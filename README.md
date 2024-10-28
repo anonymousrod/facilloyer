@@ -1,7 +1,7 @@
 # facilloyer
 
 Facilloyer
-Facilloyer est une application web Laravel conçue pour simplifier la gestion locative et le suivi des loyers. Elle fournit une solution complète aux propriétaires, agents immobiliers et gestionnaires de biens pour suivre les paiements, gérer les propriétés, et communiquer efficacement avec les locataires.
+Facilloyer est une application web basé sur l'achitecture Laravel conçue pour simplifier la gestion locative et le suivi des loyers. Elle fournit une solution complète aux propriétaires, agents immobiliers et gestionnaires de biens pour suivre les paiements, gérer les propriétés, et communiquer efficacement avec les locataires.
 
 🚀 Fonctionnalités principales :
 Gestion des propriétés : Ajoutez, modifiez et supprimez des propriétés, tout en visualisant l’état d’occupation et les informations détaillées de chaque bien.
