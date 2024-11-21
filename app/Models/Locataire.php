@@ -1,24 +1,88 @@
 <?php
 
+/**
+ * Created by Reliese Model.
+ */
+
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
+/**
+ * Class Locataire
+ * 
+ * @property int $id
+ * @property int $user_id
+ * @property string $nom
+ * @property string $prenom
+ * @property string $adresse
+ * @property string $telephone
+ * @property Carbon $date_naissance
+ * @property string|null $photo_profil
+ * @property string $genre
+ * @property float $revenu_mensuel
+ * @property int $nombre_personne_foyer
+ * @property string $statut_matrimoniale
+ * @property string $statut_professionnel
+ * @property string $garant
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * 
+ * @property User $user
+ * @property Collection|ContratDeBailLocataire[] $contrat_de_bail_locataires
+ * @property Collection|Bien[] $biens
+ * @property Collection|Paiement[] $paiements
+ *
+ * @package App\Models
+ */
 class Locataire extends Model
-{   use HasFactory;
-    protected $fillable = ['nom', 'email', 'telephone', 'adresse', 'id_bien'];
+{
+	protected $table = 'locataires';
 
-    // Relation Many-to-One : Un locataire loue un bien
-    public function bien()
-    {
-        return $this->belongsTo(Bien::class, 'id_bien');
-    }
+	protected $casts = [
+		'user_id' => 'int',
+		'date_naissance' => 'datetime',
+		'revenu_mensuel' => 'float',
+		'nombre_personne_foyer' => 'int'
+	];
 
-    // Relation One-to-Many : Un locataire effectue plusieurs paiements
-    public function paiements()
-    {
-        return $this->hasMany(Paiement::class, 'id_locataire');
-    }
+	protected $fillable = [
+		'user_id',
+		'nom',
+		'prenom',
+		'adresse',
+		'telephone',
+		'date_naissance',
+		'photo_profil',
+		'genre',
+		'revenu_mensuel',
+		'nombre_personne_foyer',
+		'statut_matrimoniale',
+		'statut_professionnel',
+		'garant'
+	];
+
+	public function user()
+	{
+		return $this->belongsTo(User::class);
+	}
+
+	public function contrat_de_bail_locataires()
+	{
+		return $this->hasMany(ContratDeBailLocataire::class);
+	}
+
+	public function biens()
+	{
+		return $this->belongsToMany(Bien::class, 'locataire_bien')
+					->withPivot('id')
+					->withTimestamps();
+	}
+
+	public function paiements()
+	{
+		return $this->hasMany(Paiement::class);
+	}
 }
-

@@ -10,14 +10,11 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Paiement
+ * Class LocataireBien
  * 
  * @property int $id
  * @property int $locataire_id
  * @property int $bien_id
- * @property float $montant
- * @property Carbon $date
- * @property string $statut
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * 
@@ -26,23 +23,18 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @package App\Models
  */
-class Paiement extends Model
+class LocataireBien extends Model
 {
-	protected $table = 'paiements';
+	protected $table = 'locataire_bien';
 
 	protected $casts = [
 		'locataire_id' => 'int',
-		'bien_id' => 'int',
-		'montant' => 'float',
-		'date' => 'datetime'
+		'bien_id' => 'int'
 	];
 
 	protected $fillable = [
 		'locataire_id',
-		'bien_id',
-		'montant',
-		'date',
-		'statut'
+		'bien_id'
 	];
 
 	public function bien()

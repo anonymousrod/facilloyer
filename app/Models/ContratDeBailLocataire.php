@@ -10,44 +10,36 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Paiement
+ * Class ContratDeBailLocataire
  * 
  * @property int $id
  * @property int $locataire_id
- * @property int $bien_id
- * @property float $montant
- * @property Carbon $date
- * @property string $statut
+ * @property int $contrat_de_bail_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * 
- * @property Bien $bien
+ * @property ContratsDeBail $contrats_de_bail
  * @property Locataire $locataire
  *
  * @package App\Models
  */
-class Paiement extends Model
+class ContratDeBailLocataire extends Model
 {
-	protected $table = 'paiements';
+	protected $table = 'contrat_de_bail_locataire';
 
 	protected $casts = [
 		'locataire_id' => 'int',
-		'bien_id' => 'int',
-		'montant' => 'float',
-		'date' => 'datetime'
+		'contrat_de_bail_id' => 'int'
 	];
 
 	protected $fillable = [
 		'locataire_id',
-		'bien_id',
-		'montant',
-		'date',
-		'statut'
+		'contrat_de_bail_id'
 	];
 
-	public function bien()
+	public function contrats_de_bail()
 	{
-		return $this->belongsTo(Bien::class);
+		return $this->belongsTo(ContratsDeBail::class, 'contrat_de_bail_id');
 	}
 
 	public function locataire()
