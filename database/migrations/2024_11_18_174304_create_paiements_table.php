@@ -19,7 +19,8 @@ return new class extends Migration
             $table->foreign('bien_id')->references('id')->on('biens')->onDelete('cascade')->onUpdate('restrict');
             $table->float('montant'); // Montant payé
             $table->date('date'); // Date du paiement
-            $table->string('statut')->default('partiellement payé'); // Statut du paiement payé, en retard
+            $table->enum('mode_paiement', ['Virement', 'Chèque', 'Espèces'])->nullable(); // Mode de paiement
+            $table->enum('status', ['Payé', 'En attente', 'Retard'])->default('En attente'); // Statut du paiement
             $table->timestamps();
         });
     }

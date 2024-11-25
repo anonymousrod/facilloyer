@@ -15,14 +15,12 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('bien_id');
             $table->foreign('bien_id')->references('id')->on('biens')->onDelete('cascade')->onUpdate('restrict');
-            $table->date('date_debut');
-            $table->date('date_fin')->nullable();
+
             $table->float('loyer_mensuel'); // Loyer mensuel
             $table->float('depot_de_garantie'); // Dépôt de garantie
             $table->string('adresse_bien'); // Adresse du bien
-            $table->string('description')->nullable(); // Description
+            $table->text('description')->nullable(); // Description
             $table->boolean('renouvellement_automatique')->default(false); // Renouvellement automatique
-            $table->string('periode_paiement'); // Période de paiement
             $table->string('penalite_retard')->nullable(); // Pénalité de retard
             $table->string('type_bien'); // Type de bien
             $table->string('statut_bien'); // Statut du bien

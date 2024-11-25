@@ -17,8 +17,14 @@ return new class extends Migration
             $table->foreign('locataire_id')->references('id')->on('locataires')->onDelete('cascade')->onUpdate('restrict');
             $table->unsignedBigInteger('contrat_de_bail_id');
             $table->foreign('contrat_de_bail_id')->references('id')->on('contrats_de_bail')->onDelete('cascade')->onUpdate('restrict');
+            $table->date('date_debut');
+            $table->date('date_fin')->nullable();
+            $table->string('periode_paiement'); // Période de paiement
             $table->timestamps();
-        });
+
+            // Contrainte unique pour éviter les doublons
+            $table->unique(['locataire_id', 'contrat_de_bail_id']);
+            });
     }
 
     /**

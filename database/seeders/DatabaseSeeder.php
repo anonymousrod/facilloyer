@@ -20,6 +20,11 @@ class DatabaseSeeder extends Seeder
         $this->call(UsersSeeder::class);
         $this->call(AgentImmonilierSeeder::class);
         $this->call(LocataireSeeder::class);
+        $this->call(BienSeeder::class);
+        $this->call(ContratsDeBailSeeder::class);
+        $this->call(ContratsDeBail_locataireSeeder::class);
+        $this->call(LocataireSeeder::class);
+        $this->call(PaiementSeeder::class);
 
     }
 }

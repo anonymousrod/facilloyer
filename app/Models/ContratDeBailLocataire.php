@@ -11,13 +11,16 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class ContratDeBailLocataire
- * 
+ *
  * @property int $id
  * @property int $locataire_id
  * @property int $contrat_de_bail_id
+ * @property Carbon $date_debut
+ * @property Carbon|null $date_fin
+ * @property string $periode_paiement
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * 
+ *
  * @property ContratsDeBail $contrats_de_bail
  * @property Locataire $locataire
  *
@@ -34,7 +37,10 @@ class ContratDeBailLocataire extends Model
 
 	protected $fillable = [
 		'locataire_id',
-		'contrat_de_bail_id'
+		'contrat_de_bail_id',
+        'bien_id',
+		'date_debut',
+        'periode_paiement'
 	];
 
 	public function contrats_de_bail()

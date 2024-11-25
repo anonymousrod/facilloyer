@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class Paiement
- * 
+ *
  * @property int $id
  * @property int $locataire_id
  * @property int $bien_id
@@ -20,7 +20,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $statut
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * 
+ *
  * @property Bien $bien
  * @property Locataire $locataire
  *
@@ -42,8 +42,26 @@ class Paiement extends Model
 		'bien_id',
 		'montant',
 		'date',
+        'mode_paiement',
 		'statut'
 	];
+
+        // Méthode pour mettre à jour le statut du paiement
+        public function updateStatus()
+        {
+            $contrat = $this->contratDeBailLocataire; // Récupérer le contrat de bail associé
+            $dateLimite = Carbon::parse($contrat->date_debut)->addMonths($contrat->periode_paiement); // Calcul de la date limite de paiement
+
+            if ($this->date_paiement <= $dateLimite) {
+                $this->status = 'Payé';
+            } elseif ($this->date_paiement > $dateLimite) {
+                $this->status = 'Retard';
+            } else {
+                $this->status = 'En attente';
+            }
+
+            $this->save(); // Sauvegarde des modifications
+        }
 
 	public function bien()
 	{
