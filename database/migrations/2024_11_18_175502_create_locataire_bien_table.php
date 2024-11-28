@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('locataire_id')->constrained('locataires'); // Locataire
             $table->foreignId('bien_id')->constrained('biens'); // Bien concerné
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

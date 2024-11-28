@@ -26,6 +26,8 @@ return new class extends Migration
             $table->string('statut_bien'); // Statut du bien
             $table->text('conditions')->nullable();
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

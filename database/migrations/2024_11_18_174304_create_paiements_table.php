@@ -22,6 +22,8 @@ return new class extends Migration
             $table->enum('mode_paiement', ['Virement', 'Chèque', 'Espèces'])->nullable(); // Mode de paiement
             $table->enum('status', ['Payé', 'En attente', 'Retard'])->default('En attente'); // Statut du paiement
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

@@ -8,16 +8,17 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class LocataireBien
- * 
+ *
  * @property int $id
  * @property int $locataire_id
  * @property int $bien_id
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * 
+ *
  * @property Bien $bien
  * @property Locataire $locataire
  *
@@ -25,6 +26,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class LocataireBien extends Model
 {
+    use SoftDeletes;
+
 	protected $table = 'locataire_bien';
 
 	protected $casts = [

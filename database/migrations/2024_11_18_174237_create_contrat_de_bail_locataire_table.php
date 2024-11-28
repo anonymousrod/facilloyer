@@ -21,6 +21,8 @@ return new class extends Migration
             $table->date('date_fin')->nullable();
             $table->string('periode_paiement'); // Période de paiement
             $table->timestamps();
+            $table->softDeletes();
+
 
             // Contrainte unique pour éviter les doublons
             $table->unique(['locataire_id', 'contrat_de_bail_id']);

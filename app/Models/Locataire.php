@@ -9,10 +9,11 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Locataire
- * 
+ *
  * @property int $id
  * @property int $user_id
  * @property string $nom
@@ -29,7 +30,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $garant
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
- * 
+ *
  * @property User $user
  * @property Collection|ContratDeBailLocataire[] $contrat_de_bail_locataires
  * @property Collection|Bien[] $biens
@@ -39,6 +40,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Locataire extends Model
 {
+    use SoftDeletes;
+
 	protected $table = 'locataires';
 
 	protected $casts = [

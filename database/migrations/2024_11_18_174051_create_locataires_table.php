@@ -28,6 +28,8 @@ return new class extends Migration
             $table->string('garant'); // Garant
             $table->string('photo_profil')->nullable(); // Photo de profil
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

@@ -9,6 +9,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class ContratsDeBail
@@ -35,6 +36,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class ContratsDeBail extends Model
 {
+    use SoftDeletes;
+
 	protected $table = 'contrats_de_bail';
 
 	protected $casts = [
@@ -54,7 +57,7 @@ class ContratsDeBail extends Model
 		'adresse_bien',
 		'description',
 		'renouvellement_automatique',
-		
+
 		'penalite_retard',
 		'type_bien',
 		'statut_bien',

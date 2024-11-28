@@ -50,155 +50,185 @@
         </div>
     </form>
 </x-guest-layout> --}}
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="apple-touch-icon" sizes="76x76" href=" {{ asset('../assets_auth/img/apple-icon.png')}} ">
-    <link rel="icon" type="image/png" href=" {{ asset('../assets_auth/img/favicon.png')}} ">
-    <title>
-      Material Dashboard 3 by Creative Tim
-    </title>
-    <!--     Fonts and icons     -->
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700,900" />
-    <!-- Nucleo Icons -->
-    <link href=" {{ asset('../assets_auth/css/nucleo-icons.css')}} " rel="stylesheet" />
-    <link href=" {{ asset('../assets_auth/css/nucleo-svg.css')}} " rel="stylesheet" />
-    <!-- Font Awesome Icons -->
-    <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script>
-    <!-- Material Icons -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0" />
-    <!-- CSS Files -->
-    <link id="pagestyle" href=" {{ asset('../assets_auth/css/material-dashboard.css?v=3.2.0')}} " rel="stylesheet" />
-  </head>
+{{-- <!DOCTYPE html> --}}
+<html lang="en" dir="ltr" data-startbar="light" data-bs-theme="light">
+<!-- Mirrored from mannatthemes.com/rizz/default/auth-register.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 26 Nov 2024 21:52:10 GMT -->
 
-  <body class="">
-    <div class="container position-sticky z-index-sticky top-0">
-      <div class="row">
-        <div class="col-12">
-          <!-- Navbar -->
-          <nav class="navbar navbar-expand-lg blur border-radius-lg top-0 z-index-3 shadow position-absolute mt-4 py-2 start-0 end-0 mx-4">
-            <div class="container-fluid ps-2 pe-0">
-              <a class="navbar-brand font-weight-bolder ms-lg-0 ms-3 " href="../pages/dashboard.html">
-                Material Dashboard 3
-              </a>
-              <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon mt-2">
-                  <span class="navbar-toggler-bar bar1"></span>
-                  <span class="navbar-toggler-bar bar2"></span>
-                  <span class="navbar-toggler-bar bar3"></span>
-                </span>
-              </button>
-              <div class="collapse navbar-collapse" id="navigation">
-                <ul class="navbar-nav mx-auto">
-                  <li class="nav-item">
-                    <a class="nav-link d-flex align-items-center me-2 active" aria-current="page" href="../pages/dashboard.html">
-                      <i class="fa fa-chart-pie opacity-6 text-dark me-1"></i>
-                      Dashboard
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link me-2" href="../pages/profile.html">
-                      <i class="fa fa-user opacity-6 text-dark me-1"></i>
-                      Profile
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link me-2" href="../pages/sign-up.html">
-                      <i class="fas fa-user-circle opacity-6 text-dark me-1"></i>
-                      Sign Up
-                    </a>
-                  </li>
-                  <li class="nav-item">
-                    <a class="nav-link me-2" href="../pages/sign-in.html">
-                      <i class="fas fa-key opacity-6 text-dark me-1"></i>
-                      Sign In
-                    </a>
-                  </li>
-                </ul>
-                <ul class="navbar-nav d-lg-flex d-none">
-                  <li class="nav-item d-flex align-items-center">
-                    <a class="btn btn-outline-primary btn-sm mb-0 me-2" target="_blank" href="https://www.creative-tim.com/builder?ref=navbar-material-dashboard">Online Builder</a>
-                  </li>
-                  <li class="nav-item">
-                    <a href="https://www.creative-tim.com/product/material-dashboard" class="btn btn-sm mb-0 me-1 bg-gradient-dark">Free download</a>
-                  </li>
-                </ul>
-              </div>
+<head>
+    @include('layouts.layouts_dash.head')
+</head>
+
+<!-- Top Bar Start -->
+
+<body>
+    <div class="container-xxl">
+        <div class="row vh-100 d-flex justify-content-center">
+            <div class="col-12 align-self-center">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-4 mx-auto">
+                            <div class="card">
+                                <div class="card-body p-0 bg-black auth-header-box rounded-top">
+                                    <div class="text-center p-3">
+                                        <a href="#" class="logo logo-admin">
+                                            <img src="assets/images/logo-sm.png" height="50" alt="logo"
+                                                class="auth-logo" />
+                                        </a>
+                                        <h4 class="mt-3 mb-1 fw-semibold text-white fs-18">Inscription à
+                                            {{ env('APP_NAME') }}</h4>
+                                        <p class="text-muted fw-medium mb-0">Remplissez les informations pour créer
+                                            votre compte.</p>
+                                    </div>
+                                </div>
+
+                                <div class="card-body pt-0">
+                                    @if (session('success'))
+                                        <div class="alert alert-success text-center">
+                                            <h5 class="text-success"> {{ session('success') }}</h5>
+                                        </div>
+                                    @endif
+
+                                    @error('errors')
+                                        <div class="alert alert-danger text-center">
+                                            <h5 class="text-primary">Erreur</h5>
+                                        </div>
+                                    @enderror
+
+                                    <!-- Erreur email -->
+                                    @error('email')
+                                        <div class="col-12">
+                                            <div class="alert alert-danger text-center" role="alert">
+                                                {{ $message }}
+                                            </div>
+                                        </div>
+                                    @enderror
+
+                                    <!-- Erreur mot de passe -->
+                                    @error('password')
+                                        <div class="col-12">
+                                            <div class="alert alert-danger text-center" role="alert">
+                                                {{ $message }}
+                                            </div>
+                                        </div>
+                                    @enderror
+
+                                    <!-- Erreur confirmation de mot de passe -->
+                                    @error('password_confirmation')
+                                        <div class="col-12">
+                                            <div class="alert alert-danger text-center" role="alert">
+                                                {{ $message }}
+                                            </div>
+                                        </div>
+                                    @enderror
+
+                                    @error('id_role')
+                                        <div class="alert alert-danger text-center">{{ $message }}</div>
+                                    @enderror
+
+                                    <form class="my-4" method="POST" action="{{ route('register') }}">
+                                        @csrf
+
+                                        <!-- Email -->
+                                        <div class="form-group mb-2">
+                                            <label class="form-label" for="email">Email</label>
+                                            <input type="email" class="form-control" id="email" name="email"
+                                                placeholder="Entrez votre adresse email" value="{{ old('email') }}"
+                                                required />
+                                        </div>
+
+                                        <!-- Mot de passe -->
+                                        <div class="form-group mb-2">
+                                            <label class="form-label" for="password">Mot de passe</label>
+                                            <input type="password" class="form-control" id="password" name="password"
+                                                placeholder="Entrez votre mot de passe" required />
+                                        </div>
+
+                                        <!-- Confirmation du mot de passe -->
+                                        <div class="form-group mb-2">
+                                            <label class="form-label" for="password_confirmation">Confirmez le mot de
+                                                passe</label>
+                                            <input type="password" class="form-control" id="password_confirmation"
+                                                name="password_confirmation" placeholder="Confirmez votre mot de passe"
+                                                required />
+                                        </div>
+
+                                        <!-- Type d'utilisateur -->
+
+                                        {{-- code a ameliorer pour l'enregistrement des locataire par l'admin --}}
+
+                                        {{-- <div class="form-group mb-2">
+                                            <label class="form-label" for="role">Type d'utilisateur</label>
+                                            <select class="form-control" id="role" name="id_role" required>
+                                                <option value="" disabled selected>-- Sélectionnez un rôle --</option>
+                                                @foreach (getRoles() as $role)
+                                                    <option value="{{ $role->id }}"
+                                                        {{ old('id_role') == $role->id ? 'selected' : '' }}>
+                                                        {{ $role->libelle }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div> --}}
+
+                                        {{-- suite du code pour register agent immobilier --}}
+
+                                        {{-- @dd(getRoles()); --}}
+                                        @foreach (getRoles() as $role)
+                                            @if ($role->libelle == 'Agent immobilier')
+                                                {{-- @dd($role->libelle); --}}
+                                                {{-- @dd($role->id); --}}
+                                                <input type="number" name="id_role" value="{{ $role->id }}" hidden>
+                                            @endif
+                                        @endforeach
+
+
+
+                                        <!-- Checkbox pour accepter les conditions -->
+                                        <div class="form-group row mt-3">
+                                            <div class="col-12">
+                                                <div class="form-check form-switch form-switch-success">
+                                                    <input class="form-check-input" type="checkbox"
+                                                        id="terms_conditions" required />
+                                                    <label class="form-check-label" for="terms_conditions">
+                                                        En m'inscrivant, j'accepte les <a href="#"
+                                                            class="text-primary">Conditions d'utilisation</a>.
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Bouton soumettre -->
+                                        <div class="form-group mb-0 row">
+                                            <div class="col-12">
+                                                <div class="d-grid mt-3">
+                                                    <button class="btn btn-primary" type="submit">
+                                                        Créer mon compte
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                    <!-- Lien pour se connecter -->
+                                    <div class="text-center">
+                                        <p class="text-muted">
+                                            Vous avez déjà un compte ?
+                                            <a href="{{ route('login') }}" class="text-primary ms-2">Se connecter</a>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </nav>
-          <!-- End Navbar -->
         </div>
-      </div>
     </div>
-    <main class="main-content  mt-0">
-      <section>
-        <div class="page-header min-vh-100">
-          <div class="container">
-            <div class="row">
-              <div class="col-6 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 start-0 text-center justify-content-center flex-column">
-                <div class="position-relative bg-gradient-primary h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center" style="background-image: url(' {{ asset('../assets_auth/img/illustrations/illustration-signup.jpg')}} '); background-size: cover;">
-                </div>
-              </div>
-              <div class="col-xl-4 col-lg-5 col-md-7 d-flex flex-column ms-auto me-auto ms-lg-auto me-lg-5">
-                <div class="card card-plain">
-                  <div class="card-header">
-                    <h4 class="font-weight-bolder">Sign Up</h4>
-                    <p class="mb-0">Enter your email and password to register</p>
-                  </div>
-                  <div class="card-body">
-                    <form role="form">
-                      <div class="input-group input-group-outline mb-3">
-                        <label class="form-label">Name</label>
-                        <input type="text" class="form-control">
-                      </div>
-                      <div class="input-group input-group-outline mb-3">
-                        <label class="form-label">Email</label>
-                        <input type="email" class="form-control">
-                      </div>
-                      <div class="input-group input-group-outline mb-3">
-                        <label class="form-label">Password</label>
-                        <input type="password" class="form-control">
-                      </div>
-                      <div class="form-check form-check-info text-start ps-0">
-                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
-                        <label class="form-check-label" for="flexCheckDefault">
-                          I agree the <a href="javascript:;" class="text-dark font-weight-bolder">Terms and Conditions</a>
-                        </label>
-                      </div>
-                      <div class="text-center">
-                        <button type="button" class="btn btn-lg bg-gradient-dark btn-lg w-100 mt-4 mb-0">Sign Up</button>
-                      </div>
-                    </form>
-                  </div>
-                  <div class="card-footer text-center pt-0 px-lg-2 px-1">
-                    <p class="mb-2 text-sm mx-auto">
-                      Already have an account?
-                      <a href="../pages/sign-in.html" class="text-primary text-gradient font-weight-bold">Sign in</a>
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
-    <!--   Core JS Files   -->
-    <script src=" {{ asset('../assets_auth/js/core/popper.min.js')}} "></script>
-    <script src=" {{ asset('../assets_auth/js/core/bootstrap.min.js')}} "></script>
-    <script src=" {{ asset('../assets_auth/js/plugins/perfect-scrollbar.min.js')}} "></script>
-    <script src=" {{ asset('../assets_auth/js/plugins/smooth-scrollbar.min.js')}} "></script>
-    <script>
-      var win = navigator.platform.indexOf('Win') > -1;
-      if (win && document.querySelector('#sidenav-scrollbar')) {
-        var options = {
-          damping: '0.5'
-        }
-        Scrollbar.init(document.querySelector('#sidenav-scrollbar'), options);
-      }
-    </script>
-    <!-- Github buttons -->
-    <script async defer src="https://buttons.github.io/buttons.js"></script>
-    <!-- Control Center for Material Dashboard: parallax effects, scripts for the example pages etc -->
-    <script src=" {{ asset('../assets_auth/js/material-dashboard.min.js?v=3.2.0')}} "></script>
-  </body>
+</body>
+
+
+
+<!--end body-->
+
+<!-- Mirrored from mannatthemes.com/rizz/default/auth-register.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 26 Nov 2024 21:52:10 GMT -->
+
+</html>

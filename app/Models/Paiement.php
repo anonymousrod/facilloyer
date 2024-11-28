@@ -8,6 +8,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * Class Paiement
@@ -28,6 +29,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Paiement extends Model
 {
+    use SoftDeletes;
+
 	protected $table = 'paiements';
 
 	protected $casts = [

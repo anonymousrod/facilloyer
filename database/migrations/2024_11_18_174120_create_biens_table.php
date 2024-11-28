@@ -25,6 +25,8 @@ return new class extends Migration
             $table->float('loyer_mensuel'); // Loyer mensuel
             $table->string('statut_bien'); // Disponible, loué, etc.
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

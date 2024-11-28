@@ -25,6 +25,8 @@ return new class extends Migration
             $table->integer('nombre_bien_disponible'); // Nombre de biens disponibles
             $table->string('photo_profil')->nullable();
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 
