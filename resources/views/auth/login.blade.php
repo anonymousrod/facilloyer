@@ -54,7 +54,7 @@
 <head>
 
 
-@include('layouts.layouts_dash.head')
+    @include('layouts.layouts_dash.head')
 
 </head>
 
@@ -75,52 +75,74 @@
                                             <img src="assets/images/logo-sm.png" height="50" alt="logo"
                                                 class="auth-logo">
                                         </a>
-                                        <h4 class="mt-3 mb-1 fw-semibold text-white fs-18">Let's Get Started Rizz</h4>
-                                        <p class="text-muted fw-medium mb-0">Sign in to continue to Rizz.</p>
+                                        <h4 class="mt-3 mb-1 fw-semibold text-white fs-18">Bienvenue sur
+                                            {{ env('APP_NAME') }}</h4>
+                                        <p class="text-muted fw-medium mb-0">Connectez-vous pour continuer.</p>
                                     </div>
                                 </div>
                                 <div class="card-body pt-0">
-                                    <form class="my-4" action="https://mannatthemes.com/rizz/default/index.html">
+                                    <!-- erreur email -->
+                                    @error('email')
+                                        <div class="alert alert-danger text-center" role="alert">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+
+                                    <!-- erreur password -->
+                                    @error('password')
+                                        <div class="alert alert-danger text-center" role="alert">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+
+                                    <form class="my-4" action="{{route('login')}}" method="POST">
+                                        @csrf
                                         <div class="form-group mb-2">
-                                            <label class="form-label" for="username">Username</label>
-                                            <input type="text" class="form-control" id="username" name="username"
-                                                placeholder="Enter username">
+                                            <label class="form-label" for="email">Adresse e-mail</label>
+                                            <input type="email"
+                                                class="form-control @error('email') is-invalid @enderror"
+                                                value="{{ old('email') }}" id="email" name="email"
+                                                placeholder="Entrez votre adresse e-mail" required>
                                         </div><!--end form-group-->
 
                                         <div class="form-group">
-                                            <label class="form-label" for="userpassword">Password</label>
-                                            <input type="password" class="form-control" name="password"
-                                                id="userpassword" placeholder="Enter password">
+                                            <label class="form-label @error('password') is-invalid @enderror"
+                                                for="password">Mot de passe</label>
+                                            <input type="password" class="form-control " name="password" id="password"
+                                                placeholder="Entrez votre mot de passe" required>
                                         </div><!--end form-group-->
+                                        <!-- Se souvenir de moi et Mot de passe oublié -->
 
                                         <div class="form-group row mt-3">
                                             <div class="col-sm-6">
                                                 <div class="form-check form-switch form-switch-success">
-                                                    <input class="form-check-input" type="checkbox"
-                                                        id="customSwitchSuccess">
-                                                    <label class="form-check-label" for="customSwitchSuccess">Remember
-                                                        me</label>
+                                                    <input class="form-check-input" type="checkbox" id="remember">
+                                                    <label class="form-check-label"
+                                                        for="remember">{{ __('Se souvenir de moi') }}</label>
                                                 </div>
                                             </div><!--end col-->
                                             <div class="col-sm-6 text-end">
-                                                <a href="auth-recover-pw.html" class="text-muted font-13"><i
-                                                        class="dripicons-lock"></i> Forgot password?</a>
+                                                @if (Route::has('password.request'))
+                                                    <a href="{{ route('password.request') }}"
+                                                        class="text-muted font-13"><i class="dripicons-lock"></i>
+                                                        {{ __('Mot de passe oublié?') }} </a>
+                                                @endif
                                             </div><!--end col-->
                                         </div><!--end form-group-->
 
                                         <div class="form-group mb-0 row">
                                             <div class="col-12">
                                                 <div class="d-grid mt-3">
-                                                    <button class="btn btn-primary" type="button">Log In <i
+                                                    <button class="btn btn-primary" type="submit">Se connecter <i
                                                             class="fas fa-sign-in-alt ms-1"></i></button>
                                                 </div>
                                             </div><!--end col-->
                                         </div> <!--end form-group-->
                                     </form><!--end form-->
                                     <div class="text-center  mb-2">
-                                        <p class="text-muted">Don't have an account ? <a href="auth-register.html"
-                                                class="text-primary ms-2">Free Resister</a></p>
-                                        <h6 class="px-3 d-inline-block">Or Login With</h6>
+                                        <p class="text-muted">Pas encore de compte ? <a href="{{ route('register')}}"
+                                                class="text-primary ms-2">Créer un compte</a></p>
+                                        <h6 class="px-3 d-inline-block">Ou connectez-vous avec</h6>
                                     </div>
                                     <div class="d-flex justify-content-center">
                                         <a href="#"
@@ -145,6 +167,7 @@
         </div><!--end row-->
     </div><!-- container -->
 </body>
+
 <!--end body-->
 
 <!-- Mirrored from mannatthemes.com/rizz/default/auth-login.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 26 Nov 2024 21:51:15 GMT -->
