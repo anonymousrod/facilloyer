@@ -38,47 +38,50 @@ class Bien extends Model
 {
     use SoftDeletes;
 
-	protected $table = 'biens';
+    protected $table = 'biens';
 
-	protected $casts = [
-		'agent_immobilier_id' => 'int',
-		'nombre_de_piece' => 'int',
-		'superficie' => 'float',
-		'annee_construction' => 'int',
-		'loyer_mensuel' => 'float'
-	];
+    protected $casts = [
+        'agent_immobilier_id' => 'int',
+        'nombre_de_piece' => 'int',
+        'superficie' => 'float',
+        'annee_construction' => 'int',
+        'loyer_mensuel' => 'float'
+    ];
 
-	protected $fillable = [
-		'agent_immobilier_id',
-		'adresse_bien',
-		'type_bien',
-		'nombre_de_piece',
-		'superficie',
-		'annee_construction',
-		'description',
-		'loyer_mensuel',
-		'statut_bien'
-	];
+    protected $fillable = [
+        'agent_immobilier_id',
+        'adresse_bien',
+        'type_bien',
+        'nombre_de_piece',
+        'superficie',
+        'annee_construction',
+        'description',
+        'loyer_mensuel',
+        'statut_bien',
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
 
-	public function agent_immobilier()
-	{
-		return $this->belongsTo(AgentImmobilier::class);
-	}
+    public function agent_immobilier()
+    {
+        return $this->belongsTo(AgentImmobilier::class);
+    }
 
-	public function contrats_de_bails()
-	{
-		return $this->hasMany(ContratsDeBail::class);
-	}
+    public function contrats_de_bails()
+    {
+        return $this->hasMany(ContratsDeBail::class);
+    }
 
-	public function locataires()
-	{
-		return $this->belongsToMany(Locataire::class, 'locataire_bien')
-					->withPivot('id')
-					->withTimestamps();
-	}
+    public function locataires()
+    {
+        return $this->belongsToMany(Locataire::class, 'locataire_bien')
+            ->withPivot('id')
+            ->withTimestamps();
+    }
 
-	public function paiements()
-	{
-		return $this->hasMany(Paiement::class);
-	}
+    public function paiements()
+    {
+        return $this->hasMany(Paiement::class);
+    }
 }

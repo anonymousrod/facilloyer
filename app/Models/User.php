@@ -42,6 +42,7 @@ class User extends Authenticatable //implements MustVerifyEmail  Implements Must
     protected $casts = [
         'id_role' => 'int',
         'email_verified_at' => 'datetime',
+        'statut' => 'boolean',
     ];
 
     /**
@@ -61,6 +62,10 @@ class User extends Authenticatable //implements MustVerifyEmail  Implements Must
         'email_verified_at',
         'password',
         'remember_token',
+        'statut',
+        'created_at',
+        'updated_at',
+        'deleted_at'
     ];
 
     /**

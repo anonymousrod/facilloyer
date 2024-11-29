@@ -27,14 +27,17 @@ class Role extends Model
 {
     use SoftDeletes;
 
-	protected $table = 'roles';
+    protected $table = 'roles';
 
-	protected $fillable = [
-		'libelle'
-	];
+    protected $fillable = [
+        'libelle',
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
 
-	public function users()
-	{
-		return $this->hasMany(User::class, 'id_role');
-	}
+    public function users()
+    {
+        return $this->hasMany(User::class, 'id_role');
+    }
 }

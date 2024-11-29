@@ -42,50 +42,53 @@ class Locataire extends Model
 {
     use SoftDeletes;
 
-	protected $table = 'locataires';
+    protected $table = 'locataires';
 
-	protected $casts = [
-		'user_id' => 'int',
-		'date_naissance' => 'datetime',
-		'revenu_mensuel' => 'float',
-		'nombre_personne_foyer' => 'int'
-	];
+    protected $casts = [
+        'user_id' => 'int',
+        'date_naissance' => 'datetime',
+        'revenu_mensuel' => 'float',
+        'nombre_personne_foyer' => 'int'
+    ];
 
-	protected $fillable = [
-		'user_id',
-		'nom',
-		'prenom',
-		'adresse',
-		'telephone',
-		'date_naissance',
-		'photo_profil',
-		'genre',
-		'revenu_mensuel',
-		'nombre_personne_foyer',
-		'statut_matrimoniale',
-		'statut_professionnel',
-		'garant'
-	];
+    protected $fillable = [
+        'user_id',
+        'nom',
+        'prenom',
+        'adresse',
+        'telephone',
+        'date_naissance',
+        'photo_profil',
+        'genre',
+        'revenu_mensuel',
+        'nombre_personne_foyer',
+        'statut_matrimoniale',
+        'statut_professionnel',
+        'garant',
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
 
-	public function user()
-	{
-		return $this->belongsTo(User::class);
-	}
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
-	public function contrat_de_bail_locataires()
-	{
-		return $this->hasMany(ContratDeBailLocataire::class);
-	}
+    public function contrat_de_bail_locataires()
+    {
+        return $this->hasMany(ContratDeBailLocataire::class);
+    }
 
-	public function biens()
-	{
-		return $this->belongsToMany(Bien::class, 'locataire_bien')
-					->withPivot('id')
-					->withTimestamps();
-	}
+    public function biens()
+    {
+        return $this->belongsToMany(Bien::class, 'locataire_bien')
+            ->withPivot('id')
+            ->withTimestamps();
+    }
 
-	public function paiements()
-	{
-		return $this->hasMany(Paiement::class);
-	}
+    public function paiements()
+    {
+        return $this->hasMany(Paiement::class);
+    }
 }

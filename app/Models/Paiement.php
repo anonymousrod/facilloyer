@@ -31,48 +31,51 @@ class Paiement extends Model
 {
     use SoftDeletes;
 
-	protected $table = 'paiements';
+    protected $table = 'paiements';
 
-	protected $casts = [
-		'locataire_id' => 'int',
-		'bien_id' => 'int',
-		'montant' => 'float',
-		'date' => 'datetime'
-	];
+    protected $casts = [
+        'locataire_id' => 'int',
+        'bien_id' => 'int',
+        'montant' => 'float',
+        'date' => 'datetime'
+    ];
 
-	protected $fillable = [
-		'locataire_id',
-		'bien_id',
-		'montant',
-		'date',
+    protected $fillable = [
+        'locataire_id',
+        'bien_id',
+        'montant',
+        'date',
         'mode_paiement',
-		'statut'
-	];
+        'statut',
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
 
-        // Méthode pour mettre à jour le statut du paiement
-        public function updateStatus()
-        {
-            $contrat = $this->contratDeBailLocataire; // Récupérer le contrat de bail associé
-            $dateLimite = Carbon::parse($contrat->date_debut)->addMonths($contrat->periode_paiement); // Calcul de la date limite de paiement
+    // Méthode pour mettre à jour le statut du paiement
+    public function updateStatus()
+    {
+        $contrat = $this->contratDeBailLocataire; // Récupérer le contrat de bail associé
+        $dateLimite = Carbon::parse($contrat->date_debut)->addMonths($contrat->periode_paiement); // Calcul de la date limite de paiement
 
-            if ($this->date_paiement <= $dateLimite) {
-                $this->status = 'Payé';
-            } elseif ($this->date_paiement > $dateLimite) {
-                $this->status = 'Retard';
-            } else {
-                $this->status = 'En attente';
-            }
-
-            $this->save(); // Sauvegarde des modifications
+        if ($this->date_paiement <= $dateLimite) {
+            $this->status = 'Payé';
+        } elseif ($this->date_paiement > $dateLimite) {
+            $this->status = 'Retard';
+        } else {
+            $this->status = 'En attente';
         }
 
-	public function bien()
-	{
-		return $this->belongsTo(Bien::class);
-	}
+        $this->save(); // Sauvegarde des modifications
+    }
 
-	public function locataire()
-	{
-		return $this->belongsTo(Locataire::class);
-	}
+    public function bien()
+    {
+        return $this->belongsTo(Bien::class);
+    }
+
+    public function locataire()
+    {
+        return $this->belongsTo(Locataire::class);
+    }
 }

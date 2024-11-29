@@ -28,25 +28,28 @@ class LocataireBien extends Model
 {
     use SoftDeletes;
 
-	protected $table = 'locataire_bien';
+    protected $table = 'locataire_bien';
 
-	protected $casts = [
-		'locataire_id' => 'int',
-		'bien_id' => 'int'
-	];
+    protected $casts = [
+        'locataire_id' => 'int',
+        'bien_id' => 'int'
+    ];
 
-	protected $fillable = [
-		'locataire_id',
-		'bien_id'
-	];
+    protected $fillable = [
+        'locataire_id',
+        'bien_id',
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
 
-	public function bien()
-	{
-		return $this->belongsTo(Bien::class);
-	}
+    public function bien()
+    {
+        return $this->belongsTo(Bien::class);
+    }
 
-	public function locataire()
-	{
-		return $this->belongsTo(Locataire::class);
-	}
+    public function locataire()
+    {
+        return $this->belongsTo(Locataire::class);
+    }
 }

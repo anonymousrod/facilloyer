@@ -38,39 +38,42 @@ class ContratsDeBail extends Model
 {
     use SoftDeletes;
 
-	protected $table = 'contrats_de_bail';
+    protected $table = 'contrats_de_bail';
 
-	protected $casts = [
-		'bien_id' => 'int',
-		'date_debut' => 'datetime',
-		'date_fin' => 'datetime',
-		'loyer_mensuel' => 'float',
-		'depot_de_garantie' => 'float',
-		'renouvellement_automatique' => 'bool'
-	];
+    protected $casts = [
+        'bien_id' => 'int',
+        'date_debut' => 'datetime',
+        'date_fin' => 'datetime',
+        'loyer_mensuel' => 'float',
+        'depot_de_garantie' => 'float',
+        'renouvellement_automatique' => 'bool'
+    ];
 
-	protected $fillable = [
+    protected $fillable = [
 
-		'date_fin',
-		'loyer_mensuel',
-		'depot_de_garantie',
-		'adresse_bien',
-		'description',
-		'renouvellement_automatique',
+        'date_fin',
+        'loyer_mensuel',
+        'depot_de_garantie',
+        'adresse_bien',
+        'description',
+        'renouvellement_automatique',
 
-		'penalite_retard',
-		'type_bien',
-		'statut_bien',
-		'conditions'
-	];
+        'penalite_retard',
+        'type_bien',
+        'statut_bien',
+        'conditions',
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
 
-	public function bien()
-	{
-		return $this->belongsTo(Bien::class);
-	}
+    public function bien()
+    {
+        return $this->belongsTo(Bien::class);
+    }
 
-	public function contrat_de_bail_locataires()
-	{
-		return $this->hasMany(ContratDeBailLocataire::class, 'contrat_de_bail_id');
-	}
+    public function contrat_de_bail_locataires()
+    {
+        return $this->hasMany(ContratDeBailLocataire::class, 'contrat_de_bail_id');
+    }
 }

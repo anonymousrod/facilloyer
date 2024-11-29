@@ -36,33 +36,36 @@ class AgentImmobilier extends Model
 {
     use SoftDeletes;
 
-	protected $table = 'agent_immobilier';
+    protected $table = 'agent_immobilier';
 
-	protected $casts = [
-		'user_id' => 'int',
-		'annee_experience' => 'int',
-		'nombre_bien_disponible' => 'int'
-	];
+    protected $casts = [
+        'user_id' => 'int',
+        'annee_experience' => 'int',
+        'nombre_bien_disponible' => 'int'
+    ];
 
-	protected $fillable = [
-		'user_id',
-		'nom_agence',
-		'nom_admin',
-		'prenom_admin',
-		'telephone_agence',
-		'annee_experience',
-		'adresse_agence',
-		'territoire_couvert',
-		'nombre_bien_disponible'
-	];
+    protected $fillable = [
+        'user_id',
+        'nom_agence',
+        'nom_admin',
+        'prenom_admin',
+        'telephone_agence',
+        'annee_experience',
+        'adresse_agence',
+        'territoire_couvert',
+        'nombre_bien_disponible',
+        'created_at',
+        'updated_at',
+        'deleted_at'
+    ];
 
-	public function user()
-	{
-		return $this->belongsTo(User::class);
-	}
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 
-	public function biens()
-	{
-		return $this->hasMany(Bien::class);
-	}
+    public function biens()
+    {
+        return $this->hasMany(Bien::class);
+    }
 }
