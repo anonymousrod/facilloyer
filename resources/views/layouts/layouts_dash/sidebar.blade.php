@@ -1,3 +1,4 @@
+<!-- leftbar-tab-menu -->
 <div class="startbar d-print-none">
     <!--start brand-->
     <div class="brand">
@@ -15,117 +16,229 @@
     <!--start startbar-menu-->
     <div class="startbar-menu">
         <div class="startbar-collapse" id="startbarCollapse" data-simplebar>
-            <ul class="navbar-nav mb-auto w-100">
-                <!-- MENU GÉNÉRAL ACCESSIBLE À TOUS LES UTILISATEURS -->
-                <li class="menu-label pt-0 mt-0">
-                    <span>Main Menu</span>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#sidebarDashboards" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="sidebarDashboards">
-                        <i class="iconoir-home-simple menu-icon"></i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
+            <div class="d-flex align-items-start flex-column w-100">
+                <!-- Navigation -->
+                <ul class="navbar-nav mb-auto w-100">
 
-                <!-- ITEMS POUR L'AGENT IMMOBILIER -->
-                @if(Auth::user()->id_role == 3)
-                    @if(Auth::user()->statut) <!-- Si l'agent est validé -->
+                    {{-- Administrateur --}}
+                    <!-- ITEMS POUR LE SUPER ADMINISTRATEUR -->
+                    @if (Auth::user()->id_role == 1)
                         <li class="nav-item">
-                            <a class="nav-link" href="manage-properties.html">
+                            <a class="nav-link" href="lol.html">
                                 <i class="iconoir-view-grid menu-icon"></i>
-                                <span>Gérer les biens immobiliers</span>
+                                <span>Dashboard</span>
                             </a>
-                        </li>
+
+                        </li><!--end nav-item-->
+
                         <li class="nav-item">
-                            <a class="nav-link" href="manage-tenants.html">
-                                <i class="iconoir-users menu-icon"></i>
-                                <span>Gérer les locataires</span>
+                            <a class="nav-link" href="#sidebarGerer_bien" data-bs-toggle="collapse" role="button"
+                                aria-expanded="false" aria-controls="sidebarGerer_user">
+                                <i class="iconoir-view-grid menu-icon"></i>
+                                <span>Gérer les utilisateurs</span>
                             </a>
-                        </li>
+                            <div class="collapse " id="sidebarGerer_user">
+                                <ul class="nav flex-column">
+
+
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="apps-chat.html">AJOUTER UTILISATEURS</a>
+                                    </li><!--end nav-item-->
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="apps-contact-list.html">LISTE AGENT IMMOBILIER</a>
+                                    </li><!--end nav-item-->
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="apps-calendar.html">LISTE LOCATAIRES</a>
+                                    </li><!--end nav-item-->
+
+                                </ul><!--end nav-->
+                            </div><!--end startbarGerer_user-->
+                        </li><!--end nav-item-->
+
                         <li class="nav-item">
-                            <a class="nav-link" href="financial-reports.html">
-                                <i class="iconoir-chart menu-icon"></i>
+                            <a class="nav-link" href="lol.html">
+                                <i class="iconoir-view-grid menu-icon"></i>
                                 <span>Consulter les rapports financiers</span>
                             </a>
-                        </li>
+
+                        </li><!--end nav-item-->
                         <li class="nav-item">
-                            <a class="nav-link" href="manage-contracts.html">
-                                <i class="iconoir-document menu-icon"></i>
-                                <span>Gérer les contrats de bail</span>
+                            <a class="nav-link" href="lol.html">
+                                <i class="iconoir-view-grid menu-icon"></i>
+                                <span>Auditer les contrats de bail</span>
                             </a>
-                        </li>
+
+                        </li><!--end nav-item-->
+                    @endif
+
+                    <!-- ITEMS POUR LE LOCATAIRE -->
+                    @if (Auth::user()->id_role == 2)
+                        </li><!--end nav-item-->
                         <li class="nav-item">
-                            <a class="nav-link" href="payment-tracking.html">
-                                <i class="iconoir-receipt menu-icon"></i>
-                                <span>Suivi des paiements</span>
+                            <a class="nav-link" href="lol.html">
+                                <i class="iconoir-view-grid menu-icon"></i>
+                                <span>Dashboard</span>
                             </a>
-                        </li>
+
+                        </li><!--end nav-item-->
+
+
                         <li class="nav-item">
-                            <a class="nav-link" href="chat.html">
-                                <i class="iconoir-chat menu-icon"></i>
+                            <a class="nav-link" href="lol.html">
+                                <i class="iconoir-view-grid menu-icon"></i>
+                                <span>Effectuer un paiement</span>
+                            </a>
+
+                        </li><!--end nav-item-->
+                        <li class="nav-item">
+                            <a class="nav-link" href="lol.html">
+                                <i class="iconoir-view-grid menu-icon"></i>
+                                <span>Consulter son contrat de bail</span>
+                            </a>
+
+                        </li><!--end nav-item-->
+                        <li class="nav-item">
+                            <a class="nav-link" href="lol.html">
+                                <i class="iconoir-view-grid menu-icon"></i>
+                                <span>Consulter l'historique des paiements</span>
+                            </a>
+
+                        </li><!--end nav-item-->
+                        <li class="nav-item">
+                            <a class="nav-link" href="lol.html">
+                                <i class="iconoir-view-grid menu-icon"></i>
                                 <span>Discussion par chat</span>
                             </a>
-                        </li>
-                    @else <!-- Si l'agent n'est pas validé -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="agency-info.html">
-                                <i class="iconoir-building menu-icon"></i>
-                                <span>Renseigner les informations de l'agence</span>
-                            </a>
-                        </li>
+
+                        </li><!--end nav-item-->
                     @endif
-                @endif
 
-                <!-- ITEMS POUR LE LOCATAIRE -->
-                @if(Auth::user()->id_role == 2)
-                    <li class="nav-item">
-                        <a class="nav-link" href="make-payment.html">
-                            <i class="iconoir-wallet menu-icon"></i>
-                            <span>Effectuer un paiement fractionné</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="view-contract.html">
-                            <i class="iconoir-document menu-icon"></i>
-                            <span>Consulter son contrat de bail</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="payment-history.html">
-                            <i class="iconoir-time-passed menu-icon"></i>
-                            <span>Consulter l'historique des paiements</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="chat.html">
-                            <i class="iconoir-chat menu-icon"></i>
-                            <span>Discussion par chat</span>
-                        </a>
-                    </li>
-                @endif
+                    <!-- ITEMS POUR L'AGENT IMMOBILIER -->
+                    @if (Auth::user()->id_role == 3)
+                        @if (Auth::user()->statut)
+                            <!-- Si l'agent est validé -->
 
-                <!-- ITEMS POUR LE SUPER ADMINISTRATEUR -->
-                @if(Auth::user()->id_role == 1)
-                    <li class="nav-item">
-                        <a class="nav-link" href="user-management.html">
-                            <i class="iconoir-user-circle menu-icon"></i>
-                            <span>Gérer les comptes utilisateurs</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="global-reports.html">
-                            <i class="iconoir-chart menu-icon"></i>
-                            <span>Consulter les rapports financiers</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="audit-contracts.html">
-                            <i class="iconoir-document menu-icon"></i>
-                            <span>Auditer les contrats de bail</span>
-                        </a>
-                    </li>
-                @endif
-            </ul>
-        </div>
-    </div>
-</div>
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="lol.html">
+                                    <i class="iconoir-view-grid menu-icon"></i>
+                                    <span>Dashboard</span>
+                                </a>
+
+                            </li><!--end nav-item-->
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="lol.html">
+                                    <i class="iconoir-view-grid menu-icon"></i>
+                                    <span>Consulter les rapports financiers</span>
+                                </a>
+
+                            </li><!--end nav-item-->
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="lol.html">
+                                    <i class="iconoir-view-grid menu-icon"></i>
+                                    <span>Suivi des paiements</span>
+                                </a>
+
+                            </li><!--end nav-item-->
+                            <li class="nav-item">
+                                <a class="nav-link" href="lol.html">
+                                    <i class="iconoir-view-grid menu-icon"></i>
+                                    <span>Discussion par chat</span>
+                                </a>
+
+                            </li><!--end nav-item-->
+
+
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="#sidebarGerer_bien" data-bs-toggle="collapse" role="button"
+                                    aria-expanded="false" aria-controls="sidebarGerer_bien">
+                                    <i class="iconoir-view-grid menu-icon"></i>
+                                    <span>Gérer les biens immobiliers</span>
+                                </a>
+                                <div class="collapse " id="sidebarGerer_bien">
+                                    <ul class="nav flex-column">
+
+
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="apps-chat.html">Ajouter Bien</a>
+                                        </li><!--end nav-item-->
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="apps-contact-list.html">Liste BIEN</a>
+                                        </li><!--end nav-item-->
+
+
+                                    </ul><!--end nav-->
+                                </div><!--end startbarGerer_bien-->
+                            </li><!--end nav-item-->
+
+
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="#sidebarGerer_contrat_bail" data-bs-toggle="collapse"
+                                    role="button" aria-expanded="false" aria-controls="sidebarGerer_contrat_bail">
+                                    <i class="iconoir-view-grid menu-icon"></i>
+                                    <span>Gérer les contrats de bail</span>
+                                </a>
+                                <div class="collapse " id="sidebarGerer_contrat_bail">
+                                    <ul class="nav flex-column">
+
+
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="apps-chat.html">Créer contrat de bail</a>
+                                        </li><!--end nav-item-->
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="apps-contact-list.html"> Lise des contrat de bail</a>
+                                        </li><!--end nav-item-->
+
+
+                                    </ul><!--end nav-->
+                                </div><!--end startbarGerer_bien-->
+                            </li><!--end nav-item-->
+                            <li class="nav-item">
+                                <a class="nav-link" href="#sidebarGerer_locataires" data-bs-toggle="collapse"
+                                    role="button" aria-expanded="false" aria-controls="sidebarGerer_locataires">
+                                    <i class="iconoir-view-grid menu-icon"></i>
+                                    <span>Gérer les locataires</span>
+                                </a>
+                                <div class="collapse " id="sidebarGerer_locataires">
+                                    <ul class="nav flex-column">
+
+
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="apps-chat.html">Ajouter locataire</a>
+                                        </li><!--end nav-item-->
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="apps-contact-list.html">Liste locataire</a>
+                                        </li><!--end nav-item-->
+
+
+                                    </ul><!--end nav-->
+                                </div><!--end startbarGerer_bien-->
+                            </li><!--end nav-item-->
+                        @else
+                            <!-- Si l'agent n'est pas validé -->
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="lol.html">
+                                    <i class="iconoir-view-grid menu-icon"></i>
+                                    <span>Renseigner les informations de l'agence</span>
+                                </a>
+
+                            </li><!--end nav-item-->
+                        @endif
+                    @endif
+
+
+
+
+                </ul><!--end navbar-nav--->
+
+            </div>
+        </div><!--end startbar-collapse-->
+    </div><!--end startbar-menu-->
+</div><!--end startbar-->
+<div class="startbar-overlay d-print-none"></div>
+<!-- end leftbar-tab-menu-->
