@@ -24,8 +24,22 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request): RedirectResponse
     {
+        // Authentification de l'utilisateur
         $request->authenticate();
 
+        // Vérifiez si l'utilisateur est un locataire avec un compte désactivé
+        $user = Auth::user();
+        if ($user->id_role == 2 && !$user->statut) {
+            // Déconnectez l'utilisateur immédiatement
+            Auth::logout();
+
+            // Redirigez vers la page de login avec un message d'erreur
+            return redirect()->route('login')->withErrors([
+                'status' => 'Votre compte a été désactivé. Veuillez contacter votre agent immobilier pour plus d\'informations.',
+            ]);
+        }
+
+        // Régénérez la session si tout est correct
         $request->session()->regenerate();
 
         return redirect()->intended(route('dashboard', absolute: false));
@@ -45,3 +59,4 @@ class AuthenticatedSessionController extends Controller
         return redirect('/');
     }
 }
+

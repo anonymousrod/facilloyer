@@ -31,13 +31,13 @@ class UsersSeeder extends Seeder
             $rand_role = $faker->randomElement($role);
 
             // Définir le statut basé sur le rôle
-            $faker_statut = ($rand_role == 3) ? false : $faker->boolean();
+            // $faker_statut = ($rand_role == 3) ? false : $faker->boolean();
 
             User::create([
                 'id_role' => $rand_role,
                 'email' => $faker->unique()->safeEmail,
                 'password' => Hash::make('123456789'),
-                'statut' => $faker_statut, // Utilisation de booléens corrects
+                'statut' => $faker->boolean(), // Utilisation de booléens corrects
             ]);
         }
     }

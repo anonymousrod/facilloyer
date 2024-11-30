@@ -81,6 +81,13 @@
                                     </div>
                                 </div>
                                 <div class="card-body pt-0">
+                                    {{-- statut non valide --}}
+                                    @if ($errors->has('status'))
+                                        <div class="alert alert-danger">
+                                            {{ $errors->first('status') }}
+                                        </div>
+                                    @endif
+
                                     <!-- erreur email -->
                                     @error('email')
                                         <div class="alert alert-danger text-center" role="alert">
@@ -95,7 +102,7 @@
                                         </div>
                                     @enderror
 
-                                    <form class="my-4" action="{{route('login')}}" method="POST">
+                                    <form class="my-4" action="{{ route('login') }}" method="POST">
                                         @csrf
                                         <div class="form-group mb-2">
                                             <label class="form-label" for="email">Adresse e-mail</label>
@@ -140,7 +147,7 @@
                                         </div> <!--end form-group-->
                                     </form><!--end form-->
                                     <div class="text-center  mb-2">
-                                        <p class="text-muted">Pas encore de compte ? <a href="{{ route('register')}}"
+                                        <p class="text-muted">Pas encore de compte ? <a href="{{ route('register') }}"
                                                 class="text-primary ms-2">Créer un compte</a></p>
                                         <h6 class="px-3 d-inline-block">Ou connectez-vous avec</h6>
                                     </div>
