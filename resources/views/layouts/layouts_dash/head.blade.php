@@ -8,12 +8,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- App favicon -->
-    <link rel="shortcut icon" href="assets/images/favicon.ico" />
+    <link rel="shortcut icon" href="{{asset('assets/images/favicon.ico')}} " />
 
     <!-- App css -->
-    <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
-    <link href="assets/css/app.min.css" rel="stylesheet" type="text/css" />
+    <link href=" {{asset('assets/css/bootstrap.min.css')}} " rel="stylesheet" type="text/css" />
+    <link href="{{asset('assets/css/icons.min.css')}} " rel="stylesheet" type="text/css" />
+    <link href="{{asset('assets/css/app.min.css')}} " rel="stylesheet" type="text/css" />
 
     {{-- head login --}}
     <meta charset="utf-8" />
@@ -28,9 +28,9 @@
 
 
     <!-- App css -->
-    <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
-    <link href="assets/css/app.min.css" rel="stylesheet" type="text/css" />
+    <link href=" {{asset('assets/css/bootstrap.min.css')}} " rel="stylesheet" type="text/css" />
+    <link href="{{asset('assets/css/icons.min.css')}} " rel="stylesheet" type="text/css" />
+    <link href="{{asset('assets/css/app.min.css')}} " rel="stylesheet" type="text/css" />
 
     {{-- head dashboard --}}
     <meta charset="utf-8" />
@@ -41,16 +41,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
     <!-- App favicon -->
-    <link rel="shortcut icon" href="assets/images/favicon.ico">
+    <link rel="shortcut icon" href="{{asset('assets/images/favicon.ico')}} ">
 
 
 
-    <link rel="stylesheet" href="assets/libs/jsvectormap/css/jsvectormap.min.css">
+    <link rel="stylesheet" href="{{asset('assets/libs/jsvectormap/css/jsvectormap.min.css')}} ">
 
     <!-- App css -->
-    <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
-    <link href="assets/css/app.min.css" rel="stylesheet" type="text/css" />
+    <link href="{{asset('assets/css/bootstrap.min.css')}} " rel="stylesheet" type="text/css" />
+    <link href="{{asset('assets/css/icons.min.css')}} " rel="stylesheet" type="text/css" />
+    <link href="{{asset('assets/css/app.min.css')}} " rel="stylesheet" type="text/css" />
 
     <title>@yield('title', 'Faciloyer')</title>
 
