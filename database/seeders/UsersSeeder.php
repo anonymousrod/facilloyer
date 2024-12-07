@@ -21,7 +21,7 @@ class UsersSeeder extends Seeder
         // Créer un utilisateur administrateur
         User::create([
             'id_role' => 1,
-            'email' => 'teteganexauce@gmail.com',
+            'email' => 'texauce@gmail.com',
             'password' => Hash::make('texauce69'),
             'statut' => true, // L'admin a toujours un statut à true
         ]);
@@ -38,6 +38,7 @@ class UsersSeeder extends Seeder
                 'email' => $faker->unique()->safeEmail,
                 'password' => Hash::make('123456789'),
                 'statut' => $faker->boolean(), // Utilisation de booléens corrects
+                'must_change_password' => $faker->boolean(), // Utilisation de booléens corrects
             ]);
         }
     }

@@ -59,6 +59,9 @@
 </head>
 
 <!-- Top Bar Start -->
+@php
+    $agent = Auth::user()?->id_role == 3;
+@endphp
 
 <body>
     <div class="container-xxl">
@@ -71,13 +74,17 @@
                                 <div class="card-body p-0 bg-black auth-header-box rounded-top">
                                     <div class="text-center p-3">
                                         <a href="#" class="logo logo-admin">
-                                            <img src="assets/images/logo-sm.png" height="50" alt="logo"
-                                                class="auth-logo" />
+                                            <img src=" {{ asset('assets/images/logo-sm.png') }} " height="50"
+                                                alt="logo" class="auth-logo" />
                                         </a>
-                                        <h4 class="mt-3 mb-1 fw-semibold text-white fs-18">Inscription à
-                                            {{ env('APP_NAME') }}</h4>
-                                        <p class="text-muted fw-medium mb-0">Remplissez les informations pour créer
-                                            votre compte.</p>
+                                        <h4 class="mt-3 mb-1 fw-semibold text-white fs-18">
+                                            {{ $agent ? 'Enregistrer un locataire' : 'Inscription à' . env('APP_NAME') }}
+                                        </h4>
+                                        <p class="text-muted fw-medium mb-0">
+                                            {{ $agent
+                                                ? 'Remplissez les informations pour enregistrer un locataire'
+                                                : 'Remplissez les informations pour créer votre compte.' }}
+                                        </p>
                                     </div>
                                 </div>
 
@@ -125,7 +132,7 @@
                                         <div class="alert alert-danger text-center">{{ $message }}</div>
                                     @enderror
 
-                                    <form class="my-4" method="POST" action="{{ route('register') }}">
+                                    <form class="my-4" method="POST" action=" {{ ($agent) ? route('locataire.store') : route('register')   }}">
                                         @csrf
 
                                         <!-- Email -->
@@ -135,86 +142,98 @@
                                                 placeholder="Entrez votre adresse email" value="{{ old('email') }}"
                                                 required />
                                         </div>
+                                        @if ($agent)
+                                            <div>
+                                                <p class=" text-info fw-medium mb-0">
+                                                    Un mot de passe sécurisé sera envoyé au locataire via l'adresse
+                                                    e-mail renseignée. </p>
+                                            </div>
+                                        @endif
 
-                                        <!-- Mot de passe -->
-                                        <div class="form-group mb-2">
-                                            <label class="form-label" for="password">Mot de passe</label>
-                                            <input type="password" class="form-control" id="password" name="password"
-                                                placeholder="Entrez votre mot de passe" required />
-                                        </div>
+                                        @if (!$agent)
+                                            <!-- Mot de passe -->
+                                            <div class="form-group mb-2">
+                                                <label class="form-label" for="password">Mot de passe</label>
+                                                <input type="password" class="form-control" id="password"
+                                                    name="password" placeholder="Entrez votre mot de passe" required />
+                                            </div>
 
-                                        <!-- Confirmation du mot de passe -->
-                                        <div class="form-group mb-2">
-                                            <label class="form-label" for="password_confirmation">Confirmez le mot de
-                                                passe</label>
-                                            <input type="password" class="form-control" id="password_confirmation"
-                                                name="password_confirmation" placeholder="Confirmez votre mot de passe"
-                                                required />
-                                        </div>
+                                            <!-- Confirmation du mot de passe -->
+                                            <div class="form-group mb-2">
+                                                <label class="form-label" for="password_confirmation">Confirmez le mot
+                                                    de
+                                                    passe</label>
+                                                <input type="password" class="form-control" id="password_confirmation"
+                                                    name="password_confirmation"
+                                                    placeholder="Confirmez votre mot de passe" required />
+                                            </div>
+                                            <!-- Type d'utilisateur -->
 
-                                        <!-- Type d'utilisateur -->
+                                            {{-- code a ameliorer pour l'enregistrement des locataire par l'admin --}}
 
-                                        {{-- code a ameliorer pour l'enregistrement des locataire par l'admin --}}
+                                            {{-- <div class="form-group mb-2">
+                                                <label class="form-label" for="role">Type d'utilisateur</label>
+                                                <select class="form-control" id="role" name="id_role" required>
+                                                    <option value="" disabled selected>-- Sélectionnez un rôle --</option>
+                                                    @foreach (getRoles() as $role)
+                                                        <option value="{{ $role->id }}"
+                                                            {{ old('id_role') == $role->id ? 'selected' : '' }}>
+                                                            {{ $role->libelle }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div> --}}
 
-                                        {{-- <div class="form-group mb-2">
-                                            <label class="form-label" for="role">Type d'utilisateur</label>
-                                            <select class="form-control" id="role" name="id_role" required>
-                                                <option value="" disabled selected>-- Sélectionnez un rôle --</option>
-                                                @foreach (getRoles() as $role)
-                                                    <option value="{{ $role->id }}"
-                                                        {{ old('id_role') == $role->id ? 'selected' : '' }}>
-                                                        {{ $role->libelle }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                        </div> --}}
+                                            {{-- suite du code pour register agent immobilier --}}
 
-                                        {{-- suite du code pour register agent immobilier --}}
-
-                                        {{-- @dd(getRoles()); --}}
-                                        @foreach (getRoles() as $role)
-                                            @if ($role->libelle == 'Agent immobilier')
-                                                {{-- @dd($role->libelle); --}}
-                                                {{-- @dd($role->id); --}}
-                                                <input type="number" name="id_role" value="{{ $role->id }}" hidden>
-                                            @endif
-                                        @endforeach
-
-
-
-                                        <!-- Checkbox pour accepter les conditions -->
-                                        <div class="form-group row mt-3">
-                                            <div class="col-12">
-                                                <div class="form-check form-switch form-switch-success">
-                                                    <input class="form-check-input" type="checkbox"
-                                                        id="terms_conditions" required />
-                                                    <label class="form-check-label" for="terms_conditions">
-                                                        En m'inscrivant, j'accepte les <a href="#"
-                                                            class="text-primary">Conditions d'utilisation</a>.
-                                                    </label>
+                                            @foreach (getRoles() as $role)
+                                                @if ($role->libelle == 'Agent immobilier')
+                                                    <input type="number" name="id_role" value="{{ $role->id }}"
+                                                        hidden>
+                                                @endif
+                                            @endforeach
+                                            <!-- Checkbox pour accepter les conditions -->
+                                            <div class="form-group row mt-3">
+                                                <div class="col-12">
+                                                    <div class="form-check form-switch form-switch-success">
+                                                        <input class="form-check-input" type="checkbox"
+                                                            id="terms_conditions" required />
+                                                        <label class="form-check-label" for="terms_conditions">
+                                                            En m'inscrivant, j'accepte les <a href="#"
+                                                                class="text-primary">Conditions d'utilisation</a>.
+                                                        </label>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        @endif
+
+
+
+
+
 
                                         <!-- Bouton soumettre -->
                                         <div class="form-group mb-0 row">
                                             <div class="col-12">
                                                 <div class="d-grid mt-3">
                                                     <button class="btn btn-primary" type="submit">
-                                                        Créer mon compte
+                                                        {{ $agent ? 'Enregistrer' : 'Créer mon compte' }}
                                                     </button>
                                                 </div>
                                             </div>
                                         </div>
                                     </form>
 
-                                    <!-- Lien pour se connecter -->
-                                    <div class="text-center">
-                                        <p class="text-muted">
-                                            Vous avez déjà un compte ?
-                                            <a href="{{ route('login') }}" class="text-primary ms-2">Se connecter</a>
-                                        </p>
-                                    </div>
+                                    @if (!$agent)
+                                        <!-- Lien pour se connecter -->
+                                        <div class="text-center">
+                                            <p class="text-muted">
+                                                Vous avez déjà un compte ?
+                                                <a href="{{ route('login') }}" class="text-primary ms-2">Se
+                                                    connecter</a>
+                                            </p>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>

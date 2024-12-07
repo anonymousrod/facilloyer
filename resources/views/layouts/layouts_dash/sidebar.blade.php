@@ -4,11 +4,11 @@
     <div class="brand">
         <a href="index.html" class="logo">
             <span>
-                <img src="{{asset('assets/images/logo-sm.png')}} " alt="logo-small" class="logo-sm">
+                <img src="{{ asset('assets/images/logo-sm.png') }} " alt="logo-small" class="logo-sm">
             </span>
             <span class="">
-                <img src="{{asset('assets/images/logo-light.png')}} " alt="logo-large" class="logo-lg logo-light">
-                <img src="{{asset('assets/images/logo-dark.png')}} " alt="logo-large" class="logo-lg logo-dark">
+                <img src="{{ asset('assets/images/logo-light.png') }} " alt="logo-large" class="logo-lg logo-light">
+                <img src="{{ asset('assets/images/logo-dark.png') }} " alt="logo-large" class="logo-lg logo-dark">
             </span>
         </a>
     </div>
@@ -128,29 +128,26 @@
                             </li><!--end nav-item-->
 
                             <li class="nav-item">
-                                <a class="nav-link" href="lol.html">
+                                <a class="nav-link" href="#sidebarGerer_locataires" data-bs-toggle="collapse"
+                                    role="button" aria-expanded="false" aria-controls="sidebarGerer_locataires">
                                     <i class="iconoir-view-grid menu-icon"></i>
-                                    <span>Consulter les rapports financiers</span>
+                                    <span>Gérer les locataires</span>
                                 </a>
+                                <div class="collapse " id="sidebarGerer_locataires">
+                                    <ul class="nav flex-column">
 
+
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="{{route('locataire.create')}}">Ajouter locataire</a>
+                                        </li><!--end nav-item-->
+                                        <li class="nav-item">
+                                            <a class="nav-link" href="apps-contact-list.html">Liste locataire</a>
+                                        </li><!--end nav-item-->
+
+
+                                    </ul><!--end nav-->
+                                </div><!--end startbarGerer_bien-->
                             </li><!--end nav-item-->
-
-                            <li class="nav-item">
-                                <a class="nav-link" href="lol.html">
-                                    <i class="iconoir-view-grid menu-icon"></i>
-                                    <span>Suivi des paiements</span>
-                                </a>
-
-                            </li><!--end nav-item-->
-                            <li class="nav-item">
-                                <a class="nav-link" href="lol.html">
-                                    <i class="iconoir-view-grid menu-icon"></i>
-                                    <span>Discussion par chat</span>
-                                </a>
-
-                            </li><!--end nav-item-->
-
-
 
                             <li class="nav-item">
                                 <a class="nav-link" href="#sidebarGerer_bien" data-bs-toggle="collapse" role="button"
@@ -174,8 +171,6 @@
                                 </div><!--end startbarGerer_bien-->
                             </li><!--end nav-item-->
 
-
-
                             <li class="nav-item">
                                 <a class="nav-link" href="#sidebarGerer_contrat_bail" data-bs-toggle="collapse"
                                     role="button" aria-expanded="false" aria-controls="sidebarGerer_contrat_bail">
@@ -190,34 +185,49 @@
                                             <a class="nav-link" href="apps-chat.html">Créer contrat de bail</a>
                                         </li><!--end nav-item-->
                                         <li class="nav-item">
-                                            <a class="nav-link" href="apps-contact-list.html"> Lise des contrat de bail</a>
+                                            <a class="nav-link" href="apps-contact-list.html"> Lise des contrat de
+                                                bail</a>
                                         </li><!--end nav-item-->
 
 
                                     </ul><!--end nav-->
                                 </div><!--end startbarGerer_bien-->
                             </li><!--end nav-item-->
+
                             <li class="nav-item">
-                                <a class="nav-link" href="#sidebarGerer_locataires" data-bs-toggle="collapse"
-                                    role="button" aria-expanded="false" aria-controls="sidebarGerer_locataires">
+                                <a class="nav-link" href="lol.html">
                                     <i class="iconoir-view-grid menu-icon"></i>
-                                    <span>Gérer les locataires</span>
+                                    <span>Suivi des paiements</span>
                                 </a>
-                                <div class="collapse " id="sidebarGerer_locataires">
-                                    <ul class="nav flex-column">
 
-
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="apps-chat.html">Ajouter locataire</a>
-                                        </li><!--end nav-item-->
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="apps-contact-list.html">Liste locataire</a>
-                                        </li><!--end nav-item-->
-
-
-                                    </ul><!--end nav-->
-                                </div><!--end startbarGerer_bien-->
                             </li><!--end nav-item-->
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="lol.html">
+                                    <i class="iconoir-view-grid menu-icon"></i>
+                                    <span>Consulter les rapports financiers</span>
+                                </a>
+
+                            </li><!--end nav-item-->
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="lol.html">
+                                    <i class="iconoir-view-grid menu-icon"></i>
+                                    <span>Discussion par chat</span>
+                                </a>
+
+                            </li><!--end nav-item-->
+
+
+
+
+
+
+
+
+
+
+
                         @else
                             <!-- Si l'agent n'est pas validé -->
 

@@ -39,6 +39,11 @@ class AuthenticatedSessionController extends Controller
             ]);
         }
 
+        // Vérification : si l'utilisateur doit changer son mot de passe
+        if ($user->id_role == 2 &&  $user->must_change_password) {
+            return redirect()->route('passwordChangeForm'); // Redirection vers la page de changement de mot de passe
+        }
+
         // Régénérez la session si tout est correct
         $request->session()->regenerate();
 
@@ -59,4 +64,3 @@ class AuthenticatedSessionController extends Controller
         return redirect('/');
     }
 }
-
