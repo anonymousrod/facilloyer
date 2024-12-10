@@ -7,3 +7,10 @@
 <script src="{{asset('assets/libs/jsvectormap/maps/world.js')}} "></script>
 <script src="{{asset('assets/js/pages/index.init.js')}} "></script>
 <script src="{{asset('assets/js/app.js')}} "></script>
+
+{{-- script pour tables --}}
+<script src=" {{ asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js')}} "></script>
+<script src=" {{ asset('assets/libs/simplebar/simplebar.min.js')}} "></script>
+<script src=" {{ asset('assets/libs/simple-datatables/umd/simple-datatables.js')}} "></script>
+<script src=" {{ asset('assets/js/pages/datatable.init.js')}} "></script>
+<script src=" {{ asset('assets/js/app.js')}} "></script>

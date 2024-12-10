@@ -43,10 +43,11 @@ Route::post('/password_change_save', [LocataireController::class, 'changePasswor
 
 
 
-// Page agence_info
-// Route::get('/agence_info', function(){
-//     return view('layouts.agence_info');
-// })->name('agence_info');
+// try
+
+Route::get('/liste_locataire', function(){
+    return view('layouts.liste_locataire');
+})->name('liste_locataire');
 
 
 

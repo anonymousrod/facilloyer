@@ -15,17 +15,19 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade')->onUpdate('restrict');
-            $table->string('nom'); // Nom
-            $table->string('prenom'); // Prénom
-            $table->string('adresse'); // Adresse
-            $table->string('telephone'); // Téléphone
-            $table->date('date_naissance'); // Date de naissance
-            $table->string('genre'); // Genre
-            $table->float('revenu_mensuel'); // Revenu mensuel
-            $table->integer('nombre_personne_foyer'); // Nombre de personnes dans le foyer
-            $table->string('statut_matrimoniale'); // Statut matrimonial
-            $table->string('statut_professionnel'); // Statut professionnel
-            $table->string('garant'); // Garant
+            $table->unsignedBigInteger('agent_id');
+            $table->foreign('agent_id')->references('id')->on('agent_immobilier')->onDelete('cascade')->onUpdate('restrict');
+            $table->string('nom')->nullable(); // Nom
+            $table->string('prenom')->nullable(); // Prénom
+            $table->string('adresse')->nullable(); // Adresse
+            $table->string('telephone')->nullable(); // Téléphone
+            $table->date('date_naissance')->nullable(); // Date de naissance
+            $table->string('genre')->nullable(); // Genre
+            $table->float('revenu_mensuel')->nullable(); // Revenu mensuel
+            $table->integer('nombre_personne_foyer')->nullable(); // Nombre de personnes dans le foyer
+            $table->string('statut_matrimoniale')->nullable(); // Statut matrimonial
+            $table->string('statut_professionnel')->nullable(); // Statut professionnel
+            $table->string('garant')->nullable(); // Garant
             $table->string('photo_profil')->nullable(); // Photo de profil
             $table->timestamps();
             $table->softDeletes();

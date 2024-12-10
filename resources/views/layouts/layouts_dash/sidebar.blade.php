@@ -141,7 +141,7 @@
                                             <a class="nav-link" href="{{route('locataire.create')}}">Ajouter locataire</a>
                                         </li><!--end nav-item-->
                                         <li class="nav-item">
-                                            <a class="nav-link" href="apps-contact-list.html">Liste locataire</a>
+                                            <a class="nav-link" href="{{ route('liste_locataire')}}">Liste locataire</a>
                                         </li><!--end nav-item-->
 
 
@@ -240,8 +240,6 @@
                             </li><!--end nav-item-->
                         @endif
                     @endif
-
-
 
 
                 </ul><!--end navbar-nav--->

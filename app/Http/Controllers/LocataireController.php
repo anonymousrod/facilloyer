@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Locataire;
 use App\Models\User;
 use App\Notifications\SendLocataireLogin;
 use Illuminate\Http\Request;
@@ -16,7 +17,8 @@ class LocataireController extends Controller
      */
     public function index()
     {
-        //
+        //pour l'affichage des locataires
+
     }
 
     /**
@@ -50,6 +52,17 @@ class LocataireController extends Controller
             'statut' => true,
             'must_change_password' => true,
         ]);
+
+        // Ajouter l'id du locataire creer dans la table locataire (user_id) ainsi que l'agent_id qui est authentifier
+        $agentImmobilier = Auth::user()->agent_immobiliers;
+        // dd($agentImmobilier);
+
+        Locataire::create([
+            'user_id' => $tenant->id,
+            'agent_id' => $agentImmobilier->first()->id
+        ]);
+
+
 
         // Envoyer l'email avec les informations de connexion
         $tenant->notify(new SendLocataireLogin($randomPassword));
