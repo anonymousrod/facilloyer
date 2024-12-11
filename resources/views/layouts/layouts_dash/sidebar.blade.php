@@ -77,7 +77,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="lol.html">
                                 <i class="iconoir-view-grid menu-icon"></i>
-                                <span>Dashboard</span>
+                                <span>Espace Locataire</span>
                             </a>
 
                         </li><!--end nav-item-->
@@ -85,29 +85,51 @@
 
                         <li class="nav-item">
                             <a class="nav-link" href="lol.html">
-                                <i class="iconoir-view-grid menu-icon"></i>
-                                <span>Effectuer un paiement</span>
+                            <i class="iconoir-book menu-icon"></i>
+                            <span>Consulter son contrat de bail</span>
                             </a>
 
                         </li><!--end nav-item-->
                         <li class="nav-item">
                             <a class="nav-link" href="lol.html">
-                                <i class="iconoir-view-grid menu-icon"></i>
-                                <span>Consulter son contrat de bail</span>
+                            <i class="iconoir-wrench menu-icon"></i>
+                            <span>Demande de maintenance/réparations </span>
                             </a>
 
                         </li><!--end nav-item-->
                         <li class="nav-item">
                             <a class="nav-link" href="lol.html">
-                                <i class="iconoir-view-grid menu-icon"></i>
-                                <span>Consulter l'historique des paiements</span>
+                            <i class="iconoir-bell menu-icon"></i>
+                            <span>Notifications d’échéances importantes</span>
+                            </a>
+
+                        </li><!--end nav-item-->
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="lol.html">
+                            <i class="iconoir-credit-card menu-icon"></i>
+                            <span>Effectuer un paiement</span>
                             </a>
 
                         </li><!--end nav-item-->
                         <li class="nav-item">
                             <a class="nav-link" href="lol.html">
-                                <i class="iconoir-view-grid menu-icon"></i>
-                                <span>Discussion par chat</span>
+                            <i class="iconoir-list menu-icon"></i>
+                            <span>Consulter l'historique des paiements</span>
+                            </a>
+
+                        </li><!--end nav-item-->
+                        <li class="nav-item">
+                            <a class="nav-link" href="lol.html">
+                            <i class="iconoir-chat-bubble menu-icon"></i>
+                            <span>Assistance en ligne </span>
+                            </a>
+
+                        </li><!--end nav-item-->
+                        <li class="nav-item">
+                            <a class="nav-link" href="lol.html">
+                            <i class="iconoir-phone menu-icon"></i>
+                            <span>Informations de l’agence ou de l’agent</span>
                             </a>
 
                         </li><!--end nav-item-->
