@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\AgentImmobilier;
 use App\Models\Locataire;
 use App\Models\User;
 use Faker\Factory;
@@ -18,10 +19,15 @@ class LocataireSeeder extends Seeder
         //
         $faker = Factory::create();
         $locataires = User::where('id_role', 2)->get()->pluck('id')->toArray();
+        $agents_id = AgentImmobilier::all()->pluck('id')->toArray();
+
+        $rand_agents_id = $faker->randomElement($agents_id);
+
 
         foreach ($locataires as $locataire) {
             Locataire::create([
                 'user_id' => $locataire ,
+                'agent_id' => $rand_agents_id ,
                 'nom' => $faker->lastName,
                 'prenom' => $faker->firstName,
                 'adresse' => $faker->address,

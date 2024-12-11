@@ -43,6 +43,8 @@ class User extends Authenticatable //implements MustVerifyEmail  Implements Must
         'id_role' => 'int',
         'email_verified_at' => 'datetime',
         'statut' => 'boolean',
+        'must_change_password' => 'boolean',
+
     ];
 
     /**
@@ -62,6 +64,7 @@ class User extends Authenticatable //implements MustVerifyEmail  Implements Must
         'email_verified_at',
         'password',
         'remember_token',
+        'must_change_password',
         'statut',
         'created_at',
         'updated_at',

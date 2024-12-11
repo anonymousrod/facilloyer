@@ -46,6 +46,7 @@ class Locataire extends Model
 
     protected $casts = [
         'user_id' => 'int',
+        'agent_id' => 'int',
         'date_naissance' => 'datetime',
         'revenu_mensuel' => 'float',
         'nombre_personne_foyer' => 'int'
@@ -53,6 +54,7 @@ class Locataire extends Model
 
     protected $fillable = [
         'user_id',
+        'agent_id',
         'nom',
         'prenom',
         'adresse',
