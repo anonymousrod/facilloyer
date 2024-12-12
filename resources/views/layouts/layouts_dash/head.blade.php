@@ -30,7 +30,6 @@
     <!-- App css -->
     <link href=" {{asset('assets/css/bootstrap.min.css')}} " rel="stylesheet" type="text/css" />
     <link href="{{asset('assets/css/icons.min.css')}} " rel="stylesheet" type="text/css" />
-    <link href="{{asset('assets/css/app.min.css')}} " rel="stylesheet" type="text/css" />
 
     {{-- head dashboard --}}
 
@@ -53,7 +52,11 @@
 
     <link href="assets/libs/simple-datatables/style.css" rel="stylesheet" type="text/css" />
     <!-- App css -->
-    <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
-    <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
-    <link href="assets/css/app.min.css" rel="stylesheet" type="text/css" />
+
+    <link rel="shortcut icon" href="assets/images/favicon.ico">
+
+       
+<link href="assets/libs/tobii/css/tobii.min.css" rel="stylesheet" type="text/css" />
+ <!-- App css -->
+
 </head>
