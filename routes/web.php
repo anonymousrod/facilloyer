@@ -37,6 +37,8 @@ Route::resource('/locataire', LocataireController::class)->names('locataire');
 //route pour le changement de mot de passe pour new locataire
 Route::get('/password_change', [LocataireController::class, 'showChangePasswordForm'])->name('passwordChangeForm');
 Route::post('/password_change_save', [LocataireController::class, 'changePassword'])->name('passwordChangeFormSave');
+//route pour changer le statut du locataire par l'agent immobilier
+Route::post('/locataires/{id}/toggle-status', [LocataireController::class, 'toggleStatus']);
 
 
 
@@ -45,9 +47,9 @@ Route::post('/password_change_save', [LocataireController::class, 'changePasswor
 
 // try
 
-Route::get('/liste_locataire', function(){
-    return view('layouts.liste_locataire');
-})->name('liste_locataire');
+// Route::get('/liste_locataire', function(){
+//     return view('layouts.liste_locataire');
+// })->name('liste_locataire');
 
 
 
