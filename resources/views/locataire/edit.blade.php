@@ -4,123 +4,116 @@
 
 <div class="container-xxl mt-5">
     <div class="row justify-content-center">
-            <div class="card">
-                <div class="card-header">
+        <div class="col-md-10 col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white text-center">
                     <h4 class="card-title">Modifier vos informations</h4>
                 </div>
                 <div class="card-body">
-                <form method="post" action="{{ route('locataire.update', $locataire->id) }}" enctype="multipart/form-data">
-                @csrf
+                    <form method="post" action="{{ route('locataire.update', $locataire->id) }}" enctype="multipart/form-data">
+                        @csrf
                         @method('patch')
 
-                        <div class="form-group mb-3 row">
-                            <label class="col-xl-3 col-lg-3 text-end form-label" for="nom">Nom</label>
-                            <div class="col-lg-9 col-xl-8">
-                                <input class="form-control" id="nom" name="nom" type="text" value="{{ old('nom', $locataire->nom) }}" placeholder="Nom">
-                            </div>
+                        <!-- Nom -->
+                        <div class="form-group mb-3">
+                            <label for="nom">Nom <span class="text-danger">*</span></label>
+                            <input type="text" id="nom" name="nom" class="form-control" 
+                                   value="{{ old('nom', $locataire->nom) }}" placeholder="Entrez votre nom" required>
                         </div>
 
-                        <div class="form-group mb-3 row">
-                            <label class="col-xl-3 col-lg-3 text-end form-label" for="prenom">Prénom</label>
-                            <div class="col-lg-9 col-xl-8">
-                                <input class="form-control" id="prenom" name="prenom" type="text" value="{{ old('prenom', $locataire->prenom) }}" placeholder="Prénom">
-                            </div>
+                        <!-- Prénom -->
+                        <div class="form-group mb-3">
+                            <label for="prenom">Prénom <span class="text-danger">*</span></label>
+                            <input type="text" id="prenom" name="prenom" class="form-control" 
+                                   value="{{ old('prenom', $locataire->prenom) }}" placeholder="Entrez votre prénom" required>
                         </div>
 
-                        <div class="form-group mb-3 row">
-                            <label class="col-xl-3 col-lg-3 text-end form-label" for="adresse">Adresse</label>
-                            <div class="col-lg-9 col-xl-8">
-                                <input class="form-control" id="adresse" name="adresse" type="text" value="{{ old('adresse', $locataire->adresse) }}" placeholder="Adresse">
-                            </div>
+                        <!-- Adresse -->
+                        <div class="form-group mb-3">
+                            <label for="adresse">Adresse <span class="text-danger">*</span></label>
+                            <textarea id="adresse" name="adresse" class="form-control" rows="2" placeholder="Entrez votre adresse" required>{{ old('adresse', $locataire->adresse) }}</textarea>
                         </div>
 
-                        <div class="form-group mb-3 row">
-                            <label class="col-xl-3 col-lg-3 text-end form-label" for="telephone">Téléphone</label>
-                            <div class="col-lg-9 col-xl-8">
-                                <input class="form-control" id="telephone" name="telephone" type="text" value="{{ old('telephone', $locataire->telephone) }}" placeholder="Téléphone">
-                            </div>
+                        <!-- Téléphone -->
+                        <div class="form-group mb-3">
+                            <label for="telephone">Téléphone <span class="text-danger">*</span></label>
+                            <input type="text" id="telephone" name="telephone" class="form-control" 
+                                   value="{{ old('telephone', $locataire->telephone) }}" placeholder="Entrez votre numéro de téléphone" required>
                         </div>
 
-                        <div class="form-group mb-3 row">
-                            <label class="col-xl-3 col-lg-3 text-end form-label" for="date_naissance">Date de naissance</label>
-                            <div class="col-lg-9 col-xl-8">
-                                <input class="form-control" id="date_naissance" name="date_naissance" type="date" value="{{ old('date_naissance', $locataire->date_naissance) }}">
-                            </div>
+                        <!-- Date de naissance -->
+                        <div class="form-group mb-3">
+                            <label for="date_naissance">Date de naissance <span class="text-danger">*</span></label>
+                            <input type="date" id="date_naissance" name="date_naissance" class="form-control" 
+                                   value="{{ old('date_naissance', $locataire->date_naissance) }}" required>
                         </div>
 
-                        <div class="form-group mb-3 row">
-                            <label class="col-xl-3 col-lg-3 text-end form-label" for="genre">Genre</label>
-                            <div class="col-lg-9 col-xl-8">
-                                <select class="form-select" id="genre" name="genre">
-                                    <option value="Homme" {{ old('genre', $locataire->genre) == 'Homme' ? 'selected' : '' }}>Homme</option>
-                                    <option value="Femme" {{ old('genre', $locataire->genre) == 'Femme' ? 'selected' : '' }}>Femme</option>
-                                    <option value="Autre" {{ old('genre', $locataire->genre) == 'Autre' ? 'selected' : '' }}>Autre</option>
-                                </select>
-                            </div>
+                        <!-- Genre -->
+                        <div class="form-group mb-3">
+                            <label for="genre">Genre <span class="text-danger">*</span></label>
+                            <select id="genre" name="genre" class="form-control" required>
+                                <option value="" disabled {{ old('genre', $locataire->genre) ? '' : 'selected' }}>Sélectionnez votre genre</option>
+                                <option value="Masculin" {{ old('genre', $locataire->genre) == 'Masculin' ? 'selected' : '' }}>Masculin</option>
+                                <option value="Féminin" {{ old('genre', $locataire->genre) == 'Féminin' ? 'selected' : '' }}>Féminin</option>
+                                <option value="Autre" {{ old('genre', $locataire->genre) == 'Autre' ? 'selected' : '' }}>Autre</option>
+                            </select>
                         </div>
 
-                        <!-- Nouveau champ : Revenu Mensuel -->
-                        <div class="form-group mb-3 row">
-                            <label class="col-xl-3 col-lg-3 text-end form-label" for="revenu_mensuel">Revenu Mensuel</label>
-                            <div class="col-lg-9 col-xl-8">
-                                <input class="form-control" id="revenu_mensuel" name="revenu_mensuel" type="number" value="{{ old('revenu_mensuel', $locataire->revenu_mensuel) }}" placeholder="Revenu Mensuel">
-                            </div>
+                        <!-- Revenu mensuel -->
+                        <div class="form-group mb-3">
+                            <label for="revenu_mensuel">Revenu mensuel (€) <span class="text-danger">*</span></label>
+                            <input type="number" id="revenu_mensuel" name="revenu_mensuel" class="form-control" 
+                                   value="{{ old('revenu_mensuel', $locataire->revenu_mensuel) }}" placeholder="Entrez votre revenu mensuel" required>
                         </div>
 
-                        <!-- Nouveau champ : Nombre de personnes dans le foyer -->
-                        <div class="form-group mb-3 row">
-                            <label class="col-xl-3 col-lg-3 text-end form-label" for="nombre_personne_foyer">Nombre de personnes dans le foyer</label>
-                            <div class="col-lg-9 col-xl-8">
-                                <input class="form-control" id="nombre_personne_foyer" name="nombre_personne_foyer" type="number" value="{{ old('nombre_personne_foyer', $locataire->nombre_personne_foyer) }}" placeholder="Nombre de personnes">
-                            </div>
+                        <!-- Nombre de personnes au foyer -->
+                        <div class="form-group mb-3">
+                            <label for="nombre_personne_foyer">Nombre de personnes au foyer <span class="text-danger">*</span></label>
+                            <input type="number" id="nombre_personne_foyer" name="nombre_personne_foyer" class="form-control" 
+                                   value="{{ old('nombre_personne_foyer', $locataire->nombre_personne_foyer) }}" placeholder="Entrez le nombre de personnes au foyer" required>
                         </div>
 
-                        <!-- Nouveau champ : Statut matrimonial -->
-                        <div class="form-group mb-3 row">
-                            <label class="col-xl-3 col-lg-3 text-end form-label" for="statut_matrimoniale">Statut matrimonial</label>
-                            <div class="col-lg-9 col-xl-8">
-                                <select class="form-select" id="statut_matrimoniale" name="statut_matrimoniale">
-                                    <option value="Célibataire" {{ old('statut_matrimoniale', $locataire->statut_matrimoniale) == 'Célibataire' ? 'selected' : '' }}>Célibataire</option>
-                                    <option value="Marié" {{ old('statut_matrimoniale', $locataire->statut_matrimoniale) == 'Marié' ? 'selected' : '' }}>Marié</option>
-                                    <option value="Divorcé" {{ old('statut_matrimoniale', $locataire->statut_matrimoniale) == 'Divorcé' ? 'selected' : '' }}>Divorcé</option>
-                                </select>
-                            </div>
+                        <!-- Statut matrimonial -->
+                        <div class="form-group mb-3">
+                            <label for="statut_matrimoniale">Statut matrimonial <span class="text-danger">*</span></label>
+                            <select id="statut_matrimoniale" name="statut_matrimoniale" class="form-control" required>
+                                <option value="" disabled {{ old('statut_matrimoniale', $locataire->statut_matrimoniale) ? '' : 'selected' }}>Sélectionnez votre statut matrimonial</option>
+                                <option value="Célibataire" {{ old('statut_matrimoniale', $locataire->statut_matrimoniale) == 'Célibataire' ? 'selected' : '' }}>Célibataire</option>
+                                <option value="Marié(e)" {{ old('statut_matrimoniale', $locataire->statut_matrimoniale) == 'Marié(e)' ? 'selected' : '' }}>Marié(e)</option>
+                                <option value="Divorcé(e)" {{ old('statut_matrimoniale', $locataire->statut_matrimoniale) == 'Divorcé(e)' ? 'selected' : '' }}>Divorcé(e)</option>
+                                <option value="Veuf(ve)" {{ old('statut_matrimoniale', $locataire->statut_matrimoniale) == 'Veuf(ve)' ? 'selected' : '' }}>Veuf(ve)</option>
+                            </select>
                         </div>
 
-                        <!-- Nouveau champ : Statut professionnel -->
-                        <div class="form-group mb-3 row">
-                            <label class="col-xl-3 col-lg-3 text-end form-label" for="statut_professionnel">Statut professionnel</label>
-                            <div class="col-lg-9 col-xl-8">
-                                <input class="form-control" id="statut_professionnel" name="statut_professionnel" type="text" value="{{ old('statut_professionnel', $locataire->statut_professionnel) }}" placeholder="Statut professionnel">
-                            </div>
+                        <!-- Statut professionnel -->
+                        <div class="form-group mb-3">
+                            <label for="statut_professionnel">Statut professionnel <span class="text-danger">*</span></label>
+                            <input type="text" id="statut_professionnel" name="statut_professionnel" class="form-control" 
+                                   value="{{ old('statut_professionnel', $locataire->statut_professionnel) }}" placeholder="Entrez votre statut professionnel" required>
                         </div>
 
-                        <!-- Nouveau champ : Garant -->
-                        <div class="form-group mb-3 row">
-                            <label class="col-xl-3 col-lg-3 text-end form-label" for="garant">Garant</label>
-                            <div class="col-lg-9 col-xl-8">
-                                <input class="form-control" id="garant" name="garant" type="text" value="{{ old('garant', $locataire->garant) }}" placeholder="Garant">
-                            </div>
+                        <!-- Garant -->
+                        <div class="form-group mb-3">
+                            <label for="garant">Garant</label>
+                            <input type="text" id="garant" name="garant" class="form-control" 
+                                   value="{{ old('garant', $locataire->garant) }}" placeholder="Entrez les informations du garant">
                         </div>
 
-                        <!-- Nouveau champ : Photo de profil -->
-                        <div class="form-group mb-3 row">
-                            <label class="col-xl-3 col-lg-3 text-end form-label" for="photo_profil">Photo de profil</label>
-                            <div class="col-lg-9 col-xl-8">
-                                <input class="form-control" id="photo_profil" name="photo_profil" type="file">
-                            </div>
+                        <!-- Photo de profil -->
+                        <div class="form-group mb-3">
+                            <label for="photo_profil">Photo de profil</label>
+                            <input type="file" id="photo_profil" name="photo_profil" class="form-control">
                         </div>
 
-                        <div class="form-group row">
-                            <div class="col-lg-9 col-xl-8 offset-lg-3">
-                                <button type="submit" class="btn btn-primary">Enregistrer</button>
-                                <a href="{{ route('profile.edit') }}" class="btn btn-secondary">Annuler</a>
-                            </div>
+                        <!-- Boutons -->
+                        <div class="form-group text-center mt-4">
+                            <button type="submit" class="btn btn-primary px-5">Enregistrer</button>
+                            <a href="{{ route('profile.edit') }}" class="btn btn-secondary px-4">Annuler</a>
                         </div>
                     </form>
                 </div>
             </div>
-        
+        </div>
     </div>
 </div>
 

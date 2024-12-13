@@ -9,14 +9,14 @@
                     <form method="post" action="{{ route('profile.update') }}" class="mt-6 space-y-6">
                         @csrf
                         @method('patch')
-
-                        <div class="form-group mb-3 row">
+                            <!-- CACHER LE CHAMPS NOM -->
+                        <!-- <div class="form-group mb-3 row">
                             <label class="col-xl-3 col-lg-3 text-end mb-lg-0 align-self-center form-label" for="name">Name</label>
                             <div class="col-lg-9 col-xl-8">
                                 <input class="form-control" id="name" name="name" type="text" value="{{ old('name', $user->name) }}" required autofocus autocomplete="name">
                                 <x-input-error class="mt-2" :messages="$errors->get('name')" />
                             </div>
-                        </div>
+                        </div> -->
 
                         <div class="form-group mb-3 row">
                             <label class="col-xl-3 col-lg-3 text-end mb-lg-0 align-self-center form-label" for="email">Email Address</label>

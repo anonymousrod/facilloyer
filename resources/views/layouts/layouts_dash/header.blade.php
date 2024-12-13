@@ -51,13 +51,13 @@
                     <li class="dropdown topbar-item">
                         <a class="nav-link dropdown-toggle arrow-none nav-icon" data-bs-toggle="dropdown"
                             href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                            <img src="{{asset('assets/images/users/avatar-1.jpg')}} " alt=""
-                                class="thumb-lg rounded-circle">
+                            <img src="{{asset('assets/images/users/avatar-1.png')}} " alt=""
+                                class="thumb-lg rounded-circle" height="150">
                         </a>
                         <div class="dropdown-menu dropdown-menu-end py-0">
                             <div class="d-flex align-items-center dropdown-item py-2 bg-secondary-subtle">
                                 <div class="flex-shrink-0">
-                                    <img src="{{asset('assets/images/users/avatar-1.jpg')}} " alt=""
+                                    <img src="{{asset('assets/images/users/avatar-1.png')}} " alt=""
                                         class="thumb-md rounded-circle">
                                 </div>
                                 <div class="flex-grow-1 ms-2 text-truncate align-self-center">

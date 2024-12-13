@@ -133,15 +133,17 @@ class LocataireController extends Controller
     
         // Gestion de l'image (si un fichier est téléchargé)
         if ($request->hasFile('photo_profil')) {
-            // Générer un nom unique pour l'image
+            // Supprimer l'ancienne image si elle existe
+            if ($locataire->photo_profil && file_exists(public_path('images/profils/'.$locataire->photo_profil))) {
+                unlink(public_path('images/profils/'.$locataire->photo_profil));
+            }
+        
+            // Sauvegarder la nouvelle image
             $imageName = time().'.'.$request->photo_profil->extension();
-            
-            // Déplacer le fichier dans le dossier public
             $request->photo_profil->move(public_path('images/profils'), $imageName);
-    
-            // Sauvegarder le nom du fichier dans la base de données
             $locataire->photo_profil = $imageName;
         }
+        
     
         // Sauvegarde des modifications
         $locataire->save();

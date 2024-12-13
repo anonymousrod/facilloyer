@@ -10,6 +10,9 @@
 <!-- <div class="page-content"> -->
     <div class="container-xxl">
         <!-- la premiere bare avec le profil et tout ce qui est est haut  -->
+
+        @if (Auth::user()->id_role == 2)
+
         <div class="row justify-content-center">
             <div class="col-12">
                 <div class="card">
@@ -18,14 +21,17 @@
                             <div class="col-lg-4 align-self-center mb-3 mb-lg-0">
                                 <div class="d-flex align-items-center flex-row flex-wrap">
                                     <div class="position-relative me-3">
-                                        <img src="assets/images/users/avatar-7.jpg" alt="" height="120" class="rounded-circle">
+                                        <img src="assets/images/users/avatar-1.png" alt="" height="120" class="rounded-circle">
                                         <a href="#" class="thumb-md justify-content-center d-flex align-items-center bg-primary text-white rounded-circle position-absolute end-0 bottom-0 border border-3 border-card-bg">
                                             <i class="fas fa-camera"></i>
                                         </a>
                                     </div>
                                     <div class="">
-                                        <h5 class="fw-semibold fs-22 mb-1">Rosa Dodson</h5>                                                        
-                                        <p class="mb-0 text-muted fw-medium">UI/UX Designer, USA</p>                                                        
+                                        @if(Auth::check())
+                                            <h4><span>{{ Auth::user()->email }}</span>!</h4>
+                                        @else
+                                            <h6>Veuillez vous connecter pour accéder à votre Workflow.</h6>
+                                        @endif
                                     </div>
                                 </div>                                                
                             </div><!--end col-->
@@ -62,6 +68,10 @@
                 </div><!--end card--> 
             </div> <!--end col-->                                  
         </div><!--end row-->
+        @endif
+        
+
+        
 
         <div class="row justify-content-center">
 
@@ -71,46 +81,44 @@
                     <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col">                      
-                                <h4 class="card-title">Personal Information</h4>                      
+                                <h4 class="card-title">Donné de connexion</h4>                      
                             </div><!--end col-->
-                            <div class="col-auto">                      
-                                <a href="#" class="float-end text-muted d-inline-flex text-decoration-underline"><i class="iconoir-edit-pencil fs-18 me-1"></i>Edit</a>                      
-                            </div><!--end col-->
+                            
                         </div>  <!--end row-->                                  
                     </div><!--end card-header-->
                     <div class="card-body pt-0">
-                        <p class="text-muted fw-medium mb-3">It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.</p>
-                        <ul class="list-unstyled mb-0">                                        
-                            <li class=""><i class="las la-birthday-cake me-2 text-secondary fs-22 align-middle"></i> <b> Birth Date </b> : 06 June 1989</li>
-                            <li class="mt-2"><i class="las la-briefcase me-2 text-secondary fs-22 align-middle"></i> <b> Position </b> : Full Stack Developer</li>
-                            <li class="mt-2"><i class="las la-university me-2 text-secondary fs-22 align-middle"></i> <b> Education </b> : Stanford Univercity</li>
-                            <li class="mt-2"><i class="las la-language me-2 text-secondary fs-22 align-middle"></i> <b> Languages </b> : English, French, Spanish</li>
-                            <li class="mt-2"><i class="las la-phone me-2 text-secondary fs-22 align-middle"></i> <b> Phone </b> : +91 23456 78910</li>
-                            <li class="mt-2"><i class="las la-envelope text-secondary fs-22 align-middle me-2"></i> <b> Email </b> : mannat.theme@gmail.com</li>
-                        </ul> 
-                        <div class="row justify-content-center mt-4">
-                            <div class="col-auto text-end border-end">
-                                <span class="thumb-md justify-content-center d-flex align-items-center bg-blue text-white rounded-circle ms-auto mb-1">
-                                    <i class="fab fa-facebook-f"></i>
-                                </span>
-                                <p class="mb-0 fw-semibold">Facebook</p>
-                                <h4 class="m-0 fw-bold">25k <span class="text-muted fs-12 fw-normal">Followers</span></h4>
-                            </div><!--end col-->
-                            <div class="col-auto">
-                                <span class="thumb-md justify-content-center d-flex align-items-center bg-black text-white rounded-circle mb-1">
-                                    <i class="fab fa-x-twitter"></i>
-                                </span>
-                                <p class="mb-0 fw-semibold">Twitter</p>
-                                <h4 class="m-0 fw-bold">58k <span class="text-muted fs-12 fw-normal">Followers</span></h4>
-                            </div><!--end col-->
-                        </div><!--end row-->       
-                    </div><!--end card-body--> 
+                        <p class="text-muted fw-medium mb-3">.</p>
+                        <ul class="list-unstyled mb-0">
+                            <!-- Date actuelle -->
+                            <li><i class="las la-calendar me-2 text-secondary fs-22 align-middle"></i> <b>Current Date</b> : {{ now()->format('d F Y') }}</li>
+
+                            <!-- Heure actuelle -->
+                            <li class="mt-2"><i class="las la-clock me-2 text-secondary fs-22 align-middle"></i> <b>Current Time</b> : {{ now()->format('H:i') }}</li>
+
+                            <!-- Jour de la semaine -->
+                            <li class="mt-2"><i class="las la-calendar-week me-2 text-secondary fs-22 align-middle"></i> <b>Day of the Week</b> : {{ now()->format('l') }}</li>
+
+                            <!-- Mois actuel -->
+                            <li class="mt-2"><i class="las la-calendar-alt me-2 text-secondary fs-22 align-middle"></i> <b>Month</b> : {{ now()->format('F') }}</li>
+
+                            <!-- Année actuelle -->
+                            <li class="mt-2"><i class="las la-calendar me-2 text-secondary fs-22 align-middle"></i> <b>Year</b> : {{ now()->format('Y') }}</li>
+
+
+                            <!-- Adresse IP de l'utilisateur -->
+                            <li class="mt-2"><i class="las la-laptop me-2 text-secondary fs-22 align-middle"></i> <b>IP Address</b> : {{ request()->ip() }}</li>
+
+                            <!-- Fuseau horaire du serveur -->
+                            <li class="mt-2"><i class="las la-clock me-2 text-secondary fs-22 align-middle"></i> <b>Server Timezone</b> : {{ config('app.timezone') }}</li>
+                        </ul>
+                    </div><!--end card-body-->
+
                 </div><!--end card--> 
             </div> <!--end col--> 
             <div class="col-md-8">
                 <ul class="nav nav-tabs mb-3" role="tablist">                                   
                     <li class="nav-item">
-                        <a class="nav-link fw-medium" data-bs-toggle="tab" href="#settings" role="tab" aria-selected="true">Clik ici pour modifier ou completer vos informations</a>
+                        <a class="nav-link fw-medium" data-bs-toggle="tab" href="#settings" role="tab" aria-selected="true">Clik ici pour modifier ton email ou ton mon mot de passe</a>
                     </li>
                 </ul>
                 <!-- Section pour le formulaire de modification des donnée -->
@@ -120,7 +128,7 @@
                             <div class="card-header">
                                 <div class="row align-items-center">
                                     <div class="col">                      
-                                        <h4 class="card-title">Personal Information</h4>                      
+                                        <h4 class="card-title">Adresse email</h4>                      
                                     </div><!--end col-->                                                       
                                 </div>  <!--end row-->                                  
                             </div><!--end card-header-->

@@ -41,10 +41,13 @@ Route::post('/password_change_save', [LocataireController::class, 'changePasswor
 Route::post('/locataires/{id}/toggle-status', [LocataireController::class, 'toggleStatus']);
 
 
-Route::middleware(['auth'])->group(function () {
-    Route::get('/locataire/edit', [LocataireController::class, 'edit'])->name('locataire.edit');
-    Route::patch('/locataire/{id}', [LocataireController::class, 'update'])->name('locataire.update');
-});
+// Route::middleware(['auth'])->group(function () {
+Route::get('/locataire/edit', [LocataireController::class, 'edit'])->name('locataire.edit');
+Route::patch('/locataire/{id}', [LocataireController::class, 'update'])->name('locataire.update');
+// });
+
+
+
 
 
 // try
