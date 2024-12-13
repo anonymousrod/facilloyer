@@ -61,7 +61,7 @@
                     </div><!--end card-body--> 
                 </div><!--end card--> 
             </div> <!--end col-->                                  
-        </div>  <!--end row-->
+        </div><!--end row-->
 
         <div class="row justify-content-center">
 

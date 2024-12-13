@@ -78,22 +78,75 @@ class LocataireController extends Controller
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
+   /**
+     * Affiche le formulaire pour modifier les informations du locataire connecté.
      */
-    public function edit(string $id)
+    public function edit()
     {
-        //
+        // Récupérer le locataire connecté
+        $locataire = Auth::user()->locataires()->first();
+
+        if (!$locataire) {
+            abort(404, 'Aucun locataire associé à cet utilisateur.');
+        }
+
+        return view('locataire.edit', compact('locataire'));
     }
 
     /**
-     * Update the specified resource in storage.
+     * Met à jour les informations du locataire connecté.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        // Validation des données, y compris le fichier
+        $request->validate([
+            'nom' => 'required|string|max:255',
+            'prenom' => 'required|string|max:255',
+            'adresse' => 'required|string|max:255',
+            'telephone' => 'required|string|max:20',
+            'date_naissance' => 'required|date',
+            'genre' => 'required|string|max:10',
+            'revenu_mensuel' => 'required|numeric',
+            'nombre_personne_foyer' => 'required|numeric',
+            'statut_matrimoniale' => 'required|string|max:20',
+            'statut_professionnel' => 'required|string|max:255',
+            'garant' => 'nullable|string|max:255',
+            'photo_profil' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        ]);
+    
+        $locataire = Locataire::findOrFail($id);
+    
+        // Mise à jour des informations
+        $locataire->nom = $request->input('nom');
+        $locataire->prenom = $request->input('prenom');
+        $locataire->adresse = $request->input('adresse');
+        $locataire->telephone = $request->input('telephone');
+        $locataire->date_naissance = $request->input('date_naissance');
+        $locataire->genre = $request->input('genre');
+        $locataire->revenu_mensuel = $request->input('revenu_mensuel');
+        $locataire->nombre_personne_foyer = $request->input('nombre_personne_foyer');
+        $locataire->statut_matrimoniale = $request->input('statut_matrimoniale');
+        $locataire->statut_professionnel = $request->input('statut_professionnel');
+        $locataire->garant = $request->input('garant');
+    
+        // Gestion de l'image (si un fichier est téléchargé)
+        if ($request->hasFile('photo_profil')) {
+            // Générer un nom unique pour l'image
+            $imageName = time().'.'.$request->photo_profil->extension();
+            
+            // Déplacer le fichier dans le dossier public
+            $request->photo_profil->move(public_path('images/profils'), $imageName);
+    
+            // Sauvegarder le nom du fichier dans la base de données
+            $locataire->photo_profil = $imageName;
+        }
+    
+        // Sauvegarde des modifications
+        $locataire->save();
+    
+        return redirect()->route('profile.edit', $locataire->id)->with('success', 'Les informations ont été mises à jour avec succès.');
     }
-
+    
     /**
      * Remove the specified resource from storage.
      */
