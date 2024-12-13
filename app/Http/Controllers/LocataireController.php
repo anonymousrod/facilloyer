@@ -17,8 +17,10 @@ class LocataireController extends Controller
      */
     public function index()
     {
+        $agent_id = Auth::user()->agent_immobiliers->first()->id;
         //pour l'affichage des locataires
-
+        $locataires = Locataire::where('agent_id', $agent_id)->get();
+        return view('layouts.liste_locataire', compact('locataires'));
     }
 
     /**
@@ -125,5 +127,14 @@ class LocataireController extends Controller
         $user->save();
 
         return redirect()->route('dashboard')->with('message', 'Votre mot de passe a été modifié avec succès.');
+    }
+
+    public function toggleStatus(Request $request, $id)
+    {
+        $locataire = Locataire::findOrFail($id);
+        $locataire->user->statut = $request->statut;
+        $locataire->user->save();
+
+        return response()->json(['success' => true]);
     }
 }

@@ -39,7 +39,8 @@ class LocataireSeeder extends Seeder
                 'statut_matrimoniale' => $faker->randomElement(['Célibataire', 'Marié']),
                 'statut_professionnel' => $faker->jobTitle,
                 'garant' => $faker->name,
-                'photo_profil' => $faker->imageUrl(150, 150, 'business'),
+                'photo_profil' => '/storage/facker/profile/' . rand(1, 19) . '.JPG',
+                // 'photo_profil' => $faker->imageUrl(150, 150, 'business'),
 
             ]);
         }
