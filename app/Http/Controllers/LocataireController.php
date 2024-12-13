@@ -146,7 +146,7 @@ class LocataireController extends Controller
         // Sauvegarde des modifications
         $locataire->save();
     
-        return redirect()->route('profile.edit', $locataire->id)->with('success', 'Les informations ont été mises à jour avec succès.');
+        return redirect()->route('locataire.edit', $locataire->id)->with('success', 'Les informations ont été mises à jour avec succès.');
     }
     
     /**
