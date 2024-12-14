@@ -33,9 +33,7 @@ require __DIR__.'/auth.php';
 // Route::post('/agent-immobilier/store', [AgentImmobilierController::class, 'store'])->name('agence_info.store');
 // Route::post('/agent-immobilier/update', [AgentImmobilierController::class, 'update'])->name('agence_info.update');
 Route::resource('/agent-immobilier', AgentImmobilierController::class)->names('agent_immobilier');
-Route::resource('/locataire', LocataireController::class)
- ->except([ 'edit','update',])
-->names('locataire');
+Route::resource('/locataire', LocataireController::class)->names('locataire');
 //route pour le changement de mot de passe pour new locataire
 Route::get('/password_change', [LocataireController::class, 'showChangePasswordForm'])->name('passwordChangeForm');
 Route::post('/password_change_save', [LocataireController::class, 'changePassword'])->name('passwordChangeFormSave');
