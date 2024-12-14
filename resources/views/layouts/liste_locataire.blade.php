@@ -180,6 +180,8 @@
                 </div><!--end card-->
             </div> <!--end col-->
         </div><!--end row-->
+
+
         {{-- voir le script equivalent dans layouts script... --}}
 
     </div><!-- container -->
