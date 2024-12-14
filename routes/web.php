@@ -33,7 +33,7 @@ require __DIR__.'/auth.php';
 // Route::post('/agent-immobilier/store', [AgentImmobilierController::class, 'store'])->name('agence_info.store');
 // Route::post('/agent-immobilier/update', [AgentImmobilierController::class, 'update'])->name('agence_info.update');
 Route::resource('/agent-immobilier', AgentImmobilierController::class)->names('agent_immobilier');
-Route::resource('/locataire', LocataireController::class)->names('locataire');
+//Route::resource('/locataire', LocataireController::class)->names('locataire');
 //route pour le changement de mot de passe pour new locataire
 Route::get('/password_change', [LocataireController::class, 'showChangePasswordForm'])->name('passwordChangeForm');
 Route::post('/password_change_save', [LocataireController::class, 'changePassword'])->name('passwordChangeFormSave');
@@ -41,15 +41,20 @@ Route::post('/password_change_save', [LocataireController::class, 'changePasswor
 Route::post('/locataires/{id}/toggle-status', [LocataireController::class, 'toggleStatus']);
 
 
+// Route::middleware(['auth'])->group(function () {
+Route::get('/locataire/edit', [LocataireController::class, 'edit'])->name('locataire.edit');
+Route::patch('/locataire/{id}', [LocataireController::class, 'update'])->name('locataire.update');
+// });
+
 
 
 
 
 // try
 
-// Route::get('/liste_locataire', function(){
-//     return view('layouts.liste_locataire');
-// })->name('liste_locataire');
+Route::get('/liste_locataire', function(){
+     return view('layouts.liste_locataire');
+ })->name('liste_locataire');
 
 
 

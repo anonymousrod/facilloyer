@@ -11,6 +11,11 @@
 
 <script src="{{asset('assets/libs/simple-datatables/umd/simple-datatables.js')}} "></script>
 <script src="{{asset('assets/js/pages/datatable.init.js')}} "></script>
+ <!-- script pour page edit -->
+
+<script src="assets/libs/simplebar/simplebar.min.js"></script>
+<script src="assets/libs/tobii/js/tobii.min.js"></script>
+<script src="assets/js/pages/profile.init.js"></script>
 
 {{-- script pour l'activation du statu par l'agent immobilier --}}
 
