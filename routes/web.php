@@ -10,6 +10,16 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+//  GEstion de la langue local et modif
+Route::get('/change-language/{lang}', function ($lang) {
+    if (in_array($lang, ['en', 'es', 'de', 'fr'])) {
+        session(['locale' => $lang]);
+        app()->setLocale($lang);
+    }
+    return redirect()->back();
+})->name('change.language');
+
+
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // })->middleware(['auth', 'verified'])->name('dashboard');

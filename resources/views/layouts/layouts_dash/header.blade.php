@@ -29,15 +29,14 @@
                             <img src="{{asset('assets/images/flags/us_flag.jpg')}} " alt="" class="thumb-sm rounded-circle">
                         </a>
                         <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#"><img src="{{asset('assets/images/flags/us_flag.jpg')}} "
-                                    alt="" height="15" class="me-2">English</a>
-                            <a class="dropdown-item" href="#"><img src="{{asset('assets/images/flags/spain_flag.jpg')}} "
-                                    alt="" height="15" class="me-2">Spanish</a>
-                            <a class="dropdown-item" href="#"><img src="{{asset('assets/images/flags/germany_flag.jpg')}} "
-                                    alt="" height="15" class="me-2">German</a>
-                            <a class="dropdown-item" href="#"><img src="{{asset('assets/images/flags/french_flag.jpg')}} "
-                                    alt="" height="15" class="me-2">French</a>
+                            <a class="dropdown-item" href="{{ route('change.language', 'en') }}">
+                                <img src="{{ asset('assets/images/flags/us_flag.jpg') }}" alt="" height="15" class="me-2">English
+                            </a>
+                            <a class="dropdown-item" href="{{ route('change.language', 'fr') }}">
+                                <img src="{{ asset('assets/images/flags/french_flag.jpg') }}" alt="" height="15" class="me-2">French
+                            </a>
                         </div>
+
                     </li><!--end topbar-language-->
 
                     <li class="topbar-item">
