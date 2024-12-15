@@ -79,37 +79,34 @@
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-header">
-                        <div class="row align-items-center">
-                            <div class="col">                      
-                                <h4 class="card-title">Donné de connexion</h4>                      
-                            </div><!--end col-->
+                        <!-- <div class="row align-items-center"> -->
+                                <h6 class="card-title">Information sur la connexion</h6>                      
                             
-                        </div>  <!--end row-->                                  
-                    </div><!--end card-header-->
+                    </div>
                     <div class="card-body pt-0">
                         <p class="text-muted fw-medium mb-3">.</p>
                         <ul class="list-unstyled mb-0">
                             <!-- Date actuelle -->
-                            <li><i class="las la-calendar me-2 text-secondary fs-22 align-middle"></i> <b>Current Date</b> : {{ now()->format('d F Y') }}</li>
+                            <li><i class="las la-calendar me-2 text-secondary fs-22 align-middle"></i> <b>Date</b> : {{ now()->format('d F Y') }}</li>
 
                             <!-- Heure actuelle -->
-                            <li class="mt-2"><i class="las la-clock me-2 text-secondary fs-22 align-middle"></i> <b>Current Time</b> : {{ now()->format('H:i') }}</li>
+                            <li class="mt-2"><i class="las la-clock me-2 text-secondary fs-22 align-middle"></i> <b>Heure</b> : {{ now()->format('H:i') }}</li>
 
                             <!-- Jour de la semaine -->
-                            <li class="mt-2"><i class="las la-calendar-week me-2 text-secondary fs-22 align-middle"></i> <b>Day of the Week</b> : {{ now()->format('l') }}</li>
+                            <li class="mt-2"><i class="las la-calendar-week me-2 text-secondary fs-22 align-middle"></i> <b>Jour de la semaine</b> : {{ now()->format('l') }}</li>
 
                             <!-- Mois actuel -->
-                            <li class="mt-2"><i class="las la-calendar-alt me-2 text-secondary fs-22 align-middle"></i> <b>Month</b> : {{ now()->format('F') }}</li>
+                            <li class="mt-2"><i class="las la-calendar-alt me-2 text-secondary fs-22 align-middle"></i> <b>Mois</b> : {{ now()->format('F') }}</li>
 
                             <!-- Année actuelle -->
-                            <li class="mt-2"><i class="las la-calendar me-2 text-secondary fs-22 align-middle"></i> <b>Year</b> : {{ now()->format('Y') }}</li>
+                            <li class="mt-2"><i class="las la-calendar me-2 text-secondary fs-22 align-middle"></i> <b>Année</b> : {{ now()->format('Y') }}</li>
 
 
                             <!-- Adresse IP de l'utilisateur -->
-                            <li class="mt-2"><i class="las la-laptop me-2 text-secondary fs-22 align-middle"></i> <b>IP Address</b> : {{ request()->ip() }}</li>
+                            <li class="mt-2"><i class="las la-laptop me-2 text-secondary fs-22 align-middle"></i> <b>Adresse IP</b> : {{ request()->ip() }}</li>
 
                             <!-- Fuseau horaire du serveur -->
-                            <li class="mt-2"><i class="las la-clock me-2 text-secondary fs-22 align-middle"></i> <b>Server Timezone</b> : {{ config('app.timezone') }}</li>
+                            <li class="mt-2"><i class="las la-clock me-2 text-secondary fs-22 align-middle"></i> <b>Fuseau Horaire </b> : {{ config('app.timezone') }}</li>
                         </ul>
                     </div><!--end card-body-->
 
@@ -118,11 +115,11 @@
             <div class="col-md-8">
                 <ul class="nav nav-tabs mb-3" role="tablist">                                   
                     <li class="nav-item">
-                        <a class="nav-link fw-medium" data-bs-toggle="tab" href="#settings" role="tab" aria-selected="true">Clik ici pour modifier ton email ou ton mon mot de passe</a>
+                        <a class="nav-link fw-medium" data-bs-toggle="tab" href="#settings" role="tab" aria-selected="true">Modifier ton email ou ton mon mot de passe</a>
                     </li>
                 </ul>
                 <!-- Section pour le formulaire de modification des donnée -->
-                <div class="tab-content">                                               
+                <!-- <div class="tab-content">                                                -->
                     <div class="tab-pane p-1" id="settings" role="tabpanel">
                         <div class="card">
                             <div class="card-header">
@@ -145,7 +142,7 @@
                         </div><!--end card-->
                        
                     </div>
-                </div> 
+                <!-- </div>  -->
             </div> <!--end col-->                                                       
         </div><!--end row-->
 
