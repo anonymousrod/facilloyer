@@ -30,10 +30,19 @@
                             </a>
                         </div>
                         <div class="mt-2">
-                            @if(Auth::check())
-                                <h6 class="fw-bold mb-0">{{ Auth::user()->nom }} {{ Auth::user()->prenom }}</h6>
-                                <p class="text-muted">{{ Auth::user()->email }}</p>
+                             @if(Auth::check())
+                                @php
+                                    $locataire = Auth::user()->locataires()->first();
+                                @endphp
+                                @if($locataire)
+                                    <h6 class="fw-bold mb-0">{{ $locataire->nom }} {{ $locataire->prenom }}</h6>
+                                    <p class="text-muted">{{ Auth::user()->email }}</p>
+                                @else
+                                    <h6 class="fw-bold mb-0">Nom non défini</h6>
+                                    <p class="text-muted">{{ Auth::user()->email }}</p>
+                                @endif
                             @endif
+
                         </div>
                     </div><!--end col-->
 
@@ -46,8 +55,8 @@
                                 <div class="legs"></div>
                             </div>
                             <div class="tableau">
-                                <h5 class="fw-bold" id="welcomeMessage">Bienvenue sur votre tableau de bord</h5>
-                                <p class="text-muted">Nous espérons que vous avez une excellente journée !</p>
+                                <h5 class="fw-bold" id="welcomeMessage">Tout vos raccourcis au meme endroit</h5>
+                                <p class="text-muted">   <=-=>  </p>
                                 <small id="monthName" class="text-muted"></small>
                             </div>
                         </div>

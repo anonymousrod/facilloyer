@@ -48,11 +48,34 @@
                     </li>
 
                     <li class="dropdown topbar-item">
-                        <a class="nav-link dropdown-toggle arrow-none nav-icon" data-bs-toggle="dropdown"
-                            href="#" role="button" aria-haspopup="false" aria-expanded="false">
-                            <img src="assets/images/users/avatar-1.png" alt=""
-                                class="thumb-lg rounded-circle" height="150">
+                      @if(Auth::check())
+                        @php
+                            $user = Auth::user();
+                            $role = $user->id_role; // Récupération du rôle de l'utilisateur
+                            $imageUrl = 'assets/images/default-avatar.png'; // Image par défaut si aucune image n'est définie
+
+                            // Vérifie le rôle pour récupérer la photo de profil
+                            if ($role == 1) { // Admin
+                                $imageUrl = $user->photo_profil ?? 'assets/images/default-admin.png';
+                            } elseif ($role == 2) { // Locataire
+                                $locataire = $user->locataires()->first();
+                                if ($locataire && $locataire->photo_profil) {
+                                    $imageUrl = asset('storage/' . $locataire->photo_profil); // Si l'image est stockée dans "storage"
+                                }
+                            } elseif ($role == 3) { // Agent immobilier
+                                $agent = $user->agent_immobiliers()->first();
+                                if ($agent && $agent->photo_profil) {
+                                    $imageUrl = asset('storage/' . $agent->photo_profil); // Si l'image est stockée dans "storage"
+                                }
+                            }
+                        @endphp
+
+                        <a class="nav-link dropdown-toggle arrow-none nav-icon" data-bs-toggle="dropdown" 
+                        href="#" role="button" aria-haspopup="false" aria-expanded="false">
+                            <img src="{{ $imageUrl }}" alt="Profil utilisateur" class="thumb-lg rounded-circle" height="150">
                         </a>
+                    @endif
+
                         
                         <div class="dropdown-menu dropdown-menu-end py-0">
                             <div class="d-flex align-items-center dropdown-item py-2 bg-secondary-subtle">
@@ -61,7 +84,44 @@
                                         class="thumb-md rounded-circle">
                                 </div>
                                 <div class="flex-grow-1 ms-2 text-truncate align-self-center">
-                                    <h6 class="my-0 fw-medium text-dark fs-13">William Martin</h6>
+                                @if(Auth::check())
+                                    @php
+                                        $user = Auth::user();
+                                        $role = $user->id_role; // Récupère le rôle de l'utilisateur
+                                        $nomComplet = '';
+                                        $suite ='';
+
+                                        // Vérifie le rôle pour afficher le nom approprié
+                                        if ($role == 1) { // Admin
+                                            $nomComplet = 'Administrateur'; // Nom générique pour l'admin
+                                        } elseif ($role == 2) { // Locataire
+                                            $locataire = $user->locataires()->first();
+                                            if ($locataire) {
+                                                $nomComplet = $locataire->nom . ' ' . $locataire->prenom;
+                                            } else {
+                                                $nomComplet = 'Nom non défini'; // Si aucun locataire n'est lié
+                                            }
+                                        } elseif ($role == 3) { // Agent immobilier
+                                            $agent = $user->agent_immobiliers()->first();
+                                            if ($agent) {
+                                                $nomComplet = $agent->nom_admin . '  :' . $agent->prenom_admin; // Remplacez `nom` et `prenom` par les bons champs du modèle `AgentImmobilier`
+                                                $suite=$agent->nom_agence;
+                                            } else {
+                                                $nomComplet = 'Nom non défini'; // Si aucun agent immobilier n'est lié
+                                            }
+                                        } else {
+                                            $nomComplet = 'Sans statut'; // Si le rôle est inconnu
+                                        }
+                                    @endphp
+
+                                    <h6 class="fw-bold mb-0">{{ $nomComplet }}</h6>
+                                    <p class="text-muted">{{ $user->email }}</p>
+                                    <h6 class="fw-bold mb-0">{{ $suite }}</h6>
+
+
+                                @endif
+
+
                                 </div><!--end media-body-->
                             </div>
                             <div class="dropdown-divider mt-0"></div>
