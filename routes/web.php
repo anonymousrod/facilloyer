@@ -9,8 +9,7 @@ use App\Http\Controllers\LocataireController;
 Route::get('/', function () {
     return view('welcome');
 });
-
-//  GEstion de la langue local et modif
+//  GEstion de la langue local
 Route::get('/change-language/{lang}', function ($lang) {
     if (in_array($lang, ['en', 'es', 'de', 'fr'])) {
         session(['locale' => $lang]);

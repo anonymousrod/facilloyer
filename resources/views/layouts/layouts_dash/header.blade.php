@@ -17,12 +17,13 @@
                 </ul>
                 <ul class="topbar-item list-unstyled d-inline-flex align-items-center mb-0">
                     <li class="hide-phone app-search">
-                        <form role="search" action="#" method="get">
+                        <form role="search" action="o.p" method="get">
                             <input type="search" name="search" class="form-control top-search mb-0"
-                                placeholder="Search here...">
+                                placeholder="Search here..." value="{{ request('search') }}">
                             <button type="submit"><i class="iconoir-search"></i></button>
                         </form>
                     </li>
+
                     <li class="dropdown">
                         <a class="nav-link dropdown-toggle arrow-none nav-icon" data-bs-toggle="dropdown" href="#"
                             role="button" aria-haspopup="false" aria-expanded="false">
