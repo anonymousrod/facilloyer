@@ -55,7 +55,6 @@
                                 <option value="" disabled {{ old('genre', $locataire->genre) ? '' : 'selected' }}>Sélectionnez votre genre</option>
                                 <option value="Masculin" {{ old('genre', $locataire->genre) == 'Masculin' ? 'selected' : '' }}>Masculin</option>
                                 <option value="Féminin" {{ old('genre', $locataire->genre) == 'Féminin' ? 'selected' : '' }}>Féminin</option>
-                                <option value="Autre" {{ old('genre', $locataire->genre) == 'Autre' ? 'selected' : '' }}>Autre</option>
                             </select>
                         </div>
 

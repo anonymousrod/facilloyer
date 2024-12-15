@@ -14,60 +14,166 @@
         @if (Auth::user()->id_role == 2)
 
         <div class="row justify-content-center">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-lg-4 align-self-center mb-3 mb-lg-0">
-                                <div class="d-flex align-items-center flex-row flex-wrap">
-                                    <div class="position-relative me-3">
-                                        <img src="assets/images/users/avatar-1.png" alt="" height="120" class="rounded-circle">
-                                        <a href="#" class="thumb-md justify-content-center d-flex align-items-center bg-primary text-white rounded-circle position-absolute end-0 bottom-0 border border-3 border-card-bg">
-                                            <i class="fas fa-camera"></i>
-                                        </a>
-                                    </div>
-                                    <div class="">
-                                        @if(Auth::check())
-                                            <h4><span>{{ Auth::user()->email }}</span>!</h4>
-                                        @else
-                                            <h6>Veuillez vous connecter pour accéder à votre Workflow.</h6>
-                                        @endif
-                                    </div>
-                                </div>                                                
-                            </div><!--end col-->
-                            
-                            <div class="col-lg-4 ms-auto align-self-center">
-                                <div class="d-flex justify-content-center">
-                                    <div class="border-dashed rounded border-theme-color p-2 me-2 flex-grow-1 flex-basis-0">
-                                        <h5 class="fw-semibold fs-22 mb-1">75</h5>
-                                        <p class="text-muted mb-0 fw-medium">Projects</p>
-                                    </div>
-                                    <div class="border-dashed rounded border-theme-color p-2 me-2 flex-grow-1 flex-basis-0">
-                                        <h5 class="fw-semibold fs-22 mb-1">68%</h5>
-                                        <p class="text-muted mb-0 fw-medium">Success Rate</p>
-                                    </div>
-                                    <div class="border-dashed rounded border-theme-color p-2 me-2 flex-grow-1 flex-basis-0">
-                                        <h5 class="fw-semibold fs-22 mb-1">$8620</h5>
-                                        <p class="text-muted mb-0 fw-medium">Earning</p>
-                                    </div>
-                                </div>                                          
-                            </div><!--end col-->
-                            <div class="col-lg-4 align-self-center">
-                                <div class="row row-cols-2">
-                                    <div class="col text-end">
-                                        <div id="complete" class="apex-charts"></div>
-                                    </div>  
-                                    <div class="col align-self-center">
-                                        <button type="button" class="btn btn-primary  d-inline-block">Follow</button> 
-                                        <button type="button" class="btn btn-light  d-inline-block">Hire Me</button>  
-                                    </div>
-                                </div>                                   
-                            </div><!--end col-->
-                        </div><!--end row-->               
-                    </div><!--end card-body--> 
-                </div><!--end card--> 
-            </div> <!--end col-->                                  
-        </div><!--end row-->
+    <div class="col-12">
+        <div class="card shadow-lg">
+            <div class="card-body">
+                <div class="row g-3 align-items-center">
+                    <!-- Section Profil -->
+                    <div class="col-lg-4 col-md-6 text-center">
+                        <div class="position-relative d-inline-block">
+                            <img src="{{ Auth::user()->profile_picture ?? asset('assets/images/users/avatar-1.png') }}" 
+                                alt="Avatar" 
+                                height="100" 
+                                class="rounded-circle shadow">
+                            <a href="a.fr" class="thumb-md d-flex justify-content-center align-items-center bg-primary text-white rounded-circle position-absolute end-0 bottom-0 border border-3 border-white">
+                                <i class="fas fa-camera"></i>
+                            </a>
+                        </div>
+                        <div class="mt-2">
+                            @if(Auth::check())
+                                <h5 class="fw-bold mb-0">{{ Auth::user()->nom }} {{ Auth::user()->prenom }}</h5>
+                                <p class="text-muted">{{ Auth::user()->email }}</p>
+                            @endif
+                        </div>
+                    </div><!--end col-->
+
+                    <!-- Section Progress Circle -->
+                    <div class="col-lg-4 col-md-6 text-center">
+                        <div class="progress-container position-relative mx-auto" style="width: 120px; height: 120px;">
+                            <div class="progress-ring">
+                                <svg width="120" height="120">
+                                    <circle class="progress-ring__background" cx="60" cy="60" r="54" />
+                                    <circle class="progress-ring__circle" cx="60" cy="60" r="54" />
+                                </svg>
+                                <div class="progress-text">
+                                    <span id="daysCount" class="fw-bold fs-4"></span>
+                                    <small class="d-block text-uppercase text-muted" style="font-size: 11px;">Jours restants</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!--end col-->
+
+                    <!-- Section Actions -->
+                    <div class="col-lg-4 col-md-12">
+                        <div class="d-flex flex-wrap justify-content-center gap-3">
+                            <div class="menu-icon bg-info text-white" onclick="window.location.href='a.fr'">
+                                <i class="fas fa-home"></i>
+                            </div>
+                            <div class="menu-icon bg-warning text-white" onclick="window.location.href='a.fr'">
+                                <i class="fas fa-money-check-alt"></i>
+                            </div>
+                            <div class="menu-icon bg-success text-white" onclick="window.location.href='a.fr'">
+                                <i class="fas fa-file-invoice-dollar"></i>
+                            </div>
+                            <div class="menu-icon bg-dark text-white" onclick="window.location.href='a.fr'">
+                                <i class="fas fa-headset"></i>
+                            </div>
+                            <div class="menu-icon bg-primary text-white" onclick="window.location.href='a.fr'">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                            <div class="menu-icon bg-danger text-white" onclick="window.location.href='a.fr'">
+                                <i class="fas fa-cogs"></i>
+                            </div>
+                            <!-- New Icons -->
+                            <div class="menu-icon bg-info text-white" onclick="window.location.href='a.fr'">
+                                <i class="fas fa-clipboard-list"></i>
+                            </div>
+                            <div class="menu-icon bg-secondary text-white" onclick="window.location.href='a.fr'">
+                                <i class="fas fa-bell"></i>
+                            </div>
+                        </div>                                   
+                    </div><!--end col-->
+                </div><!--end row-->               
+            </div><!--end card-body--> 
+        </div><!--end card--> 
+    </div> <!--end col-->                                  
+</div><!--end row-->
+
+<style>
+/* Progress Circle Design */
+.progress-container {
+    position: relative;
+}
+
+.progress-ring svg {
+    transform: rotate(-90deg);
+    width: 100%;
+    height: 100%;
+}
+
+.progress-ring__background {
+    fill: none;
+    stroke: #e9ecef;
+    stroke-width: 10;
+}
+
+.progress-ring__circle {
+    fill: none;
+    stroke: #0d6efd;
+    stroke-width: 10;
+    stroke-dasharray: 339.2; /* 2 * Math.PI * r (54) */
+    stroke-dashoffset: 339.2;
+    transition: stroke-dashoffset 1s ease-in-out;
+}
+
+.progress-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+}
+
+/* Menu Icon Style */
+.menu-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.menu-icon i {
+    font-size: 24px;
+}
+
+.menu-icon:hover {
+    transform: translateY(-8px) scale(1.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Styling for the email */
+.text-muted {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Calcul des jours restants dans le mois
+        const daysInMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate();
+        const today = new Date().getDate();
+        const remainingDays = daysInMonth - today;
+
+        // Mise à jour du cercle de progression
+        const progressCircle = document.querySelector(".progress-ring__circle");
+        const radius = progressCircle.r.baseVal.value;
+        const circumference = 2 * Math.PI * radius;
+        const percentage = (remainingDays / daysInMonth) * 100;
+        const offset = circumference - (percentage / 100) * circumference;
+
+        progressCircle.style.strokeDasharray = `${circumference}`;
+        progressCircle.style.strokeDashoffset = `${offset}`;
+
+        // Mise à jour du compteur au centre
+        document.getElementById("daysCount").innerText = remainingDays;
+    });
+</script>
+
         @endif
         
 
