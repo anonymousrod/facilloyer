@@ -23,7 +23,7 @@
                         <div class="position-relative d-inline-block">
                             <img src="{{ Auth::user()->profile_picture ?? asset('assets/images/users/avatar-1.png') }}" 
                                 alt="Avatar" 
-                                height="100" 
+                                height="80" 
                                 class="rounded-circle shadow">
                             <a href="a.fr" class="thumb-md d-flex justify-content-center align-items-center bg-primary text-white rounded-circle position-absolute end-0 bottom-0 border border-3 border-white">
                                 <i class="fas fa-camera"></i>
@@ -31,24 +31,24 @@
                         </div>
                         <div class="mt-2">
                             @if(Auth::check())
-                                <h5 class="fw-bold mb-0">{{ Auth::user()->nom }} {{ Auth::user()->prenom }}</h5>
+                                <h6 class="fw-bold mb-0">{{ Auth::user()->nom }} {{ Auth::user()->prenom }}</h6>
                                 <p class="text-muted">{{ Auth::user()->email }}</p>
                             @endif
                         </div>
                     </div><!--end col-->
 
-                    <!-- Section Progress Circle -->
+                    <!-- Section Message d'Accueil -->
                     <div class="col-lg-4 col-md-6 text-center">
-                        <div class="progress-container position-relative mx-auto" style="width: 120px; height: 120px;">
-                            <div class="progress-ring">
-                                <svg width="120" height="120">
-                                    <circle class="progress-ring__background" cx="60" cy="60" r="54" />
-                                    <circle class="progress-ring__circle" cx="60" cy="60" r="54" />
-                                </svg>
-                                <div class="progress-text">
-                                    <span id="daysCount" class="fw-bold fs-4"></span>
-                                    <small class="d-block text-uppercase text-muted" style="font-size: 11px;">Jours restants</small>
-                                </div>
+                        <div class="bonhomme-tableau">
+                            <div class="bonhomme">
+                                <div class="head"></div>
+                                <div class="body"></div>
+                                <div class="legs"></div>
+                            </div>
+                            <div class="tableau">
+                                <h5 class="fw-bold" id="welcomeMessage">Bienvenue sur votre tableau de bord</h5>
+                                <p class="text-muted">Nous espérons que vous avez une excellente journée !</p>
+                                <small id="monthName" class="text-muted"></small>
                             </div>
                         </div>
                     </div><!--end col-->
@@ -90,44 +90,77 @@
 </div><!--end row-->
 
 <style>
-/* Progress Circle Design */
-.progress-container {
+/* Bonhomme avec tableau */
+.bonhomme-tableau {
+    position: relative;
+    display: inline-block;
+    text-align: center;
+    margin-top: 10px; /* Réduit l'espace au-dessus */
+}
+
+.bonhomme {
+    width: 40px; /* Réduit la largeur du bonhomme */
+    height: 70px; /* Réduit la hauteur du bonhomme */
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.head {
+    width: 20px; /* Réduit la taille de la tête */
+    height: 20px; /* Réduit la taille de la tête */
+    background-color: #f1c40f;
+    border-radius: 50%;
+    margin-bottom: 5px; /* Réduit l'espace entre la tête et le corps */
+    margin-left: 5px;
+}
+
+.body {
+    width: 20px; /* Réduit la largeur du corps */
+    height: 30px; /* Réduit la hauteur du corps */
+    background-color: #3498db;
+    margin-left: 5px;
+}
+
+.legs {
+    width: 40px; /* Réduit la largeur des jambes */
+    height: 8px; /* Réduit la hauteur des jambes */
+    background-color: #e74c3c;
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    transform: translateX(0);
+}
+
+.tableau {
+    background-color: #ecf0f1;
+    padding: 10px; /* Réduit l'espace intérieur du tableau */
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 40px; /* Réduit l'espace au-dessus du tableau */
     position: relative;
 }
 
-.progress-ring svg {
-    transform: rotate(-90deg);
-    width: 100%;
-    height: 100%;
+.tableau h5 {
+    font-size: 1.1rem; /* Réduit la taille du titre */
+    color: #0d6efd;
+    font-weight: bold;
 }
 
-.progress-ring__background {
-    fill: none;
-    stroke: #e9ecef;
-    stroke-width: 10;
+.tableau p {
+    font-size: 10px; /* Réduit la taille du texte */
+    color: #6c757d;
 }
 
-.progress-ring__circle {
-    fill: none;
-    stroke: #0d6efd;
-    stroke-width: 10;
-    stroke-dasharray: 339.2; /* 2 * Math.PI * r (54) */
-    stroke-dashoffset: 339.2;
-    transition: stroke-dashoffset 1s ease-in-out;
-}
-
-.progress-text {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
+.tableau small {
+    font-size: 10px; /* Réduit la taille du mois */
+    color: #495057;
 }
 
 /* Menu Icon Style */
 .menu-icon {
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     display: flex;
     justify-content: center;
@@ -137,40 +170,24 @@
 }
 
 .menu-icon i {
-    font-size: 24px;
+    font-size: 20px;
 }
 
 .menu-icon:hover {
     transform: translateY(-8px) scale(1.1);
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
-
-/* Styling for the email */
-.text-muted {
-    font-size: 0.9rem;
-    color: #6c757d;
-}
 </style>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        // Calcul des jours restants dans le mois
-        const daysInMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0).getDate();
-        const today = new Date().getDate();
-        const remainingDays = daysInMonth - today;
-
-        // Mise à jour du cercle de progression
-        const progressCircle = document.querySelector(".progress-ring__circle");
-        const radius = progressCircle.r.baseVal.value;
-        const circumference = 2 * Math.PI * radius;
-        const percentage = (remainingDays / daysInMonth) * 100;
-        const offset = circumference - (percentage / 100) * circumference;
-
-        progressCircle.style.strokeDasharray = `${circumference}`;
-        progressCircle.style.strokeDashoffset = `${offset}`;
-
-        // Mise à jour du compteur au centre
-        document.getElementById("daysCount").innerText = remainingDays;
+        // Affichage du nom du mois actuel
+        const today = new Date();
+        const monthName = today.toLocaleString('default', { month: 'long' });  // Nom du mois (ex : janvier)
+        
+        // Mise à jour du texte pour afficher le mois
+        const monthNameText = document.getElementById("monthName");
+        monthNameText.innerText = `Mois de ${monthName}`;
     });
 </script>
 
