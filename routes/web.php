@@ -9,6 +9,15 @@ use App\Http\Controllers\LocataireController;
 Route::get('/', function () {
     return view('welcome');
 });
+//  GEstion de la langue local
+Route::get('/change-language/{lang}', function ($lang) {
+    if (in_array($lang, ['en', 'es', 'de', 'fr'])) {
+        session(['locale' => $lang]);
+        app()->setLocale($lang);
+    }
+    return redirect()->back();
+})->name('change.language');
+
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
@@ -33,7 +42,7 @@ require __DIR__.'/auth.php';
 // Route::post('/agent-immobilier/store', [AgentImmobilierController::class, 'store'])->name('agence_info.store');
 // Route::post('/agent-immobilier/update', [AgentImmobilierController::class, 'update'])->name('agence_info.update');
 Route::resource('/agent-immobilier', AgentImmobilierController::class)->names('agent_immobilier');
-//Route::resource('/locataire', LocataireController::class)->names('locataire');
+Route::resource('/locataire', LocataireController::class)->names('locataire');
 //route pour le changement de mot de passe pour new locataire
 Route::get('/password_change', [LocataireController::class, 'showChangePasswordForm'])->name('passwordChangeForm');
 Route::post('/password_change_save', [LocataireController::class, 'changePassword'])->name('passwordChangeFormSave');
