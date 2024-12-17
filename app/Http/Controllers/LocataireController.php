@@ -75,24 +75,31 @@ class LocataireController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($user)
     {
-        //
-    }
 
-   /**
-     * Affiche le formulaire pour modifier les informations du locataire connecté.
-     */
-    public function edit()
-    {
-        // Récupérer le locataire connecté
-        $locataire = Auth::user()->locataires()->first();
+        $locataire = Auth::user()->locataires->first();
 
         if (!$locataire) {
             abort(404, 'Aucun locataire associé à cet utilisateur.');
         }
 
         return view('locataire.edit', compact('locataire'));
+    }
+
+    /**
+     * Affiche le formulaire pour modifier les informations du locataire connecté.
+     */
+    public function edit()
+    {
+        // Récupérer le locataire connecté
+        // $locataire = Auth::user()->locataires->first();
+
+        // if (!$locataire) {
+        //     abort(404, 'Aucun locataire associé à cet utilisateur.');
+        // }
+
+        // return view('locataire.edit', compact('locataire'));
     }
 
     /**
@@ -115,9 +122,10 @@ class LocataireController extends Controller
             'garant' => 'nullable|string|max:255',
             'photo_profil' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
-    
+
         $locataire = Locataire::findOrFail($id);
-    
+        $user = Auth::user();
+
         // Mise à jour des informations
         $locataire->nom = $request->input('nom');
         $locataire->prenom = $request->input('prenom');
@@ -130,27 +138,27 @@ class LocataireController extends Controller
         $locataire->statut_matrimoniale = $request->input('statut_matrimoniale');
         $locataire->statut_professionnel = $request->input('statut_professionnel');
         $locataire->garant = $request->input('garant');
-    
+
         // Gestion de l'image (si un fichier est téléchargé)
         if ($request->hasFile('photo_profil')) {
             // Supprimer l'ancienne image si elle existe
-            if ($locataire->photo_profil && file_exists(public_path('images/profils/'.$locataire->photo_profil))) {
-                unlink(public_path('images/profils/'.$locataire->photo_profil));
+            if ($locataire->photo_profil && file_exists(public_path('images/profils/' . $locataire->photo_profil))) {
+                unlink(public_path('images/profils/' . $locataire->photo_profil));
             }
-        
+
             // Sauvegarder la nouvelle image
-            $imageName = time().'.'.$request->photo_profil->extension();
+            $imageName = time() . '.' . $request->photo_profil->extension();
             $request->photo_profil->move(public_path('images/profils'), $imageName);
             $locataire->photo_profil = $imageName;
         }
-        
-    
+
+
         // Sauvegarde des modifications
         $locataire->save();
-    
-        return redirect()->route('locataire.edit', $locataire->id)->with('success', 'Les informations ont été mises à jour avec succès.');
+
+        return redirect()->route('locataire.show', $user)->with('success', 'Les informations ont été mises à jour avec succès.');
     }
-    
+
     /**
      * Remove the specified resource from storage.
      */

@@ -70,13 +70,13 @@
                             }
                         @endphp
 
-                        <a class="nav-link dropdown-toggle arrow-none nav-icon" data-bs-toggle="dropdown" 
+                        <a class="nav-link dropdown-toggle arrow-none nav-icon" data-bs-toggle="dropdown"
                         href="#" role="button" aria-haspopup="false" aria-expanded="false">
                             <img src="{{ $imageUrl }}" alt="Profil utilisateur" class="thumb-lg rounded-circle" height="150">
                         </a>
                     @endif
 
-                        
+
                         <div class="dropdown-menu dropdown-menu-end py-0">
                             <div class="d-flex align-items-center dropdown-item py-2 bg-secondary-subtle">
                                 <div class="flex-shrink-0">
@@ -132,7 +132,7 @@
                              <!-- POUR LE LOCATAIRE -->
                              @if (Auth::user()->id_role == 2)
 
-                            <a class="dropdown-item" href="{{route('locataire.edit')}}"><i
+                            <a class="dropdown-item" href="{{route('locataire.show', $user )}}"><i
                                     class="las la-cog fs-18 me-1 align-text-bottom"></i>Completez Mon Profil</a>
                             <a class="dropdown-item" href="pages-faq.html"><i
                                     class="las la-question-circle fs-18 me-1 align-text-bottom"></i> Help Center</a>
@@ -157,7 +157,7 @@
                             </form>
                         </div>
                     </li>
-                    
+
                 </ul><!--end topbar-nav-->
             </nav>
             <!-- end navbar-->
