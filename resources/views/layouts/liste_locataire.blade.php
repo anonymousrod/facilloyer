@@ -171,10 +171,13 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                            <button type="button" class="btn btn-sm btn-primary csv">Export CSV</button>
-                            <button type="button" class="btn btn-sm btn-primary sql">Export SQL</button>
+                            <a href="{{ route('export.pdf') }}" class="btn btn-sm btn-primary pdf">
+                                <i class="fas fa-file-pdf"></i> Exporter en PDF
+                            </a>
+                            {{-- <button type="button" class="btn btn-sm btn-primary csv">Export PDF</button> --}}
+                            {{-- <button type="button" class="btn btn-sm btn-primary sql">Export SQL</button>
                             <button type="button" class="btn btn-sm btn-primary txt">Export TXT</button>
-                            <button type="button" class="btn btn-sm btn-primary json">Export JSON</button>
+                            <button type="button" class="btn btn-sm btn-primary json">Export JSON</button> --}}
                         </div>
                     </div><!--end card-body-->
                 </div><!--end card-->
