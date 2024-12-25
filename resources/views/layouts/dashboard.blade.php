@@ -1,84 +1,118 @@
 @extends('layouts.master_dash')
+
 @section('title', 'Dashboard')
+
 @section('content')
     @if ($message)
-        <div class="alert alert-warning text-center">
-            <h5 class="text-warning">{{ $message }}</h5>
+        <div class="alert alert-warning text-center fade show" role="alert">
+            <h5 class="text-warning mb-0">{{ $message }}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
-    {{-- si le statut est validé,  --}}
+
     @if (isset($statut))
-    <div class="page-wrapper">
-            <!-- Page Content-->
-            <div class="page-content">
-                <div class="container-xxl">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-light">
+                    <h4 class="card-title mb-0">Calendrier des événements</h4>
+                </div>
+                <div class="card-body">
                     <div class="row">
-                        <div class="col-12">
-                            <div class="mb-3">
+                        <div class="col-lg-9">
+                            <div id='calendar' class="mb-4"></div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="card border-primary">
+                                <div class="card-header bg-primary text-white">
+                                    <h5 class="card-title mb-0"><i class="fas fa-calendar-plus"></i> Nouvel Événement</h5>
+                                </div>
                                 <div class="card-body">
-                                    <div id='calendar'></div>
-                                    <div style='clear:both'></div>
+                                    <form id="eventForm">
+                                        <div class="mb-3">
+                                            <label for="eventTitle" class="form-label fw-bold">Titre de l'événement</label>
+                                            <input type="text" class="form-control form-control-lg" id="eventTitle" 
+                                                   placeholder="Ex: Réunion importante" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="eventDate" class="form-label fw-bold">Date</label>
+                                            <input type="date" class="form-control form-control-lg" id="eventDate" required>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="eventDescription" class="form-label fw-bold">Description</label>
+                                            <textarea class="form-control" id="eventDescription" rows="4" 
+                                                      placeholder="Détails de l'événement..." required></textarea>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                                            <i class="fas fa-save"></i> Enregistrer
+                                        </button>
+                                    </form>
                                 </div>
                             </div>
-                        </div> <!-- end col -->
-                    </div> <!-- end row -->
-                </div><!-- container -->
-
-                <!--Start Rightbar-->
-                <!--Start Rightbar/offcanvas-->
-                <div class="offcanvas offcanvas-end" tabindex="-1" id="Appearance" aria-labelledby="AppearanceLabel">
-                    <div class="offcanvas-header border-bottom justify-content-between">
-                      <h5 class="m-0 font-14" id="AppearanceLabel">Appearance</h5>
-                      <button type="button" class="btn-close text-reset p-0 m-0 align-self-center" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                        </div>
                     </div>
-                    <div class="offcanvas-body">  
-                        <h6>Account Settings</h6>
-                        <div class="p-2 text-start mt-3">
-                            <div class="form-check form-switch mb-2">
-                                <input class="form-check-input" type="checkbox" id="settings-switch1">
-                                <label class="form-check-label" for="settings-switch1">Auto updates</label>
-                            </div><!--end form-switch-->
-                            <div class="form-check form-switch mb-2">
-                                <input class="form-check-input" type="checkbox" id="settings-switch2" checked>
-                                <label class="form-check-label" for="settings-switch2">Location Permission</label>
-                            </div><!--end form-switch-->
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="settings-switch3">
-                                <label class="form-check-label" for="settings-switch3">Show offline Contacts</label>
-                            </div><!--end form-switch-->
-                        </div><!--end /div-->
-                        <h6>General Settings</h6>
-                        <div class="p-2 text-start mt-3">
-                            <div class="form-check form-switch mb-2">
-                                <input class="form-check-input" type="checkbox" id="settings-switch4">
-                                <label class="form-check-label" for="settings-switch4">Show me Online</label>
-                            </div><!--end form-switch-->
-                            <div class="form-check form-switch mb-2">
-                                <input class="form-check-input" type="checkbox" id="settings-switch5" checked>
-                                <label class="form-check-label" for="settings-switch5">Status visible to all</label>
-                            </div><!--end form-switch-->
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="settings-switch6">
-                                <label class="form-check-label" for="settings-switch6">Notifications Popup</label>
-                            </div><!--end form-switch-->
-                        </div><!--end /div-->               
-                    </div><!--end offcanvas-body-->
                 </div>
-                <!--end Rightbar/offcanvas-->
-                <!--end Rightbar-->
-                <!--Start Footer-->
-                
-                
-
-                <!--end footer-->
             </div>
-            <!-- end page content -->
         </div>
-        <!-- end page-wrapper -->
-
-        <!-- Javascript  -->
-        <!-- vendor js -->
-        
-
+    </div>
     @endif
+@endsection
+
+@section('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const calendarEl = document.getElementById('calendar');
+        const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            locale: 'fr',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek'
+            },
+            events: [], // Liste initiale vide
+
+            // Affichage des détails lors du clic sur un événement
+            eventClick: function (info) {
+                alert(
+                    `Titre : ${info.event.title}\n` +
+                    `Date : ${info.event.start.toLocaleDateString()}\n` +
+                    `Description : ${info.event.extendedProps.description}`
+                );
+            },
+        });
+
+        calendar.render();
+
+        // Formulaire d'ajout d'événements
+        const eventForm = document.getElementById('eventForm');
+        eventForm.addEventListener('submit', function (e) {
+            e.preventDefault(); // Empêcher le rechargement de la page
+
+            // Récupération des données du formulaire
+            const title = document.getElementById('eventTitle').value.trim();
+            const date = document.getElementById('eventDate').value;
+            const description = document.getElementById('eventDescription').value.trim();
+
+            // Vérification des champs
+            if (!title || !date) {
+                alert("Veuillez remplir tous les champs obligatoires.");
+                return;
+            }
+
+            // Ajout de l'événement au calendrier
+            calendar.addEvent({
+                title: title,
+                start: date,
+                description: description,
+            });
+
+            // Réinitialisation du formulaire
+            eventForm.reset();
+
+            // Message de confirmation
+            alert('L\'événement a été ajouté au calendrier avec succès !');
+        });
+    });
+</script>
 @endsection
