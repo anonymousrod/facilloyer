@@ -2,6 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ContratDeBailLocataire;
+use App\Models\ContratDeBail;
+use App\Models\Paiement;
+use App\Models\Bien;
+use App\Models\AgentImmobilier;
+use App\Models\LocataireBien;
 use App\Models\Locataire;
 use App\Models\User;
 use App\Notifications\SendLocataireLogin;
@@ -12,6 +18,40 @@ use Illuminate\Support\Facades\Hash;
 
 class LocataireController extends Controller
 {
+
+    public function showInformations($id)
+    {
+        // Correction du nom de la relation
+        $locataire = Locataire::with([
+            'user',
+            'agent_immobilier.user',  // Changé de 'agent' à 'agent_immobilier'
+            'paiements.bien',
+            'contrat_de_bail_locataires.contrats_de_bail.bien'  // Ajusté selon votre modèle
+        ])->findOrFail($id);
+        
+        // Statistiques des paiements
+        $statsPaiements = [
+            'total_paye' => $locataire->paiements->sum('montant'),
+            'paiements_en_retard' => $locataire->paiements->where('status', 'Retard')->count(),
+            'paiements_a_jour' => $locataire->paiements->where('status', 'Payé')->count(),
+        ];
+    
+        // Historique des biens loués
+        $biensLoues = $locataire->contrat_de_bail_locataires->map(function($contrat) {
+            return [
+                'bien' => $contrat->contrats_de_bail->bien ?? null,
+                'date_debut' => $contrat->date_debut ?? null,
+                'periode_paiement' => $contrat->periode_paiement ?? null,
+                'loyer' => $contrat->contrats_de_bail->loyer_mensuel ?? 0
+            ];
+        });
+    
+        return view('locataire.locainformations', compact(
+            'locataire',
+            'statsPaiements',
+            'biensLoues'
+        ));
+    }
     /**
      * Display a listing of the resource.
      */
@@ -76,16 +116,17 @@ class LocataireController extends Controller
      * Display the specified resource.
      */
     public function show($user)
-    {
+{
+    $locataire = Auth::user()->locataires->first();
 
-        $locataire = Auth::user()->locataires->first();
-
-        if (!$locataire) {
-            abort(404, 'Aucun locataire associé à cet utilisateur.');
-        }
-
-        return view('locataire.edit', compact('locataire'));
+    if (!$locataire) {
+        abort(404, 'Aucun locataire associé à cet utilisateur.');
     }
+
+    // Rediriger vers la vue d'édition
+    return view('locataire.edit', compact('locataire'));
+}
+
 
     /**
      * Affiche le formulaire pour modifier les informations du locataire connecté.

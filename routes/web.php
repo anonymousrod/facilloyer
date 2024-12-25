@@ -18,6 +18,12 @@ Route::get('/change-language/{lang}', function ($lang) {
     return redirect()->back();
 })->name('change.language');
 
+// Assurez-vous que cette route est placée AVANT les routes resource
+Route::get('/locataire/{id}/locainformations', [LocataireController::class, 'showInformations'])
+    ->name('locataire.locainformations');
+
+// La route resource existante
+Route::resource('locataire', LocataireController::class);
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
@@ -38,7 +44,6 @@ require __DIR__.'/auth.php';
 
 
 Route::resource('/agent-immobilier', AgentImmobilierController::class)->names('agent_immobilier');
-Route::resource('/locataire', LocataireController::class)->names('locataire');
 //route pour le changement de mot de passe pour new locataire
 Route::get('/password_change', [LocataireController::class, 'showChangePasswordForm'])->name('passwordChangeForm');
 Route::post('/password_change_save', [LocataireController::class, 'changePassword'])->name('passwordChangeFormSave');

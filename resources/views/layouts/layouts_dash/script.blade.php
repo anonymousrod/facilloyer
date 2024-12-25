@@ -63,3 +63,9 @@
         });
     });
 </script>
+
+
+{{-- script pour le calendrier --}}
+
+<script src="assets/libs/fullcalendar/index.global.min.js"></script>
+<script src="assets/js/pages/calendar.init.js"></script>

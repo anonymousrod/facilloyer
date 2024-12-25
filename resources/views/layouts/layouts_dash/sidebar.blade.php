@@ -24,7 +24,7 @@
                     <!-- ITEMS POUR LE SUPER ADMINISTRATEUR -->
                     @if (Auth::user()->id_role == 1)
                         <li class="nav-item">
-                            <a class="nav-link" href="lol.html">
+                            <a class="nav-link" href="{{route('dashboard')}}">
                                 <i class="iconoir-view-grid menu-icon"></i>
                                 <span>Dashboard</span>
                             </a>
@@ -75,9 +75,9 @@
                     @if (Auth::user()->id_role == 2)
                         </li><!--end nav-item-->
                         <li class="nav-item">
-                            <a class="nav-link" href="lol.html">
+                            <a class="nav-link" href="{{route('dashboard')}}"><">
                                 <i class="iconoir-view-grid menu-icon"></i>
-                                <span>Espace Locataire</span>
+                                <span>Dashbord</span>
                             </a>
 
                         </li><!--end nav-item-->
@@ -142,7 +142,7 @@
 
 
                             <li class="nav-item">
-                                <a class="nav-link" href="lol.html">
+                                <a class="nav-link" href="{{route('dashboard')}}">
                                     <i class="iconoir-view-grid menu-icon"></i>
                                     <span>Dashboard</span>
                                 </a>
