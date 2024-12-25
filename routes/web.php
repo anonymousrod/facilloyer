@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AgentImmobilierController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ExportListePDF;
 use App\Http\Controllers\LocataireController;
 
 Route::get('/', function () {
@@ -49,6 +50,10 @@ Route::get('/password_change', [LocataireController::class, 'showChangePasswordF
 Route::post('/password_change_save', [LocataireController::class, 'changePassword'])->name('passwordChangeFormSave');
 //route pour changer le statut du locataire par l'agent immobilier
 Route::post('/locataires/{id}/toggle-status', [LocataireController::class, 'toggleStatus']);
+
+//Route pour l'exportation de la liste des locataire en pdf
+
+Route::get('/export/pdf', [ExportListePDF::class, 'exportPdf'])->name('export.pdf');
 
 
 
