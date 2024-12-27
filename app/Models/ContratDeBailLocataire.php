@@ -44,6 +44,8 @@ class ContratDeBailLocataire extends Model
         'bien_id',
         'date_debut',
         'periode_paiement',
+        'statut_paiement',
+        'echeance_paiement',
         'created_at',
         'updated_at',
         'deleted_at'

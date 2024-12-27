@@ -20,6 +20,8 @@ return new class extends Migration
             $table->date('date_debut');
             $table->date('date_fin')->nullable();
             $table->string('periode_paiement'); // Période de paiement
+            $table->enum('statut_paiement', ['Payé', 'Partiellement payé', 'En attente'])->default('En attente'); // État du paiement pour la période
+            $table->date('echeance_paiement')->nullable(); // Date d'échéance pour la période actuelle
             $table->timestamps();
             $table->softDeletes();
 
@@ -35,5 +37,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('contrat_de_bail_locataire');
+        Schema::table('contrat_de_bail_locataire', function (Blueprint $table) {
+            $table->dropColumn(['statut_paiement', 'echeance_paiement']);
+        });
     }
 };
