@@ -106,7 +106,7 @@
                         </li><!--end nav-item-->
 
                         <li class="nav-item">
-                            <a class="nav-link" href="{{route('locataire.paiements.create')}}">
+                            <a class="nav-link" href="{{route('locataire.paiements.selection')}}">
                             <i class="iconoir-credit-card menu-icon"></i>
                             <span>Effectuer un paiement</span>
                             </a>

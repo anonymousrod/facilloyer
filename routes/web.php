@@ -78,6 +78,12 @@ Route::middleware(['auth'])->group(function () {
 
     
 });
+Route::middleware(['auth'])->group(function () {
+    Route::get('/locataire/paiements/selection', [PaiementController::class, 'selectionBien'])->name('locataire.paiements.selection');
+    Route::post('/locataire/paiements/calcul', [PaiementController::class, 'calculMontant'])->name('paiement.calcul');
+    Route::post('/locataire/paiements/effectuer', [PaiementController::class, 'effectuerPaiement'])->name('paiement.effectuer');
+});
+
 
 
 

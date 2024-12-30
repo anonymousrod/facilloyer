@@ -103,7 +103,7 @@
 
         <div class="card-body">
             <!-- Statistiques de paiement -->
-            <div class="row g-4 mb-4">
+            <!-- <div class="row g-4 mb-4">
                 <div class="col-md-4">
                     <div class="stat-card">
                         <h6 class="text-primary mb-2">Total payé</h6>
@@ -125,7 +125,7 @@
                         <small class="text-muted">Montant total de la période</small>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
             <!-- Informations personnelles et professionnelles -->
             <div class="row g-4 mb-4">
@@ -139,6 +139,16 @@
                         </div>
                         <div class="card-body">
                             <table class="table info-table">
+                                <tr>
+                                    <div class="col-md-8">
+                                        <h3 class="mb-2">{{ $locataire->nom }} {{ $locataire->prenom }}</h3>
+                                        <div class="d-flex flex-wrap gap-3">
+                                            <span><i class="fas fa-envelope me-2"></i>{{ $locataire->user->email }}</span>
+                                            <span><i class="fas fa-phone me-2"></i>{{ $locataire->telephone ?? 'Non renseigné' }}</span>
+                                        </div>
+                                    </div>
+                                </tr>
+
                                 <tr>
                                     <th>Adresse</th>
                                     <td>{{ $locataire->adresse }}</td>
@@ -255,8 +265,8 @@
                                                     <small class="text-muted d-block">Dépôt de garantie</small>
                                                     <strong>{{ number_format($location['contrat']['depot_garantie'], 2, ',', ' ') }} €</strong>
                                                 </div>
-                                               
-                                                
+
+
                                                 <div class="col-6">
                                                     <small class="text-muted d-block">Périodicité</small>
                                                     <strong>{{ $location['contrat']['periode_paiement'] }}</strong>

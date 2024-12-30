@@ -64,6 +64,7 @@ class PaiementSeeder extends Seeder
                     'montant' => $montantPeriode,
                     'date' => $dateCourante,
                     'status' => $this->faker->randomElement(['Payé', 'attente']),
+                    'description_paiement' => $this->faker->sentence,  // Description générée aléatoirement
                 ]);
 
                 $dateCourante->addMonths($moisParPeriode);

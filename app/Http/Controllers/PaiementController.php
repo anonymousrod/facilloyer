@@ -12,7 +12,93 @@ use Illuminate\Support\Facades\DB;
 use App\Models\ContratDeBailLocataire;
 
 class PaiementController extends Controller
+
+
 {
+
+
+    // la sélection du bien, le calcul des montants, et la gestion des paiements 
+    public function selectionBien()
+{
+    $user = Auth::user();
+    $locataire = $user->locataires()->first();
+
+    if (!$locataire) {
+        return redirect()->route('dashboard')->with('error', 'Accès non autorisé.');
+    }
+
+    $contrats = ContratDeBailLocataire::with('contrats_de_bail')
+        ->where('locataire_id', $locataire->id)
+        ->get();
+
+    return view('locataire.paiements.selection', compact('contrats'));
+}
+
+//le calcul des montants
+public function calculMontant(Request $request)
+{
+    $request->validate([
+        'contrat_id' => 'required|exists:contrat_de_bail_locataire,id',
+        'complement' => 'nullable|numeric|min:0',
+    ]);
+
+    $contrat = ContratDeBailLocataire::with('contrats_de_bail')->find($request->contrat_id);
+
+    if (!$contrat) {
+        return redirect()->back()->with('error', 'Contrat introuvable.');
+    }
+
+    $loyerMensuel = $contrat->contrats_de_bail->loyer_mensuel;
+    $complement = $request->input('complement', 0);
+    $montantTotal = $loyerMensuel + $complement;
+
+    $contrat->update([
+        'complement_au_loyer' => $complement,
+        'montant_total_periode' => $montantTotal,
+    ]);
+
+    return view('locataire.paiements.paiement', compact('contrat', 'montantTotal'));
+}
+
+public function effectuerPaiement(Request $request)
+    {
+        // Validation des champs
+        $request->validate([
+            'contrat_id' => 'required|exists:contrat_de_bail_locataire,id',
+            'montant_paye' => 'required|numeric|min:0',
+            'description_paiement' => 'required|string|max:255', // Validation de la description
+        ]);
+
+        // Récupérer le contrat
+        $contrat = ContratDeBailLocataire::find($request->contrat_id);
+
+        if (!$contrat) {
+            return redirect()->back()->with('error', 'Contrat introuvable.');
+        }
+
+        // Calcul du montant restant
+        $montantPaye = $request->input('montant_paye');
+        $montantRestant = $contrat->montant_total_periode - $montantPaye;
+
+        // Mettre à jour le contrat
+        $contrat->update([
+            'montant_restant' => $montantRestant,
+            'statut_paiement' => $montantRestant > 0 ? 'Partiellement payé' : 'Payé',
+        ]);
+
+        // Enregistrer le paiement
+        Paiement::create([
+            'locataire_id' => $contrat->locataire_id,
+            'bien_id' => $contrat->contrats_de_bail->bien_id,
+            'montant' => $montantPaye,
+            'description_paiement' => $request->input('description_paiement'), // Ajout de la description
+            'date' => Carbon::now(),
+        ]);
+
+        // Retourner un message de succès
+        return redirect()->route('locataire.paiements.selection')->with('success', 'Paiement effectué avec succès.');
+    }
+
     public function historique()
     {
         $user = Auth::user();
