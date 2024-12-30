@@ -24,28 +24,34 @@ class LocataireController extends Controller
         // Correction du nom de la relation
         $locataire = Locataire::with([
             'user',
-            'agent_immobilier.user',  // Changé de 'agent' à 'agent_immobilier'
+            'agent_immobilier',
             'paiements.bien',
-            'contrat_de_bail_locataires.contrats_de_bail.bien'  // Ajusté selon votre modèle
+            'contrat_de_bail_locataires.contrats_de_bail.bien'
         ])->findOrFail($id);
         
         // Statistiques des paiements
         $statsPaiements = [
             'total_paye' => $locataire->paiements->sum('montant'),
-            'paiements_en_retard' => $locataire->paiements->where('status', 'Retard')->count(),
-            'paiements_a_jour' => $locataire->paiements->where('status', 'Payé')->count(),
+            'montant_restant' => $locataire->paiements->sum('montant_restant'),
+            'montant_total_periode' => $locataire->paiements->sum('montant_total_periode'),
+            'derniers_paiements' => $locataire->paiements
+                ->sortByDesc('date')
+                ->take(5)
         ];
-    
-        // Historique des biens loués
+
+        // Historique des biens loués avec leurs contrats
         $biensLoues = $locataire->contrat_de_bail_locataires->map(function($contrat) {
             return [
                 'bien' => $contrat->contrats_de_bail->bien ?? null,
-                'date_debut' => $contrat->date_debut ?? null,
-                'periode_paiement' => $contrat->periode_paiement ?? null,
-                'loyer' => $contrat->contrats_de_bail->loyer_mensuel ?? 0
+                'contrat' => [
+                    'date_debut' => $contrat->date_debut,
+                    'periode_paiement' => $contrat->periode_paiement,
+                    'loyer_mensuel' => $contrat->contrats_de_bail->loyer_mensuel ?? 0,
+                    'depot_garantie' => $contrat->contrats_de_bail->depot_de_garantie ?? 0
+                ]
             ];
         });
-    
+
         return view('locataire.locainformations', compact(
             'locataire',
             'statsPaiements',

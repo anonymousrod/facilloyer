@@ -19,6 +19,9 @@ return new class extends Migration
             $table->foreign('contrat_de_bail_id')->references('id')->on('contrats_de_bail')->onDelete('cascade')->onUpdate('restrict');
             $table->date('date_debut');
             $table->date('date_fin')->nullable();
+            $table->float('complement_au_loyer')->nullable(); // Montant de complement au loyer mensuel , pour frais eau electricité , eau ,ect....
+            $table->float('montant_restant')->nullable(); // Montant restant pour la période en cours
+            $table->float('montant_total_periode')->nullable(); // Montant total attendu pour une période mensuel
             $table->string('periode_paiement'); // Période de paiement
             $table->enum('statut_paiement', ['Payé', 'Partiellement payé', 'En attente'])->default('En attente'); // État du paiement pour la période
             $table->date('echeance_paiement')->nullable(); // Date d'échéance pour la période actuelle

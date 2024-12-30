@@ -4,12 +4,19 @@ namespace Database\Seeders;
 
 use App\Models\ContratDeBailLocataire;
 use App\Models\Paiement;
-use App\Models\LocataireBien;
 use Illuminate\Database\Seeder;
 use Carbon\Carbon;
+use Faker\Factory;
 
 class PaiementSeeder extends Seeder
 {
+    protected $faker;
+
+    public function __construct()
+    {
+        $this->faker = Factory::create();
+    }
+
     /**
      * Run the database seeds.
      */
@@ -25,28 +32,17 @@ class PaiementSeeder extends Seeder
 
             // Vérifier si le contrat de bail est valide et récupérer le bien
             if (!$contratDeBail || !$contratDeBail->bien) {
-                dump("Contrat de bail ou bien manquant pour le locataire ID : $locataireId");
-
-                continue; // Passer si le contrat ou le bien est manquant
+                continue;
             }
 
             $bienId = $contratDeBail->bien->id;
 
-            // Vérifier si le locataire est assigné au bien
-            $isAssigned = LocataireBien::where('locataire_id', $locataireId)
-                ->where('bien_id', $bienId)
-                ->exists();
-
-            if (!$isAssigned) {
-
-                continue; // Passer au contrat suivant si non assigné
-            }
-
-            // Récupérer les informations nécessaires pour les paiements
+            // Déterminer la date de début et de fin
             $dateDebut = Carbon::parse($contratLocataire->date_debut);
-            $periodePaiement = $contratLocataire->periode_paiement;
+            $dateFin = Carbon::parse($contratLocataire->date_fin);
 
-            // Déterminer le nombre de mois par période
+            // Déterminer la fréquence de paiement
+            $periodePaiement = $contratLocataire->periode_paiement;
             $moisParPeriode = match ($periodePaiement) {
                 'Mensuel' => 1,
                 'Trimestriel' => 3,
@@ -55,34 +51,21 @@ class PaiementSeeder extends Seeder
                 default => 1,
             };
 
-            // Calculer le montant total pour chaque période
+            // Calculer le montant pour chaque période
             $loyerMensuel = $contratDeBail->bien->loyer_mensuel;
-            $montantTotalPeriode = $loyerMensuel * $moisParPeriode;
+            $montantPeriode = $loyerMensuel * $moisParPeriode;
 
-            // Générer les paiements pour la durée du contrat
-            $dateFin = Carbon::parse($contratLocataire->date_fin);
+            // Générer les paiements pour chaque période
             $dateCourante = $dateDebut;
-
             while ($dateCourante < $dateFin) {
-                $montantRestant = $montantTotalPeriode;
+                Paiement::create([
+                    'locataire_id' => $locataireId,
+                    'bien_id' => $bienId,
+                    'montant' => $montantPeriode,
+                    'date' => $dateCourante,
+                    'status' => $this->faker->randomElement(['Payé', 'attente']),
+                ]);
 
-                // Simuler plusieurs paiements pour couvrir la période
-                while ($montantRestant > 0) {
-                    // Générer un montant payé aléatoire (au maximum ce qui reste à payer)
-                    $montant = min($montantRestant, random_int(5000, 20000));
-                    $montantRestant -= $montant;
-
-                    Paiement::create([
-                        'locataire_id' => $locataireId,
-                        'bien_id' => $bienId,
-                        'montant_total_periode' => $montantTotalPeriode,
-                        'montant_restant' => $montantRestant,
-                        'montant' => $montant,
-                        'date' => $dateCourante,
-                    ]);
-                }
-
-                // Passer à la prochaine période
                 $dateCourante->addMonths($moisParPeriode);
             }
         }

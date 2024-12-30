@@ -14,12 +14,11 @@ class PaiementFactory extends Factory
     public function definition()
     {
         return [
-            'montant' => $this->faker->randomFloat(2, 500, 5000),
-            'date_paiement' => $this->faker->date(),
-            'moyen_paiement' => $this->faker->randomElement(['carte bancaire', 'virement', 'chèque']),
-            'statut_paiement' => $this->faker->boolean(),
-            'id_locataire' => Locataire::factory(),
-            'id_bien' => Bien::factory(),
+            'locataire_id' => Locataire::factory(),
+            'bien_id' => Bien::factory(),
+            'montant' => $this->faker->randomFloat(2, 1000, 5000),
+            'date' => $this->faker->dateTimeBetween('-1 year', 'now'),
+            'status' => $this->faker->randomElement(['Payé', 'attente']),
         ];
     }
 }
