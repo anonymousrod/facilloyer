@@ -30,7 +30,10 @@ class AgentImmonilierSeeder extends Seeder
                 'adresse_agence' => $faker->address,
                 'territoire_couvert' => $faker->city,
                 'nombre_bien_disponible' => $faker->numberBetween(1, 100),
-                'photo_profil' => $faker->imageUrl(150, 150, 'business'),
+                'photo_profil' => '/storage/facker/profile/' . rand(1, 19) . '.JPG',
+                'carte_identite_pdf' => '/storage/facker/carte_identite_pdf/' . rand(1, 6) . '.PDF',
+                'rccm_pdf' => '/storage/facker/rccm_pdf/' . rand(1, 6) . '.PDF',
+                // 'photo_profil' => $faker->imageUrl(150, 150, 'business'),
 
             ]);
         }

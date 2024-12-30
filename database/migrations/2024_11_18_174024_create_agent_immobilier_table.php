@@ -24,9 +24,10 @@ return new class extends Migration
             $table->string('territoire_couvert'); // Territoire couvert
             $table->integer('nombre_bien_disponible'); // Nombre de biens disponibles
             $table->string('photo_profil')->nullable();
+            $table->string('carte_identite_pdf')->nullable();
+            $table->string('rccm_pdf')->nullable();
             $table->timestamps();
             $table->softDeletes();
-
         });
     }
 
