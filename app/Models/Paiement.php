@@ -1,9 +1,5 @@
 <?php
 
-/**
- * Created by Reliese Model.
- */
-
 namespace App\Models;
 
 use Carbon\Carbon;
@@ -18,14 +14,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property int $bien_id
  * @property float $montant
  * @property Carbon $date
- * @property string $statut
+ * @property string $status
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
+ * @property Carbon|null $deleted_at
  *
  * @property Bien $bien
  * @property Locataire $locataire
- *
- * @package App\Models
  */
 class Paiement extends Model
 {
@@ -37,47 +32,28 @@ class Paiement extends Model
         'locataire_id' => 'int',
         'bien_id' => 'int',
         'montant' => 'float',
-        'montant_total_periode' => 'float',
-        'montant_restant' => 'float',
-        'date' => 'datetime'
+        'date' => 'date'
     ];
 
     protected $fillable = [
         'locataire_id',
         'bien_id',
         'montant',
-        'montant_total_periode',
-        'montant_restant',
         'date',
-        // 'mode_paiement',
-        // 'statut',
-        'created_at',
-        'updated_at',
-        'deleted_at'
+        'status',
     ];
 
-    // Méthode pour mettre à jour le statut du paiement
-    // public function updateStatus()
-    // {
-    //     $contrat = $this->contratDeBailLocataire; // Récupérer le contrat de bail associé
-    //     $dateLimite = Carbon::parse($contrat->date_debut)->addMonths($contrat->periode_paiement); // Calcul de la date limite de paiement
-
-    //     if ($this->date_paiement <= $dateLimite) {
-    //         $this->status = 'Payé';
-    //     } elseif ($this->date_paiement > $dateLimite) {
-    //         $this->status = 'Retard';
-    //     } else {
-    //         $this->status = 'En attente';
-    //     }
-
-    //     $this->save(); // Sauvegarde des modifications
-    // }
-
+    /**
+     * Relation avec le modèle Bien.
+     */
     public function bien()
     {
         return $this->belongsTo(Bien::class);
     }
 
+    /**
+     * Relation avec le modèle Locataire.
+     */
     public function locataire()
     {
         return $this->belongsTo(Locataire::class);

@@ -75,7 +75,7 @@
                     @if (Auth::user()->id_role == 2)
                         </li><!--end nav-item-->
                         <li class="nav-item">
-                            <a class="nav-link" href="{{route('dashboard')}}"><">
+                            <a class="nav-link" href="{{route('dashboard')}}">
                                 <i class="iconoir-view-grid menu-icon"></i>
                                 <span>Dashbord</span>
                             </a>
@@ -106,16 +106,16 @@
                         </li><!--end nav-item-->
 
                         <li class="nav-item">
-                            <a class="nav-link" href="lol.html">
+                            <a class="nav-link" href="{{route('locataire.paiements.create')}}">
                             <i class="iconoir-credit-card menu-icon"></i>
                             <span>Effectuer un paiement</span>
                             </a>
 
-                        </li><!--end nav-item-->
+                       </li><!--end nav-item-->
                         <li class="nav-item">
-                            <a class="nav-link" href="lol.html">
+                            <a class="nav-link" href="{{route('locataire.paiements.historique')}}">
                             <i class="iconoir-list menu-icon"></i>
-                            <span>Consulter l'historique des paiements</span>
+                            <span>Historique des paiements</span>
                             </a>
 
                         </li><!--end nav-item-->
@@ -133,7 +133,20 @@
                             </a>
 
                         </li><!--end nav-item-->
-                    @endif
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('locataire.locainformations', Auth::user()->id)}}">
+                            <i class="iconoir-user menu-icon"></i>
+                            <span>Modifier Mon Profil</span>
+                            </a>
+                        </li><!--end nav-item-->
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('profile.edit', Auth::user()->id)}}">
+                            <i class="iconoir-settings menu-icon"></i>
+                            <span>Paramètres</span>
+                            </a>
+                        </li><!--end nav-item-->
+                    @endif 
 
                     <!-- ITEMS POUR L'AGENT IMMOBILIER -->
                     @if (Auth::user()->id_role == 3)

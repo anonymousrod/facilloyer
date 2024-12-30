@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\ContratDeBailLocataire;
 use App\Models\ContratsDeBail;
-use App\Models\Locataire;
 use Carbon\Carbon;
 use Faker\Factory;
 use Illuminate\Database\Seeder;
@@ -17,20 +16,25 @@ class ContratsDeBail_locataireSeeder extends Seeder
     public function run(): void
     {
         $faker = Factory::create();
-        $contrats = ContratsDeBail::all();
+
+        // Récupérer tous les contrats de bail existants
+        $contrats = ContratsDeBail::with('bien.locataires')->get();
 
         foreach ($contrats as $contrat) {
-            // Récupérer un locataire déjà assigné au bien de ce contrat
-            $locatairesAssignes = $contrat->bien->locataires;
+            $bien = $contrat->bien;
 
-            if ($locatairesAssignes->isNotEmpty()) {
-                $locataire = $locatairesAssignes->random();
+            // Vérifier si le bien a des locataires assignés
+            if ($bien && $bien->locataires->isNotEmpty()) {
+                $locataire = $bien->locataires->random();
 
                 $periodePaiement = $faker->randomElement(['Mensuel', 'Trimestriel', 'Semestriel', 'Annuel']);
                 $dateDebut = Carbon::now()->startOfMonth();
                 $dateFin = $dateDebut->copy()->addYear();
 
-                // Créer un contrat pour le locataire et le bien
+                // Calculer l'échéance en fonction de la période
+                $echeancePaiement = $this->calculerEcheance($dateDebut, $periodePaiement);
+
+                // Créer un enregistrement pour le contrat de bail locataire
                 ContratDeBailLocataire::create([
                     'contrat_de_bail_id' => $contrat->id,
                     'locataire_id' => $locataire->id,
@@ -38,7 +42,7 @@ class ContratsDeBail_locataireSeeder extends Seeder
                     'date_fin' => $dateFin,
                     'periode_paiement' => $periodePaiement,
                     'statut_paiement' => 'En attente',
-                    'echeance_paiement' => $this->calculerEcheance($dateDebut, $periodePaiement),
+                    'echeance_paiement' => $echeancePaiement,
                 ]);
             }
         }

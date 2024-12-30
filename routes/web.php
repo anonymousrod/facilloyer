@@ -6,6 +6,7 @@ use App\Http\Controllers\AgentImmobilierController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportListePDF;
 use App\Http\Controllers\LocataireController;
+use App\Http\Controllers\PaiementController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -54,6 +55,31 @@ Route::post('/locataires/{id}/toggle-status', [LocataireController::class, 'togg
 //Route pour l'exportation de la liste des locataire en pdf
 
 Route::get('/export/pdf', [ExportListePDF::class, 'exportPdf'])->name('export.pdf');
+
+// Routes pour les paiements (uniquement avec auth)
+Route::middleware(['auth'])->group(function () {
+    // Historique des paiements
+    Route::get('/locataire/paiements/historique', [PaiementController::class, 'historique'])
+        ->name('locataire.paiements.historique');
+    
+    // Effectuer un paiement
+    Route::get('/locataire/paiements/create', [PaiementController::class, 'create'])
+        ->name('locataire.paiements.create');
+        
+    Route::post('/locataire/paiements/store', [PaiementController::class, 'store'])
+        ->name('locataire.paiements.store');
+    
+    // Route pour la quittance de loyer
+    Route::get('/locataire/paiements/{id}/quittance', [PaiementController::class, 'generateQuittance'])
+        ->name('locataire.paiements.quittance');
+
+    Route::get('/locataire/paiements/{id}/details', [PaiementController::class, 'show'])
+    ->name('locataire.paiements.show');
+
+    
+});
+
+
 
 
 

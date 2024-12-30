@@ -68,9 +68,9 @@ class Bien extends Model
         return $this->belongsTo(AgentImmobilier::class);
     }
 
-    public function contrats_de_bails()
+    public function contrats_de_bail()
     {
-        return $this->hasMany(ContratsDeBail::class);
+        return $this->hasMany(ContratDeBail::class);
     }
 
     public function locataires()

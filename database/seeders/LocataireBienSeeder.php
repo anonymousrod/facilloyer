@@ -1,53 +1,5 @@
 <?php
 
-// namespace Database\Seeders;
-
-// use App\Models\Bien;
-// use App\Models\Locataire;
-// use Faker\Factory;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-// use Illuminate\Database\Seeder;
-
-// class LocataireBienSeeder extends Seeder
-// {
-//     /**
-//      * Run the database seeds.
-//      */
-//     public function run(): void
-//     {
-//         // Créer une instance de Faker pour générer des données factices si nécessaire
-//         $faker = Factory::create();
-
-//         // Récupérer tous les biens
-//         $biens = Bien::all();
-
-//         // Récupérer tous les locataires
-//         $locataires = Locataire::all();
-
-//         // Itérer sur chaque locataire
-//         foreach ($locataires as $locataire) {
-
-//             // Sélectionner entre 1 et 3 biens pour chaque locataire, sans dépasser le nombre total de biens
-//             $biensSelectionnes = $biens->random(rand(1, min(3, $biens->count())));
-
-//             // Itérer sur les biens sélectionnés pour ce locataire
-//             foreach ($biensSelectionnes as $bien) {
-
-//                 // Vérifier si ce locataire est déjà associé à ce bien
-//                 $exists = $locataire->biens()->where('bien_id', $bien->id)->exists();
-
-//                 // Si l'association n'existe pas, on crée une nouvelle relation dans la table pivot
-//                 if (!$exists) {
-//                     $locataire->biens()->attach($bien->id);
-//                 }
-//             }
-//         }
-//     }
-
-// }
-
-// <?php
-
 namespace Database\Seeders;
 
 use App\Models\Bien;
@@ -65,12 +17,21 @@ class LocataireBienSeeder extends Seeder
         $locataires = Locataire::all();
 
         foreach ($locataires as $locataire) {
-            // Assigner entre 1 et 3 biens disponibles aléatoires au locataire
-            $biensDisponibles = Bien::doesntHave('locataires')->get();
-            $biensSelectionnes = $biensDisponibles->random(rand(1, min(3, $biensDisponibles->count())));
+            // Récupérer tous les biens qui ne sont pas déjà associés à ce locataire
+            $biensDisponibles = Bien::whereDoesntHave('locataires', function($query) use ($locataire) {
+                $query->where('locataire_id', $locataire->id);
+            })->get();
 
-            foreach ($biensSelectionnes as $bien) {
-                $locataire->biens()->attach($bien->id);
+            // Vérifier s'il y a des biens disponibles
+            if ($biensDisponibles->count() > 0) {
+                // Sélectionner entre 1 et 3 biens
+                $nombreBiens = min(3, $biensDisponibles->count());
+                $biensSelectionnes = $biensDisponibles->random(max(1, $nombreBiens));
+
+                // Attacher les biens sélectionnés au locataire
+                foreach ($biensSelectionnes as $bien) {
+                    $locataire->biens()->attach($bien->id);
+                }
             }
         }
     }

@@ -11,17 +11,26 @@ class ExportListePDF extends Controller
     //
     public function exportPdf()
     {
-        // Récupérer les locataires avec leurs relations
         $locataires = Locataire::with('user')->get();
-        
 
-        // Activer les images distantes
-        Pdf::setOptions(['isRemoteEnabled' => true]);
+        $options = [
+            'isRemoteEnabled' => true,
+            'isPhpEnabled' => true,
+            'defaultFont' => 'sans-serif',
+            'chroot' => [
+                public_path(),
+                storage_path('app/public')
+            ]
+        ];
 
-        // Charger la vue pour le PDF
-        $pdf = Pdf::loadView('exports.locataires_pdf', compact('locataires'));
+        // Configurer PDF avec les options
+        $pdf = PDF::setOptions($options)
+            ->loadView('exports.locataires_pdf', compact('locataires'));
 
-        // Retourner le fichier PDF téléchargé
         return $pdf->download('locataires.pdf');
     }
+
+    
 }
+
+
