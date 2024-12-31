@@ -20,9 +20,19 @@
                         </div>
                     </div>
                     <div class="card-body pt-0">
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
                         <form
                             action="{{ isset($agentImmobilier) ? route('agent_immobilier.update', $agentImmobilier->id) : route('agent_immobilier.store') }}"
-                            method="POST">
+                            method="POST" enctype="multipart/form-data">
                             @csrf
                             @if (isset($agentImmobilier))
                                 @method('PUT')
@@ -35,8 +45,9 @@
                                         <label for="nom_agence" class="col-sm-3 col-form-label text-end">Nom de
                                             l'agence</label>
                                         <div class="col-sm-9">
-                                            <input class="form-control" type="text" value="{{ isset($agentImmobilier) ? $agentImmobilier->nom_agence : ''}}" id="nom_agence" name="nom_agence"
-                                                required>
+                                            <input class="form-control" type="text"
+                                                value="{{ isset($agentImmobilier) ? $agentImmobilier->nom_agence : '' }}"
+                                                id="nom_agence" name="nom_agence" required>
                                         </div>
                                     </div>
                                     <!-- Nom de l'admin -->
@@ -44,8 +55,9 @@
                                         <label for="nom_admin" class="col-sm-3 col-form-label text-end">Nom de
                                             l'admin</label>
                                         <div class="col-sm-9">
-                                            <input class="form-control" type="text" value="{{ isset($agentImmobilier) ? $agentImmobilier->nom_admin : ''}}" id="nom_admin" name="nom_admin"
-                                                required>
+                                            <input class="form-control" type="text"
+                                                value="{{ isset($agentImmobilier) ? $agentImmobilier->nom_admin : '' }}"
+                                                id="nom_admin" name="nom_admin" required>
                                         </div>
                                     </div>
                                     <!-- Prénom de l'admin -->
@@ -53,8 +65,9 @@
                                         <label for="prenom_admin" class="col-sm-3 col-form-label text-end">Prénom de
                                             l'admin</label>
                                         <div class="col-sm-9">
-                                            <input class="form-control" type="text" value="{{ isset($agentImmobilier) ? $agentImmobilier->prenom_admin : ''}}" id="prenom_admin" name="prenom_admin"
-                                                required>
+                                            <input class="form-control" type="text"
+                                                value="{{ isset($agentImmobilier) ? $agentImmobilier->prenom_admin : '' }}"
+                                                id="prenom_admin" name="prenom_admin" required>
                                         </div>
                                     </div>
                                     <!-- Téléphone de l'agence -->
@@ -62,8 +75,18 @@
                                         <label for="telephone_agence"
                                             class="col-sm-3 col-form-label text-end">Téléphone</label>
                                         <div class="col-sm-9">
-                                            <input class="form-control" type="tel"  value="{{ isset($agentImmobilier) ? $agentImmobilier->telephone_agence : ''}}"id="telephone_agence"
+                                            <input class="form-control" type="tel"
+                                                value="{{ isset($agentImmobilier) ? $agentImmobilier->telephone_agence : '' }}"id="telephone_agence"
                                                 name="telephone_agence" required>
+                                        </div>
+                                    </div>
+                                    <!-- Fichier PDF Carte d'identité ou IFU -->
+                                    <div class="mb-3 row">
+                                        <label for="carte_identite_pdf" class="col-sm-3 col-form-label text-end">Carte
+                                            d'identité / IFU</label>
+                                        <div class="col-sm-9">
+                                            <input class="form-control" type="file" id="carte_identite_pdf"
+                                                name="carte_identite_pdf" accept="application/pdf" {{ isset($agentImmobilier) ? '' : 'required' }}>
                                         </div>
                                     </div>
 
@@ -74,8 +97,9 @@
                                     <div class="mb-3 row">
                                         <label for="adresse_agence" class="col-sm-3 col-form-label text-end">Adresse</label>
                                         <div class="col-sm-9">
-                                            <input class="form-control" type="text" value="{{ isset($agentImmobilier) ? $agentImmobilier->adresse_agence : ''}}" id="adresse_agence"
-                                                name="adresse_agence" required>
+                                            <input class="form-control" type="text"
+                                                value="{{ isset($agentImmobilier) ? $agentImmobilier->adresse_agence : '' }}"
+                                                id="adresse_agence" name="adresse_agence" required>
                                         </div>
                                     </div>
                                     <!-- Territoire couvert -->
@@ -91,25 +115,45 @@
                                         <label for="nombre_bien_disponible" class="col-sm-3 col-form-label text-end">Biens
                                             disponibles</label>
                                         <div class="col-sm-9">
-                                            <input class="form-control" type="number" value="{{ isset($agentImmobilier) ? $agentImmobilier->nombre_bien_disponible : ''}}" id="nombre_bien_disponible"
-                                                name="nombre_bien_disponible" min="0" required>
+                                            <input class="form-control" type="number"
+                                                value="{{ isset($agentImmobilier) ? $agentImmobilier->nombre_bien_disponible : '' }}"
+                                                id="nombre_bien_disponible" name="nombre_bien_disponible" min="0"
+                                                required>
                                         </div>
                                     </div>
                                     <!-- Année d'expérience -->
                                     <div class="mb-3 row">
                                         <label for="annee_experience" class="col-sm-3 col-form-label text-end">Année
-                                            d'expérience</label>
+                                            Expérience</label>
                                         <div class="col-sm-9">
-                                            <input class="form-control" type="number" value="{{ isset($agentImmobilier) ? $agentImmobilier->annee_experience : ''}}" id="annee_experience"
-                                                name="annee_experience" min="0" required>
+                                            <input class="form-control" type="number"
+                                                value="{{ isset($agentImmobilier) ? $agentImmobilier->annee_experience : '' }}"
+                                                id="annee_experience" name="annee_experience" min="0" required>
+                                        </div>
+                                    </div>
+                                    <!-- Fichier PDF RCCM -->
+                                    <div class="mb-3 row">
+                                        <label for="rccm_pdf" class="col-sm-3 col-form-label text-end">RCCM</label>
+                                        <div class="col-sm-9">
+                                            <input class="form-control" type="file" id="rccm_pdf" name="rccm_pdf"
+                                                accept="application/pdf" {{ isset($agentImmobilier) ? '' : 'required' }}>
                                         </div>
                                     </div>
 
                                 </div>
+                                <!-- Photo de profil centrée -->
+                                <div class="mb-3 row justify-content-center">
+                                    <div class="col-6 text-center">
+                                        <label for="photo_profil" class="form-label">Photo de profil</label>
+                                        <input class="form-control" type="file" id="photo_profil" name="photo_profil"
+                                            accept="image/*" {{ isset($agentImmobilier) ? '' : 'required' }}  >
+                                    </div>
+                                </div>
                                 <!-- Bouton de soumission -->
                                 <div class="mb-3 row">
                                     <div class="col-sm-12  text-center">
-                                        <button type="submit" class="btn btn-primary"> {{ isset($agentImmobilier) ? "Modifier" : "Enregistrer" }} </button>
+                                        <button type="submit" class="btn btn-primary">
+                                            {{ isset($agentImmobilier) ? 'Modifier' : 'Enregistrer' }} </button>
                                     </div>
                                 </div>
                             </div>

@@ -54,6 +54,9 @@ class AgentImmobilier extends Model
         'adresse_agence',
         'territoire_couvert',
         'nombre_bien_disponible',
+        'photo_profil',
+        'carte_identite_pdf',
+        'rccm_pdf',
         'created_at',
         'updated_at',
         'deleted_at'

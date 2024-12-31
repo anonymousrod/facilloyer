@@ -1,5 +1,5 @@
-@extends('layouts.master_dash')
+{{-- @extends('layouts.master_dash') --}}
 @section('title', 'Gestion Agent Immobilier')
-@section('content')
+{{-- @section('content') --}}
     @include('auth.register')
-@endsection
+{{-- @endsection --}}

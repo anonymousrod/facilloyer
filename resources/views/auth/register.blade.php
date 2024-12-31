@@ -51,7 +51,7 @@
     </form>
 </x-guest-layout> --}}
 {{-- <!DOCTYPE html> --}}
-<html lang="en" dir="ltr" data-startbar="light" data-bs-theme="light">
+{{-- <html lang="en" dir="ltr" data-startbar="light" data-bs-theme="light"> --}}
 <!-- Mirrored from mannatthemes.com/rizz/default/auth-register.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 26 Nov 2024 21:52:10 GMT -->
 
 <head>
@@ -250,4 +250,4 @@
 
 <!-- Mirrored from mannatthemes.com/rizz/default/auth-register.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 26 Nov 2024 21:52:10 GMT -->
 
-</html>
+{{-- </html> --}}
