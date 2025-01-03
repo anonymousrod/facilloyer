@@ -247,11 +247,24 @@ class LocataireController extends Controller
 
         return response()->json(['success' => true]);
     }
-
-    public function showAgentInfo($locataireId) {
-        $locataire = Locataire::findOrFail($locataireId);
-        $agent = $locataire->agent_immobilier;
+   
+public function showAgentInfo($locataireId)
+    {
+        // Vérifiez si le locataire existe
+        $locataire = Locataire::find($locataireId);
+        if (!$locataire) {
+            abort(404, 'Locataire non trouvé.');
+        }
     
-        return view('locataire.agentinfo', compact('agent'));
+        // Vérifiez si un agent est lié au locataire
+        $agent = $locataire->agent_immobilier; // Assurez-vous que cette relation est correcte
+        if (!$agent) {
+            return back()->withErrors('Aucun agent immobilier associé à ce locataire.');
+        }
+    
+        // Retournez la vue avec les données nécessaires
+        return view('locataire.agentinfo', compact('agent', 'locataire'));
     }
+    
+
 }

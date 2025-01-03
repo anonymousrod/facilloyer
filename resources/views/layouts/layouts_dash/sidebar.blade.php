@@ -127,12 +127,13 @@
 
                         </li><!--end nav-item-->
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('locataire.agentinfo', $locataire) }}">
+                            <a class="nav-link" href="{{ route('locataire.agentinfo', Auth::user()->id) }}">
                             <i class="iconoir-phone menu-icon"></i>
                             <span>Informations de l’agence ou de l’agent</span>
                             </a>
 
                         </li><!--end nav-item-->
+                        
                         <li class="nav-item">
                             <a class="nav-link" href="{{route('locataire.locainformations', Auth::user()->id)}}">
                             <i class="iconoir-user menu-icon"></i>

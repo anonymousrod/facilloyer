@@ -26,6 +26,10 @@ Route::get('/change-language/{lang}', function ($lang) {
 Route::get('/locataire/{id}/locainformations', [LocataireController::class, 'showInformations'])
     ->name('locataire.locainformations');
 
+Route::get('/locataire/{id}/agentinfo', [LocataireController::class, 'showAgentInfo'])
+->name('locataire.agentinfo');
+
+
 // La route resource existante
 Route::resource('locataire', LocataireController::class);
 
@@ -82,7 +86,6 @@ Route::middleware(['auth'])->group(function () {
 
    
 });
-Route::get('/locataires/{id}/agentagentinfo', [LocataireController::class, 'showAgentInfo'])->name('locataire.agentinfo');
 
 
 
