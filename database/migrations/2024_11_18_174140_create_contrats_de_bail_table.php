@@ -16,9 +16,9 @@ return new class extends Migration
             $table->unsignedBigInteger('bien_id');
             $table->foreign('bien_id')->references('id')->on('biens')->onDelete('cascade')->onUpdate('restrict');
 
-            $table->float('loyer_mensuel'); // Loyer mensuel
+            // $table->float('loyer_mensuel'); 
             $table->float('depot_de_garantie'); // Dépôt de garantie
-            $table->string('adresse_bien'); // Adresse du bien
+            // $table->string('adresse_bien'); 
             $table->text('description')->nullable(); // Description
             $table->boolean('renouvellement_automatique')->default(false); // Renouvellement automatique
             $table->string('penalite_retard')->nullable(); // Pénalité de retard

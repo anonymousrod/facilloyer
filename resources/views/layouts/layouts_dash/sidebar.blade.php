@@ -106,12 +106,12 @@
                         </li><!--end nav-item-->
 
                         <li class="nav-item">
-                            <a class="nav-link" href="{{route('locataire.paiements.selection')}}">
+                            <a class="nav-link" href="r.r">
                             <i class="iconoir-credit-card menu-icon"></i>
                             <span>Effectuer un paiement</span>
                             </a>
+                        </li><!--end nav-item-->
 
-                       </li><!--end nav-item-->
                         <li class="nav-item">
                             <a class="nav-link" href="{{route('locataire.paiements.historique')}}">
                             <i class="iconoir-list menu-icon"></i>
@@ -127,7 +127,7 @@
 
                         </li><!--end nav-item-->
                         <li class="nav-item">
-                            <a class="nav-link" href="lol.html">
+                            <a class="nav-link" href="{{ route('locataire.agentinfo', $locataire) }}">
                             <i class="iconoir-phone menu-icon"></i>
                             <span>Informations de l’agence ou de l’agent</span>
                             </a>

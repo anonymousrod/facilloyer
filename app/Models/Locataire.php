@@ -98,4 +98,5 @@ class Locataire extends Model
     {
         return $this->belongsTo(AgentImmobilier::class, 'agent_id');
     }
+    
 }

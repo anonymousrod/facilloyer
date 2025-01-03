@@ -247,4 +247,11 @@ class LocataireController extends Controller
 
         return response()->json(['success' => true]);
     }
+
+    public function showAgentInfo($locataireId) {
+        $locataire = Locataire::findOrFail($locataireId);
+        $agent = $locataire->agent_immobilier;
+    
+        return view('locataire.agentinfo', compact('agent'));
+    }
 }

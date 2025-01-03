@@ -8,6 +8,8 @@ use App\Http\Controllers\ExportListePDF;
 use App\Http\Controllers\LocataireController;
 use App\Http\Controllers\PaiementController;
 
+
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -62,12 +64,14 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/locataire/paiements/historique', [PaiementController::class, 'historique'])
         ->name('locataire.paiements.historique');
     
-    // Effectuer un paiement
-    Route::get('/locataire/paiements/create', [PaiementController::class, 'create'])
-        ->name('locataire.paiements.create');
+    
         
     Route::post('/locataire/paiements/store', [PaiementController::class, 'store'])
         ->name('locataire.paiements.store');
+    
+
+    Route::post('/locataire/paiements/create', [PaiementController::class, 'create'])
+    ->name('locataire.paiements.create');
     
     // Route pour la quittance de loyer
     Route::get('/locataire/paiements/{id}/quittance', [PaiementController::class, 'generateQuittance'])
@@ -76,14 +80,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/locataire/paiements/{id}/details', [PaiementController::class, 'show'])
     ->name('locataire.paiements.show');
 
-    
+   
 });
-Route::middleware(['auth'])->group(function () {
-    Route::get('/locataire/paiements/selection', [PaiementController::class, 'selectionBien'])->name('locataire.paiements.selection');
-    Route::post('/locataire/paiements/calcul', [PaiementController::class, 'calculMontant'])->name('paiement.calcul');
-    Route::post('/locataire/paiements/effectuer', [PaiementController::class, 'effectuerPaiement'])->name('paiement.effectuer');
-});
-
+Route::get('/locataires/{id}/agentagentinfo', [LocataireController::class, 'showAgentInfo'])->name('locataire.agentinfo');
 
 
 

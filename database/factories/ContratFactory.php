@@ -16,7 +16,7 @@ class ContratFactory extends Factory
         return [
             'date_debut' => $this->faker->date(),
             'date_fin' => $this->faker->date(),
-            'montant_loyer' => $this->faker->randomFloat(2, 500, 5000),
+            // 'montant_loyer' => $this->faker->randomFloat(2, 500, 5000),
             'conditions' => $this->faker->sentence(),
             'id_locataire' => Locataire::factory(),
             'id_bien' => Bien::factory(),

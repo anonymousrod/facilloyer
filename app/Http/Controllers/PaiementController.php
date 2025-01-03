@@ -10,96 +10,14 @@ use Carbon\Carbon;
 use PDF; // Si vous utilisez barryvdh/laravel-dompdf
 use Illuminate\Support\Facades\DB;
 use App\Models\ContratDeBailLocataire;
+use App\Models\Locataire;
+
 
 class PaiementController extends Controller
 
-
 {
 
-
-    // la sélection du bien, le calcul des montants, et la gestion des paiements 
-    public function selectionBien()
-{
-    $user = Auth::user();
-    $locataire = $user->locataires()->first();
-
-    if (!$locataire) {
-        return redirect()->route('dashboard')->with('error', 'Accès non autorisé.');
-    }
-
-    $contrats = ContratDeBailLocataire::with('contrats_de_bail')
-        ->where('locataire_id', $locataire->id)
-        ->get();
-
-    return view('locataire.paiements.selection', compact('contrats'));
-}
-
-//le calcul des montants
-public function calculMontant(Request $request)
-{
-    $request->validate([
-        'contrat_id' => 'required|exists:contrat_de_bail_locataire,id',
-        'complement' => 'nullable|numeric|min:0',
-    ]);
-
-    $contrat = ContratDeBailLocataire::with('contrats_de_bail')->find($request->contrat_id);
-
-    if (!$contrat) {
-        return redirect()->back()->with('error', 'Contrat introuvable.');
-    }
-
-    $loyerMensuel = $contrat->contrats_de_bail->loyer_mensuel;
-    $complement = $request->input('complement', 0);
-    $montantTotal = $loyerMensuel + $complement;
-
-    $contrat->update([
-        'complement_au_loyer' => $complement,
-        'montant_total_periode' => $montantTotal,
-    ]);
-
-    return view('locataire.paiements.paiement', compact('contrat', 'montantTotal'));
-}
-
-public function effectuerPaiement(Request $request)
-    {
-        // Validation des champs
-        $request->validate([
-            'contrat_id' => 'required|exists:contrat_de_bail_locataire,id',
-            'montant_paye' => 'required|numeric|min:0',
-            'description_paiement' => 'required|string|max:255', // Validation de la description
-        ]);
-
-        // Récupérer le contrat
-        $contrat = ContratDeBailLocataire::find($request->contrat_id);
-
-        if (!$contrat) {
-            return redirect()->back()->with('error', 'Contrat introuvable.');
-        }
-
-        // Calcul du montant restant
-        $montantPaye = $request->input('montant_paye');
-        $montantRestant = $contrat->montant_total_periode - $montantPaye;
-
-        // Mettre à jour le contrat
-        $contrat->update([
-            'montant_restant' => $montantRestant,
-            'statut_paiement' => $montantRestant > 0 ? 'Partiellement payé' : 'Payé',
-        ]);
-
-        // Enregistrer le paiement
-        Paiement::create([
-            'locataire_id' => $contrat->locataire_id,
-            'bien_id' => $contrat->contrats_de_bail->bien_id,
-            'montant' => $montantPaye,
-            'description_paiement' => $request->input('description_paiement'), // Ajout de la description
-            'date' => Carbon::now(),
-        ]);
-
-        // Retourner un message de succès
-        return redirect()->route('locataire.paiements.selection')->with('success', 'Paiement effectué avec succès.');
-    }
-
-    public function historique()
+public function historique()
     {
         $user = Auth::user();
         $locataire = $user->locataires()->first();
@@ -124,30 +42,9 @@ public function effectuerPaiement(Request $request)
         return view('locataire.paiements.historique', compact('paiements', 'stats'));
     }
 
-    public function create()
-    {
-        // Vérifier si l'utilisateur connecté a un locataire associé
-        $user = auth()->user();
-        if (!$user || !$user->locataire) {
-            return redirect()->back()
-                ->with('error', 'Vous devez être enregistré comme locataire pour effectuer un paiement.');
-        }
-        
-        // Récupérer les biens associés au locataire
-        $biens = $user->locataire->biens;
-        
-        return view('locataire.paiements.create', compact('biens'));
-    }
 
-    public function getBienDetails($bienId)
-    {
-        $bien = Bien::findOrFail($bienId);
-        return response()->json([
-            'loyer_mensuel' => $bien->loyer_mensuel
-        ]);
-    }
 
-  public function store(Request $request)
+public function store(Request $request)
         {
             // Validation des données
             $validatedData = $request->validate([
@@ -188,7 +85,7 @@ public function effectuerPaiement(Request $request)
     
     
 
-    public function show($id)
+public function show($id)
     {
         $user = Auth::user();
         $locataire = $user->locataires()->first();
@@ -216,81 +113,9 @@ public function effectuerPaiement(Request $request)
         return view('locataire.paiements.show', compact('paiement', 'montantRestant', 'loyerMensuel'));
     }
 
-    // public function generateReceipt($id)
-    // {
-    //     $user = Auth::user();
-    //     $locataire = $user->locataires()->first();
+    
 
-    //     if (!$locataire) {
-    //         return redirect()->route('dashboard')
-    //             ->with('error', 'Accès non autorisé.');
-    //     }
-
-    //     $paiement = Paiement::where('locataire_id', $locataire->id)
-    //         ->with(['bien', 'locataire'])
-    //         ->findOrFail($id);
-
-    //     $pdf = PDF::loadView('locataire.paiements.receipt', compact('paiement'));
-        
-    //     return $pdf->download('recu-paiement-' . $paiement->reference . '.pdf');
-    // }
-
-    // public function bienPaiements($bien_id)
-    // {
-    //     $user = Auth::user();
-    //     $locataire = $user->locataires()->first();
-
-    //     if (!$locataire) {
-    //         return redirect()->route('dashboard')
-    //             ->with('error', 'Accès non autorisé.');
-    //     }
-
-    //     $bien = Bien::where('id', $bien_id)
-    //         ->whereHas('locataires', function($query) use ($locataire) {
-    //             $query->where('locataire_id', $locataire->id);
-    //         })
-    //         ->firstOrFail();
-
-    //     $paiements = Paiement::where('bien_id', $bien_id)
-    //         ->where('locataire_id', $locataire->id)
-    //         ->orderBy('date', 'desc')
-    //         ->get();
-
-    //     return view('locataire.paiements.bien', compact('bien', 'paiements'));
-    // }
-
-    // public function dashboard()
-    // {
-    //     $user = Auth::user();
-    //     $locataire = $user->locataires()->first();
-
-    //     if (!$locataire) {
-    //         return redirect()->route('dashboard')
-    //             ->with('error', 'Accès non autorisé.');
-    //     }
-
-    //     $stats = [
-    //         'total_paye' => $locataire->paiements()->sum('montant'),
-    //         'total_restant' => $locataire->paiements()->sum('montant_restant'),
-    //         'nombre_paiements' => $locataire->paiements()->count(),
-    //         'derniers_paiements' => $locataire->paiements()
-    //             ->with('bien')
-    //             ->orderBy('date', 'desc')
-    //             ->limit(5)
-    //             ->get(),
-    //         'paiements_par_mois' => $locataire->paiements()
-    //             ->selectRaw('MONTH(date) as mois, YEAR(date) as annee, SUM(montant) as total')
-    //             ->groupBy('mois', 'annee')
-    //             ->orderBy('annee', 'desc')
-    //             ->orderBy('mois', 'desc')
-    //             ->limit(12)
-    //             ->get()
-    //     ];
-
-    //     return view('locataire.paiements.dashboard', compact('stats'));
-    // }
-
-    public function generateQuittance($id)
+public function generateQuittance($id)
     {
         $user = Auth::user();
         $locataire = $user->locataires()->first();
@@ -323,4 +148,20 @@ public function effectuerPaiement(Request $request)
         
         return $pdf->download('quittance-' . str_pad($paiement->id, 6, '0', STR_PAD_LEFT) . '.pdf');
     }
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+
+
+
+
+
 }

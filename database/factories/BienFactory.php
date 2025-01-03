@@ -17,6 +17,8 @@ class BienFactory extends Factory
             'type_bien' => $this->faker->randomElement(['appartement', 'maison', 'bureau']),
             'statut' => $this->faker->randomElement(['disponible', 'loué', 'maintenance']),
             'id_agent' => Agent::factory(), // Génère automatiquement un agent associé
+            'montant_loyer' => $this->faker->randomFloat(2, 500, 5000),
+
         ];
     }
 }
