@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Hash;
 class LocataireController extends Controller
 {
 
-    public function showInformations($id)
+public function showInformations($id)
     {
         // Correction du nom de la relation
         $locataire = Locataire::with([
@@ -266,5 +266,36 @@ public function showAgentInfo($locataireId)
         return view('locataire.agentinfo', compact('agent', 'locataire'));
     }
     
+
+public function updateEvaluation(Request $request, $id)
+    {
+        try {
+            // Validation
+            $request->validate([
+                'evaluation' => 'required|numeric|min:1|max:5',
+            ]);
+    
+            // Récupérer l'agent
+            $agent = AgentImmobilier::find($id);
+            if (!$agent) {
+                return response()->json(['error' => 'Agent non trouvé.'], 404);
+            }
+    
+            // Mise à jour
+            $agent->evaluation = $request->evaluation;
+            $agent->save();
+    
+            // Répondre avec succès
+            return response()->json([
+                'success' => 'Évaluation mise à jour avec succès.',
+                'evaluation' => $agent->evaluation,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+    
+    
+
 
 }

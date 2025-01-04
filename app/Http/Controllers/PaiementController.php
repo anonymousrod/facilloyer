@@ -21,26 +21,27 @@ public function historique()
     {
         $user = Auth::user();
         $locataire = $user->locataires()->first();
-
+    
         if (!$locataire) {
             return redirect()->route('dashboard')
                 ->with('error', 'Accès non autorisé.');
         }
-
+    
         $paiements = Paiement::with(['bien'])
             ->where('locataire_id', $locataire->id)
+            ->where('montant', '>', 0) // Filtre pour les paiements effectués
             ->orderBy('date', 'desc')
             ->get();
-
+    
         $stats = [
             'total_paye' => $paiements->sum('montant'),
-            'total_restant' => $paiements->sum('montant_restant'),
             'nombre_paiements' => $paiements->count(),
             'montant_moyen' => $paiements->count() > 0 ? $paiements->sum('montant') / $paiements->count() : 0,
         ];
-
+    
         return view('locataire.paiements.historique', compact('paiements', 'stats'));
     }
+    
 
 
 

@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property string $telephone_agence
  * @property int $annee_experience
  * @property string $adresse_agence
+ * @property float $evaluation
  * @property string $territoire_couvert
  * @property int $nombre_bien_disponible
  * @property Carbon|null $created_at
@@ -51,6 +52,7 @@ class AgentImmobilier extends Model
         'prenom_admin',
         'telephone_agence',
         'annee_experience',
+        'evaluation',
         'adresse_agence',
         'territoire_couvert',
         'nombre_bien_disponible',
@@ -71,4 +73,10 @@ class AgentImmobilier extends Model
     {
         return $this->hasMany(Bien::class);
     }
+
+    public function demandesMaintenance()
+{
+    return $this->hasMany(DemandeMaintenance::class, 'agent_immobilier_id');
+}
+
 }

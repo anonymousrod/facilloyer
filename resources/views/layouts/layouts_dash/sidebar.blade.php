@@ -91,7 +91,7 @@
 
                         </li><!--end nav-item-->
                         <li class="nav-item">
-                            <a class="nav-link" href="lol.html">
+                            <a class="nav-link" href="{{route('demandes.index')}}">
                             <i class="iconoir-wrench menu-icon"></i>
                             <span>Demande de maintenance/réparations </span>
                             </a>
@@ -245,6 +245,14 @@
                                 </a>
 
                             </li><!--end nav-item-->
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('agent_demande')}}">
+                                    <i class="iconoir-view-grid menu-icon"></i>
+                                    <span>Voir les demande de maintenances</span>
+                                </a>
+
+                            </li><!--end nav-item-->
+
 
                             <li class="nav-item">
                                 <a class="nav-link" href="lol.html">

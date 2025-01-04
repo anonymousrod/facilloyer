@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DemandeMaintenanceController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AgentImmobilierController;
@@ -28,6 +29,14 @@ Route::get('/locataire/{id}/locainformations', [LocataireController::class, 'sho
 
 Route::get('/locataire/{id}/agentinfo', [LocataireController::class, 'showAgentInfo'])
 ->name('locataire.agentinfo');
+
+// noté agence
+Route::put('/agent/evaluation/{id}', [AgentImmobilierController::class, 'updateEvaluation'])
+->name('agent.updateEvaluation');
+
+
+
+
 
 
 // La route resource existante
@@ -83,6 +92,28 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/locataire/paiements/{id}/details', [PaiementController::class, 'show'])
     ->name('locataire.paiements.show');
+
+
+
+
+
+
+
+    Route::middleware(['auth'])->group(function() {
+        // Afficher le formulaire de demande de maintenance
+        Route::get('/demande-maintenance/create', [DemandeMaintenanceController::class, 'create'])->name('demandes.create');
+    
+        // Soumettre la demande
+        Route::post('/demande-maintenance', [DemandeMaintenanceController::class, 'store'])->name('demandes.store');
+        // Afficher les demandes de maintenance soumises par le locataire
+        Route::get('/mes-demandes', [DemandeMaintenanceController::class, 'index'])->name('demandes.index');
+        //AGENT CONSULTE LES DEMANDES
+        Route::get('/agent_demande', [DemandeMaintenanceController::class, 'showAgentDemands'])->name('agent_demande');
+
+    
+    
+    });
+    
 
    
 });
