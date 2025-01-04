@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Hash;
 class LocataireController extends Controller
 {
 
-    public function showInformations($id)
+public function showInformations($id)
     {
         // Correction du nom de la relation
         $locataire = Locataire::with([
@@ -247,4 +247,55 @@ class LocataireController extends Controller
 
         return response()->json(['success' => true]);
     }
+   
+public function showAgentInfo($locataireId)
+    {
+        // Vérifiez si le locataire existe
+        $locataire = Locataire::find($locataireId);
+        if (!$locataire) {
+            abort(404, 'Locataire non trouvé.');
+        }
+    
+        // Vérifiez si un agent est lié au locataire
+        $agent = $locataire->agent_immobilier; // Assurez-vous que cette relation est correcte
+        if (!$agent) {
+            return back()->withErrors('Aucun agent immobilier associé à ce locataire.');
+        }
+    
+        // Retournez la vue avec les données nécessaires
+        return view('locataire.agentinfo', compact('agent', 'locataire'));
+    }
+    
+
+public function updateEvaluation(Request $request, $id)
+    {
+        try {
+            // Validation
+            $request->validate([
+                'evaluation' => 'required|numeric|min:1|max:5',
+            ]);
+    
+            // Récupérer l'agent
+            $agent = AgentImmobilier::find($id);
+            if (!$agent) {
+                return response()->json(['error' => 'Agent non trouvé.'], 404);
+            }
+    
+            // Mise à jour
+            $agent->evaluation = $request->evaluation;
+            $agent->save();
+    
+            // Répondre avec succès
+            return response()->json([
+                'success' => 'Évaluation mise à jour avec succès.',
+                'evaluation' => $agent->evaluation,
+            ]);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+    
+    
+
+
 }

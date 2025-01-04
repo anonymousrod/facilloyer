@@ -25,6 +25,7 @@ return new class extends Migration
             $table->integer('nombre_bien_disponible'); // Nombre de biens disponibles
             $table->string('photo_profil')->nullable();
             $table->string('carte_identite_pdf')->nullable();
+            $table->float('evaluation')->nullable(); // Note de l'agent apres evaluation
             $table->string('rccm_pdf')->nullable();
             $table->timestamps();
             $table->softDeletes();

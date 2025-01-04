@@ -52,9 +52,9 @@ class ContratsDeBail extends Model
     protected $fillable = [
 
         'date_fin',
-        'loyer_mensuel',
+        // 'loyer_mensuel',
         'depot_de_garantie',
-        'adresse_bien',
+        // 'adresse_bien',
         'description',
         'renouvellement_automatique',
 

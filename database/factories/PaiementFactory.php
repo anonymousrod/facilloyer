@@ -19,6 +19,7 @@ class PaiementFactory extends Factory
             'montant' => $this->faker->randomFloat(2, 1000, 5000),
             'date' => $this->faker->dateTimeBetween('-1 year', 'now'),
             'status' => $this->faker->randomElement(['Payé', 'attente']),
+            'description_paiement' => $this->faker->sentence,  // Description générée aléatoirement
         ];
     }
 }
