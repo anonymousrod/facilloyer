@@ -146,7 +146,7 @@
                             <span>Paramètres</span>
                             </a>
                         </li><!--end nav-item-->
-                    @endif 
+                    @endif
 
                     <!-- ITEMS POUR L'AGENT IMMOBILIER -->
                     @if (Auth::user()->id_role == 3)
@@ -188,17 +188,17 @@
                                 <a class="nav-link" href="#sidebarGerer_bien" data-bs-toggle="collapse" role="button"
                                     aria-expanded="false" aria-controls="sidebarGerer_bien">
                                     <i class="iconoir-view-grid menu-icon"></i>
-                                    <span>Gérer les biens immobiliers</span>
+                                    <span>Gestion des biens</span>
                                 </a>
                                 <div class="collapse " id="sidebarGerer_bien">
                                     <ul class="nav flex-column">
 
 
                                         <li class="nav-item">
-                                            <a class="nav-link" href="apps-chat.html">Ajouter Bien</a>
+                                            <a class="nav-link" href="{{ route('biens.create') }}">Ajouter </a>
                                         </li><!--end nav-item-->
                                         <li class="nav-item">
-                                            <a class="nav-link" href="apps-contact-list.html">Liste BIEN</a>
+                                            <a class="nav-link" href="{{ route('biens.index') }}">Liste </a>
                                         </li><!--end nav-item-->
 
 

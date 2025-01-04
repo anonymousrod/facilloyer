@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AgentImmobilierController;
+use App\Http\Controllers\BienController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportListePDF;
 use App\Http\Controllers\LocataireController;
@@ -42,10 +43,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 
 Route::resource('/agent-immobilier', AgentImmobilierController::class)->names('agent_immobilier');
+
+Route::resource('/biens', BienController::class)->names('biens');
 //route pour le changement de mot de passe pour new locataire
 Route::get('/password_change', [LocataireController::class, 'showChangePasswordForm'])->name('passwordChangeForm');
 Route::post('/password_change_save', [LocataireController::class, 'changePassword'])->name('passwordChangeFormSave');
@@ -61,27 +64,23 @@ Route::middleware(['auth'])->group(function () {
     // Historique des paiements
     Route::get('/locataire/paiements/historique', [PaiementController::class, 'historique'])
         ->name('locataire.paiements.historique');
-    
+
     // Effectuer un paiement
     Route::get('/locataire/paiements/create', [PaiementController::class, 'create'])
         ->name('locataire.paiements.create');
-        
+
     Route::post('/locataire/paiements/store', [PaiementController::class, 'store'])
         ->name('locataire.paiements.store');
-    
+
     // Route pour la quittance de loyer
     Route::get('/locataire/paiements/{id}/quittance', [PaiementController::class, 'generateQuittance'])
         ->name('locataire.paiements.quittance');
 
     Route::get('/locataire/paiements/{id}/details', [PaiementController::class, 'show'])
-    ->name('locataire.paiements.show');
-
-    
+        ->name('locataire.paiements.show');
 });
 
-
-
-
-
-
-
+//try
+Route::get('/info_detail_bien', function () {
+    return view('layouts.bien_detail');
+})->name('bien_detail');

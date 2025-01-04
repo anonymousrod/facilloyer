@@ -1,0 +1,312 @@
+{{-- @extends('layouts.master_dash')
+@section('title', 'Ajouter un Bien')
+@section('content')
+    <div class="container-xxl">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        @if (session('success'))
+                            <div class="alert alert-success text-center">
+                                <h5 class="text-success">{{ session('success') }}</h5>
+                            </div>
+                        @endif
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h4 class="card-title">Gestion des biens / Ajouter</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body pt-0">
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                        <form method="POST" action="{{ route('biens.store') }}" enctype="multipart/form-data">
+                            @csrf
+                            <div class="row g-3">
+                                <!-- Nom du Bien -->
+                                <div class="col-md-6">
+                                    <label for="name_bien" class="form-label fw-bold">Nom du Bien
+                                        <span class="text-muted">(ex : Villa Moderne)</span>
+                                    </label>
+                                    <input type="text" name="name_bien" class="form-control" id="name_bien"
+                                        placeholder="Nom du bien" required>
+                                </div>
+
+                                <!-- Statut du Bien -->
+                                <div class="col-md-6">
+                                    <label for="statut_bien" class="form-label fw-bold">Statut du Bien
+                                        <span class="text-muted">(Disponible, Loué, Vendu)</span>
+                                    </label>
+                                    <select name="statut_bien" id="statut_bien" class="form-select" required>
+                                        <option value="" selected>Choisir un statut</option>
+                                        <option value="Disponible">Disponible</option>
+                                        <option value="Loué">Loué</option>
+                                        <option value="Vendu">Vendu</option>
+                                    </select>
+                                </div>
+
+                                <!-- Nombre Maximum de Pièces -->
+                                <div class="col-md-6">
+                                    <label for="nombre_de_piece" class="form-label fw-bold">Nombre Maximum de Pièces
+                                        <span class="text-muted">(ex : 4)</span>
+                                    </label>
+                                    <input type="number" name="nombre_de_piece" class="form-control" id="nombre_de_piece"
+                                        placeholder="Nombre de pièces" required>
+                                </div>
+
+                                <!-- Chambres -->
+                                <div class="col-md-6">
+                                    <label for="nbr_chambres" class="form-label fw-bold">Nombre de Chambres
+                                        <span class="text-muted">(ex : 2)</span>
+                                    </label>
+                                    <input type="number" name="nbr_chambres" class="form-control" id="nbr_chambres"
+                                        placeholder="Nombre de chambres">
+                                </div>
+
+                                <!-- Salles de Bain -->
+                                <div class="col-md-6">
+                                    <label for="nbr_salles_de_bain" class="form-label fw-bold">Nombre de Salles de Bain
+                                        <span class="text-muted">(ex : 1)</span>
+                                    </label>
+                                    <input type="number" name="nbr_salles_de_bain" class="form-control"
+                                        id="nbr_salles_de_bain" placeholder="Nombre de salles de bain">
+                                </div>
+
+                                <!-- Superficie -->
+                                <div class="col-md-6">
+                                    <label for="superficie" class="form-label fw-bold">
+                                        <span class="text-muted">(m², ex : 85)</span>
+                                    </label>
+                                    <input type="number" name="superficie" class="form-control" id="superficie"
+                                        placeholder="Superficie en m²" required>
+                                </div>
+
+                                <!-- Prix -->
+                                <div class="col-md-6">
+                                    <label for="loyer_mensuel" class="form-label fw-bold">Prix (Loyer Mensuel)
+                                        <span class="text-muted">(ex : 3000 FCFA)</span>
+                                    </label>
+                                    <input type="number" name="loyer_mensuel" class="form-control" id="loyer_mensuel"
+                                        placeholder="Prix en FCFA" required>
+                                </div>
+
+                                <!-- Type de Bien -->
+                                <div class="col-md-6">
+                                    <label for="type_bien" class="form-label fw-bold">Type de Bien
+                                        <span class="text-muted">(ex : Villa, Appartement)</span>
+                                    </label>
+                                    <input type="text" name="type_bien" class="form-control" id="type_bien"
+                                        placeholder="Type du bien">
+                                </div>
+
+                                <!-- Description -->
+                                <div class="col-md-12">
+                                    <label for="description" class="form-label fw-bold">Description
+                                        <span class="text-muted">(Ajoutez une description détaillée du bien)</span>
+                                    </label>
+                                    <textarea name="description" id="description" class="form-control" rows="3"
+                                        placeholder="Entrez une description du bien"></textarea>
+                                </div>
+
+                                <!-- Adresse -->
+                                <div class="col-md-6">
+                                    <label for="adresse_bien" class="form-label fw-bold">Adresse
+                                        <span class="text-muted">(ex : Cotonou, Quartier)</span>
+                                    </label>
+                                    <input type="text" name="adresse_bien" class="form-control" id="adresse_bien"
+                                        placeholder="Adresse complète" required>
+                                </div>
+
+                                <!-- Photo N1 du Bien -->
+                                <div class="col-md-6">
+                                    <label for="photo_bien" class="form-label fw-bold">Photo N°1 du Bien
+                                        <span class="text-muted">(Format : JPG, PNG)</span>
+                                    </label>
+                                    <input type="file" name="photo_bien" class="form-control" id="photo_bien"
+                                        required>
+                                </div>
+                                <!-- Photo N2 du Bien -->
+                                <div class="col-md-6">
+                                    <label for="photo2_bien" class="form-label fw-bold">Photo N°2 du Bien
+                                        <span class="text-muted">(Format : JPG, PNG)</span>
+                                    </label>
+                                    <input type="file" name="photo2_bien" class="form-control" id="photo2_bien">
+                                </div>
+                                <!-- Photo N3 du Bien -->
+                                <div class="col-md-6">
+                                    <label for="photo3_bien" class="form-label fw-bold">Photo N°3 du Bien
+                                        <span class="text-muted">(Format : JPG, PNG)</span>
+                                    </label>
+                                    <input type="file" name="photo3_bien" class="form-control" id="photo3_bien">
+                                </div>
+                            </div>
+
+                            <!-- Bouton de soumission -->
+                            <div class="mt-4">
+                                <button type="submit" class="btn btn-primary">Soumettre le Bien</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection --}}
+
+@extends('layouts.master_dash')
+@section('title', isset($bien) ? 'Modifier un Bien' : 'Ajouter un Bien')  {{-- Titre dynamique en fonction de l'action --}}
+@section('content')
+    <div class="container-xxl">
+        <div class="row justify-content-center">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        @if (session('success'))
+                            <div class="alert alert-success text-center">
+                                <h5 class="text-success">{{ session('success') }}</h5>
+                            </div>
+                        @endif
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <h4 class="card-title">{{ isset($bien) ? 'Modifier' : 'Ajouter' }} un Bien</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body pt-0">
+                        @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
+
+                        <form method="POST" action="{{ isset($bien) ? route('biens.update', $bien->id) : route('biens.store') }}" enctype="multipart/form-data">
+                            @csrf
+                            @if(isset($bien))  {{-- Si c'est une modification, ajouter un champ _method pour PATCH --}}
+                                @method('PATCH')
+                            @endif
+                            <div class="row g-3">
+                                <!-- Nom du Bien -->
+                                <div class="col-md-6">
+                                    <label for="name_bien" class="form-label fw-bold">Nom du Bien</label>
+                                    <input type="text" name="name_bien" class="form-control" id="name_bien"
+                                        placeholder="Nom du bien" required value="{{ old('name_bien', $bien->name_bien ?? '') }}">
+                                </div>
+
+                                <!-- Statut du Bien -->
+                                <div class="col-md-6">
+                                    <label for="statut_bien" class="form-label fw-bold">Statut du Bien</label>
+                                    <select name="statut_bien" id="statut_bien" class="form-select" required>
+                                        <option value="Disponible" {{ old('statut_bien', $bien->statut_bien ?? '') == 'Disponible' ? 'selected' : '' }}>Disponible</option>
+                                        <option value="Loué" {{ old('statut_bien', $bien->statut_bien ?? '') == 'Loué' ? 'selected' : '' }}>Loué</option>
+                                        <option value="Vendu" {{ old('statut_bien', $bien->statut_bien ?? '') == 'Vendu' ? 'selected' : '' }}>Vendu</option>
+                                    </select>
+                                </div>
+
+                                <!-- Nombre Maximum de Pièces -->
+                                <div class="col-md-6">
+                                    <label for="nombre_de_piece" class="form-label fw-bold">Nombre Maximum de Pièces</label>
+                                    <input type="number" name="nombre_de_piece" class="form-control" id="nombre_de_piece"
+                                        placeholder="Nombre de pièces" required value="{{ old('nombre_de_piece', $bien->nombre_de_piece ?? '') }}">
+                                </div>
+
+                                <!-- Chambres -->
+                                <div class="col-md-6">
+                                    <label for="nbr_chambres" class="form-label fw-bold">Nombre de Chambres</label>
+                                    <input type="number" name="nbr_chambres" class="form-control" id="nbr_chambres"
+                                        placeholder="Nombre de chambres" value="{{ old('nbr_chambres', $bien->nbr_chambres ?? '') }}">
+                                </div>
+
+                                <!-- Salles de Bain -->
+                                <div class="col-md-6">
+                                    <label for="nbr_salles_de_bain" class="form-label fw-bold">Nombre de Salles de Bain</label>
+                                    <input type="number" name="nbr_salles_de_bain" class="form-control"
+                                        id="nbr_salles_de_bain" placeholder="Nombre de salles de bain" value="{{ old('nbr_salles_de_bain', $bien->nbr_salles_de_bain ?? '') }}">
+                                </div>
+
+                                <!-- Superficie -->
+                                <div class="col-md-6">
+                                    <label for="superficie" class="form-label fw-bold">Superficie (m²)</label>
+                                    <input type="number" name="superficie" class="form-control" id="superficie"
+                                        placeholder="Superficie en m²" required value="{{ old('superficie', $bien->superficie ?? '') }}">
+                                </div>
+
+                                <!-- Prix -->
+                                <div class="col-md-6">
+                                    <label for="loyer_mensuel" class="form-label fw-bold">Prix (Loyer Mensuel)</label>
+                                    <input type="number" name="loyer_mensuel" class="form-control" id="loyer_mensuel"
+                                        placeholder="Prix en FCFA" required value="{{ old('loyer_mensuel', $bien->loyer_mensuel ?? '') }}">
+                                </div>
+
+                                <!-- Type de Bien -->
+                                <div class="col-md-6">
+                                    <label for="type_bien" class="form-label fw-bold">Type de Bien</label>
+                                    <input type="text" name="type_bien" class="form-control" id="type_bien"
+                                        placeholder="Type du bien" value="{{ old('type_bien', $bien->type_bien ?? '') }}">
+                                </div>
+
+                                <!-- Description -->
+                                <div class="col-md-12">
+                                    <label for="description" class="form-label fw-bold">Description</label>
+                                    <textarea name="description" id="description" class="form-control" rows="3"
+                                        placeholder="Entrez une description du bien">{{ old('description', $bien->description ?? '') }}</textarea>
+                                </div>
+
+                                <!-- Adresse -->
+                                <div class="col-md-6">
+                                    <label for="adresse_bien" class="form-label fw-bold">Adresse</label>
+                                    <input type="text" name="adresse_bien" class="form-control" id="adresse_bien"
+                                        placeholder="Adresse complète" required value="{{ old('adresse_bien', $bien->adresse_bien ?? '') }}">
+                                </div>
+
+                                <!-- Photo N°1 du Bien -->
+                                <div class="col-md-6">
+                                    <label for="photo_bien" class="form-label fw-bold">Photo N°1 du Bien</label>
+                                    <input type="file" name="photo_bien" class="form-control" id="photo_bien" {{ isset($bien) ? '' : 'required' }} >
+                                    {{-- @isset($bien->photo_bien)
+                                        <img src="{{ asset($bien->photo_bien) }}" alt="Image de Bien" class="mt-2" width="100">
+                                    @endisset --}}
+                                </div>
+
+                                <!-- Photo N°2 du Bien -->
+                                <div class="col-md-6">
+                                    <label for="photo2_bien" class="form-label fw-bold">Photo N°2 du Bien</label>
+                                    <input type="file" name="photo2_bien" class="form-control" id="photo2_bien" {{ isset($bien) ? '' : 'required' }}>
+                                    {{-- @isset($bien->photo2_bien)
+                                        <img src="{{ asset('storage/'.$bien->photo2_bien) }}" alt="Image de Bien" class="mt-2" width="100">
+                                    @endisset --}}
+                                </div>
+
+                                <!-- Photo N°3 du Bien -->
+                                <div class="col-md-6">
+                                    <label for="photo3_bien" class="form-label fw-bold">Photo N°3 du Bien</label>
+                                    <input type="file" name="photo3_bien" class="form-control" id="photo3_bien" {{ isset($bien) ? '' : 'required' }}>
+                                    {{-- @isset($bien->photo3_bien)
+                                        <img src="{{ asset('storage/'.$bien->photo3_bien) }}" alt="Image de Bien" class="mt-2" width="100">
+                                    @endisset --}}
+                                </div>
+                            </div>
+
+                            <!-- Bouton de soumission -->
+                            <div class="mt-4">
+                                <button type="submit" class="btn btn-primary">{{ isset($bien) ? 'Mettre à jour le Bien' : 'Soumettre le Bien' }}</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+

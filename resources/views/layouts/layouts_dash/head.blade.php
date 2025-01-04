@@ -6,14 +6,18 @@
     <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
     <meta content="" name="author" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon-->
+
+
 
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{asset('assets/images/favicon.ico')}} " />
+    <link rel="shortcut icon" href="{{ asset('assets/images/favicon.ico') }} " />
 
     <!-- App css -->
-    <link href=" {{asset('assets/css/bootstrap.min.css')}} " rel="stylesheet" type="text/css" />
-    <link href="{{asset('assets/css/icons.min.css')}} " rel="stylesheet" type="text/css" />
-    <link href="{{asset('assets/css/app.min.css')}} " rel="stylesheet" type="text/css" />
+    <link href=" {{ asset('assets/css/bootstrap.min.css') }} " rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/icons.min.css') }} " rel="stylesheet" type="text/css" />
+    <link href="{{ asset('assets/css/app.min.css') }} " rel="stylesheet" type="text/css" />
 
     {{-- head login --}}
     {{-- <meta charset="utf-8" /> --}}
@@ -70,8 +74,9 @@
     <link href="assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="assets/css/icons.min.css" rel="stylesheet" type="text/css" />
     <link href="assets/css/app.min.css" rel="stylesheet" type="text/css" />
+
+    {{-- autre template css --}}
+    <!-- Custom Css -->
+    {{-- <link rel="stylesheet" href=" {{ asset('assets/css/main.css') }}  ">
+    <link rel="stylesheet" href=" {{ asset('assets/css/color_skins.css')}}  "> --}}
 </head>
-
-
-
-
