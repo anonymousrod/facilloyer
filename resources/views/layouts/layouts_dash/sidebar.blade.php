@@ -41,14 +41,14 @@
                             <div class="collapse" id="sidebarGerer_user">
                                 <ul class="nav flex-column">
                                     <li class="nav-item">
-                                        <a class="nav-link" href="apps-chat.html">
+                                        <a class="nav-link" href="{{ route('admin.agents.index') }}">
                                             <i class="fas fa-user-plus menu-icon"></i> <!-- Icône pour ajouter utilisateur -->
-                                            <span>Ajouter utilisateurs</span>
+                                            <span>Ajoute d'agence immmboliers</span>
                                         </a>
                                     </li><!--end nav-item-->
                                     <li class="nav-item">
-                                        <a class="nav-link" href="apps-contact-list.html">
-                                            <i class="fas fa-user-tie menu-icon"></i> <!-- Icône pour agents immobiliers -->
+                                        <a class="nav-link" href="t.t">
+                                        <i class="fas fa-user-tie menu-icon"></i> <!-- Icône pour agents immobiliers -->
                                             <span>Liste agents immobiliers</span>
                                         </a>
                                     </li><!--end nav-item-->
@@ -98,6 +98,7 @@
 
                     <!-- ITEMS POUR LE LOCATAIRE -->
                     @if (Auth::user()->id_role == 2)
+                        
                             <!-- Dashboard -->
                             <li class="nav-item">
                                 <a class="nav-link" href="{{route('dashboard')}}">
@@ -177,10 +178,12 @@
                                     <span>Paramètres</span>
                                 </a>
                             </li><!--end nav-item-->
-                        @endif
+                    @endif
 
 
                     <!-- ITEMS POUR L'AGENT IMMOBILIER -->
+                    
+                    
                     @if (Auth::user()->id_role == 3)
                         @if (Auth::user()->statut)
                             <!-- Si l'agent est validé -->
@@ -292,16 +295,6 @@
                                 </a>
 
                             </li><!--end nav-item-->
-
-
-
-
-
-
-
-
-
-
 
                         @else
                             <!-- Si l'agent n'est pas validé -->

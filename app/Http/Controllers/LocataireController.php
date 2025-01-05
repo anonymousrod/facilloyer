@@ -61,7 +61,7 @@ public function showInformations($id)
     /**
      * Display a listing of the resource.
      */
-    public function index()
+ public function index()
     {
         $agent_id = Auth::user()->agent_immobiliers->first()->id;
         //pour l'affichage des locataires
@@ -267,7 +267,7 @@ public function showAgentInfo($locataireId)
     }
     
 
-public function updateEvaluation(Request $request, $id)
+    public function updateEvaluation(Request $request, $id)
     {
         try {
             // Validation

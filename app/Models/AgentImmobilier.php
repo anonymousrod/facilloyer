@@ -79,4 +79,5 @@ class AgentImmobilier extends Model
     return $this->hasMany(DemandeMaintenance::class, 'agent_immobilier_id');
 }
 
+
 }

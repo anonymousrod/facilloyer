@@ -39,6 +39,7 @@ Route::put('/agent/evaluation/{id}', [AgentImmobilierController::class, 'updateE
 
 
 
+
 // La route resource existante
 Route::resource('locataire', LocataireController::class);
 
@@ -65,7 +66,6 @@ Route::resource('/agent-immobilier', AgentImmobilierController::class)->names('a
 Route::get('/password_change', [LocataireController::class, 'showChangePasswordForm'])->name('passwordChangeForm');
 Route::post('/password_change_save', [LocataireController::class, 'changePassword'])->name('passwordChangeFormSave');
 //route pour changer le statut du locataire par l'agent immobilier
-Route::post('/locataires/{id}/toggle-status', [LocataireController::class, 'toggleStatus']);
 
 //Route pour l'exportation de la liste des locataire en pdf
 
@@ -109,11 +109,22 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/mes-demandes', [DemandeMaintenanceController::class, 'index'])->name('demandes.index');
         //AGENT CONSULTE LES DEMANDES
         Route::get('/agent_demande', [DemandeMaintenanceController::class, 'showAgentDemands'])->name('agent_demande');
-
-    
     
     });
-    
+
+   
+// Routes pour les agents immobiliers
+Route::post('/admin/agents/toggle-status/{id}', [AgentImmobilierController::class, 'toggleStatus'])->name('admin.agents.toggleStatus');
+
+
+// Routes pour les locataires
+Route::prefix('locataires')->group(function () {
+    Route::post('/{id}/toggle-status', [LocataireController::class, 'toggleStatus']);
+});
+    Route::get('/admin/agents/index', [AgentImmobilierController::class, 'index'])->name('admin.agents.index');
+Route::get('/admin/agents/{id}', [AgentImmobilierController::class, 'show'])->name('admin.agents.show');
+Route::patch('/agents/{id}/update-status', [AgentImmobilierController::class, 'updateStatus'])->name('agents.updateStatus');
+
 
    
 });

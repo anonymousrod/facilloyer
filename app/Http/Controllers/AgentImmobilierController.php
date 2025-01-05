@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\User;
 use Illuminate\Support\Str;
 use App\Models\AgentImmobilier;
 use Illuminate\Http\Request;
@@ -14,8 +14,55 @@ class AgentImmobilierController extends Controller
      */
     public function index()
     {
-        //
+        // Récupération des agents immobiliers avec leurs utilisateurs
+        $agents = AgentImmobilier::with('user')->get();
+    
+        // Retourne la vue avec les données
+        return view('admin.agents.index', compact('agents'));
     }
+    
+    // Méthode pour changer le statut de l'utilisateur lié
+ public function toggleStatus(Request $request, $id)
+    {
+        try {
+            $agent = User::findOrFail($id); // Vérifie si l'utilisateur existe
+            $agent->statut = $request->statut ? 1 : 0; // Met à jour le statut
+            $agent->save();
+    
+            return response()->json([
+                'success' => true,
+                'message' => 'Statut mis à jour avec succès.',
+                'statut' => $agent->statut ? 'Activé' : 'Désactivé',
+            ]);
+        } catch (\Exception $e) {
+            // Retourne une erreur JSON
+            return response()->json([
+                'success' => false,
+                'message' => 'Une erreur est survenue : ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+public function updateStatus($id)
+    {
+        $agent = AgentImmobilier::withTrashed()->findOrFail($id);
+    
+        // Si l'agent est déjà désactivé (soft delete), on le réactive
+        if ($agent->deleted_at) {
+            $agent->restore();
+            return redirect()->back()->with('success', 'L\'agent a été activé.');
+        } else {
+            // Sinon, on le désactive (soft delete)
+            $agent->delete();
+            return redirect()->back()->with('success', 'L\'agent a été désactivé.');
+        }
+    }
+    
+    
+ 
+
+    
+
+    
 
     /**
      * Show the form for creating a new resource.
@@ -88,10 +135,15 @@ class AgentImmobilierController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show($id)
     {
-        //
+        // Récupérer l'agent immobilier avec ses relations
+        $agent = AgentImmobilier::with(['user', 'biens',])->findOrFail($id);
+    
+        // Retourner la vue avec les données de l'agent
+        return view('admin.agents.show', compact('agent'));
     }
+    
 
     /**
      * Show the form for editing the specified resource.
