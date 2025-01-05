@@ -4,6 +4,7 @@ use App\Http\Controllers\DemandeMaintenanceController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AgentImmobilierController;
+use App\Http\Controllers\BienController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportListePDF;
 use App\Http\Controllers\LocataireController;
@@ -58,10 +59,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 
 Route::resource('/agent-immobilier', AgentImmobilierController::class)->names('agent_immobilier');
+
+Route::resource('/biens', BienController::class)->names('biens');
 //route pour le changement de mot de passe pour new locataire
 Route::get('/password_change', [LocataireController::class, 'showChangePasswordForm'])->name('passwordChangeForm');
 Route::post('/password_change_save', [LocataireController::class, 'changePassword'])->name('passwordChangeFormSave');
@@ -76,16 +79,16 @@ Route::middleware(['auth'])->group(function () {
     // Historique des paiements
     Route::get('/locataire/paiements/historique', [PaiementController::class, 'historique'])
         ->name('locataire.paiements.historique');
-    
-    
-        
+
+
+
     Route::post('/locataire/paiements/store', [PaiementController::class, 'store'])
         ->name('locataire.paiements.store');
     
 
     Route::post('/locataire/paiements/create', [PaiementController::class, 'create'])
     ->name('locataire.paiements.create');
-    
+
     // Route pour la quittance de loyer
     Route::get('/locataire/paiements/{id}/quittance', [PaiementController::class, 'generateQuittance'])
         ->name('locataire.paiements.quittance');
@@ -102,7 +105,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['auth'])->group(function() {
         // Afficher le formulaire de demande de maintenance
         Route::get('/demande-maintenance/create', [DemandeMaintenanceController::class, 'create'])->name('demandes.create');
-    
+
         // Soumettre la demande
         Route::post('/demande-maintenance', [DemandeMaintenanceController::class, 'store'])->name('demandes.store');
         // Afficher les demandes de maintenance soumises par le locataire
@@ -121,17 +124,19 @@ Route::post('/admin/agents/toggle-status/{id}', [AgentImmobilierController::clas
 Route::prefix('locataires')->group(function () {
     Route::post('/{id}/toggle-status', [LocataireController::class, 'toggleStatus']);
 });
-    Route::get('/admin/agents/index', [AgentImmobilierController::class, 'index'])->name('admin.agents.index');
+Route::get('/admin/agents/index', [AgentImmobilierController::class, 'index'])->name('admin.agents.index');
 Route::get('/admin/agents/{id}', [AgentImmobilierController::class, 'show'])->name('admin.agents.show');
 Route::patch('/agents/{id}/update-status', [AgentImmobilierController::class, 'updateStatus'])->name('agents.updateStatus');
 
 
-   
+
+    
+
+
+
 });
 
-
-
-
-
-
-
+//try
+Route::get('/info_detail_bien', function () {
+    return view('layouts.bien_detail');
+})->name('bien_detail');

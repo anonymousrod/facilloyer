@@ -99,87 +99,109 @@
                     <!-- ITEMS POUR LE LOCATAIRE -->
                     @if (Auth::user()->id_role == 2)
                         
-                            <!-- Dashboard -->
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{route('dashboard')}}">
-                                    <i class="iconoir-view-grid menu-icon"></i> <!-- Icône du Dashboard -->
-                                    <span>Dashboard</span>
-                                </a>
-                            </li><!--end nav-item-->
+                        <!-- Dashboard -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('dashboard')}}">
+                                <i class="iconoir-view-grid menu-icon"></i> <!-- Icône du Dashboard -->
+                                <span>Dashboard</span>
+                            </a>
+                        </li><!--end nav-item-->
 
-                            <!-- Consulter son contrat de bail -->
-                            <li class="nav-item">
-                                <a class="nav-link" href="lol.html">
-                                    <i class="iconoir-book menu-icon"></i> <!-- Icône pour contrat de bail -->
-                                    <span>Consulter son contrat de bail</span>
-                                </a>
-                            </li><!--end nav-item-->
+                        <!-- Consulter son contrat de bail -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="lol.html">
+                                <i class="iconoir-book menu-icon"></i> <!-- Icône pour contrat de bail -->
+                                <span>Consulter son contrat de bail</span>
+                            </a>
+                        </li><!--end nav-item-->
 
-                            <!-- Demande de maintenance/réparations -->
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{route('demandes.index')}}">
-                                    <i class="iconoir-wrench menu-icon"></i> <!-- Icône pour demande de maintenance -->
-                                    <span>Demande de maintenance/réparations</span>
-                                </a>
-                            </li><!--end nav-item-->
+                        <!-- Demande de maintenance/réparations -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('demandes.index')}}">
+                                <i class="iconoir-wrench menu-icon"></i> <!-- Icône pour demande de maintenance -->
+                                <span>Demande de maintenance/réparations</span>
+                            </a>
+                        </li><!--end nav-item-->
 
-                            <!-- Notifications d’échéances importantes -->
-                            <li class="nav-item">
-                                <a class="nav-link" href="lol.html">
-                                    <i class="iconoir-bell menu-icon"></i> <!-- Icône pour notifications -->
-                                    <span>Notifications d’échéances importantes</span>
-                                </a>
-                            </li><!--end nav-item-->
+                        <!-- Notifications d’échéances importantes -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="lol.html">
+                                <i class="iconoir-bell menu-icon"></i> <!-- Icône pour notifications -->
+                                <span>Notifications d’échéances importantes</span>
+                            </a>
+                        </li><!--end nav-item-->
 
-                            <!-- Effectuer un paiement -->
-                            <li class="nav-item">
-                                <a class="nav-link" href="r.r">
-                                    <i class="iconoir-credit-card menu-icon"></i> <!-- Icône pour paiement -->
-                                    <span>Effectuer un paiement</span>
-                                </a>
-                            </li><!--end nav-item-->
+                        <!-- Effectuer un paiement -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="r.r">
+                                <i class="iconoir-credit-card menu-icon"></i> <!-- Icône pour paiement -->
+                                <span>Effectuer un paiement</span>
+                            </a>
+                        </li><!--end nav-item-->
 
-                            <!-- Historique des paiements -->
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{route('locataire.paiements.historique')}}">
-                                    <i class="iconoir-list menu-icon"></i> <!-- Icône pour historique des paiements -->
-                                    <span>Historique des paiements</span>
-                                </a>
-                            </li><!--end nav-item-->
+                        <!-- Historique des paiements -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('locataire.paiements.historique')}}">
+                                <i class="iconoir-list menu-icon"></i> <!-- Icône pour historique des paiements -->
+                                <span>Historique des paiements</span>
+                            </a>
+                        </li><!--end nav-item-->
 
-                            <!-- Assistance en ligne -->
-                            <li class="nav-item">
-                                <a class="nav-link" href="lol.html">
-                                    <i class="iconoir-chat-bubble menu-icon"></i> <!-- Icône pour assistance en ligne -->
-                                    <span>Assistance en ligne</span>
-                                </a>
-                            </li><!--end nav-item-->
+                        <!-- Assistance en ligne -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="lol.html">
+                                <i class="iconoir-chat-bubble menu-icon"></i> <!-- Icône pour assistance en ligne -->
+                                <span>Assistance en ligne</span>
+                            </a>
+                        </li><!--end nav-item-->
 
-                            <!-- Informations de l’agence ou de l’agent -->
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('locataire.agentinfo', Auth::user()->id) }}">
-                                    <i class="iconoir-phone menu-icon"></i> <!-- Icône pour infos de l'agent/agence -->
-                                    <span>Informations de l’agence ou de l’agent</span>
-                                </a>
-                            </li><!--end nav-item-->
+                        <!-- Informations de l’agence ou de l’agent -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('locataire.agentinfo', Auth::user()->id) }}">
+                                <i class="iconoir-phone menu-icon"></i> <!-- Icône pour infos de l'agent/agence -->
+                                <span>Informations de l’agence ou de l’agent</span>
+                            </a>
+                        </li><!--end nav-item-->
 
-                            <!-- Modifier Mon Profil -->
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{route('locataire.locainformations', Auth::user()->id)}}">
-                                    <i class="iconoir-user menu-icon"></i> <!-- Icône pour modification de profil -->
-                                    <span>Modifier Mon Profil</span>
-                                </a>
-                            </li><!--end nav-item-->
+                        <!-- Modifier Mon Profil -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('locataire.locainformations', Auth::user()->id)}}">
+                                <i class="iconoir-user menu-icon"></i> <!-- Icône pour modification de profil -->
+                                <span>Modifier Mon Profil</span>
+                            </a>
+                        </li><!--end nav-item-->
 
-                            <!-- Paramètres -->
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{route('profile.edit', Auth::user()->id)}}">
-                                    <i class="iconoir-settings menu-icon"></i> <!-- Icône pour paramètres -->
-                                    <span>Paramètres</span>
-                                </a>
-                            </li><!--end nav-item-->
+                        <!-- Paramètres -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('profile.edit', Auth::user()->id)}}">
+                                <i class="iconoir-settings menu-icon"></i> <!-- Icône pour paramètres -->
+                                <span>Paramètres</span>
+                            </a>
+                        </li><!--end nav-item-->
+                
+
+                        </li><!--end nav-item-->
+                        <li class="nav-item">
+                            <a class="nav-link" href="lol.html">
+                            <i class="iconoir-phone menu-icon"></i>
+                            <span>Informations de l’agence ou de l’agent</span>
+                            </a>
+
+                        </li><!--end nav-item-->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('locataire.locainformations', Auth::user()->id)}}">
+                            <i class="iconoir-user menu-icon"></i>
+                            <span>Modifier Mon Profil</span>
+                            </a>
+                        </li><!--end nav-item-->
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{route('profile.edit', Auth::user()->id)}}">
+                            <i class="iconoir-settings menu-icon"></i>
+                            <span>Paramètres</span>
+                            </a>
+                        </li><!--end nav-item-->
                     @endif
-
 
                     <!-- ITEMS POUR L'AGENT IMMOBILIER -->
                     
@@ -223,17 +245,17 @@
                                 <a class="nav-link" href="#sidebarGerer_bien" data-bs-toggle="collapse" role="button"
                                     aria-expanded="false" aria-controls="sidebarGerer_bien">
                                     <i class="iconoir-view-grid menu-icon"></i>
-                                    <span>Gérer les biens immobiliers</span>
+                                    <span>Gestion des biens</span>
                                 </a>
                                 <div class="collapse " id="sidebarGerer_bien">
                                     <ul class="nav flex-column">
 
 
                                         <li class="nav-item">
-                                            <a class="nav-link" href="apps-chat.html">Ajouter Bien</a>
+                                            <a class="nav-link" href="{{ route('biens.create') }}">Ajouter </a>
                                         </li><!--end nav-item-->
                                         <li class="nav-item">
-                                            <a class="nav-link" href="apps-contact-list.html">Liste BIEN</a>
+                                            <a class="nav-link" href="{{ route('biens.index') }}">Liste </a>
                                         </li><!--end nav-item-->
 
 

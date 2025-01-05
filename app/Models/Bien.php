@@ -43,6 +43,8 @@ class Bien extends Model
     protected $casts = [
         'agent_immobilier_id' => 'int',
         'nombre_de_piece' => 'int',
+        'nbr_chambres' => 'int',
+        'nbr_salles_de_bain' => 'int',
         'superficie' => 'float',
         'annee_construction' => 'int',
         'loyer_mensuel' => 'float'
@@ -50,13 +52,19 @@ class Bien extends Model
 
     protected $fillable = [
         'agent_immobilier_id',
+        'name_bien',
         'adresse_bien',
         'type_bien',
         'nombre_de_piece',
+        'nbr_chambres',
+        'nbr_salles_de_bain',
         'superficie',
-        'annee_construction',
+        // 'annee_construction',
         'description',
         'loyer_mensuel',
+        'photo_bien',
+        'photo2_bien',
+        'photo3_bien',
         'statut_bien',
         'created_at',
         'updated_at',
@@ -70,7 +78,7 @@ class Bien extends Model
 
     public function contrats_de_bail()
     {
-        return $this->hasMany(ContratDeBail::class);
+        return $this->hasMany(ContratsDeBail::class);
     }
 
     public function locataires()

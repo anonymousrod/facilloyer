@@ -22,17 +22,24 @@ class BienSeeder extends Seeder
 
         foreach ($AgentImmobiliers as  $AgentImmobilier) {
             // creer un random de nombre de bien pour chaque agent immobilier
-            $nb_bien = rand(1, 10);
+            $nb_bien = rand(20, 30);
             for ($i=0; $i < $nb_bien ; $i++) {
                 Bien::create([
                     'agent_immobilier_id' => $AgentImmobilier,
+                    'name_bien'=> $faker->name,
                     'type_bien' =>  $faker->randomElement(['Appartement', 'Maison', 'Studio']),
                     'adresse_bien' => $faker->address,
                     'nombre_de_piece' => $faker->numberBetween(1, 10),
+                    'nbr_chambres' => $faker->numberBetween(1, 10),
+                    'nbr_salles_de_bain' => $faker->numberBetween(1, 10),
                     'superficie' => $faker->numberBetween(20, 500), // m²
-                    'annee_construction' => $faker->year(),
+                    // 'annee_construction' => $faker->year(),
                     'description' => $faker->paragraph(),
                     'loyer_mensuel'=> $faker->randomFloat(2, 200, 2000),
+                    'photo_bien' => '/storage/facker/profile/' . rand(1, 19) . '.JPG',
+                    'photo2_bien' => '/storage/facker/profile/' . rand(1, 19) . '.JPG',
+                    'photo3_bien' => '/storage/facker/profile/' . rand(1, 19) . '.JPG',
+
                     'statut_bien'=> $faker->randomElement(['Disponible', 'Loué', 'En maintenance']),
                 ]);
             }

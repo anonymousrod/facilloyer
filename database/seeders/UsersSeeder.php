@@ -27,7 +27,7 @@ class UsersSeeder extends Seeder
         ]);
 
         // Créer des utilisateurs aléatoires
-        for ($i = 0; $i < 11; $i++) {
+        for ($i = 0; $i < 20; $i++) {
             $rand_role = $faker->randomElement($role);
 
             // Définir le statut basé sur le rôle

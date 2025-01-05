@@ -99,7 +99,7 @@ public function updateStatus($id)
         $photoProfilPath = $request->file('photo_profil')->store('photos_profil', 'public');
         $carteIdentitePath = $request->file('carte_identite_pdf')->store('cartes_identite', 'public');
         $rccmPath = $request->file('rccm_pdf')->store('rccm', 'public');
-        $storage = '/storage/';
+            $storage = '/storage/';
 
         // Ajouter `user_id` aux données du formulaire
         // $request->merge([
@@ -200,7 +200,7 @@ public function updateStatus($id)
         $agent->adresse_agence = $request->adresse_agence;
         $agent->territoire_couvert = $request->territoire_couvert;
         $agent->nombre_bien_disponible = $request->nombre_bien_disponible;
-        
+
         // Sauvegarder les modifications
         $agent->save();
 
