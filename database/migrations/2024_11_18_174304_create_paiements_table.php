@@ -20,6 +20,7 @@ return new class extends Migration
             $table->float('montant'); // Montant payé lors de la transaction
             $table->date('date'); // Date du paiement
             $table->enum('status', ['Payé', 'attente'])->default('attente'); // Statut du paiement , si elle a marché ou elle a eté refusé
+            $table->string('description_paiement'); // Description du paiement , ex: paiement d'ue partie de la location
             $table->timestamps();
             $table->softDeletes();
 

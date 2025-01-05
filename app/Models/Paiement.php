@@ -41,6 +41,7 @@ class Paiement extends Model
         'montant',
         'date',
         'status',
+        'description_paiement'
     ];
 
     /**

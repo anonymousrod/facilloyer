@@ -23,9 +23,9 @@ class ContratsDeBailSeeder extends Seeder
             for ($i = 0; $i < $nbContrats; $i++) {
                 ContratsDeBail::create([
                     'bien_id' => $bien->id,
-                    'loyer_mensuel' => $bien->loyer_mensuel,
+                    // 'loyer_mensuel' => $bien->loyer_mensuel,
                     'depot_de_garantie' => $bien->loyer_mensuel * 2,
-                    'adresse_bien' => $bien->adresse_bien,
+                    // 'adresse_bien' => $bien->adresse_bien,
                     'description' => $faker->paragraph(),
                     'renouvellement_automatique' => $faker->boolean,
                     'penalite_retard' => $faker->randomFloat(2, 10, 50),
