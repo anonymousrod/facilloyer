@@ -43,19 +43,19 @@
                                     <li class="nav-item">
                                         <a class="nav-link" href="{{ route('admin.agents.index') }}">
                                             <i class="fas fa-user-plus menu-icon"></i> <!-- Icône pour ajouter utilisateur -->
-                                            <span>Ajoute d'agence immmboliers</span>
+                                            <span>Valider les agences</span>
                                         </a>
                                     </li><!--end nav-item-->
-                                    <li class="nav-item">
+                                    <!-- <li class="nav-item">
                                         <a class="nav-link" href="t.t">
-                                        <i class="fas fa-user-tie menu-icon"></i> <!-- Icône pour agents immobiliers -->
+                                        <i class="fas fa-user-tie menu-icon"></i> 
                                             <span>Liste agents immobiliers</span>
                                         </a>
-                                    </li><!--end nav-item-->
+                                    </li> -->
                                     <li class="nav-item">
-                                        <a class="nav-link" href="apps-calendar.html">
+                                        <a class="nav-link" href="{{route('locataire.create')}}">
                                             <i class="fas fa-users menu-icon"></i> <!-- Icône pour liste des locataires -->
-                                            <span>Liste locataires</span>
+                                            <span>Liste des locataire </spam>
                                         </a>
                                     </li><!--end nav-item-->
                                 </ul><!--end nav-->
