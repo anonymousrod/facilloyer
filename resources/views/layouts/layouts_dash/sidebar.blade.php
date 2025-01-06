@@ -186,32 +186,10 @@
                         </li><!--end nav-item-->
                 
 
-                        </li><!--end nav-item-->
-                        <li class="nav-item">
-                            <a class="nav-link" href="lol.html">
-                            <i class="iconoir-phone menu-icon"></i>
-                            <span>Informations de l’agence ou de l’agent</span>
-                            </a>
-
-                        </li><!--end nav-item-->
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{route('locataire.locainformations', Auth::user()->id)}}">
-                            <i class="iconoir-user menu-icon"></i>
-                            <span>Modifier Mon Profil</span>
-                            </a>
-                        </li><!--end nav-item-->
-
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{route('profile.edit', Auth::user()->id)}}">
-                            <i class="iconoir-settings menu-icon"></i>
-                            <span>Paramètres</span>
-                            </a>
-                        </li><!--end nav-item-->
-                    @endif
-
-                    <!-- ITEMS POUR L'AGENT IMMOBILIER -->
+                    @endif                    
                     
-                    
+                        <!-- ITEMS POUR L'AGENT IMMOBILIER -->
+                
                     @if (Auth::user()->id_role == 3)
                         @if (Auth::user()->statut)
                             <!-- Si l'agent est validé -->

@@ -7,6 +7,7 @@ use App\Http\Controllers\AgentImmobilierController;
 use App\Http\Controllers\BienController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportListePDF;
+use App\Http\Controllers\LocataireBienController;
 use App\Http\Controllers\LocataireController;
 use App\Http\Controllers\PaiementController;
 
@@ -88,7 +89,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::post('/locataire/paiements/store', [PaiementController::class, 'store'])
         ->name('locataire.paiements.store');
-    
+
 
     Route::post('/locataire/paiements/create', [PaiementController::class, 'create'])
     ->name('locataire.paiements.create');
@@ -183,6 +184,19 @@ Route::get('/admin/contrats_de_bail/{id}', [ActionAdminController::class, 'showC
 Route::get('/admin/contrats_de_bail/{id}/export_pdf', [ActionAdminController::class, 'exportContractToPDF'])->name('admin.contrats_de_bail.export_pdf');
 
 //try
-Route::get('/info_detail_bien', function () {
-    return view('layouts.bien_detail');
-})->name('bien_detail');
+// Route::get('/info_detail_bien', function () {
+//     return view('layouts.bien_detail');
+// })->name('bien_detail');
+
+// Afficher la page d'assignation
+Route::get('/bien/{id}/assign-locataire', [LocataireBienController::class, 'showAssignPage'])->name('assign.locataire');
+
+// Assigner le locataire
+Route::post('/bien/{id}/assign-locataire', [LocataireBienController::class, 'assignLocataire']);
+
+//route pour recherche dynaique assignement
+Route::get('/locataires/search', [LocataireController::class, 'search'])->name('locataires.search');
+//route pour desassigner locataire
+Route::delete('/biens/{bien}/unassign-locataire', [LocataireBienController::class, 'unassignLocataire'])->name('unassign.locataire');
+
+

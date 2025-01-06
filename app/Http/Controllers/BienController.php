@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bien;
+use App\Models\Locataire;
+use App\Models\LocataireBien;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -79,9 +81,18 @@ class BienController extends Controller
      */
     public function show(string $id)
     {
-        $bien = Bien::findOrFail($id); // Retrieve the property details
-        return view('layouts.bien_detail', compact('bien'));
+        $bien = Bien::findOrFail($id);
+
+        // Vérifier si un locataire est déjà assigné à ce bien
+        $locataireAssigné = LocataireBien::where('bien_id', $id)->with('locataire')->first();
+
+        return view('layouts.bien_detail', [
+            'bien' => $bien,
+            'locataireAssigné' => $locataireAssigné,
+        ]);
     }
+
+
 
     /**
      * Show the form for editing the specified resource.
@@ -153,7 +164,6 @@ class BienController extends Controller
         $bien->save();
 
         return redirect()->route('biens.show', $bien->id)->with('success', 'Les informations du bien ont été mises à jour.');
-
     }
 
     /**
@@ -161,6 +171,20 @@ class BienController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $bien = Bien::findOrFail($id);
+
+        // Vérifier si un locataire est assigné
+        $locataireAssigné = LocataireBien::where('bien_id', $id)->exists();
+
+        if ($locataireAssigné) {
+            return redirect()->route('biens.show', $id)
+                ->with('error', 'Ce bien ne peut pas être supprimé tant qu’il est assigné à un locataire.');
+        }
+
+        // Supprimer le bien
+        $bien->delete();
+
+        return redirect()->route('biens.index')
+            ->with('success', 'Bien supprimé avec succès.');
     }
 }

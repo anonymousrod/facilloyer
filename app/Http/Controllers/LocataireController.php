@@ -39,7 +39,7 @@ public function showInformations($id)
             'paiements.bien',
             'contrat_de_bail_locataires.contrats_de_bail.bien'
         ])->findOrFail($id);
-        
+
         // Statistiques des paiements
         $statsPaiements = [
             'total_paye' => $locataire->paiements->sum('montant'),
@@ -51,7 +51,7 @@ public function showInformations($id)
         ];
 
         // Historique des biens loués avec leurs contrats
-        $biensLoues = $locataire->contrat_de_bail_locataires->map(function($contrat) {
+        $biensLoues = $locataire->contrat_de_bail_locataires->map(function ($contrat) {
             return [
                 'bien' => $contrat->contrats_de_bail->bien ?? null,
                 'contrat' => [
@@ -133,16 +133,16 @@ public function showInformations($id)
      * Display the specified resource.
      */
     public function show($user)
-{
-    $locataire = Auth::user()->locataires->first();
+    {
+        $locataire = Auth::user()->locataires->first();
 
-    if (!$locataire) {
-        abort(404, 'Aucun locataire associé à cet utilisateur.');
+        if (!$locataire) {
+            abort(404, 'Aucun locataire associé à cet utilisateur.');
+        }
+
+        // Rediriger vers la vue d'édition
+        return view('locataire.edit', compact('locataire'));
     }
-
-    // Rediriger vers la vue d'édition
-    return view('locataire.edit', compact('locataire'));
-}
 
 
     /**
@@ -258,25 +258,25 @@ public function showInformations($id)
 
         return response()->json(['success' => true]);
     }
-   
-public function showAgentInfo($locataireId)
+
+    public function showAgentInfo($locataireId)
     {
         // Vérifiez si le locataire existe
         $locataire = Locataire::find($locataireId);
         if (!$locataire) {
             abort(404, 'Locataire non trouvé.');
         }
-    
+
         // Vérifiez si un agent est lié au locataire
         $agent = $locataire->agent_immobilier; // Assurez-vous que cette relation est correcte
         if (!$agent) {
             return back()->withErrors('Aucun agent immobilier associé à ce locataire.');
         }
-    
+
         // Retournez la vue avec les données nécessaires
         return view('locataire.agentinfo', compact('agent', 'locataire'));
     }
-    
+
 
     public function updateEvaluation(Request $request, $id)
     {
@@ -285,17 +285,17 @@ public function showAgentInfo($locataireId)
             $request->validate([
                 'evaluation' => 'required|numeric|min:1|max:5',
             ]);
-    
+
             // Récupérer l'agent
             $agent = AgentImmobilier::find($id);
             if (!$agent) {
                 return response()->json(['error' => 'Agent non trouvé.'], 404);
             }
-    
+
             // Mise à jour
             $agent->evaluation = $request->evaluation;
             $agent->save();
-    
+
             // Répondre avec succès
             return response()->json([
                 'success' => 'Évaluation mise à jour avec succès.',
@@ -305,8 +305,23 @@ public function showAgentInfo($locataireId)
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-    
-    
 
+    public function search(Request $request)
+    {
+        $query = $request->input('query'); // Texte de recherche
+        $bienId = $request->input('bien_id'); // ID du bien
 
+        // Locataires non assignés à ce bien
+        $locataires = Locataire::whereDoesntHave('locataireBiens', function ($q) use ($bienId) {
+            $q->where('bien_id', $bienId);
+        })
+            ->where(function ($q) use ($query) {
+                $q->where('nom', 'like', "%$query%")
+                    ->orWhere('prenom', 'like', "%$query%");
+            })
+            ->select('id', 'nom', 'prenom') // Ne retourner que les champs nécessaires
+            ->get();
+
+        return response()->json($locataires); // Retourner les résultats au format JSON
+    }
 }
