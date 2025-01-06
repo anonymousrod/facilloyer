@@ -179,17 +179,23 @@ public function index()
         return view('admin.paiements.index', compact('paiements'));
     }
     
+
+public function telechargerQuittancePaiement($id)
+    {
+        $paiement = Paiement::with(['locataire', 'bien', 'bien.agent_immobilier'])->findOrFail($id);
     
-// PaiementController.php
-public function displayPaiementDetails($id)
-{
-    $paiement = Paiement::with(['locataire', 'bien', 'bien.agent_immobilier'])->findOrFail($id);
+        $pdf = PDF::loadView('admin.paiements.quittance', compact('paiement'));
+        return $pdf->download('quittance_paiement_' . $paiement->id . '.pdf');
+    }
 
-    return view('admin.paiements.show', compact('paiement'));
-}
 
     
-
+public function afficherDetailsPaiement($id)
+    {
+        $paiement = Paiement::with(['locataire', 'bien', 'bien.agent_immobilier'])->findOrFail($id);
+        return view('admin.paiements.details', compact('paiement'));
+    }
+    
 
 
 

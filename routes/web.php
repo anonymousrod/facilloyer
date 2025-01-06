@@ -11,6 +11,9 @@ use App\Http\Controllers\LocataireController;
 use App\Http\Controllers\PaiementController;
 
 use App\Http\Controllers\ActionAdminController;
+use App\Http\Controllers\ContratDeBailController;
+
+
 
 
 Route::get('/', function () {
@@ -147,18 +150,37 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 
 // Route pour afficher le profil du locataire par l'administrateur
 Route::get('admin/locataires/{locataire}/profil', [LocataireController::class, 'showProfil'])->name('admin.locataires.profil');
+
+
+
 // route pour afficher la liste de tout les paiement par ladministrateur
 
 
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function() {
     Route::get('/paiements', [PaiementController::class, 'index'])->name('paiements.index');
-    Route::get('/paiements/quittance', [PaiementController::class, 'quittance'])->name('paiements.quittance');
-    Route::get('/paiements/show', [PaiementController::class, 'show'])->name('paiements.show');
-
+    
 
 });
 
+//GESTIONQUITTANCE D4UN PAIEMENT SPECIFIQUE 
 
+Route::get('admin/paiements/{id}/details', [PaiementController::class, 'afficherDetailsPaiement'])->name('admin.paiements.details');
+Route::get('admin/paiements/{id}/quittance', [PaiementController::class, 'telechargerQuittancePaiement'])->name('admin.paiements.quittance');
+
+
+
+
+Route::get('/admin/contrats-de-bail', [ActionAdminController::class, 'index'])->name('admin.contrats_de_bail.index');
+Route::post('/admin/contrats-de-bail', [ActionAdminController::class, 'store'])->name('admin.contrats_de_bail.store');
+Route::delete('/admin/contrats-de-bail/{id}', [ActionAdminController::class, 'destroy'])->name('admin.contrats_de_bail.destroy');
+
+
+//  DETAIL CONTRAT POUR L4ADMIN
+
+Route::get('/admin/contrats_de_bail/{id}', [ActionAdminController::class, 'showContractDetails'])->name('admin.contrats_de_bail.show');
+
+// EXPOTER UN CONTRAT PAR L4AMINISTRATEUR DIFFERENT DE POUR L4AGENT
+Route::get('/admin/contrats_de_bail/{id}/export_pdf', [ActionAdminController::class, 'exportContractToPDF'])->name('admin.contrats_de_bail.export_pdf');
 
 //try
 Route::get('/info_detail_bien', function () {

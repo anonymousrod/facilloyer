@@ -78,8 +78,8 @@
 
                         <!-- Auditer les contrats de bail -->
                         <li class="nav-item">
-                            <a class="nav-link" href="audit-contrats.html">
-                                <i class="fas fa-file-contract menu-icon"></i> <!-- Icône pour audit contrats -->
+                            <a class="nav-link" href="{{ route('admin.contrats_de_bail.index') }}">
+                                <i class="fas fa-book menu-icon"></i> <!-- Icône pour audit contrats -->
                                 <span>Auditer les contrats de bail</span>
                             </a>
                         </li><!--end nav-item-->

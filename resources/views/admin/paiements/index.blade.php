@@ -28,12 +28,12 @@
 
                     <div class="d-flex justify-content-between align-items-center mt-3">
                         <!-- Bouton pour voir plus -->
-                        <a href="{{ route('admin.paiements.show', $paiement->id) }}" class="btn btn-info btn-sm">
+                        <a href="{{ route('admin.paiements.details', $paiement->id) }}" class="btn btn-info btn-sm">
                             <i class="fas fa-eye"></i> Voir
                         </a>
                         <!-- Bouton pour la quittance -->
                         <a href="{{ route('admin.paiements.quittance', $paiement->id) }}" class="btn btn-primary btn-sm">
-                            <i class="fas fa-file-alt"></i> Quittance
+                            <i class="fas fa-file-alt"></i> Justif
                         </a>
                     </div>
                 </div>
