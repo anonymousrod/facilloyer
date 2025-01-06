@@ -41,7 +41,7 @@
                             <div class="collapse" id="sidebarGerer_user">
                                 <ul class="nav flex-column">
                                     <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('admin.agents.index') }}">
+                                        <a class="nav-link" href="{{ route('admin.agents.index',)}}">
                                             <i class="fas fa-user-plus menu-icon"></i> <!-- Icône pour ajouter utilisateur -->
                                             <span>Valider les agences</span>
                                         </a>
@@ -53,7 +53,7 @@
                                         </a>
                                     </li> -->
                                     <li class="nav-item">
-                                        <a class="nav-link" href="{{route('locataire.create')}}">
+                                        <a class="nav-link" href="{{route('admin.locataires_par_agence', Auth::user()->id)}}">
                                             <i class="fas fa-users menu-icon"></i> <!-- Icône pour liste des locataires -->
                                             <span>Liste des locataire </spam>
                                         </a>
@@ -67,6 +67,12 @@
                             <a class="nav-link" href="rapports-financiers.html">
                                 <i class="fas fa-file-invoice-dollar menu-icon"></i> <!-- Icône pour rapports financiers -->
                                 <span>Consulter les rapports financiers</span>
+                            </a>
+                        </li><!--end nav-item-->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('admin.paiements.index') }}">
+                                <i class="fas fa-file-invoice-dollar menu-icon"></i> <!-- Historique des paiements -->
+                                <span>Historiques des Paiements</span>
                             </a>
                         </li><!--end nav-item-->
 

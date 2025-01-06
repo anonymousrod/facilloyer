@@ -13,6 +13,7 @@ use App\Models\ContratDeBailLocataire;
 use App\Models\Locataire;
 
 
+
 class PaiementController extends Controller
 
 {
@@ -153,12 +154,40 @@ public function generateQuittance($id)
 
     
     
+
+
+public function quittance($id)
+    {
+        $paiement = Paiement::with(['locataire', 'bien.agent_immobilier'])->findOrFail($id);
+
+        $pdf = PDF::loadView('admin.paiements.quittance', compact('paiement'));
+        return $pdf->download('quittance_paiement.pdf');
+    }
+
+
+
     
     
     
+public function index()
+    {
+        // Récupérer tous les paiements avec les relations nécessaires
+        $paiements = Paiement::with(['locataire', 'bien.agent_immobilier'])
+            ->orderBy('date', 'desc') // Trier par date du plus récent au plus ancien
+            ->get();
+
+        return view('admin.paiements.index', compact('paiements'));
+    }
     
     
-    
+// PaiementController.php
+public function displayPaiementDetails($id)
+{
+    $paiement = Paiement::with(['locataire', 'bien', 'bien.agent_immobilier'])->findOrFail($id);
+
+    return view('admin.paiements.show', compact('paiement'));
+}
+
     
 
 

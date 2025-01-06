@@ -10,6 +10,7 @@ use App\Http\Controllers\ExportListePDF;
 use App\Http\Controllers\LocataireController;
 use App\Http\Controllers\PaiementController;
 
+use App\Http\Controllers\ActionAdminController;
 
 
 Route::get('/', function () {
@@ -97,7 +98,7 @@ Route::middleware(['auth'])->group(function () {
     ->name('locataire.paiements.show');
 
 
-
+});
 
 
 
@@ -124,17 +125,40 @@ Route::post('/admin/agents/toggle-status/{id}', [AgentImmobilierController::clas
 Route::prefix('locataires')->group(function () {
     Route::post('/{id}/toggle-status', [LocataireController::class, 'toggleStatus']);
 });
+
+//route administrateurs
 Route::get('/admin/agents/index', [AgentImmobilierController::class, 'index'])->name('admin.agents.index');
 Route::get('/admin/agents/{id}', [AgentImmobilierController::class, 'show'])->name('admin.agents.show');
 Route::patch('/agents/{id}/update-status', [AgentImmobilierController::class, 'updateStatus'])->name('agents.updateStatus');
 
 
 
-    
 
+Route::prefix('admin')->middleware('auth')->group(function () {
+    // Afficher les locataires par agence
+    Route::get('/locataires_par_agence', [ActionAdminController::class, 'afficherLocatairesParAgence'])->name('admin.locataires_par_agence');
+
+    // Changer le statut du locataire
+    Route::post('/locataires/{id}/changer-etat', [ActionAdminController::class, 'changerEtatLocataire'])->name('admin.locataires.changer.etat');
+
+    // Supprimer le locataire
+    Route::delete('/locataires/{id}/supprimer', [ActionAdminController::class, 'supprimerLocataire'])->name('admin.locataires.supprimer');
+});
+
+// Route pour afficher le profil du locataire par l'administrateur
+Route::get('admin/locataires/{locataire}/profil', [LocataireController::class, 'showProfil'])->name('admin.locataires.profil');
+// route pour afficher la liste de tout les paiement par ladministrateur
+
+
+Route::middleware('auth')->prefix('admin')->name('admin.')->group(function() {
+    Route::get('/paiements', [PaiementController::class, 'index'])->name('paiements.index');
+    Route::get('/paiements/quittance', [PaiementController::class, 'quittance'])->name('paiements.quittance');
+    Route::get('/paiements/show', [PaiementController::class, 'show'])->name('paiements.show');
 
 
 });
+
+
 
 //try
 Route::get('/info_detail_bien', function () {

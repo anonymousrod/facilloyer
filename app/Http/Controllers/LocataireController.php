@@ -19,6 +19,17 @@ use Illuminate\Support\Facades\Hash;
 class LocataireController extends Controller
 {
 
+
+    public function showProfil($locataireId)
+    {
+        // Récupère le locataire par son ID, y compris ses informations liées à l'utilisateur (user)
+        $locataire = Locataire::with('user')->findOrFail($locataireId);
+
+        // Retourne la vue du profil avec les données du locataire
+        return view('admin.locataires.profil', compact('locataire'));
+    }
+    
+
 public function showInformations($id)
     {
         // Correction du nom de la relation

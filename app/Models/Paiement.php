@@ -49,14 +49,24 @@ class Paiement extends Model
      */
     public function bien()
     {
-        return $this->belongsTo(Bien::class);
+        return $this->belongsTo(Bien::class)->withDefault([
+            'name_bien' => 'Bien inconnu',
+            'agent_immobilier' => null,
+        ]);
     }
+
 
     /**
      * Relation avec le modèle Locataire.
      */
     public function locataire()
     {
-        return $this->belongsTo(Locataire::class);
+        return $this->belongsTo(Locataire::class)->withDefault([
+            'nom' => 'Locataire inconnu', // Valeur par défaut si aucune donnée n'est trouvée
+            'prenom' => 'Inconnu',
+        ]);
+
+
     }
+
 }
