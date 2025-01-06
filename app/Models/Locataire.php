@@ -94,15 +94,18 @@ class Locataire extends Model
         return $this->hasMany(Paiement::class);
     }
 
+    public function locataireBiens()
+    {
+        return $this->hasMany(LocataireBien::class, 'locataire_id');
+    }
+
     public function agent_immobilier()
     {
         return $this->belongsTo(AgentImmobilier::class, 'agent_id');
     }
-    
-    public function demandesMaintenance()
-{
-    return $this->hasMany(DemandeMaintenance::class);
-}
 
-    
+    public function demandesMaintenance()
+    {
+        return $this->hasMany(DemandeMaintenance::class);
+    }
 }
