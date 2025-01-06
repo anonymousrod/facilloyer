@@ -36,9 +36,9 @@ class BienSeeder extends Seeder
                     // 'annee_construction' => $faker->year(),
                     'description' => $faker->paragraph(),
                     'loyer_mensuel'=> $faker->randomFloat(2, 200, 2000),
-                    'photo_bien' => '/storage/facker/photo_bien/' . rand(1, 15) . '.JPG',
-                    'photo2_bien' => '/storage/facker/photo_bien/' . rand(1, 15) . '.JPG',
-                    'photo3_bien' => '/storage/facker/photo_bien/' . rand(1, 15) . '.JPG',
+                    'photo_bien' => '/storage/facker/photo_bien/' . rand(1, 6) . '.JPG',
+                    'photo2_bien' => '/storage/facker/photo_bien/' . rand(1, 6) . '.JPG',
+                    'photo3_bien' => '/storage/facker/photo_bien/' . rand(1, 6) . '.JPG',
                     'statut_bien'=> $faker->randomElement(['Disponible', 'Loué', 'En maintenance']),
                 ]);
             }
