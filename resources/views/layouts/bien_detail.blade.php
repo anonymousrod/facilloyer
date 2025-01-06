@@ -121,14 +121,45 @@
 
             <!-- Colonne secondaire -->
             <div class="col-lg-4 col-md-12">
-                <div class="card">
+                {{-- <div class="card">
                     <div class="card-body">
                         <h4 class="card-title text-muted">Informations supplémentaires</h4>
                         <p class="text-muted">Cette section peut être utilisée pour ajouter des informations
                             complémentaires, comme les caractéristiques du bien, les coordonnées de l'agent immobilier, ou
                             d'autres détails.</p>
                     </div>
+                </div> --}}
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        @if ($locataireAssigné)
+                            <div class="text-center">
+                                <img src="{{ asset($locataireAssigné->locataire->photo_profil) }}"
+                                    alt="Photo de {{ $locataireAssigné->locataire->nom }}" class="rounded-circle mb-3"
+                                    style="width: 100px; height: 100px; object-fit: cover;">
+                                <h5 class="text-primary">{{ $locataireAssigné->locataire->nom }} {{ $locataireAssigné->locataire->prenom }}</h5>
+                            </div>
+                            <table class="table table-borderless ">
+                                <tbody>
+
+                                    <tr>
+                                        <th class="fw-bold text-muted">Email :</th>
+                                        <td>{{ $locataireAssigné->locataire->user->email }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="fw-bold text-muted">Statut :</th>
+                                        <td><span class="badge bg-success">Locataire Assigné</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        @else
+                            <div class="text-center">
+                                <h5 class="text-danger">Aucun locataire assigné</h5>
+                                <p class="text-muted">Assignez un locataire pour voir ses informations ici.</p>
+                            </div>
+                        @endif
+                    </div>
                 </div>
+
 
                 <div class="card shadow-sm">
                     <div class="card-header ">
@@ -207,5 +238,10 @@
 
     table td {
         font-size: 0.95rem;
+    }
+
+    .card-body img {
+        border: 1px solid #ddd;
+        /* Optionnel : ajoute un contour léger */
     }
 </style>
