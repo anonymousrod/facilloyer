@@ -85,6 +85,7 @@ class BienController extends Controller
 
         // Vérifier si un locataire est déjà assigné à ce bien
         $locataireAssigné = LocataireBien::where('bien_id', $id)->with('locataire')->first();
+        
 
         return view('layouts.bien_detail', [
             'bien' => $bien,
