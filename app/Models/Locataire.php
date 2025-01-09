@@ -77,9 +77,9 @@ class Locataire extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    public function contrat_de_bail_locataires()
+    public function contratsDeBail()
     {
-        return $this->hasMany(ContratDeBailLocataire::class);
+        return $this->hasMany(ContratsDeBail::class);
     }
 
     public function biens()

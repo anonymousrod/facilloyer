@@ -43,6 +43,8 @@ class Bien extends Model
     protected $casts = [
         'agent_immobilier_id' => 'int',
         'nombre_de_piece' => 'int',
+        'nombre_de_salon' => 'int',
+        'nombre_de_cuisine' => 'int',
         'nbr_chambres' => 'int',
         'nbr_salles_de_bain' => 'int',
         'superficie' => 'float',
@@ -53,9 +55,13 @@ class Bien extends Model
     protected $fillable = [
         'agent_immobilier_id',
         'name_bien',
+        'name_proprietaire',
+        'proprietaire_numéro',
         'adresse_bien',
         'type_bien',
         'nombre_de_piece',
+        'nombre_de_salon',
+        'nombre_de_cuisine',
         'nbr_chambres',
         'nbr_salles_de_bain',
         'superficie',

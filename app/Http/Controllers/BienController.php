@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bien;
+use App\Models\ContratsDeBail;
 use App\Models\Locataire;
 use App\Models\LocataireBien;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class BienController extends Controller
 {
@@ -41,9 +43,13 @@ class BienController extends Controller
         //
         $request->validate([
             'name_bien' => 'required|string|max:255',
+            'name_proprietaire' => 'required|string|max:255',
+            'proprietaire_numéro' => 'required|string|max:20',
             'adresse_bien' => 'required|string|max:255',
             'type_bien' => 'required|string|max:255',
             'nombre_de_piece' => 'required|integer|min:1',
+            'nombre_de_salon' => 'required|integer|min:1',
+            'nombre_de_cuisine' => 'required|integer|min:1',
             'nbr_chambres' => 'nullable|integer|min:0',
             'nbr_salles_de_bain' => 'nullable|integer|min:0',
             'superficie' => 'required|numeric|min:1',
@@ -83,15 +89,20 @@ class BienController extends Controller
     {
         $bien = Bien::findOrFail($id);
 
-        // Vérifier si un locataire est déjà assigné à ce bien
+        // Vérifier si un locataire est assigné à ce bien
         $locataireAssigné = LocataireBien::where('bien_id', $id)->with('locataire')->first();
-        
+
+        $contrat = ContratsDeBail::where('bien_id', $bien->id)
+        ->where('locataire_id', $locataireAssigné ?->locataire->id)
+        ->first();
 
         return view('layouts.bien_detail', [
             'bien' => $bien,
             'locataireAssigné' => $locataireAssigné,
+            'contrat' => $contrat,
         ]);
     }
+
 
 
 
@@ -114,10 +125,14 @@ class BienController extends Controller
         // Valider les données
         $request->validate([
             'name_bien' => 'required|string|max:255',
+            'name_proprietaire' => 'required|string|max:255',
+            'proprietaire_numéro' => 'required|string|max:20',
             'statut_bien' => 'required|in:Disponible,Loué,Vendu',
             'nombre_de_piece' => 'required|integer',
             'nbr_chambres' => 'nullable|integer',
             'nbr_salles_de_bain' => 'nullable|integer',
+            'nombre_de_salon' => 'required|integer|min:1',
+            'nombre_de_cuisine' => 'required|integer|min:1',
             'superficie' => 'required|numeric',
             'loyer_mensuel' => 'required|numeric',
             'type_bien' => 'nullable|string|max:255',
@@ -134,8 +149,12 @@ class BienController extends Controller
 
         // Mettre à jour les données simples
         $bien->name_bien = $request->name_bien;
+        $bien->name_proprietaire = $request->name_proprietaire;
+        $bien->proprietaire_numéro = $request->proprietaire_numéro;
         $bien->statut_bien = $request->statut_bien;
         $bien->nombre_de_piece = $request->nombre_de_piece;
+        $bien->nombre_de_salon = $request->nombre_de_salon;
+        $bien->nombre_de_cuisine = $request->nombre_de_cuisine;
         $bien->nbr_chambres = $request->nbr_chambres;
         $bien->nbr_salles_de_bain = $request->nbr_salles_de_bain;
         $bien->superficie = $request->superficie;
