@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\Bien;
-use App\Models\ContratDeBail;
 use App\Models\ContratsDeBail;
 use App\Models\Locataire;
 use Carbon\Carbon;
@@ -28,9 +27,20 @@ class ContratsDeBailSeeder extends Seeder
         foreach ($locataires as $locataire) {
             // Sélectionner un bien au hasard pour ce locataire
             $bien = $biens->random();
-            $frequencepaiement = $faker->randomElement(['Mensuel', 'Trimestriel', 'Semestriel', 'Annuel']);
+            $frequencePaiement = $faker->randomElement(['Mensuel', 'Trimestriel', 'Semestriel', 'Annuel']);
             $dateDebut = Carbon::now()->startOfMonth();
             $dateFin = $dateDebut->copy()->addYear();
+
+            // Calculer le montant_total_frequence basé sur la fréquence de paiement
+            $loyerMensuel = $bien->loyer_mensuel;  // Assurez-vous que cette colonne existe dans le modèle Bien
+            $nombreMois = match ($frequencePaiement) {
+                'Mensuel' => 1,
+                'Trimestriel' => 3,
+                'Semestriel' => 6,
+                'Annuel' => 12,
+            };
+
+            $montantTotalFrequence = $loyerMensuel * $nombreMois;
 
             // Créer un contrat de bail pour ce locataire et ce bien
             ContratsDeBail::create([
@@ -48,8 +58,8 @@ class ContratsDeBailSeeder extends Seeder
                 'clauses_specifiques6' => $faker->paragraph(),
                 'date_debut' => $dateDebut,
                 'date_fin' => $dateFin,
-                'montant_total_frequence' => $faker->randomFloat(2, 100, 1500),
-                'frequence_paiement' => $frequencepaiement,
+                'montant_total_frequence' => $montantTotalFrequence,  // Calculé selon le loyer mensuel et la fréquence
+                'frequence_paiement' => $frequencePaiement,
                 'penalite_retard' => $faker->numberBetween(1, 50),
                 'mode_paiement' => $faker->randomElement(['virement', 'espèces', 'chèque']),
                 'renouvellement_automatique' => $faker->boolean(),
