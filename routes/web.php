@@ -11,9 +11,7 @@ use App\Http\Controllers\ExportListePDF;
 use App\Http\Controllers\LocataireBienController;
 use App\Http\Controllers\LocataireController;
 use App\Http\Controllers\PaiementController;
-
 use App\Http\Controllers\ActionAdminController;
-use App\Http\Controllers\ContratDeBailController;
 
 
 
