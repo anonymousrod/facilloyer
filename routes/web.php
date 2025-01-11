@@ -5,6 +5,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AgentImmobilierController;
 use App\Http\Controllers\BienController;
+use App\Http\Controllers\ContratDeBailController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ExportListePDF;
 use App\Http\Controllers\LocataireBienController;
@@ -198,5 +199,9 @@ Route::post('/bien/{id}/assign-locataire', [LocataireBienController::class, 'ass
 Route::get('/locataires/search', [LocataireController::class, 'search'])->name('locataires.search');
 //route pour desassigner locataire
 Route::delete('/biens/{bien}/unassign-locataire', [LocataireBienController::class, 'unassignLocataire'])->name('unassign.locataire');
+
+//route contrat de bail
+Route::resource('/Contrat_de_bail', ContratDeBailController::class)->names('contrat');
+
 
 

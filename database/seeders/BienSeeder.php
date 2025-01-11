@@ -27,11 +27,15 @@ class BienSeeder extends Seeder
                 Bien::create([
                     'agent_immobilier_id' => $AgentImmobilier,
                     'name_bien'=> $faker->name,
+                    'name_proprietaire'=> $faker->name,
+                    'proprietaire_numéro'=> $faker->phoneNumber,
                     'type_bien' =>  $faker->randomElement(['Appartement', 'Maison', 'Studio']),
                     'adresse_bien' => $faker->address,
                     'nombre_de_piece' => $faker->numberBetween(1, 10),
                     'nbr_chambres' => $faker->numberBetween(1, 10),
                     'nbr_salles_de_bain' => $faker->numberBetween(1, 10),
+                    'nombre_de_salon' => $faker->numberBetween(1, 10),
+                    'nombre_de_cuisine' => $faker->numberBetween(1, 10),
                     'superficie' => $faker->numberBetween(20, 500), // m²
                     // 'annee_construction' => $faker->year(),
                     'description' => $faker->paragraph(),

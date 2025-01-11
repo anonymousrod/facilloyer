@@ -42,26 +42,40 @@ class ContratsDeBail extends Model
 
     protected $casts = [
         'bien_id' => 'int',
-        'date_debut' => 'datetime',
-        'date_fin' => 'datetime',
-        'loyer_mensuel' => 'float',
-        'depot_de_garantie' => 'float',
-        'renouvellement_automatique' => 'bool'
+        'locataire_id' => 'int',
+        'montant_total_frequence' => 'float',
+        'date_debut' => 'date',
+        'date_fin' => 'date',
+        'caution' => 'float',
+        'caution_eau' => 'float',
+        'caution_electricite' => 'float',
     ];
 
     protected $fillable = [
-
+        //new
+        'locataire_id',
+        'date_debut',
         'date_fin',
-        // 'loyer_mensuel',
-        'depot_de_garantie',
-        // 'adresse_bien',
-        'description',
         'renouvellement_automatique',
-
+        'montant_total_frequence',
+        'frequence_paiement',
         'penalite_retard',
-        'type_bien',
-        'statut_bien',
-        'conditions',
+        'mode_paiement',
+        'statut_contrat',
+        //old
+        'bien_id',
+        'reference',
+        'caution',
+        'caution_eau',
+        'caution_electricite',
+        'clauses_specifiques1',
+        'clauses_specifiques2',
+        'clauses_specifiques3',
+        'clauses_specifiques4',
+        'clauses_specifiques5',
+        'clauses_specifiques6',
+        'lieu_signature',
+        'date_signature',
         'created_at',
         'updated_at',
         'deleted_at'
@@ -72,8 +86,8 @@ class ContratsDeBail extends Model
         return $this->belongsTo(Bien::class);
     }
 
-    public function contrat_de_bail_locataires()
+    public function locataire()
     {
-        return $this->hasMany(ContratDeBailLocataire::class, 'contrat_de_bail_id');
+        return $this->belongsTo(Locataire::class);
     }
 }

@@ -3,7 +3,10 @@
 namespace Database\Seeders;
 
 use App\Models\Bien;
+use App\Models\ContratDeBail;
 use App\Models\ContratsDeBail;
+use App\Models\Locataire;
+use Carbon\Carbon;
 use Faker\Factory;
 use Illuminate\Database\Seeder;
 
@@ -16,24 +19,44 @@ class ContratsDeBailSeeder extends Seeder
     {
         $faker = Factory::create();
 
+        // Récupérer tous les locataires
+        $locataires = Locataire::all();
+
+        // Récupérer tous les biens
         $biens = Bien::all();
 
-        foreach ($biens as $bien) {
-            $nbContrats = rand(1, 3); // Créer entre 1 et 3 contrats pour chaque bien
-            for ($i = 0; $i < $nbContrats; $i++) {
-                ContratsDeBail::create([
-                    'bien_id' => $bien->id,
-                    // 'loyer_mensuel' => $bien->loyer_mensuel,
-                    'depot_de_garantie' => $bien->loyer_mensuel * 2,
-                    // 'adresse_bien' => $bien->adresse_bien,
-                    'description' => $faker->paragraph(),
-                    'renouvellement_automatique' => $faker->boolean,
-                    'penalite_retard' => $faker->randomFloat(2, 10, 50),
-                    'type_bien' => $bien->type_bien,
-                    'statut_bien' => $bien->statut_bien,
-                    'conditions' => $faker->paragraph(),
-                ]);
-            }
+        foreach ($locataires as $locataire) {
+            // Sélectionner un bien au hasard pour ce locataire
+            $bien = $biens->random();
+            $frequencepaiement = $faker->randomElement(['Mensuel', 'Trimestriel', 'Semestriel', 'Annuel']);
+            $dateDebut = Carbon::now()->startOfMonth();
+            $dateFin = $dateDebut->copy()->addYear();
+
+            // Créer un contrat de bail pour ce locataire et ce bien
+            ContratsDeBail::create([
+                'locataire_id' => $locataire->id,
+                'bien_id' => $bien->id,
+                'reference' => strtoupper($faker->unique()->lexify('CONTRAT-????')),
+                'caution' => $faker->numberBetween(1000, 5000),
+                'caution_eau' => $faker->numberBetween(50, 200),
+                'caution_electricite' => $faker->numberBetween(50, 200),
+                'clauses_specifiques1' => $faker->paragraph(),
+                'clauses_specifiques2' => $faker->paragraph(),
+                'clauses_specifiques3' => $faker->paragraph(),
+                'clauses_specifiques4' => $faker->paragraph(),
+                'clauses_specifiques5' => $faker->paragraph(),
+                'clauses_specifiques6' => $faker->paragraph(),
+                'date_debut' => $dateDebut,
+                'date_fin' => $dateFin,
+                'montant_total_frequence' => $faker->randomFloat(2, 100, 1500),
+                'frequence_paiement' => $frequencepaiement,
+                'penalite_retard' => $faker->numberBetween(1, 50),
+                'mode_paiement' => $faker->randomElement(['virement', 'espèces', 'chèque']),
+                'renouvellement_automatique' => $faker->boolean(),
+                'statut_contrat' => $faker->randomElement(['actif', 'terminé', 'suspendu']),
+                'lieu_signature' => $faker->city,
+                'date_signature' => $faker->date(),
+            ]);
         }
     }
 }

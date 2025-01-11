@@ -36,12 +36,9 @@ class ContratDeBailLocataire extends Model
     protected $casts = [
         'locataire_id' => 'int',
         'contrat_de_bail_id' => 'int',
-        'complement_au_loyer' => 'float',
-        'montant_restant' => 'float',
-        'montant_total_periode' => 'float',
+        'montant_total_frequence' => 'float',
         'date_debut' => 'date',
         'date_fin' => 'date',
-        'echeance_paiement' => 'date'
     ];
 
     protected $fillable = [
@@ -49,12 +46,11 @@ class ContratDeBailLocataire extends Model
         'contrat_de_bail_id',
         'date_debut',
         'date_fin',
-        'complement_au_loyer',
-        'montant_restant',
-        'montant_total_periode',
-        'periode_paiement',
-        'statut_paiement',
-        'echeance_paiement',
+        'renouvellement_automatique',
+        'montant_total_frequence',
+        'frequence_paiement',
+        'mode_paiement',
+        'statut_contrat',
         'created_at',
         'updated_at',
         'deleted_at'
