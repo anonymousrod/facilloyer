@@ -4,6 +4,7 @@ use App\Http\Controllers\DemandeMaintenanceController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AgentImmobilierController;
+use App\Http\Controllers\ArticleContratBailController;
 use App\Http\Controllers\BienController;
 use App\Http\Controllers\ContratDeBailController;
 use App\Http\Controllers\DashboardController;
@@ -11,8 +12,7 @@ use App\Http\Controllers\ExportListePDF;
 use App\Http\Controllers\LocataireBienController;
 use App\Http\Controllers\LocataireController;
 use App\Http\Controllers\PaiementController;
-
-
+use App\Models\ArticleContratBail;
 
 Route::get('/', function () {
     return view('welcome');
@@ -141,6 +141,8 @@ Route::delete('/biens/{bien}/unassign-locataire', [LocataireBienController::clas
 
 //route contrat de bail
 Route::resource('/Contrat_de_bail', ContratDeBailController::class)->names('contrat');
+//route article
+Route::resource('/Article_contrat_bail', ArticleContratBailController::class)->names('article');
 
 
 

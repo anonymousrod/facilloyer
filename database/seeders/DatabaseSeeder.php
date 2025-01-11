@@ -25,6 +25,7 @@ class DatabaseSeeder extends Seeder
         $this->call(ContratsDeBailSeeder::class);
         $this->call(LocataireSeeder::class);
         $this->call(PaiementSeeder::class);
+        $this->call(ArticleContratBailSeeder::class);
 
     }
 }
