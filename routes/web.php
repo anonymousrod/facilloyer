@@ -4,6 +4,7 @@ use App\Http\Controllers\DemandeMaintenanceController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AgentImmobilierController;
+use App\Http\Controllers\ArticleContratBailController;
 use App\Http\Controllers\BienController;
 use App\Http\Controllers\ContratDeBailController;
 use App\Http\Controllers\DashboardController;
@@ -28,13 +29,20 @@ Route::get('/change-language/{lang}', function ($lang) {
     return redirect()->back();
 })->name('change.language');
 
+
+// route modifiez mon prodfill locataire
+
+Route::get('/locataire/{id}/locashow', [LocataireController::class, 'showInformations'])
+->name('locataire.locashow');
+
+Route::middleware(['auth'])->group(function () {
+
+
 // Assurez-vous que cette route est placée AVANT les routes resource
-Route::get('/locataire/{id}/locainformations', [LocataireController::class, 'showInformations'])
-    ->name('locataire.locainformations');
+Route::get('/locataire/agentinfo', [LocataireController::class, 'agenceImmobiliereAssociee'])->name('locataire.agentinfo');
 
-Route::get('/locataire/{id}/agentinfo', [LocataireController::class, 'showAgentInfo'])
-->name('locataire.agentinfo');
 
+});
 // noté agence
 Route::put('/agent/evaluation/{id}', [AgentImmobilierController::class, 'updateEvaluation'])
 ->name('agent.updateEvaluation');
@@ -97,8 +105,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/locataire/paiements/{id}/quittance', [PaiementController::class, 'generateQuittance'])
         ->name('locataire.paiements.quittance');
 
-    Route::get('/locataire/paiements/{id}/details', [PaiementController::class, 'show'])
-    ->name('locataire.paiements.show');
+    Route::get('/locataire/paiements/{id}/detail', [PaiementController::class, 'show'])->name('locataire.paiements.detail');
 
 
 });
@@ -200,6 +207,8 @@ Route::delete('/biens/{bien}/unassign-locataire', [LocataireBienController::clas
 
 //route contrat de bail
 Route::resource('/Contrat_de_bail', ContratDeBailController::class)->names('contrat');
+//route article
+Route::resource('/Article_contrat_bail', ArticleContratBailController::class)->names('article');
 
 
 

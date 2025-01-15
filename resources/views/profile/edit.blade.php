@@ -1,5 +1,5 @@
 @extends('layouts.master_dash')
-@section('title', 'Modifier le Profil')
+@section('title', 'Parametre Profil')
 @section('content')
 <div class="container-xxl">
     <div class="row justify-content-center">

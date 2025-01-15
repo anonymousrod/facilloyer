@@ -3,6 +3,7 @@
 
 @section('styles')
 <style>
+    /* Conteneur de la table avec scroll vertical */
     .table-container {
         max-height: 400px; /* Limite la hauteur pour activer le scroll */
         overflow-y: auto;
@@ -12,12 +13,14 @@
         background-color: #f9fafb;
     }
 
+    /* Style général de la table */
     .table {
         margin-bottom: 0;
         width: 100%;
         border-collapse: collapse;
     }
 
+    /* Style des en-têtes de table */
     .table thead th {
         background-color: #f1f5f9;
         position: sticky;
@@ -27,28 +30,57 @@
         padding: 0.75rem;
     }
 
+    /* Style des lignes paires de la table */
     .table tbody tr:nth-child(even) {
         background-color: #f8fafc;
     }
 
+    /* Style des lignes au survol */
     .table tbody tr:hover {
         background-color: #e5e7eb;
     }
 
+    /* Icônes d'actions (vue, télécharger) */
     .action-icons i {
         font-size: 1.25rem;
         cursor: pointer;
         margin-right: 1rem;
     }
 
+    /* Changement de couleur des icônes au survol */
     .action-icons i:hover {
         color: #007bff;
     }
 
-    /* Pour garantir la responsivité */
-    @media (max-width: 576px) {
+    /* Responsivité : ajustements pour les petites tailles d'écran */
+    @media (max-width: 768px) {
+        .table thead th {
+            font-size: 0.875rem; /* Réduit la taille de la police des entêtes sur petits écrans */
+        }
+
+        .table tbody td {
+            font-size: 0.875rem; /* Réduit la taille de la police des cellules sur petits écrans */
+        }
+
         .action-icons i {
-            font-size: 1.1rem;
+            font-size: 1.1rem; /* Réduit la taille des icônes sur petits écrans */
+        }
+    }
+
+    @media (max-width: 576px) {
+        /* Cache certaines colonnes sur des écrans très petits pour économiser de l'espace */
+        .table td:nth-child(3), .table td:nth-child(4) {
+            display: none;
+        }
+
+        /* Ajuste la taille des icônes sur très petits écrans */
+        .action-icons i {
+            font-size: 1rem;
+        }
+
+        /* Ajoute un scroll horizontal pour les petites tailles */
+        .table-container {
+            overflow-x: auto;
         }
     }
 </style>
@@ -76,12 +108,12 @@
                             <tbody>
                                 @forelse($paiements as $paiement)
                                 <tr>
-                                    <td>{{ $paiement->date->format('d/m/Y') }}</td>
+                                    <td>{{ $paiement->date_debut_frequence ? $paiement->date_debut_frequence->format('d/m/Y') : 'Date non disponible' }}</td>
                                     <td>#{{ str_pad($paiement->id, 6, '0', STR_PAD_LEFT) }}</td>
-                                    <td><strong>{{ number_format($paiement->montant, 2, ',', ' ') }} €</strong></td>
+                                    <td><strong>{{ number_format($paiement->montant_paye, 2, ',', ' ') }} FCFA</strong></td>
                                     <td class="action-icons">
                                         <!-- Icône Vue (Détails) -->
-                                        <a href="{{ route('locataire.paiements.show', $paiement->id) }}">
+                                        <a href="{{ route('locataire.paiements.detail', $paiement->id) }}">
                                             <i class="las la-eye fs-4"></i>
                                         </a>
                                         <!-- Icône Télécharger -->
@@ -99,7 +131,6 @@
                         </table>
                     </div>
                 </div>
-               
             </div>
         </div>
     </div>

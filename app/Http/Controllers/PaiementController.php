@@ -11,6 +11,8 @@ use PDF; // Si vous utilisez barryvdh/laravel-dompdf
 use Illuminate\Support\Facades\DB;
 use App\Models\ContratDeBailLocataire;
 use App\Models\Locataire;
+use Illuminate\Support\Facades\Schema;
+
 
 
 
@@ -22,28 +24,28 @@ public function historique()
     {
         $user = Auth::user();
         $locataire = $user->locataires()->first();
-    
+        
         if (!$locataire) {
             return redirect()->route('dashboard')
                 ->with('error', 'Accès non autorisé.');
         }
     
-        $paiements = Paiement::with(['bien'])
-            ->where('locataire_id', $locataire->id)
-            ->where('montant', '>', 0) // Filtre pour les paiements effectués
-            ->orderBy('date', 'desc')
-            ->get();
+        // Récupérer les derniers paiements avec pagination pour un scroll infini
+        $paiements = Paiement::where('locataire_id', $locataire->id)
+            ->orderBy('date_debut_frequence', 'desc') // Trie par la date de début de la fréquence des paiements
+            ->paginate(10); // 10 paiements par page pour la pagination
     
+        // Optionnel : calculer des statistiques
         $stats = [
-            'total_paye' => $paiements->sum('montant'),
+            'total_paye' => $paiements->sum('montant_paye'),
             'nombre_paiements' => $paiements->count(),
-            'montant_moyen' => $paiements->count() > 0 ? $paiements->sum('montant') / $paiements->count() : 0,
+            'montant_moyen' => $paiements->count() > 0 ? $paiements->sum('montant_paye') / $paiements->count() : 0,
         ];
     
+        // Retourner la vue avec les paiements paginés
         return view('locataire.paiements.historique', compact('paiements', 'stats'));
     }
     
-
 
 
 public function store(Request $request)
@@ -85,72 +87,41 @@ public function store(Request $request)
             ]);
         }
     
-    
-
 public function show($id)
-    {
-        $user = Auth::user();
-        $locataire = $user->locataires()->first();
-
-        if (!$locataire) {
-            return redirect()->route('dashboard')
-                ->with('error', 'Accès non autorisé.');
+        {
+            // Récupération de l'utilisateur connecté (locataire)
+            $user = Auth::user();
+            $locataire = $user->locataires()->first();
+        
+            // Vérification si le locataire a le paiement
+            $paiement = Paiement::with('bien') // Charger également les informations du logement (bien)
+                ->where('locataire_id', $locataire->id)
+                ->findOrFail($id); // Trouver le paiement par ID ou retourner une erreur 404
+        
+            // Calcul du montant payé (même si dans ce cas c'est déjà dans l'objet $paiement)
+            $montantPaye = $paiement->montant_paye;
+        
+            // Passer les données à la vue
+            return view('locataire.paiements.detail', compact('paiement', 'montantPaye'));
         }
-
-        $paiement = Paiement::with(['bien.agent_immobilier', 'locataire'])
-            ->where('locataire_id', $locataire->id)
-            ->findOrFail($id);
-
-        // Calcul du montant total payé pour la période
-        $montantTotalPaye = Paiement::where('locataire_id', $locataire->id)
-            ->where('bien_id', $paiement->bien_id)
-            ->whereMonth('date', $paiement->date->month)
-            ->whereYear('date', $paiement->date->year)
-            ->sum('montant');
-
-        // Calcul du montant restant
-        $loyerMensuel = $paiement->bien->loyer_mensuel ?? $paiement->montant_total_periode;
-        $montantRestant = max(0, $loyerMensuel - $montantTotalPaye);
-
-        return view('locataire.paiements.show', compact('paiement', 'montantRestant', 'loyerMensuel'));
-    }
+         
 
     
 
 public function generateQuittance($id)
-    {
-        $user = Auth::user();
-        $locataire = $user->locataires()->first();
-
-        if (!$locataire) {
-            return redirect()->route('dashboard')
-                ->with('error', 'Accès non autorisé.');
-        }
-
-        $paiement = Paiement::with(['bien.agent_immobilier', 'locataire'])
-            ->where('locataire_id', $locataire->id)
-            ->findOrFail($id);
-
-        // Calcul du montant total payé pour la période
-        $montantTotalPaye = Paiement::where('locataire_id', $locataire->id)
-            ->where('bien_id', $paiement->bien_id)
-            ->whereMonth('date', $paiement->date->month)
-            ->whereYear('date', $paiement->date->year)
-            ->sum('montant');
-
-        // Calcul du montant restant
-        $loyerMensuel = $paiement->bien->loyer_mensuel ?? $paiement->montant_total_periode;
-        $montantRestant = max(0, $loyerMensuel - $montantTotalPaye);
-
-        // Ajout des montants calculés au paiement
-        $paiement->montant_total_periode = $loyerMensuel;
-        $paiement->montant_restant = $montantRestant;
-
-        $pdf = PDF::loadView('locataire.paiements.quittance', compact('paiement'));
+        {
+            // Récupérer les informations du paiement à partir de l'ID
+            $paiement = Paiement::findOrFail($id);
+            
+            // Récupérer les informations du bien
+            $bien = $paiement->bien;
         
-        return $pdf->download('quittance-' . str_pad($paiement->id, 6, '0', STR_PAD_LEFT) . '.pdf');
-    }
-
+            // Passer les données à la vue
+            $pdf = PDF::loadView('locataire.paiements.quittance', compact('paiement', 'bien'));
+        
+            // Retourner le PDF généré en tant que téléchargement
+            return $pdf->download("quittance_paiement_{$paiement->id}.pdf");
+        }
 
     
     

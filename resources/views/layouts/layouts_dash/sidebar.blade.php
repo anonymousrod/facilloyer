@@ -164,14 +164,16 @@
                         <!-- Informations de l’agence ou de l’agent -->
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('locataire.agentinfo', Auth::user()->id) }}">
-                                <i class="iconoir-phone menu-icon"></i> <!-- Icône pour infos de l'agent/agence -->
+                                <i class="iconoir-phone menu-icon"></i>
                                 <span>Informations de l’agence ou de l’agent</span>
                             </a>
-                        </li><!--end nav-item-->
+                        </li>
+
 
                         <!-- Modifier Mon Profil -->
+                         
                         <li class="nav-item">
-                            <a class="nav-link" href="{{route('locataire.locainformations', Auth::user()->id)}}">
+                            <a class="nav-link" href="{{ route('locataire.locashow', Auth::user()->id) }}">
                                 <i class="iconoir-user menu-icon"></i> <!-- Icône pour modification de profil -->
                                 <span>Modifier Mon Profil</span>
                             </a>
@@ -251,18 +253,17 @@
                                 <a class="nav-link" href="#sidebarGerer_contrat_bail" data-bs-toggle="collapse"
                                     role="button" aria-expanded="false" aria-controls="sidebarGerer_contrat_bail">
                                     <i class="iconoir-view-grid menu-icon"></i>
-                                    <span>Gérer les contrats de bail</span>
+                                    <span>Gestion des Articles</span>
                                 </a>
                                 <div class="collapse " id="sidebarGerer_contrat_bail">
                                     <ul class="nav flex-column">
 
 
                                         <li class="nav-item">
-                                            <a class="nav-link" href="apps-chat.html">Créer contrat de bail</a>
+                                            <a class="nav-link" href="{{route('article.create')}}">Créer un article</a>
                                         </li><!--end nav-item-->
                                         <li class="nav-item">
-                                            <a class="nav-link" href="apps-contact-list.html"> Lise des contrat de
-                                                bail</a>
+                                            <a class="nav-link" href="{{route('article.index')}}"> Lise des Articles</a>
                                         </li><!--end nav-item-->
 
 

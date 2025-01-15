@@ -132,7 +132,7 @@
                              <!-- POUR LE LOCATAIRE -->
                             @if (Auth::user()->id_role == 2)
 
-                            <a class="dropdown-item" href="{{route('locataire.locainformations', Auth::user()->id)}}"><i
+                            <a class="dropdown-item" href="{{route('locataire.locashow', Auth::user()->id)}}"><i
                                     class="las la-user fs-18 me-1 align-text-bottom" ></i>Completez Mon Profil</a>
                             <a class="dropdown-item" href="pages-faq.html"><i
                                     class="las la-question-circle fs-18 me-1 align-text-bottom"></i> Help Center</a>
