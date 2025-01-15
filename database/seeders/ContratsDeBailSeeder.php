@@ -43,6 +43,7 @@ class ContratsDeBailSeeder extends Seeder
             $montantTotalFrequence = $loyerMensuel * $nombreMois;
 
             // Créer un contrat de bail pour ce locataire et ce bien
+
             ContratsDeBail::create([
                 'locataire_id' => $locataire->id,
                 'bien_id' => $bien->id,
@@ -50,12 +51,6 @@ class ContratsDeBailSeeder extends Seeder
                 'caution' => $faker->numberBetween(1000, 5000),
                 'caution_eau' => $faker->numberBetween(50, 200),
                 'caution_electricite' => $faker->numberBetween(50, 200),
-                'clauses_specifiques1' => $faker->paragraph(),
-                'clauses_specifiques2' => $faker->paragraph(),
-                'clauses_specifiques3' => $faker->paragraph(),
-                'clauses_specifiques4' => $faker->paragraph(),
-                'clauses_specifiques5' => $faker->paragraph(),
-                'clauses_specifiques6' => $faker->paragraph(),
                 'date_debut' => $dateDebut,
                 'date_fin' => $dateFin,
                 'montant_total_frequence' => $montantTotalFrequence,  // Calculé selon le loyer mensuel et la fréquence
@@ -66,7 +61,8 @@ class ContratsDeBailSeeder extends Seeder
                 'statut_contrat' => $faker->randomElement(['actif', 'terminé', 'suspendu']),
                 'lieu_signature' => $faker->city,
                 'date_signature' => $faker->date(),
-            ]);
+            ])
+            ;
         }
     }
 }

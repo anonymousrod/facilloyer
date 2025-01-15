@@ -68,14 +68,11 @@ class ContratsDeBail extends Model
         'caution',
         'caution_eau',
         'caution_electricite',
-        'clauses_specifiques1',
-        'clauses_specifiques2',
-        'clauses_specifiques3',
-        'clauses_specifiques4',
-        'clauses_specifiques5',
-        'clauses_specifiques6',
+
         'lieu_signature',
         'date_signature',
+        'signature_agent_immobilier',
+        'signature_locataire',
         'created_at',
         'updated_at',
         'deleted_at'

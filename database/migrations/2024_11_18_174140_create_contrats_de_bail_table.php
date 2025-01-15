@@ -23,13 +23,7 @@ return new class extends Migration
             $table->float('caution_eau')->nullable();
             $table->float('caution_electricite')->nullable();
             // $table->string('adresse_bien');
-            // Clauses spécifiques
-            $table->text('clauses_specifiques1')->nullable();
-            $table->text('clauses_specifiques2')->nullable();
-            $table->text('clauses_specifiques3')->nullable();
-            $table->text('clauses_specifiques4')->nullable();
-            $table->text('clauses_specifiques5')->nullable();
-            $table->text('clauses_specifiques6')->nullable();
+
             //new
             $table->date('date_debut');//du contrat
             $table->date('date_fin')->nullable();//du contrat
@@ -43,6 +37,8 @@ return new class extends Migration
             // Signatures
             $table->string('lieu_signature');
             $table->date('date_signature');
+            $table->longText('signature_agent_immobilier')->nullable();
+            $table->longText('signature_locataire')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

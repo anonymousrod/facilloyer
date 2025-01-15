@@ -1,17 +1,17 @@
-<script src="{{asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js')}} "></script>
+<script src="{{ asset('assets/libs/bootstrap/js/bootstrap.bundle.min.js') }} "></script>
 
-<script src="{{asset('assets/libs/apexcharts/apexcharts.min.js')}} "></script>
-<script src="{{asset('assets/data/stock-prices.js')}} "></script>
-<script src="{{asset('assets/libs/jsvectormap/js/jsvectormap.min.js')}} "></script>
-<script src="{{asset('assets/libs/jsvectormap/maps/world.js')}} "></script>
-<script src="{{asset('assets/js/pages/index.init.js')}} "></script>
-<script src="{{asset('assets/js/app.js')}} "></script>
+<script src="{{ asset('assets/libs/apexcharts/apexcharts.min.js') }} "></script>
+<script src="{{ asset('assets/data/stock-prices.js') }} "></script>
+<script src="{{ asset('assets/libs/jsvectormap/js/jsvectormap.min.js') }} "></script>
+<script src="{{ asset('assets/libs/jsvectormap/maps/world.js') }} "></script>
+<script src="{{ asset('assets/js/pages/index.init.js') }} "></script>
+<script src="{{ asset('assets/js/app.js') }} "></script>
 
 {{-- script pour tables --}}
 
-<script src="{{asset('assets/libs/simple-datatables/umd/simple-datatables.js')}} "></script>
-<script src="{{asset('assets/js/pages/datatable.init.js')}} "></script>
- <!-- script pour page edit -->
+<script src="{{ asset('assets/libs/simple-datatables/umd/simple-datatables.js') }} "></script>
+<script src="{{ asset('assets/js/pages/datatable.init.js') }} "></script>
+<!-- script pour page edit -->
 
 <script src="assets/libs/simplebar/simplebar.min.js"></script>
 <script src="assets/libs/tobii/js/tobii.min.js"></script>
@@ -24,38 +24,43 @@
         const toggleStatusButtons = document.querySelectorAll('.toggle-status');
 
         toggleStatusButtons.forEach(button => {
-            button.addEventListener('change', function () {
+            button.addEventListener('change', function() {
                 const locataireId = this.dataset.id;
                 const isChecked = this.checked;
                 const statusLabel = this.nextElementSibling;
 
                 // Confirmation message
-                const confirmation = confirm(`Êtes-vous sûr de vouloir ${isChecked ? 'activer' : 'désactiver'} ce locataire ?`);
+                const confirmation = confirm(
+                    `Êtes-vous sûr de vouloir ${isChecked ? 'activer' : 'désactiver'} ce locataire ?`
+                );
 
                 if (confirmation) {
                     // Envoyer la requête au backend pour mettre à jour le statut
                     fetch(`/locataires/${locataireId}/toggle-status`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        body: JSON.stringify({ statut: isChecked })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.success) {
-                            statusLabel.textContent = isChecked ? 'Activé' : 'Désactivé';
-                        } else {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            },
+                            body: JSON.stringify({
+                                statut: isChecked
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                statusLabel.textContent = isChecked ? 'Activé' :
+                                    'Désactivé';
+                            } else {
+                                alert('Une erreur s\'est produite. Veuillez réessayer.');
+                                this.checked = !isChecked; // Rétablir l'ancien état
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Erreur :', error);
                             alert('Une erreur s\'est produite. Veuillez réessayer.');
                             this.checked = !isChecked; // Rétablir l'ancien état
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Erreur :', error);
-                        alert('Une erreur s\'est produite. Veuillez réessayer.');
-                        this.checked = !isChecked; // Rétablir l'ancien état
-                    });
+                        });
                 } else {
                     this.checked = !isChecked; // Rétablir l'ancien état si annulation
                 }
@@ -82,3 +87,72 @@
 
 <!-- pour les icones -->
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+
+{{-- script pour voir plus de la page bien_detail --}}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var seeMoreBtn = document.getElementById("see-more-btn");
+        var contratDetails = document.getElementById("contrat-details");
+
+        seeMoreBtn.addEventListener("click", function() {
+            if (contratDetails.style.display === "none") {
+                contratDetails.style.display = "block";
+                seeMoreBtn.textContent = "Voir moins";
+            } else {
+                contratDetails.style.display = "none";
+                seeMoreBtn.textContent = "Voir plus";
+            }
+        });
+    });
+</script>
+
+{{-- script pour js signature_pad --}}
+{{-- <script src=" {{ asset('node_modules/signature_pad/dist/signature_pad.umd.min.js')}} "></script> --}}
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+
+
+<script>
+    // Fonction d'initialisation pour SignaturePad Agent Immobilier
+    var signatureAgentCanvas = document.getElementById('signatureAgent');
+
+    if (signatureAgentCanvas) {
+        var signatureAgentPad = new SignaturePad(signatureAgentCanvas, {
+            backgroundColor: 'rgba(255, 255, 255, 0)', // Fond transparent
+            penColor: 'black'
+        });
+
+        document.getElementById('clearAgent').addEventListener('click', function() {
+            signatureAgentPad.clear();
+        });
+    }
+
+    // Fonction d'initialisation pour SignaturePad Locataire
+    var signatureLocataireCanvas = document.getElementById('signatureLocataire');
+    if (signatureLocataireCanvas) {
+        var signatureLocatairePad = new SignaturePad(signatureLocataireCanvas, {
+            backgroundColor: 'rgba(255, 255, 255, 0)',
+            penColor: 'black'
+        });
+
+        document.getElementById('clearLocataire').addEventListener('click', function() {
+            signatureLocatairePad.clear();
+        });
+    }
+</script>
+<script>
+    document.querySelector('form').addEventListener('submit', function (event) {
+    // Capture la signature de l'agent immobilier
+    if (signatureAgentPad && !signatureAgentPad.isEmpty()) {
+        document.getElementById('signatureAgentInput').value = signatureAgentPad.toDataURL('image/png');
+    }
+
+    // Capture la signature du locataire
+    if (signatureLocatairePad && !signatureLocatairePad.isEmpty()) {
+        document.getElementById('signatureLocataireInput').value = signatureLocatairePad.toDataURL('image/png');
+    }
+
+    // Vérification dans la console des valeurs des champs cachés
+    console.log(document.getElementById('signatureAgentInput').value);
+    console.log(document.getElementById('signatureLocataireInput').value);
+</script>
+

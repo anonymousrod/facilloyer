@@ -17,11 +17,14 @@ class ArticleContratBailSeeder extends Seeder
         $agents = AgentImmobilier::all();
 
         foreach ($agents as $agent) {
-            ArticleContratBail::create([
-                'agent_immobilier_id' => $agent->id,
-                'titre_article' => $faker->sentence(),
-                'contenu_article' => $faker->paragraph(5),
-            ]);
+            for ($i=0; $i < 6 ; $i++) {
+                # code...
+                ArticleContratBail::create([
+                    'agent_immobilier_id' => $agent->id,
+                    'titre_article' => $faker->sentence(),
+                    'contenu_article' => $faker->paragraph(5),
+                ]);
+            }
         }
     }
 }

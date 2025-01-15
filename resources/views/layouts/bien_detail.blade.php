@@ -169,157 +169,259 @@
                                 D’AUTRE PART,
                             </p>
 
-                            <p>IL A ÉTÉ CONVENU CE QUI SUIT :</p>
+                            <div id="contrat-details" style="display: none;">
+                                <p>IL A ÉTÉ CONVENU CE QUI SUIT :</p>
 
-                            <h6>ARTICLE 1 : OBJET DU CONTRAT</h6>
-                            <p>
-                                L’Agent Immobilier met à disposition du Locataire, en son nom propre ou en qualité de
-                                mandataire du propriétaire, un bien immobilier situé à
-                                <strong>{{ $bien->adresse_bien }}</strong>. Ce bien est destiné à un usage exclusivement
-                                résidentiel et ne pourra être utilisé pour d’autres fins sans l’autorisation écrite de
-                                l’Agent Immobilier.
-                            </p>
+                                <h6>ARTICLE 1 </u> : OBJET DU CONTRAT</h6>
 
-                            <h6>ARTICLE 2 : DESCRIPTION DU BIEN</h6>
-                            <p>
-                                Le bien loué est décrit comme suit :
-                            <ul>
-                                <li>Superficie : {{ $bien->superficie }} m²</li>
-                                <li>Nombre de pièces totale : {{ $bien->nombre_de_piece }} (incluant
-                                    {{ $bien->nbr_chambres }} chambres, {{ $bien->nombre_de_salon }} salons,
-                                    {{ $bien->nombre_de_cuisine }} cuisine, {{ $bien->nbr_salles_de_bain }} salles de
-                                    bains )</li>
-                                <li>Équipements : {{ $bien->description }}</li>
-                            </ul>
-                            L'ensemble faisant l'objet d'un titre de propriété, tel que ces locaux existent et se
-                            comportentsans qu'il ne soit nécessaire d'en faire une plus grand description, <strong>le
-                                Preneur déclarant bien connaître les lieux et locaux pour les avoir visités</strong>.
-                            </p>
+                                <p>
+                                    L’Agent Immobilier met à disposition du Locataire, en son nom propre ou en qualité de
+                                    mandataire du propriétaire, un bien immobilier situé à
+                                    <strong>{{ $bien->adresse_bien }}</strong>. Ce bien est destiné à un usage
+                                    exclusivement
+                                    résidentiel et ne pourra être utilisé pour d’autres fins sans l’autorisation écrite de
+                                    l’Agent Immobilier.
+                                </p>
 
-                            @php
-                                $nombreAnnees = str_pad(
-                                    floor($contrat->date_debut->diffInMonths($contrat->date_fin) / 12),
-                                    2,
-                                    '0',
-                                    STR_PAD_LEFT,
-                                );
-                                $renouvelable = $contrat->renouvellement_automatique
-                                    ? 'Renouvelable'
-                                    : 'Non renouvelable';
-                            @endphp
+                                <h6>ARTICLE 2 </u> : DESCRIPTION DU BIEN</h6>
+                                <p>
+                                    Le bien loué est décrit comme suit :
+                                <ul>
+                                    <li>Superficie : {{ $bien->superficie }} m²</li>
+                                    <li>Nombre de pièces totale : {{ $bien->nombre_de_piece }} (incluant
+                                        {{ $bien->nbr_chambres }} chambres, {{ $bien->nombre_de_salon }} salons,
+                                        {{ $bien->nombre_de_cuisine }} cuisine, {{ $bien->nbr_salles_de_bain }} salles de
+                                        bains )</li>
+                                    <li>Équipements : {{ $bien->description }}</li>
+                                </ul>
+                                L'ensemble faisant l'objet d'un titre de propriété, tel que ces locaux existent et se
+                                comportentsans qu'il ne soit nécessaire d'en faire une plus grand description, <strong>le
+                                    Preneur déclarant bien connaître les lieux et locaux pour les avoir visités</strong>.
+                                </p>
+
+                                @php
+                                    $nombreAnnees = str_pad(
+                                        floor($contrat->date_debut->diffInMonths($contrat->date_fin) / 12),
+                                        2,
+                                        '0',
+                                        STR_PAD_LEFT,
+                                    );
+                                    $renouvelable = $contrat->renouvellement_automatique
+                                        ? 'Renouvelable'
+                                        : 'Non renouvelable';
+                                @endphp
 
 
 
-                            <h6>ARTICLE 3 : DURÉE DU CONTRAT</h6>
-                            <p>
-                                Le présent contrat est consenti et accepté pour une durée de
-                                {{ $contrat->date_debut->diffInMonths($contrat->date_fin) }} mois
-                                <strong> ({{ $nombreAnnees }} an(s)) {{ $renouvelable }}</strong>,
-                                débutant le
-                                <strong>{{ $contrat->date_debut->format('d/m/Y') }}</strong> et se terminant le
-                                <strong>{{ $contrat->date_fin->format('d/m/Y') }}</strong>.
-                                @if ($renouvelable == 'Renouvelable')
-                                    À son expiration, le contrat pourra être renouvelé automatiquement pour une durée
-                                    identique,
-                                    sauf dénonciation par l’une des parties .
+                                <h6>ARTICLE 3 </u> : DURÉE DU CONTRAT</h6>
+                                <p>
+                                    Le présent contrat est consenti et accepté pour une durée de
+                                    {{ $contrat->date_debut->diffInMonths($contrat->date_fin) }} mois
+                                    <strong> ({{ $nombreAnnees }} an(s)) {{ $renouvelable }}</strong>,
+                                    débutant le
+                                    <strong>{{ $contrat->date_debut->format('d/m/Y') }}</strong> et se terminant le
+                                    <strong>{{ $contrat->date_fin->format('d/m/Y') }}</strong>.
+                                    @if ($renouvelable == 'Renouvelable')
+                                        À son expiration, le contrat pourra être renouvelé automatiquement pour une durée
+                                        identique,
+                                        sauf dénonciation par l’une des parties .
+                                    @endif
+                                    Chacune des parties aura la faculté de dénoncer le contrat, a charge pour elle de
+                                    prévenire
+                                    l'autre partie au moin <strong> trois (03) mois</strong> à l'avance par lettre
+                                    recommandée
+                                    avec accusé de réception, de son intention de mettre fin à la location
+
+                                </p>
+
+                                <h6>ARTICLE 4</u> : LOYER ET MODALITÉS DE PAIEMENT</h6>
+                                @php
+                                    // Calculer le montant en fonction de la fréquence de paiement
+                                    $frequences = [
+                                        'mois' => 1,
+                                        'bimestre' => 2,
+                                        'trimestre' => 3,
+                                    ];
+                                    $multiplicateur = $frequences[$contrat->frequence_paiement] ?? 1; // Par défaut, 1 si la fréquence n'est pas reconnue
+                                    $montant = $bien->loyer_mensuel * $multiplicateur;
+
+                                @endphp
+                                @php
+                                    // Convertir la fréquence en jours si c'est une période (mois, bimestre, trimestre)
+$frequences = [
+    'mois' => 30,
+    'bimestre' => 60,
+    'trimestre' => 90,
+];
+$delai_retard =
+    $frequences[$contrat->frequence_paiement] ?? $contrat->frequence_paiement; // Par défaut, la valeur brute si non reconnue
+
+// Formater la pénalité (ajouter un symbole si nécessaire)
+$penalite = is_numeric($contrat->penalite_retard)
+    ? $contrat->penalite_retard .
+        (strpos($contrat->penalite_retard, '%') !== false ? '' : ' Francs CFA')
+                                        : $contrat->penalite_retard;
+                                @endphp
+
+                                <p>
+                                    1. Le présent contrat est consenti et accepté pour un loyer mensuel de
+                                    <strong>{{ number_format($bien->loyer_mensuel, 2) }} Francs CFA</strong> Payable par
+                                    <strong>{{ $contrat->frequence_paiement }}</strong> et d'avance
+                                    soit <strong>{{ number_format($montant, 2) }}</strong> Francs CFA.
+                                    Ce loyer est payable au plus tard le
+                                    <strong>{{ $contrat->date_debut->addMonth(1)->day }}ème
+                                        jour</strong> de chaque mois.
+                                    <br> <br>
+
+                                    2. Le preneur doit verser une caution (Dépôt de garantie) de trois (03) mois
+                                    qui lui sera restitué à la fin du contrat, déduction faite des éventuelles
+                                    réparations ou charges dues, soit <strong> {{ $contrat->caution }} Francs CFA </strong>
+                                    et
+                                    un
+                                    loyer de trois (03) mois, soit <strong>{{ $bien->loyer_mensuel * 3 }}</strong> Francs
+                                    CFA,
+                                    correspondant au trois
+                                    premier mois, avant son entrée en jouissance des lieux.
+                                    Une caution d'eau
+                                    de <strong> {{ $contrat->caution_eau }} </strong> Francs CFA doit également être
+                                    versée.
+
+                                    Le mode de paiement retenu est le paiement mobile.
+                                    En cas de retard de paiement supérieur à
+                                    <strong>{{ $delai_retard }}</strong> jours, une pénalité de
+                                    <strong>{{ $penalite }}</strong> sera appliquée.
+                                </p>
+
+
+                                @php
+                                    // Initialisation du compteur d'articles à 5
+                                    $articleCounter = 4;
+                                @endphp
+
+                                <!-- Affichage des articles de la table Article -->
+                                @if ($articles->count() > 0)
+                                    @foreach ($articles as $article)
+                                        @php $articleCounter++; @endphp
+                                        <h6>ARTICLE {{ $articleCounter }} : {{ $article->titre_article }} </h6>
+                                        <p> {{ $article->contenu_article }} </p>
+                                    @endforeach
                                 @endif
-                                Chacune des parties aura la faculté de dénoncer le contrat, a charge pour elle de prévenire
-                                l'autre partie au moin <strong> trois (03) mois</strong> à l'avance par lettre recommandée
-                                avec accusé de réception, de son intention de mettre fin à la location
 
-                            </p>
+                                <!-- Continuation des articles numérotés dynamiquement -->
+                                @php $articleCounter++; @endphp
 
-                            <h6>ARTICLE 4 : LOYER ET MODALITÉS DE PAIEMENT</h6>
-                            @php
-                                // Calculer le montant en fonction de la fréquence de paiement
-                                $frequences = [
-                                    'mois' => 1,
-                                    'bimestre' => 2,
-                                    'trimestre' => 3,
-                                ];
-                                $multiplicateur = $frequences[$contrat->frequence_paiement] ?? 1; // Par défaut, 1 si la fréquence n'est pas reconnue
-                                $montant = $bien->loyer_mensuel * $multiplicateur;
+                                <h6><u>ARTICLE {{ $articleCounter }} </u> : DATE DE PRISE D'EFFET</h6>
 
-                            @endphp
-                            @php
-                                // Convertir la fréquence en jours si c'est une période (mois, bimestre, trimestre)
-                                $frequences = [
-                                    'mois' => 30,
-                                    'bimestre' => 60,
-                                    'trimestre' => 90,
-                                ];
-                                $delai_retard =
-                                    $frequences[$contrat->frequence_paiement] ?? $contrat->frequence_paiement; // Par défaut, la valeur brute si non reconnue
+                                <P>Le present contrat commence à courir à compter du
+                                    <strong>{{ $contrat->date_debut->format('d/m/Y') }}</strong>
+                                </P>
+                                <br>
+                                <p>En fois de quoi les parties contractantes ont opposé leurs noms, cachets et signatures
+                                </p>
+                                <p>
+                                    Fait en trois (03) exemlaires originaux, remis à chaque partie.
+                                </p>
 
-                                // Formater la pénalité (ajouter un symbole si nécessaire)
-                                $penalite = is_numeric($contrat->penalite_retard)
-                                    ? $contrat->penalite_retard .
-                                        (strpos($contrat->penalite_retard, '%') !== false ? '' : ' Francs CFA')
-                                                                    : $contrat->penalite_retard;
-                            @endphp
-
-                            <p>
-                                1. Le présent contrat est consenti et accepté pour un loyer mensuel de
-                                <strong>{{ number_format($bien->loyer_mensuel, 2) }} Francs CFA</strong> Payable par
-                                <strong>{{ $contrat->frequence_paiement }}</strong> et d'avance
-                                soit <strong>{{ number_format($montant, 2) }}</strong> Francs CFA.
-                                Ce loyer est payable au plus tard le
-                                <strong>{{ $contrat->date_debut->addMonth(1)->day }}ème
-                                    jour</strong> de chaque mois.
-                                <br> <br>
-
-                                2. Le preneur doit verser une caution (Dépôt de garantie) de trois (03) mois
-                                qui lui sera restitué à la fin du contrat, déduction faite des éventuelles
-                                réparations ou charges dues, soit <strong> {{ $contrat->caution }} Francs CFA </strong> et
-                                un
-                                loyer de trois (03) mois, soit <strong>{{ $bien->loyer_mensuel * 3 }}</strong> Francs CFA,
-                                correspondant au trois
-                                premier mois, avant son entrée en jouissance des lieux.
-                                Une caution d'eau
-                                de <strong> {{ $contrat->caution_eau }} </strong> Francs CFA doit également être versée.
-
-                                Le mode de paiement retenu est le paiement mobile.
-                                En cas de retard de paiement supérieur à
-                                <strong>{{ $delai_retard }}</strong> jours, une pénalité de
-                                <strong>{{ $penalite }}</strong> sera appliquée.
-                            </p>
+                                <p>Fait à <strong>{{ $contrat->lieu_signature }}</strong>, le
+                                    <strong>{{ \Carbon\Carbon::parse($contrat->date_signature)->format('d/m/Y') }}</strong>.
 
 
+                                    {{-- <!-- Signature Agent Immobilier -->
+                                    @if (Auth::user()->role->id == '3')
+                                        <div class="col-md-6">
+                                            <p><strong>Agent Immobilier</strong></p>
+                                            @if ($contrat->signature_agent_immobilier)
+                                                <p>Signature: <img src="" alt="Signature Agent Immobilier"
+                                                        width="150"></p>
+                                                <p>{{ $bien->agent_immobilier->nom_admin }}
+                                                    {{ $bien->agent_immobilier->prenom_admin }}</p>
+                                            @else
+                                                <p>Signature :
+                                                    <canvas id="signatureAgent" class="signature-canvas"></canvas>
+                                                </p>
+                                                <button type="button" id="clearAgent"
+                                                    class="btn btn-secondary">Effacer</button>
+                                            @endif
+                                        </div>
+                                    @endif
 
-                            <h6>ARTICLE 5 : OBLIGATIONS DU LOCATAIRE</h6>
-                            <p> {{$contrat->clauses_specifiques1}} </p>
-                            <h6>ARTICLE 6 : OBLIGATIONS DE L'AGENT IMMOBILIER</h6>
-                            <p> {{$contrat->clauses_specifiques2}} </p>
-                            <h6>ARTICLE 7 : RENOUVELLEMENT DU CONTRAT</h6>
-                            <p> {{$contrat->clauses_specifiques3}} </p>
-                            <h6>ARTICLE 8 : RESILIATION DU CONTRAT</h6>
-                            <p> {{$contrat->clauses_specifiques4}} </p>
-                            <h6>ARTICLE 9 : CONFORMITE DES LIEUX LOUES</h6>
-                            <p> {{$contrat->clauses_specifiques5}} </p>
-                            <h6>ARTICLE 10 : REGLEMENT DES LITIGES</h6>
-                            <p> {{$contrat->clauses_specifiques6}} </p>
+                                    <!-- Signature Locataire -->
+                                    @if (Auth::user()->role->id == '2')
+                                        <div class="col-md-6">
+                                            <p><strong>Locataire</strong></p>
+                                            @if ($contrat->signature_locataire)
+                                                <p>Signature: <img src="" alt="Signature Locataire"
+                                                        width="150"></p>
+                                                <p>{{ $locataireAssigné->locataire->prenom }}
+                                                    {{ $locataireAssigné->locataire->nom }}</p>
+                                            @else
+                                                <p>Signature :
+                                                    <canvas id="signatureLocataire" class="signature-canvas"></canvas>
+                                                </p>
+                                                <button type="button" id="clearLocataire"
+                                                    class="btn btn-secondary">Effacer</button>
+                                            @endif
+                                        </div>
+                                    @endif --}}
+
+                                    <!-- Signature Agent Immobilier -->
+                                    @if (Auth::user()->role->id == '3')
+                                        <div class="col-md-6">
+                                            <p><strong>Agent Immobilier</strong></p>
+                                            @if ($contrat->signature_agent_immobilier)
+                                                <p>Signature: <img src="{{ $contrat->signature_agent_immobilier }}"
+                                                        alt="Signature Agent Immobilier" width="150"></p>
+                                                <p>{{ $bien->agent_immobilier->nom_admin }}
+                                                    {{ $bien->agent_immobilier->prenom_admin }}</p>
+                                            @else
+                                                <p>Signature : <canvas id="signatureAgent" class="signature-canvas"
+                                                        width="400" height="200"></canvas></p>
+                                                <button type="button" id="clearAgent"
+                                                    class="btn btn-secondary">Effacer</button>
+                                            @endif
+                                        </div>
+                                    @endif
+
+                                    <!-- Signature Locataire -->
+                                    @if (Auth::user()->role->id == '2')
+                                        <div class="col-md-6">
+                                            <p><strong>Locataire</strong></p>
+                                            @if ($contrat->signature_locataire)
+                                                <p>Signature: <img src="{{ $contrat->signature_locataire }}"
+                                                        alt="Signature Locataire" width="150"></p>
+                                                <p>{{ $locataireAssigné->locataire->prenom }}
+                                                    {{ $locataireAssigné->locataire->nom }}</p>
+                                            @else
+                                                <p>Signature : <canvas id="signatureLocataire" class="signature-canvas"
+                                                        width="400" height="200"></canvas></p>
+                                                <button type="button" id="clearLocataire"
+                                                    class="btn btn-secondary">Effacer</button>
+                                            @endif
+                                        </div>
+                                    @endif
+
+                                <form method="POST" action="{{ route('contrat.update', $contrat->id) }}">
+                                    @csrf
+                                    @method('PUT')
+
+                                    <input type="hidden" name="signature_agent" id="signatureAgentInput">
+                                    <input type="hidden" name="signature_locataire" id="signatureLocataireInput">
 
 
-                            <h6>ARTICLE 8 : SIGNATURES</h6>
-                            <p>
-                                Le présent contrat est établi en deux exemplaires originaux, remis à chaque partie.
-                            </p>
+                                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                                </form>
 
-                            <p>Fait à <strong>{{ $bien->adresse_bien }}</strong>, le
-                                <strong>{{ \Carbon\Carbon::parse($contrat->date_signature)->format('d/m/Y') }}</strong>.
 
-                            <p><strong>Signatures :</strong></p>
-                            <p>
-                                L’Agent Immobilier : <strong>{{ $bien->agent_immobilier->nom_agent }}
-                                    {{ $bien->agent_immobilier->prenom_agent }}</strong><br>
-                                Le Locataire : <strong>{{ $locataireAssigné->locataire->prenom }}
-                                    {{ $locataireAssigné->locataire->nom }}</strong>
-                            </p>
+
+
+                            </div>
+                            <button id="see-more-btn" class="btn btn-primary mt-2">Voir plus</button>
                         @else
                             <p>Aucun contrat trouvé pour ce bien et ce locataire.</p>
                         @endif
                     </div>
                 </div>
+
 
 
 
@@ -471,5 +573,12 @@
     .card-body img {
         border: 1px solid #ddd;
         /* Optionnel : ajoute un contour léger */
+    }
+
+    .signature-canvas {
+        border: 1px solid #ccc;
+        /* touch-action: none; */
+        /* Désactiver le comportement tactile natif */
+        cursor: crosshair;
     }
 </style>

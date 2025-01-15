@@ -80,4 +80,5 @@
     <!-- Custom Css -->
     {{-- <link rel="stylesheet" href=" {{ asset('assets/css/main.css') }}  ">
     <link rel="stylesheet" href=" {{ asset('assets/css/color_skins.css')}}  "> --}}
+
 </head>
