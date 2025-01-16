@@ -7,6 +7,9 @@ use App\Models\ContratDeBailLocataire;
 use App\Models\ContratsDeBail;
 use App\Models\Locataire;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+
 
 class ContratDeBailController extends Controller
 {
@@ -45,12 +48,7 @@ class ContratDeBailController extends Controller
             'caution_eau' => 'nullable|numeric',
             'caution_electricite' => 'nullable|numeric',
             'montant_total_frequence' => 'nullable|numeric',
-            'clauses_specifiques1' => 'nullable|string',
-            'clauses_specifiques2' => 'nullable|string',
-            'clauses_specifiques3' => 'nullable|string',
-            'clauses_specifiques4' => 'nullable|string',
-            'clauses_specifiques5' => 'nullable|string',
-            'clauses_specifiques6' => 'nullable|string',
+
             'lieu_signature' => 'required|string',
             'date_signature' => 'required|date',
             'locataire_id' => 'required|exists:locataires,id',
@@ -69,12 +67,7 @@ class ContratDeBailController extends Controller
             'caution' => $request->caution,
             'caution_eau' => $request->caution_eau,
             'caution_electricite' => $request->caution_electricite,
-            'clauses_specifiques1' => $request->clauses_specifiques1,
-            'clauses_specifiques2' => $request->clauses_specifiques2,
-            'clauses_specifiques3' => $request->clauses_specifiques3,
-            'clauses_specifiques4' => $request->clauses_specifiques4,
-            'clauses_specifiques5' => $request->clauses_specifiques5,
-            'clauses_specifiques6' => $request->clauses_specifiques6,
+
             'lieu_signature' => $request->lieu_signature,
             'date_signature' => $request->date_signature,
             'locataire_id' => $request->locataire_id,
@@ -89,7 +82,7 @@ class ContratDeBailController extends Controller
         ]);
 
         // Retourner vers la page avec succès
-        return redirect()->route('biens.show',$request->bien_id)->with('success', 'Contrat de bail ajouté avec succès!');
+        return redirect()->route('biens.show', $request->bien_id)->with('success', 'Contrat de bail ajouté avec succès!');
     }
 
     /**
@@ -113,7 +106,46 @@ class ContratDeBailController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+
+        $contrat = ContratsDeBail::findOrFail($id);
+
+        // Validation optionnelle
+        $request->validate([
+            'signature_agent' => 'nullable|string',
+            'signature_locataire' => 'nullable|string',
+        ]);
+        Log::info('Signature Agent: ' . $request->input('signature_agent'));
+        Log::info('Signature Locataire: ' . $request->input('signature_locataire'));
+
+
+        // Enregistrement de la signature de l'agent
+        if ($request->filled('signature_agent')) {
+            $agentSignaturePath = $this->saveSignatureImage($request->input('signature_agent'), 'agent_' . $contrat->id);
+            $contrat->signature_agent_immobilier = $agentSignaturePath;
+        }
+
+        // Enregistrement de la signature du locataire
+        if ($request->filled('signature_locataire')) {
+            $locataireSignaturePath = $this->saveSignatureImage($request->input('signature_locataire'), 'locataire_' . $contrat->id);
+            $contrat->signature_locataire = $locataireSignaturePath;
+        }
+
+        $contrat->save();
+
+        return redirect()->route('biens.show', $contrat->bien->id)
+            ->with('success', 'Contrat de bail mis à jour avec succès.');
+    }
+
+    private function saveSignatureImage($base64Data, $filename)
+    {
+        $base64Data = str_replace('data:image/png;base64,', '', $base64Data);
+        $base64Data = str_replace(' ', '+', $base64Data);
+        $signatureImage = base64_decode($base64Data);
+
+        $filePath = 'signatures/' . $filename . '.png';
+        Storage::disk('public')->put($filePath, $signatureImage);
+
+        return '/storage/' . $filePath;
     }
 
     /**

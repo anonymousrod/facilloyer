@@ -116,6 +116,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['auth'])->group(function() {
         // Afficher le formulaire de demande de maintenance
         Route::get('/demande-maintenance/create', [DemandeMaintenanceController::class, 'create'])->name('demandes.create');
+        Route::get('/locataire/demandes/index', [DemandeMaintenanceController::class, 'index'])->name('locataire.demandes.index');
 
         // Soumettre la demande
         Route::post('/demande-maintenance', [DemandeMaintenanceController::class, 'store'])->name('demandes.store');
@@ -138,6 +139,8 @@ Route::post('/admin/agents/toggle-status/{id}', [AgentImmobilierController::clas
 Route::prefix('locataires')->group(function () {
     Route::post('/{id}/toggle-status', [LocataireController::class, 'toggleStatus']);
 });
+
+
 
 //route administrateurs
 Route::get('/admin/agents/index', [AgentImmobilierController::class, 'index'])->name('admin.agents.index');

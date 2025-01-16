@@ -5,7 +5,7 @@
     <div class="d-flex justify-content-between align-items-center">
         <h5>Mes Demandes</h5>
         <!-- Icône pour accéder au formulaire de création -->
-        <a href="{{ route('locataire.demandes.create',) }}" class="btn btn-primary">
+        <a href="{{ route('locataire.demandes.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Nouvelle demande
         </a>
     </div>

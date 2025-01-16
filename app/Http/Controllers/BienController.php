@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ArticleContratBail;
 use App\Models\Bien;
 use App\Models\ContratsDeBail;
 use App\Models\Locataire;
@@ -87,19 +88,24 @@ class BienController extends Controller
      */
     public function show(string $id)
     {
+        $agent_connecter = Auth::user()->agent_immobiliers->first()->id;
         $bien = Bien::findOrFail($id);
 
         // Vérifier si un locataire est assigné à ce bien
         $locataireAssigné = LocataireBien::where('bien_id', $id)->with('locataire')->first();
+        // Selectionner les contrat de bail relier au bien
 
         $contrat = ContratsDeBail::where('bien_id', $bien->id)
         ->where('locataire_id', $locataireAssigné ?->locataire->id)
         ->first();
 
+        $articles = ArticleContratBail::where('agent_immobilier_id', $agent_connecter)->get();
+
         return view('layouts.bien_detail', [
             'bien' => $bien,
             'locataireAssigné' => $locataireAssigné,
             'contrat' => $contrat,
+            'articles' => $articles,
         ]);
     }
 

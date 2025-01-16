@@ -69,60 +69,21 @@
                                 <!-- Pénalité de retard -->
                                 <div class="col-md-6">
                                     <label for="penalite_retard" class="form-label fw-bold">Pénalité de retard</label>
-                                    <input type="number" name="penalite_retard" class="form-control"
-                                        id="penalite_retard" placeholder="Pénalité en Francs CFA">
-                                </div>
-
-                                <!-- Clauses Spécifiques -->
-                                <div class="col-md-12">
-                                    <label for="clauses_specifiques1" class="form-label fw-bold">Clauses Spécifiques N°1</label>
-                                    <textarea name="clauses_specifiques1" id="clauses_specifiques1" class="form-control" rows="3"
-                                        placeholder="Entrez les clauses spécifiques au Locataire (facultatif)"></textarea>
-                                </div>
-                                <!-- Clauses Spécifiques -->
-                                <div class="col-md-12">
-                                    <label for="clauses_specifiques2" class="form-label fw-bold">Clauses Spécifiques N°2</label>
-                                    <textarea name="clauses_specifiques2" id="clauses_specifiques2" class="form-control" rows="3"
-                                        placeholder="Entrez les clauses spécifiques à l'agent immobilier (facultatif)"></textarea>
-                                </div>
-                                <!-- Clauses Spécifiques -->
-                                <div class="col-md-12">
-                                    <label for="clauses_specifiques3" class="form-label fw-bold">Clauses Spécifiques N°3</label>
-                                    <textarea name="clauses_specifiques3" id="clauses_specifiques3" class="form-control" rows="3"
-                                        placeholder="Entrez les clauses spécifiques au renouvellement du contrat (facultatif)"></textarea>
-                                </div>
-                                <!-- Clauses Spécifiques -->
-                                <div class="col-md-12">
-                                    <label for="clauses_specifiques4" class="form-label fw-bold">Clauses Spécifiques N°4</label>
-                                    <textarea name="clauses_specifiques4" id="clauses_specifiques4" class="form-control" rows="3"
-                                        placeholder="Entrez les clauses spécifiques pour la résiliation (facultatif)"></textarea>
-                                </div>
-                                <!-- Clauses Spécifiques -->
-                                <div class="col-md-12">
-                                    <label for="clauses_specifiques5" class="form-label fw-bold">Clauses Spécifiques N°5</label>
-                                    <textarea name="clauses_specifiques5" id="clauses_specifiques5" class="form-control" rows="3"
-                                        placeholder=" Conformité des lieux loue (facultatif)"></textarea>
-                                </div>
-                                <!-- Clauses Spécifiques -->
-                                <div class="col-md-12">
-                                    <label for="clauses_specifiques6" class="form-label fw-bold">Clauses Spécifiques N°6</label>
-                                    <textarea name="clauses_specifiques6" id="clauses_specifiques6" class="form-control" rows="3"
-                                        placeholder="Règlement et litige (facultatif)"></textarea>
+                                    <input type="number" name="penalite_retard" class="form-control" id="penalite_retard"
+                                        placeholder="Pénalité en Francs CFA">
                                 </div>
 
                                 <!-- Lieu de Signature -->
                                 <div class="col-md-6">
                                     <label for="lieu_signature" class="form-label fw-bold">Lieu de Signature</label>
                                     <input type="text" name="lieu_signature" class="form-control" id="lieu_signature"
-                                        placeholder="Lieu de la signature" required>
+                                        placeholder="Lieu de redaction du contrat ( Fait à...)" required>
                                 </div>
 
-                                <!-- Date de Signature -->
-                                <div class="col-md-6">
-                                    <label for="date_signature" class="form-label fw-bold">Date de Signature</label>
-                                    <input type="date" name="date_signature" class="form-control" id="date_signature"
-                                        required>
-                                </div>
+                                <!-- Date de Signature (Champ Caché) -->
+                                <input type="hidden" name="date_signature" id="date_signature"
+                                    value="{{ now()->format('Y-m-d') }}">
+
                                 <hr class="custom-hr">
 
                                 <!-- Locataire -->
