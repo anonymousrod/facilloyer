@@ -114,18 +114,33 @@ Route::middleware(['auth'])->group(function () {
 
 
     Route::middleware(['auth'])->group(function() {
-        // Afficher le formulaire de demande de maintenance
-        Route::get('/demande-maintenance/create', [DemandeMaintenanceController::class, 'create'])->name('demandes.create');
+       // Afficher le formulaire de demande de maintenance
+        Route::get('/locataire/demandes/create', [DemandeMaintenanceController::class, 'create'])->name('locataire.demandes.create');
+        // MODIFIER SUPRIMER ET UPDATE   PAR LE LOCATAIRE
+        Route::get('/locataire/demandes/{demande}/edit', [DemandeMaintenanceController::class, 'edit'])->name('locataire.demandes.edit');
+        Route::put('/locataire/demandes/{demande}', [DemandeMaintenanceController::class, 'update'])->name('locataire.demandes.update');
+        Route::delete('/locataire/demandes/{demande}', [DemandeMaintenanceController::class, 'destroy'])->name('locataire.demandes.destroy');
+    
+        // Enregistrer la demande de maintenance
+        Route::post('/locataire/demandes', [DemandeMaintenanceController::class, 'store'])->name('locataire.demandes.store');
+
+        // Voir la liste des demandes de maintenance du locataire
         Route::get('/locataire/demandes/index', [DemandeMaintenanceController::class, 'index'])->name('locataire.demandes.index');
 
-        // Soumettre la demande
-        Route::post('/demande-maintenance', [DemandeMaintenanceController::class, 'store'])->name('demandes.store');
-        // Afficher les demandes de maintenance soumises par le locataire
-        Route::get('/mes-demandes', [DemandeMaintenanceController::class, 'index'])->name('demandes.index');
+       
         //AGENT CONSULTE LES DEMANDES
         Route::get('/agent_demande', [DemandeMaintenanceController::class, 'showAgentDemands'])->name('agent_demande');
-        Route::put('/demandes/{id}/archive', [DemandeMaintenanceController::class, 'archive'])->name('demandes.archive');
-        Route::put('/demandes/{id}/unarchive', [DemandeMaintenanceController::class, 'unarchive'])->name('demandes.unarchive');
+        
+         //LOCATAIRE ACHIVE OU DESACHIVE
+        Route::put('locataire/demandes/{id}/archive', [DemandeMaintenanceController::class, 'archive'])->name('locataire.demandes.archive');
+        Route::put('loctaire/demandes/{id}/unarchive', [DemandeMaintenanceController::class, 'unarchive'])->name('locataire.demandes.unarchive');
+
+
+
+
+        // AGENT IMMOBILIERS VOIR LES DEMANDES
+
+        Route::get('/agent/demandes', [DemandeMaintenanceController::class, 'afficherDemandesAgent'])->name('agent.demandes');
 
     
     });

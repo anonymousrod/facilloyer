@@ -123,7 +123,7 @@
 
                         <!-- Demande de maintenance/réparations -->
                         <li class="nav-item">
-                            <a class="nav-link" href="{{route('locataire.demandes.index', )}}">
+                            <a class="nav-link" href="{{route('locataire.demandes.index')}}">
                                 <i class="iconoir-wrench menu-icon"></i> <!-- Icône pour demande de maintenance -->
                                 <span>Demande de maintenance/réparations</span>
                             </a>
@@ -287,7 +287,7 @@
 
                             </li><!--end nav-item-->
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('agent_demande')}}">
+                                <a class="nav-link" href="{{ route('agent.demandes')}}">
                                     <i class="iconoir-view-grid menu-icon"></i>
                                     <span>Voir les demande de maintenances</span>
                                 </a>

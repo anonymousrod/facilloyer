@@ -1,86 +1,114 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Support\Facades\Auth; // Ajoutez cette ligne en haut du fichier
 
 use App\Models\DemandeMaintenance;
+use App\Models\Locataire;
+use App\Models\Bien;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
 
 class DemandeMaintenanceController extends Controller
 {
 
-
-public function create()
-{
-    return view('demandes.create'); // Retourne la vue avec le formulaire
-}
-
-
-
-  
-
-
-// Locataire : soumettre une demande
-public function store(Request $request)
+        /**
+     * Afficher les demandes de maintenance pour un agent immobilier connecté.
+     *
+     * @return \Illuminate\View\View
+     */
+public function afficherDemandesAgent()
     {
-        $validated = $request->validate([
-            'libelle' => 'required|string|max:255',
-            'description' => 'required|string|max:500',
-        ]);
+        // Récupérer l'agent immobilier connecté
+        $agent = Auth::user();
 
-        $locataire = Auth::user(); // Récupérer l'utilisateur connecté
-        $agentId = $locataire->agent_id; // Supposons que le locataire a un champ `agent_id`
+      // Récupérer les biens associés à cet agent
+    $biensIds = Bien::where('agent_immobilier_id', $agent->id)->pluck('id');
 
-        DemandeMaintenance::create([
-            'locataire_id' => $locataire->id,
-            'agent_id' => $agentId,
-            'libelle' => $validated['libelle'],
-            'description' => $validated['description'],
-            'statut' => 'en attente',
-        ]);
+    // Récupérer les demandes de maintenance liées aux biens de cet agent uniquement
+    $demandes = DemandeMaintenance::whereIn('bien_id', $biensIds)
+        ->whereHas('bien', function ($query) use ($agent) {
+            $query->where('agent_immobilier_id', $agent->id);
+        })
+        ->with('bien')
+        ->get();
 
-        return redirect()->route('locataire.demandes.index')->with('success', 'Votre demande a été soumise avec succès.');
+
+        // Retourner la vue avec les données
+        return view('agent.demandes', compact('demandes'));
     }
 
-
-
-public function index()
+    // Afficher le formulaire de demande de maintenance pour un locataire
+    public function create()
     {
-        $locataire = Auth::user();
-        $demandes = DemandeMaintenance::where('locataire_id', $locataire->id)->get();
-    
+        // Récupérer le locataire connecté
+        $locataire = Auth::user()->locataires()->first();
+        
+        // Vérifier si le locataire a des biens associés
+        if (!$locataire) {
+            return redirect()->route('dashbord')->with('error', 'Il faut etre un locataire pour soumettre une demande de maintenance');
+        }
+
+        // Récupérer les biens associés au locataire
+        $biens = $locataire->biens;
+
+        // Passer les biens à la vue
+        return view('locataire.demandes.create', compact('biens'));
+    }
+
+    // Enregistrer une nouvelle demande de maintenance
+    public function store(Request $request)
+    {
+        // Validation des données du formulaire
+        $request->validate([
+            'bien_id' => 'required|exists:biens,id',
+            'description' => 'required|string|max:255',
+            'statut' => 'required|in:en attente,en cours,terminée'
+        ]);
+
+        // Récupérer le locataire connecté
+        $locataire = Auth::user()->locataires()->first();
+
+        // Vérifier si le locataire existe
+        if (!$locataire) {
+            return redirect()->route('dashbord')->with('error', 'Desole nous n avons pas pu soumettre votre demande.');
+        }
+
+        // Créer la demande de maintenance
+        try {
+            DemandeMaintenance::create([
+                'locataire_id' => $locataire->id,
+                'bien_id' => $request->bien_id,
+                'description' => $request->description,
+                'statut' => $request->statut,
+            ]);
+
+            // Redirection avec message de succès
+            return redirect()->route('locataire.demandes.index')->with('success', 'Votre demande de maintenance a été enregistrée.');
+        } catch (\Exception $e) {
+            // Si une erreur survient
+            return back()->with('error', 'Une erreur est survenue lors de l\'enregistrement de votre demande.');
+        }
+    }
+
+    // Afficher la liste des demandes de maintenance pour le locataire
+    public function index()
+    {
+        // Récupérer le locataire connecté
+        $locataire = Auth::user()->locataires()->first();
+
+        // Vérifier si le locataire existe
+        if (!$locataire) {
+            return redirect()->route('dashboard')->with('error', 'Probleme lors de l afichage des demandes.');
+        }
+
+        // Récupérer les demandes de maintenance du locataire
+        $demandes = $locataire->demandesMaintenance;
+
         return view('locataire.demandes.index', compact('demandes'));
     }
-    
+
+    // Afficher le formulaire d'édition d'une demande de maintenance
 
 
-    // Agent immobilier : mettre à jour le statut
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'statut' => 'required|string',
-        ]);
-
-        $demande = DemandeMaintenance::findOrFail($id);
-        $demande->update([
-            'statut' => $request->statut,
-        ]);
-
-        return response()->json(['message' => 'Statut mis à jour avec succès']);
-    }
-
-
-    public function showAgentDemands()
-    {
-        $agent = Auth::user(); // Récupère l'utilisateur authentifié (l'agent)
-        // Récupère les demandes des locataires assignés à cet agent
-        $demandes = DemandeMaintenance::whereHas('locataire', function ($query) use ($agent) {
-            $query->where('agent_id', $agent->id); // Filtrer par agent
-        })->get();
-    
-        return view('agent_demande', compact('demandes')); // Retourne la vue avec les demandes
-    }
-    
 
 }
