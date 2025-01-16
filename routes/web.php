@@ -123,6 +123,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/mes-demandes', [DemandeMaintenanceController::class, 'index'])->name('demandes.index');
         //AGENT CONSULTE LES DEMANDES
         Route::get('/agent_demande', [DemandeMaintenanceController::class, 'showAgentDemands'])->name('agent_demande');
+        Route::put('/demandes/{id}/archive', [DemandeMaintenanceController::class, 'archive'])->name('demandes.archive');
+        Route::put('/demandes/{id}/unarchive', [DemandeMaintenanceController::class, 'unarchive'])->name('demandes.unarchive');
+
     
     });
 

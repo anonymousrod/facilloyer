@@ -6,10 +6,12 @@ use Illuminate\Support\Facades\Auth; // Ajoutez cette ligne en haut du fichier
 use App\Models\DemandeMaintenance;
 use Illuminate\Http\Request;
 
+
 class DemandeMaintenanceController extends Controller
 {
-     
-    public function create()
+
+
+public function create()
 {
     return view('demandes.create'); // Retourne la vue avec le formulaire
 }
@@ -19,44 +21,38 @@ class DemandeMaintenanceController extends Controller
   
 
 
-    // Locataire : soumettre une demande
-    public function store(Request $request)
-{
-    // Validation des données du formulaire
-    $request->validate([
-        'libelle' => 'required|string|max:255',
-        'description' => 'required|string',
-    ]);
+// Locataire : soumettre une demande
+public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'libelle' => 'required|string|max:255',
+            'description' => 'required|string|max:500',
+        ]);
 
-    // Assurez-vous que le locataire est authentifié
-    $locataire_id = auth()->user()->id; // Ou récupérez l'ID du locataire de manière appropriée
+        $locataire = Auth::user(); // Récupérer l'utilisateur connecté
+        $agentId = $locataire->agent_id; // Supposons que le locataire a un champ `agent_id`
 
-    // Créer la demande de maintenance
-    DemandeMaintenance::create([
-        'locataire_id' => $locataire_id,
-        'libelle' => $request->libelle,
-        'description' => $request->description,
-    ]);
+        DemandeMaintenance::create([
+            'locataire_id' => $locataire->id,
+            'agent_id' => $agentId,
+            'libelle' => $validated['libelle'],
+            'description' => $validated['description'],
+            'statut' => 'en attente',
+        ]);
 
-    // Retourner un message ou rediriger vers une autre page
-    return redirect()->route('demandes.index')->with('success', 'Demande soumise avec succès');
-}
-
-public function index()
-{
-    // Récupérer les demandes du locataire connecté
-    $demandes = DemandeMaintenance::where('locataire_id', auth()->user()->id)->get();
-
-    // Mettre à jour les demandes avec un statut vide pour qu'elles soient marquées "En attente"
-    foreach ($demandes as $demande) {
-        if (empty($demande->statut)) {
-            $demande->statut = 'En attente';
-            $demande->save();
-        }
+        return redirect()->route('locataire.demandes.index')->with('success', 'Votre demande a été soumise avec succès.');
     }
 
-    return view('demandes.index', compact('demandes'));
-}
+
+
+public function index()
+    {
+        $locataire = Auth::user();
+        $demandes = DemandeMaintenance::where('locataire_id', $locataire->id)->get();
+    
+        return view('locataire.demandes.index', compact('demandes'));
+    }
+    
 
 
     // Agent immobilier : mettre à jour le statut

@@ -10,9 +10,9 @@
                             Rizz
                             <span
                                 class="text-muted d-none d-sm-inline-block float-end">
-                                Crafted with
+                                Custom 
                                 <i class="iconoir-heart text-danger"></i>
-                                by Mannatthemes</span>
+                                by Silitis@Tech</span>
                         </p>
                     </div>
                 </div>

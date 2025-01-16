@@ -123,7 +123,7 @@
 
                         <!-- Demande de maintenance/réparations -->
                         <li class="nav-item">
-                            <a class="nav-link" href="{{route('demandes.index')}}">
+                            <a class="nav-link" href="{{route('locataire.demandes.index', )}}">
                                 <i class="iconoir-wrench menu-icon"></i> <!-- Icône pour demande de maintenance -->
                                 <span>Demande de maintenance/réparations</span>
                             </a>
