@@ -116,10 +116,7 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['auth'])->group(function() {
        // Afficher le formulaire de demande de maintenance
         Route::get('/locataire/demandes/create', [DemandeMaintenanceController::class, 'create'])->name('locataire.demandes.create');
-        // MODIFIER SUPRIMER ET UPDATE   PAR LE LOCATAIRE
-        Route::get('/locataire/demandes/{demande}/edit', [DemandeMaintenanceController::class, 'edit'])->name('locataire.demandes.edit');
-        Route::put('/locataire/demandes/{demande}', [DemandeMaintenanceController::class, 'update'])->name('locataire.demandes.update');
-        Route::delete('/locataire/demandes/{demande}', [DemandeMaintenanceController::class, 'destroy'])->name('locataire.demandes.destroy');
+       
     
         // Enregistrer la demande de maintenance
         Route::post('/locataire/demandes', [DemandeMaintenanceController::class, 'store'])->name('locataire.demandes.store');
@@ -128,12 +125,8 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/locataire/demandes/index', [DemandeMaintenanceController::class, 'index'])->name('locataire.demandes.index');
 
        
-        //AGENT CONSULTE LES DEMANDES
-        Route::get('/agent_demande', [DemandeMaintenanceController::class, 'showAgentDemands'])->name('agent_demande');
         
-         //LOCATAIRE ACHIVE OU DESACHIVE
-        Route::put('locataire/demandes/{id}/archive', [DemandeMaintenanceController::class, 'archive'])->name('locataire.demandes.archive');
-        Route::put('loctaire/demandes/{id}/unarchive', [DemandeMaintenanceController::class, 'unarchive'])->name('locataire.demandes.unarchive');
+        
 
 
 
@@ -142,7 +135,11 @@ Route::middleware(['auth'])->group(function () {
 
         Route::get('/agent/demandes', [DemandeMaintenanceController::class, 'afficherDemandesAgent'])->name('agent.demandes');
 
-    
+        // mise a jour des stauts des demandes par l'agent immobilier
+        Route::patch('/agent/demandes/{id}', [DemandeMaintenanceController::class, 'mettreAJourStatut'])->name('agent.demandes.update');
+
+
+
     });
 
    
