@@ -158,5 +158,6 @@
     // Vérification dans la console des valeurs des champs cachés
     console.log(document.getElementById('signatureAgentInput').value);
     console.log(document.getElementById('signatureLocataireInput').value);
+    });
 </script>
 
