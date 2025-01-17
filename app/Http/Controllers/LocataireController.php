@@ -93,7 +93,7 @@ class LocataireController extends Controller
 
         // Ajouter le locataire dans la table users
         $tenant = User::create([
-            'name' => $request->name,
+            // 'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($randomPassword),
             'id_role' => 2, // Rôle "Locataire"
@@ -202,6 +202,11 @@ class LocataireController extends Controller
 
         // Sauvegarde des modifications
         $locataire->save();
+
+        // Mettre à jour le champ `name` de l'utilisateur
+        $user = $locataire->user; // Si `AgentImmobilier` a une relation avec `User`
+        $user->name = $request->input('nom') . ' ' . $request->input('prenom');
+        $user->save();
 
         return redirect()->route('locataire.show', $user)->with('success', 'Les informations ont été mises à jour avec succès.');
     }

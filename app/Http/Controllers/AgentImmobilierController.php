@@ -52,19 +52,9 @@ class AgentImmobilierController extends Controller
         $photoProfilPath = $request->file('photo_profil')->store('photos_profil', 'public');
         $carteIdentitePath = $request->file('carte_identite_pdf')->store('cartes_identite', 'public');
         $rccmPath = $request->file('rccm_pdf')->store('rccm', 'public');
-            $storage = '/storage/';
+        $storage = '/storage/';
 
-        // Ajouter `user_id` aux données du formulaire
-        // $request->merge([
-        //     'user_id' => Auth::user()->id,
-        //     'photo_profil' => $photoProfilPath,
-        //     // 'carte_identite_pdf' =>$carteIdentitePath,
-        //     // 'rccm_pdf' =>$rccmPath,
-        // ]);
-        // dd($request->all());
-        // Créer l'agent immobilier avec toutes les données, y compris `user_id`
 
-        // AgentImmobilier::create($request->all());
         AgentImmobilier::create([
             // dd(Auth::user()),
             'user_id' => Auth::user()->id, // Associer l'agent à l'utilisateur connecté
@@ -81,6 +71,11 @@ class AgentImmobilierController extends Controller
             'rccm_pdf' => $storage . $rccmPath,
 
         ]);
+
+        // Mettre à jour le champ `name` de l'utilisateur connecté
+        $user = Auth::user();
+        $user->name = $request->nom_agence;
+        $user->save();
 
         return redirect()->route('agent_immobilier.create')->with('success', 'Vos information on bien été enregistrer.');
     }
@@ -151,6 +146,11 @@ class AgentImmobilierController extends Controller
 
         // Sauvegarder les modifications
         $agent->save();
+
+        // Mettre à jour le champ `name` de l'utilisateur
+        $user = $agent->user; // Si `AgentImmobilier` a une relation avec `User`
+        $user->name = $request->nom_agence;
+        $user->save();
 
         return redirect()->route('agent_immobilier.create')->with('success', 'Les informations de l\'agent immobilier ont été mises à jour.');
     }

@@ -22,6 +22,7 @@ class UsersSeeder extends Seeder
         User::create([
             'id_role' => 1,
             'email' => 'texauce@gmail.com',
+            'name' => $faker->lastName,
             'password' => Hash::make('texauce69'),
             'statut' => true, // L'admin a toujours un statut à true
         ]);
@@ -35,6 +36,7 @@ class UsersSeeder extends Seeder
 
             User::create([
                 'id_role' => $rand_role,
+                'name' => $faker->lastName,
                 'email' => $faker->unique()->safeEmail,
                 'password' => Hash::make('123456789'),
                 'statut' => $faker->boolean(), // Utilisation de booléens corrects
