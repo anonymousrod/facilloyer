@@ -79,4 +79,12 @@ class AgentImmobilier extends Model
     return $this->hasMany(DemandeMaintenance::class, 'agent_immobilier_id');
 }
 
+public function locataires()
+{
+    return $this->hasMany(Locataire::class, 'agent_id'); // 'agent_id' doit être la clé étrangère dans la table locataires
+}
+
+
+
+
 }

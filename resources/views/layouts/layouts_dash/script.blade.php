@@ -19,10 +19,13 @@
 
 {{-- script pour l'activation du statu par l'agent immobilier --}}
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const toggleStatusButtons = document.querySelectorAll('.toggle-status');
 
+<<<<<<< HEAD
+
+
+
+{{-- script pour l'activation du statut de l'agent  par le super administrateur --}}
+=======
         toggleStatusButtons.forEach(button => {
             button.addEventListener('change', function() {
                 const locataireId = this.dataset.id;
@@ -68,6 +71,7 @@
         });
     });
 </script>
+>>>>>>> exauce
 
 
 {{-- script pour le calendrier --}}

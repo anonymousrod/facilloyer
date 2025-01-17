@@ -98,4 +98,10 @@ class Bien extends Model
     {
         return $this->hasMany(Paiement::class);
     }
+
+    // Définition de la relation avec les demandes de maintenance
+    public function demandesMaintenance()
+    {
+        return $this->hasMany(DemandeMaintenance::class);
+    }
 }

@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\ContratDeBailLocataire;
 use App\Models\ContratDeBail;
 use App\Models\Paiement;
@@ -19,49 +18,51 @@ use Illuminate\Support\Facades\Hash;
 class LocataireController extends Controller
 {
 
-    public function showInformations($id)
-    {
-        // Correction du nom de la relation
-        $locataire = Locataire::with([
-            'user',
-            'agent_immobilier',
-            'paiements.bien',
-            'contrat_de_bail_locataires.contrats_de_bail.bien'
-        ])->findOrFail($id);
+// Affiche les informations détaillées du locataire
+// Affiche les informations détaillées du locataire
 
-        // Statistiques des paiements
-        $statsPaiements = [
-            'total_paye' => $locataire->paiements->sum('montant'),
-            'montant_restant' => $locataire->paiements->sum('montant_restant'),
-            'montant_total_periode' => $locataire->paiements->sum('montant_total_periode'),
-            'derniers_paiements' => $locataire->paiements
-                ->sortByDesc('date')
-                ->take(5)
-        ];
 
-        // Historique des biens loués avec leurs contrats
-        $biensLoues = $locataire->contrat_de_bail_locataires->map(function ($contrat) {
-            return [
-                'bien' => $contrat->contrats_de_bail->bien ?? null,
-                'contrat' => [
-                    'date_debut' => $contrat->date_debut,
-                    'periode_paiement' => $contrat->periode_paiement,
-                    'loyer_mensuel' => $contrat->contrats_de_bail->loyer_mensuel ?? 0,
-                    'depot_garantie' => $contrat->contrats_de_bail->depot_de_garantie ?? 0
-                ]
-            ];
-        });
+public function showInformations($id)
+{
+    // Récupérer le locataire, ses relations et les biens loués
+    $locataire = Locataire::with(['user', 'agent_immobilier', 'biens.paiements'])
+        ->where('user_id', $id)
+        ->firstOrFail();
 
-        return view('locataire.locainformations', compact(
-            'locataire',
-            'statsPaiements',
-            'biensLoues'
-        ));
+    if (!$locataire) {
+        abort(404, "Locataire non trouvé avec l'ID $id");
     }
+
+    // Filtrer les paiements du mois en cours
+    $paiementsDuMois = Paiement::where('locataire_id', $locataire->id)
+        ->whereMonth('date_debut_frequence', now()->month)
+        ->whereYear('date_debut_frequence', now()->year)
+        ->get();
+
+    return view('locataire.locashow', compact('locataire', 'paiementsDuMois'));
+}
+
+
+
+
+// admin use pour afficher chaque les profil locataire
+public function showProfil($locataireId)
+    {
+        // Récupère le locataire par son ID, y compris ses informations liées à l'utilisateur (user)
+        $locataire = Locataire::with('user')->findOrFail($locataireId);
+
+        // Retourne la vue du profil avec les données du locataire
+        return view('admin.locataires.profil', compact('locataire'));
+    }
+
+
+
+
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+ public function index()
     {
         $agent_id = Auth::user()->agent_immobiliers->first()->id;
         //pour l'affichage des locataires
@@ -140,13 +141,13 @@ class LocataireController extends Controller
     public function edit()
     {
         // Récupérer le locataire connecté
-        // $locataire = Auth::user()->locataires->first();
+         $locataire = Auth::user()->locataires->first();
 
-        // if (!$locataire) {
-        //     abort(404, 'Aucun locataire associé à cet utilisateur.');
-        // }
+         if (!$locataire) {
+             abort(404, 'Aucun locataire associé à cet utilisateur.');
+         }
 
-        // return view('locataire.edit', compact('locataire'));
+         return view('locataire.edit', compact('locataire'));
     }
 
     /**
@@ -226,7 +227,7 @@ class LocataireController extends Controller
     }
 
     // Change le mot de passe
-    public function changePassword(Request $request)
+public function changePassword(Request $request)
     {
         // Validation des entrées
         $request->validate([
@@ -253,26 +254,36 @@ class LocataireController extends Controller
         return response()->json(['success' => true]);
     }
 
-    public function showAgentInfo($locataireId)
+public function agenceImmobiliereAssociee()
     {
-        // Vérifiez si le locataire existe
-        $locataire = Locataire::find($locataireId);
-        if (!$locataire) {
-            abort(404, 'Locataire non trouvé.');
+        // Récupérer l'utilisateur connecté
+        $user = Auth::user();
+
+        // Vérifier si l'utilisateur est connecté et est un locataire
+        if (!$user || !$user->locataires()->exists()) {
+            return redirect()->back()->with('error', 'Vous n\'êtes pas un locataire ou connecté.');
         }
 
-        // Vérifiez si un agent est lié au locataire
-        $agent = $locataire->agent_immobilier; // Assurez-vous que cette relation est correcte
+        // Récupérer le locataire et l'agence immobilière associée
+        $locataire = $user->locataires()->first();
+        $agent = $locataire->agent_immobilier; // Vérifiez que cette relation existe
+
+        // Vérifier si une agence est associée
         if (!$agent) {
-            return back()->withErrors('Aucun agent immobilier associé à ce locataire.');
+            return redirect()->back()->with('error', 'Aucune agence immobilière associée.');
         }
 
-        // Retournez la vue avec les données nécessaires
-        return view('locataire.agentinfo', compact('agent', 'locataire'));
+        // Debug : Affichez les données pour confirmer
+        // dd($agent);
+
+        // Retourner la vue avec les données
+        return view('locataire.agentinfo', compact('locataire', 'agent'));
     }
 
 
-    public function updateEvaluation(Request $request, $id)
+
+
+public function updateEvaluation(Request $request, $id)
     {
         try {
             // Validation
@@ -286,7 +297,7 @@ class LocataireController extends Controller
                 return response()->json(['error' => 'Agent non trouvé.'], 404);
             }
 
-            // Mise à jour
+            // Mise à jour de l'évaluation
             $agent->evaluation = $request->evaluation;
             $agent->save();
 
@@ -300,7 +311,8 @@ class LocataireController extends Controller
         }
     }
 
-    public function search(Request $request)
+
+public function search(Request $request)
     {
         $query = $request->input('query'); // Texte de recherche
         $bienId = $request->input('bien_id'); // ID du bien

@@ -11,7 +11,7 @@
                         </button>
                     </li>
                     <li class="mx-3 welcome-text">
-                        <h3 class="mb-0 fw-bold text-truncate">Espace De Gestion!</h3>
+                        <h3 class="mb-0 fw-bold text-truncate">Mon Tableau de Bord!</h3>
                         <!-- <h6 class="mb-0 fw-normal text-muted text-truncate fs-14">Here's your overview this week.</h6> -->
                     </li>
                 </ul>
@@ -132,7 +132,7 @@
                              <!-- POUR LE LOCATAIRE -->
                             @if (Auth::user()->id_role == 2)
 
-                            <a class="dropdown-item" href="{{route('locataire.locainformations', Auth::user()->id)}}"><i
+                            <a class="dropdown-item" href="{{route('locataire.locashow', Auth::user()->id)}}"><i
                                     class="las la-user fs-18 me-1 align-text-bottom" ></i>Completez Mon Profil</a>
                             <a class="dropdown-item" href="pages-faq.html"><i
                                     class="las la-question-circle fs-18 me-1 align-text-bottom"></i> Help Center</a>

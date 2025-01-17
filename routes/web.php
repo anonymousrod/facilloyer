@@ -12,7 +12,10 @@ use App\Http\Controllers\ExportListePDF;
 use App\Http\Controllers\LocataireBienController;
 use App\Http\Controllers\LocataireController;
 use App\Http\Controllers\PaiementController;
-use App\Models\ArticleContratBail;
+use App\Http\Controllers\ActionAdminController;
+
+
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -26,16 +29,24 @@ Route::get('/change-language/{lang}', function ($lang) {
     return redirect()->back();
 })->name('change.language');
 
+
+// route modifiez mon prodfill locataire
+
+Route::get('/locataire/{id}/locashow', [LocataireController::class, 'showInformations'])
+->name('locataire.locashow');
+
+Route::middleware(['auth'])->group(function () {
+
+
 // Assurez-vous que cette route est placée AVANT les routes resource
-Route::get('/locataire/{id}/locainformations', [LocataireController::class, 'showInformations'])
-    ->name('locataire.locainformations');
+Route::get('/locataire/agentinfo', [LocataireController::class, 'agenceImmobiliereAssociee'])->name('locataire.agentinfo');
 
-Route::get('/locataire/{id}/agentinfo', [LocataireController::class, 'showAgentInfo'])
-->name('locataire.agentinfo');
 
+});
 // noté agence
 Route::put('/agent/evaluation/{id}', [AgentImmobilierController::class, 'updateEvaluation'])
 ->name('agent.updateEvaluation');
+
 
 
 
@@ -70,7 +81,6 @@ Route::resource('/biens', BienController::class)->names('biens');
 Route::get('/password_change', [LocataireController::class, 'showChangePasswordForm'])->name('passwordChangeForm');
 Route::post('/password_change_save', [LocataireController::class, 'changePassword'])->name('passwordChangeFormSave');
 //route pour changer le statut du locataire par l'agent immobilier
-Route::post('/locataires/{id}/toggle-status', [LocataireController::class, 'toggleStatus']);
 
 //Route pour l'exportation de la liste des locataire en pdf
 
@@ -95,33 +105,110 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/locataire/paiements/{id}/quittance', [PaiementController::class, 'generateQuittance'])
         ->name('locataire.paiements.quittance');
 
-    Route::get('/locataire/paiements/{id}/details', [PaiementController::class, 'show'])
-    ->name('locataire.paiements.show');
+    Route::get('/locataire/paiements/{id}/detail', [PaiementController::class, 'show'])->name('locataire.paiements.detail');
 
 
-
+});
 
 
 
 
     Route::middleware(['auth'])->group(function() {
-        // Afficher le formulaire de demande de maintenance
-        Route::get('/demande-maintenance/create', [DemandeMaintenanceController::class, 'create'])->name('demandes.create');
+       // Afficher le formulaire de demande de maintenance
+        Route::get('/locataire/demandes/create', [DemandeMaintenanceController::class, 'create'])->name('locataire.demandes.create');
+        // MODIFIER SUPRIMER ET UPDATE   PAR LE LOCATAIRE
+        Route::get('/locataire/demandes/{demande}/edit', [DemandeMaintenanceController::class, 'edit'])->name('locataire.demandes.edit');
+        Route::put('/locataire/demandes/{demande}', [DemandeMaintenanceController::class, 'update'])->name('locataire.demandes.update');
+        Route::delete('/locataire/demandes/{demande}', [DemandeMaintenanceController::class, 'destroy'])->name('locataire.demandes.destroy');
+    
+        // Enregistrer la demande de maintenance
+        Route::post('/locataire/demandes', [DemandeMaintenanceController::class, 'store'])->name('locataire.demandes.store');
 
-        // Soumettre la demande
-        Route::post('/demande-maintenance', [DemandeMaintenanceController::class, 'store'])->name('demandes.store');
-        // Afficher les demandes de maintenance soumises par le locataire
-        Route::get('/mes-demandes', [DemandeMaintenanceController::class, 'index'])->name('demandes.index');
+        // Voir la liste des demandes de maintenance du locataire
+        Route::get('/locataire/demandes/index', [DemandeMaintenanceController::class, 'index'])->name('locataire.demandes.index');
+
+       
         //AGENT CONSULTE LES DEMANDES
         Route::get('/agent_demande', [DemandeMaintenanceController::class, 'showAgentDemands'])->name('agent_demande');
+        
+         //LOCATAIRE ACHIVE OU DESACHIVE
+        Route::put('locataire/demandes/{id}/archive', [DemandeMaintenanceController::class, 'archive'])->name('locataire.demandes.archive');
+        Route::put('loctaire/demandes/{id}/unarchive', [DemandeMaintenanceController::class, 'unarchive'])->name('locataire.demandes.unarchive');
 
 
 
+
+        // AGENT IMMOBILIERS VOIR LES DEMANDES
+
+        Route::get('/agent/demandes', [DemandeMaintenanceController::class, 'afficherDemandesAgent'])->name('agent.demandes');
+
+    
     });
 
+   
+// Routes pour les agents immobiliers
+Route::post('/admin/agents/toggle-status/{id}', [AgentImmobilierController::class, 'toggleStatus'])->name('admin.agents.toggleStatus');
 
+
+// Routes pour les locataires
+Route::prefix('locataires')->group(function () {
+    Route::post('/{id}/toggle-status', [LocataireController::class, 'toggleStatus']);
+});
+
+
+
+//route administrateurs
+Route::get('/admin/agents/index', [AgentImmobilierController::class, 'index'])->name('admin.agents.index');
+Route::get('/admin/agents/{id}', [AgentImmobilierController::class, 'show'])->name('admin.agents.show');
+Route::patch('/agents/{id}/update-status', [AgentImmobilierController::class, 'updateStatus'])->name('agents.updateStatus');
+
+
+
+
+Route::prefix('admin')->middleware('auth')->group(function () {
+    // Afficher les locataires par agence
+    Route::get('/locataires_par_agence', [ActionAdminController::class, 'afficherLocatairesParAgence'])->name('admin.locataires_par_agence');
+
+    // Changer le statut du locataire
+    Route::post('/locataires/{id}/changer-etat', [ActionAdminController::class, 'changerEtatLocataire'])->name('admin.locataires.changer.etat');
+
+    // Supprimer le locataire
+    Route::delete('/locataires/{id}/supprimer', [ActionAdminController::class, 'supprimerLocataire'])->name('admin.locataires.supprimer');
+});
+
+// Route pour afficher le profil du locataire par l'administrateur
+Route::get('admin/locataires/{locataire}/profil', [LocataireController::class, 'showProfil'])->name('admin.locataires.profil');
+
+
+
+// route pour afficher la liste de tout les paiement par ladministrateur
+
+
+Route::middleware('auth')->prefix('admin')->name('admin.')->group(function() {
+    Route::get('/paiements', [PaiementController::class, 'index'])->name('paiements.index');
+    
 
 });
+
+//GESTIONQUITTANCE D4UN PAIEMENT SPECIFIQUE 
+
+Route::get('admin/paiements/{id}/details', [PaiementController::class, 'afficherDetailsPaiement'])->name('admin.paiements.details');
+Route::get('admin/paiements/{id}/quittance', [PaiementController::class, 'telechargerQuittancePaiement'])->name('admin.paiements.quittance');
+
+
+
+
+Route::get('/admin/contrats-de-bail', [ActionAdminController::class, 'index'])->name('admin.contrats_de_bail.index');
+Route::post('/admin/contrats-de-bail', [ActionAdminController::class, 'store'])->name('admin.contrats_de_bail.store');
+Route::delete('/admin/contrats-de-bail/{id}', [ActionAdminController::class, 'destroy'])->name('admin.contrats_de_bail.destroy');
+
+
+//  DETAIL CONTRAT POUR L4ADMIN
+
+Route::get('/admin/contrats_de_bail/{id}', [ActionAdminController::class, 'showContractDetails'])->name('admin.contrats_de_bail.show');
+
+// EXPOTER UN CONTRAT PAR L4AMINISTRATEUR DIFFERENT DE POUR L4AGENT
+Route::get('/admin/contrats_de_bail/{id}/export_pdf', [ActionAdminController::class, 'exportContractToPDF'])->name('admin.contrats_de_bail.export_pdf');
 
 //try
 // Route::get('/info_detail_bien', function () {
