@@ -16,26 +16,67 @@ class DemandeMaintenanceController extends Controller
      *
      * @return \Illuminate\View\View
      */
+
+     //   POUR AFFICHER LES DEMAMNDE DE MAINTENANCE DANS LE DASHBOARD LOCATAIRE 
 public function afficherDemandesAgent()
     {
-        // Récupérer l'agent immobilier connecté
-        $agent = Auth::user();
-
-      // Récupérer les biens associés à cet agent
-    $biensIds = Bien::where('agent_immobilier_id', $agent->id)->pluck('id');
-
-    // Récupérer les demandes de maintenance liées aux biens de cet agent uniquement
-    $demandes = DemandeMaintenance::whereIn('bien_id', $biensIds)
-        ->whereHas('bien', function ($query) use ($agent) {
-            $query->where('agent_immobilier_id', $agent->id);
-        })
-        ->with('bien')
-        ->get();
-
-
+        // Récupérer l'agent connecté
+        $agentId = auth()->user()->id;
+    
+        // Récupérer les demandes de maintenance des biens de l'agent connecté
+        $demandes = DemandeMaintenance::with(['locataire', 'bien'])
+            ->whereHas('bien', function ($query) use ($agentId) {
+                $query->where('agent_immobilier_id', $agentId);
+            })
+            ->get();
+    
+        // Log des résultats pour déboguer
+        \Log::info('Demandes récupérées : ', $demandes->toArray());
+    
         // Retourner la vue avec les données
         return view('agent.demandes', compact('demandes'));
     }
+
+    /**
+     * Récupère les demandes de maintenance regroupées par agence, locataire et bien.
+     */
+public function indexGrouped()
+    {
+        // Récupérer les demandes de maintenance avec leurs relations
+        $demandes = DemandeMaintenance::with(['locataire', 'bien.agent_immobilier'])
+            ->get()
+            ->groupBy(function ($demande) {
+                return $demande->bien->agent_immobilier->nom_agence?? 'Agence inconnue';
+            });
+
+        return view('admin.demandes.grouped', compact('demandes'));
+    }
+    
+     // POUR QUE L'AGENT CHANGENT LES STATUT DEs DEMANDEs ENCOOURS OU TERMINE
+public function mettreAJourStatut(Request $request, $id)
+    {
+        // Valider le statut
+        $request->validate([
+            'statut' => 'required|in:en attente,en cours,terminée',
+        ]);
+
+        // Trouver la demande de maintenance
+        $demande = DemandeMaintenance::findOrFail($id);
+
+        // Vérifier si l'agent est autorisé à modifier cette demande
+        if ($demande->bien->agent_immobilier_id !== auth()->user()->id) {
+            abort(403, 'Action non autorisée.');
+        }
+
+        // Mettre à jour le statut
+        $demande->statut = $request->statut;
+        $demande->save();
+
+        // Rediriger avec un message de succès
+        return redirect()->route('agent.demandes')->with('success', 'Statut mis à jour avec succès.');
+    }
+
+    
 
     // Afficher le formulaire de demande de maintenance pour un locataire
     public function create()

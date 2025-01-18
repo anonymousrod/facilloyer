@@ -6,6 +6,7 @@ use App\Models\ContratDeBail;
 use App\Models\Paiement;
 use App\Models\Bien;
 use App\Models\AgentImmobilier;
+use App\Notifications\SendLocataireLogin;
 use App\Models\LocataireBien;
 use App\Models\Locataire;
 use App\Models\User;

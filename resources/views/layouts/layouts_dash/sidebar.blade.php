@@ -86,7 +86,7 @@
 
                         <!-- Nouveau menu 1 : Gestion de la maintenance -->
                         <li class="nav-item">
-                            <a class="nav-link" href="gestion-maintenance.html">
+                            <a class="nav-link" href="{{ route('admin.demandes.grouped')}} ">
                                 <i class="fas fa-tools menu-icon"></i> <!-- Icône pour gestion de la maintenance -->
                                 <span>Gérer la maintenance</span>
                             </a>

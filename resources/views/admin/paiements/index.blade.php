@@ -1,112 +1,124 @@
+
 @extends('layouts.master_dash')
 
 @section('content')
-<div class="container">
-    <!-- En-tête avec champ de recherche -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h6> <b>Historique des Paiements</b></h6>
-        <!-- Champ de recherche amélioré -->
-        <div class="search-box">
-            <input type="text" id="searchPaiements" class="form-control" placeholder="🔍  Nom locataire ou date ">
+<div class="container mt-4">
+    <!-- Formulaire de recherche avec design amélioré -->
+    <div class="row justify-content-center mb-4">
+        <div class="col-md-8">
+            <form action="{{ route('admin.paiements.index') }}" method="GET" class="input-group input-group-lg">
+                <input type="text" name="search" class="form-control form-control-lg" placeholder="Rechercher par nom de locataire ou agence" value="{{ request('search') }}">
+                <div class="input-group-append">
+                    <button class="btn btn-warning btn-lg" type="submit">
+                        <i class="fas fa-search"></i> Rechercher
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 
-    <!-- Liste des paiements -->
-    <div class="row" id="paiementsContainer">
-        @foreach($paiements as $paiement)
-        <div class="col-md-6 col-lg-4 mb-4 paiement-card">
-            <div class="card shadow-sm border-0">
-                <div class="card-body">
-                    <h5 class="card-title locataire-nom">{{ $paiement->locataire->nom }} {{ $paiement->locataire->prenom }}</h5>
-                    <p class="text-muted mb-2"><strong>Bien :</strong> {{ $paiement->bien->name_bien }}</p>
-                    <p class="text-muted mb-2 montant"><strong>Montant :</strong> {{ number_format($paiement->montant, 2, ',', ' ') }} €</p>
-                    <p class="text-muted mb-2 date"><strong>Date :</strong> {{ $paiement->date->format('d/m/Y') }}</p>
-                    <p class="text-muted mb-2">
-                        <strong>Agence :</strong> {{ $paiement->bien->agent_immobilier->nom_agence }} <br>
-                        <small>{{ $paiement->bien->agent_immobilier->adresse_agence }}</small>
-                    </p>
+    <h2 class="text-center mb-4">Historique des Paiements</h2>
 
-                    <div class="d-flex justify-content-between align-items-center mt-3">
-                        <!-- Bouton pour voir plus -->
-                        <a href="{{ route('admin.paiements.details', $paiement->id) }}" class="btn btn-info btn-sm">
-                            <i class="fas fa-eye"></i> Voir
-                        </a>
-                        <!-- Bouton pour la quittance -->
-                        <a href="{{ route('admin.paiements.quittance', $paiement->id) }}" class="btn btn-primary btn-sm">
-                            <i class="fas fa-file-alt"></i> Justif
-                        </a>
+    @foreach ($paiements as $agence => $paiementsAgence)
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <strong>{{ $agence }}</strong>
+                <span class="badge badge-light">{{ $paiementsAgence->count() }} Paiements</span>
+            </div>
+            <div class="card-body">
+                @foreach ($paiementsAgence->take(5) as $paiement)
+                    <div class="mb-3">
+                        <h5 class="text-secondary">Locataire : {{ $paiement->locataire->nom ?? 'Inconnu' }} {{ $paiement->locataire->prenom ?? '' }}</h5>
+                        <p><strong>Bien : </strong>{{ $paiement->bien->name_bien ?? 'Bien inconnu' }}</p>
+                        <p><strong>Montant payé : </strong>{{ number_format($paiement->montant_paye, 2) }} FCFA</p>
+                        <p><strong>Statut : </strong>{{ $paiement->statut_paiement }}</p>
+                        <a href="{{ route('admin.paiements.details', $paiement->id) }}" class="btn btn-info btn-sm">Voir détails</a>
                     </div>
-                </div>
+                    <hr>
+                @endforeach
+
+                <!-- Voir plus pour afficher tous les paiements de l'agence -->
+                @if ($paiementsAgence->count() > 5)
+                    <div class="text-center">
+                        <a href="#" class="btn btn-outline-primary voir-plus">Voir plus</a>
+                    </div>
+                @endif
             </div>
         </div>
-        @endforeach
-    </div>
+    @endforeach
 </div>
 
-<!-- Script pour recherche -->
+<!-- Script pour afficher plus de paiements -->
 <script>
-    document.getElementById('searchPaiements').addEventListener('keyup', function () {
-        const searchValue = this.value.toLowerCase();
-        const paiementCards = document.querySelectorAll('.paiement-card');
-
-        paiementCards.forEach(function (card) {
-            const locataireNom = card.querySelector('.locataire-nom').innerText.toLowerCase();
-            const montant = card.querySelector('.montant').innerText.toLowerCase();
-            const date = card.querySelector('.date').innerText.toLowerCase();
-
-            // Recherche par préfixe : inclure si le texte saisi correspond au début des champs
-            if (
-                locataireNom.startsWith(searchValue) ||
-                montant.startsWith(searchValue) ||
-                date.startsWith(searchValue)
-            ) {
-                card.style.display = 'block';
-            } else {
-                card.style.display = 'none';
-            }
+    document.querySelectorAll('.voir-plus').forEach(button => {
+        button.addEventListener('click', function() {
+            const agenceCard = button.closest('.card-body');
+            agenceCard.querySelectorAll('.mb-3').forEach((paiement, index) => {
+                if (index >= 5) {
+                    paiement.style.display = 'block';  // Afficher les paiements supplémentaires
+                }
+            });
+            button.style.display = 'none'; // Masquer le bouton "Voir plus"
         });
     });
 </script>
-<style>
-    .search-box {
-    position: relative;
-    width: 300px;
-}
 
-.search-box input {
-    width: 100%;
-    padding: 10px 15px;
-    border: 1px solid #ced4da;
-    border-radius: 50px;
-    font-size: 14px;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-}
-
-.search-box input:focus {
-    border-color: #007bff;
-    box-shadow: 0 3px 8px rgba(0, 123, 255, 0.5);
-    outline: none;
-}
-
-.search-box input::placeholder {
-    color: #adb5bd;
-    font-size: 14px;
-}
-
-.search-box input:focus::placeholder {
-    color: transparent;
-}
-
-.search-box::before {
-    content: '🔍';
-    position: absolute;
-    top: 50%;
-    left: 15px;
-    transform: translateY(-50%);
-    font-size: 16px;
-    color: #adb5bd;
-}
-
-</style>
 @endsection
+
+
+<style>
+
+
+
+.card {
+    border-radius: 12px;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Header styling */
+.card-header {
+    border-radius: 12px 12px 0 0;
+    font-size: 1.2rem;
+}
+
+/* Button styling */
+.btn-outline-primary {
+    transition: background-color 0.3s ease;
+}
+
+.btn-outline-primary:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+/* Search box */
+.input-group {
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.input-group input {
+    border-radius: 50px 0 0 50px;
+}
+
+.input-group .btn {
+    border-radius: 0 50px 50px 0;
+}
+
+/* Voir plus animation */
+.voir-plus {
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.voir-plus:hover {
+    transform: scale(1.05);
+    opacity: 0.9;
+}
+</style>

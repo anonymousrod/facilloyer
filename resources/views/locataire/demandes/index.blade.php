@@ -6,7 +6,7 @@
         <div class="col-lg-10">
             <div class="card shadow-lg border-0 rounded-lg">
                 <div class="card-header bg-primary text-white text-center py-4 rounded-top">
-                    <h3 class="card-title mb-0">Liste des demandes de maintenance</h3>
+                    <h3 class="card-title mb-0">Mes demandes de maintenance</h3>
                 </div>
                 <div class="card-body p-4">
                     <!-- Affichage des messages de succès ou d'erreur -->
@@ -27,7 +27,7 @@
                         <table class="table table-hover align-middle table-bordered text-center shadow">
                             <thead class="bg-light text-dark">
                                 <tr>
-                                    <th>N°</th>
+                                    <!-- <th>N°</th> -->
                                     <th>Bien</th>
                                     <th>Description</th>
                                     <th>Statut</th>
@@ -36,8 +36,8 @@
                             <tbody>
                                 @foreach ($demandes as $demande)
                                     <tr>
-                                        <td><strong>{{ $demande->id }}</strong></td>
-                                        <td>{{ $demande->bien->name_bien }}</td> <!-- Afficher le nom du bien -->
+                                        <!-- <td><strong>{{ $demande->id }}</strong></td> -->
+                                        <td>{{ $demande->bien->name_bien }}</td>
                                         <td>{{ $demande->description }}</td>
                                         <td>
                                             <span class="badge 
