@@ -10,7 +10,6 @@ use App\Notifications\SendLocataireLogin;
 use App\Models\LocataireBien;
 use App\Models\Locataire;
 use App\Models\User;
-use App\Notifications\SendLocataireLogin;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
