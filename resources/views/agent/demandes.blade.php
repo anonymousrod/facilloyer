@@ -26,8 +26,11 @@
                         @forelse ($demandes as $demande)
                         <tr>
                             <td>{{ $demande->description }}</td>
-                            <td>{{ $demande->locataire->nom ?? 'N/A' }}</td>
+                            <td>{{ $demande->locataire->nom ?? 'N/A' }}
+                                {{ $demande->locataire->prenom ?? '' }}
+                            </td>
                             <td>{{ $demande->bien->name_bien ?? 'N/A' }}</td>
+                            
                             <td>
                                 <span class="badge 
                                     {{ $demande->statut == 'en attente' ? 'bg-warning text-dark' : 

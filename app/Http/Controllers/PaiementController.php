@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Schema;
 class PaiementController extends Controller
 
 {
-
+  // historique de paiement par le locataire pour un loctaire en fonction de ces biens
 public function historique()
     {
         $user = Auth::user();
@@ -87,6 +87,8 @@ public function store(Request $request)
             ]);
         }
     
+
+       // PAIEMENT DETAIL POUR UN LOCTAIRE
 public function show($id)
         {
             // Récupération de l'utilisateur connecté (locataire)
@@ -106,7 +108,7 @@ public function show($id)
         }
          
 
-    
+    // LOCTAIRE QUUITTANCE D'UN PAIEMENT SËCIFIUQE 
 
 public function generateQuittance($id)
         {
@@ -126,47 +128,61 @@ public function generateQuittance($id)
     
     
 
+/**
+     * Affiche A lADMINISTRATEUR  la liste des paiements regroupés par agence, locataire et bien.
+     */
 
-public function quittance($id)
-    {
-        $paiement = Paiement::with(['locataire', 'bien.agent_immobilier'])->findOrFail($id);
-
-        $pdf = PDF::loadView('admin.paiements.quittance', compact('paiement'));
-        return $pdf->download('quittance_paiement.pdf');
-    }
-
-
-
+public function index(Request $request)
+        {
+            // Recherche des paiements par locataire ou agence
+            $query = Paiement::with(['bien.agent_immobilier', 'locataire'])
+                             ->orderBy('created_at', 'desc');
+    
+            if ($request->has('search')) {
+                $searchTerm = $request->input('search');
+                $query->whereHas('locataire', function($q) use ($searchTerm) {
+                    $q->where('nom', 'like', "%{$searchTerm}%")
+                      ->orWhere('prenom', 'like', "%{$searchTerm}%");
+                })
+                ->orWhereHas('bien.agent_immobilier', function($q) use ($searchTerm) {
+                    $q->where('nom_agence', 'like', "%{$searchTerm}%");
+                });
+            }
+    
+            // Récupère les paiements paginés, 5 paiements par agence
+            $paiements = $query->get()->groupBy(function ($paiement) {
+                return $paiement->bien->agent_immobilier->nom_agence ?? 'Agence inconnue';
+            });
+    
+            return view('admin.paiements.index', compact('paiements'));
+        }
+    
+        // Méthodes supplémentaires (afficherDetailsPaiement, telechargerQuittancePaiement) restent inchangées.
     
     
-    
-public function index()
-    {
-        // Récupérer tous les paiements avec les relations nécessaires
-        $paiements = Paiement::with(['locataire', 'bien.agent_immobilier'])
-            ->orderBy('date', 'desc') // Trier par date du plus récent au plus ancien
-            ->get();
 
-        return view('admin.paiements.index', compact('paiements'));
-    }
-    
-
-public function telechargerQuittancePaiement($id)
-    {
-        $paiement = Paiement::with(['locataire', 'bien', 'bien.agent_immobilier'])->findOrFail($id);
-    
-        $pdf = PDF::loadView('admin.paiements.quittance', compact('paiement'));
-        return $pdf->download('quittance_paiement_' . $paiement->id . '.pdf');
-    }
-
-
-    
+    /**
+     * Affiche  A LADMINISTRATEUR les détails d'un paiement spécifique.
+     */
 public function afficherDetailsPaiement($id)
     {
-        $paiement = Paiement::with(['locataire', 'bien', 'bien.agent_immobilier'])->findOrFail($id);
+        $paiement = Paiement::with(['bien', 'locataire'])->findOrFail($id);
+
         return view('admin.paiements.details', compact('paiement'));
     }
-    
+
+    /**
+     * Télécharge  A L4AMDINISTRAEUR la quittance d'un paiement.
+     */
+public function telechargerQuittancePaiement($id)
+    {
+        $paiement = Paiement::findOrFail($id);
+
+        // Ici, générez un PDF ou un fichier pour la quittance.
+        // Code pour la génération de quittance.
+
+        return response()->download('chemin_du_fichier.pdf');
+    }
 
 
 

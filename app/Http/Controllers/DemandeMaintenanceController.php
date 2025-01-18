@@ -36,6 +36,21 @@ public function afficherDemandesAgent()
         // Retourner la vue avec les données
         return view('agent.demandes', compact('demandes'));
     }
+
+    /**
+     * Récupère les demandes de maintenance regroupées par agence, locataire et bien.
+     */
+public function indexGrouped()
+    {
+        // Récupérer les demandes de maintenance avec leurs relations
+        $demandes = DemandeMaintenance::with(['locataire', 'bien.agent_immobilier'])
+            ->get()
+            ->groupBy(function ($demande) {
+                return $demande->bien->agent_immobilier->nom_agence?? 'Agence inconnue';
+            });
+
+        return view('admin.demandes.grouped', compact('demandes'));
+    }
     
      // POUR QUE L'AGENT CHANGENT LES STATUT DEs DEMANDEs ENCOOURS OU TERMINE
 public function mettreAJourStatut(Request $request, $id)

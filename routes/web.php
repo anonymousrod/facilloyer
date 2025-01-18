@@ -124,12 +124,6 @@ Route::middleware(['auth'])->group(function () {
         // Voir la liste des demandes de maintenance du locataire
         Route::get('/locataire/demandes/index', [DemandeMaintenanceController::class, 'index'])->name('locataire.demandes.index');
 
-       
-        
-        
-
-
-
 
         // AGENT IMMOBILIERS VOIR LES DEMANDES
 
@@ -139,8 +133,15 @@ Route::middleware(['auth'])->group(function () {
         Route::patch('/agent/demandes/{id}', [DemandeMaintenanceController::class, 'mettreAJourStatut'])->name('agent.demandes.update');
 
 
-
     });
+
+
+    // ADMINITRATEUR DEMANDE MANTENANCE SUPERVISION
+    Route::prefix('admin')->middleware('auth')->group(function () {
+        Route::get('demandes-maintenance/grouped', [DemandeMaintenanceController::class, 'indexGrouped'])
+            ->name('admin.demandes.grouped');
+    });
+
 
    
 // Routes pour les agents immobiliers
@@ -181,17 +182,14 @@ Route::get('admin/locataires/{locataire}/profil', [LocataireController::class, '
 // route pour afficher la liste de tout les paiement par ladministrateur
 
 
-Route::middleware('auth')->prefix('admin')->name('admin.')->group(function() {
+Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/paiements', [PaiementController::class, 'index'])->name('paiements.index');
-    
-
+    Route::get('/paiements/{id}/details', [PaiementController::class, 'afficherDetailsPaiement'])->name('paiements.details');
+    Route::get('/paiements/{id}/quittance', [PaiementController::class, 'telechargerQuittancePaiement'])->name('paiements.quittance');
 });
 
+
 //GESTIONQUITTANCE D4UN PAIEMENT SPECIFIQUE 
-
-Route::get('admin/paiements/{id}/details', [PaiementController::class, 'afficherDetailsPaiement'])->name('admin.paiements.details');
-Route::get('admin/paiements/{id}/quittance', [PaiementController::class, 'telechargerQuittancePaiement'])->name('admin.paiements.quittance');
-
 
 
 
