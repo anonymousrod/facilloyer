@@ -4,38 +4,53 @@ namespace App\Http\Controllers;
 
 use App\Models\DemandeMaintenance;
 use App\Models\Locataire;
+use App\Models\AgentImmobilier;
 use App\Models\Bien;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Auth;     
+use Illuminate\Support\Facades\Log;
+
+
 
 class DemandeMaintenanceController extends Controller
 {
 
-        /**
-     * Afficher les demandes de maintenance pour un agent immobilier connecté.
-     *
-     * @return \Illuminate\View\View
-     */
+        
+     // Afficher les demandes de maintenance pour un agent immobilier connecté.
+     
 
-     //   POUR AFFICHER LES DEMAMNDE DE MAINTENANCE DANS LE DASHBOARD LOCATAIRE 
+     //   POUR AFFICHER LES DEMAMNDE DE MAINTENANCE DANS LE DASHBOARD AGENT 
 public function afficherDemandesAgent()
-    {
-        // Récupérer l'agent connecté
-        $agentId = auth()->user()->id;
-    
-        // Récupérer les demandes de maintenance des biens de l'agent connecté
-        $demandes = DemandeMaintenance::with(['locataire', 'bien'])
-            ->whereHas('bien', function ($query) use ($agentId) {
-                $query->where('agent_immobilier_id', $agentId);
-            })
-            ->get();
-    
-        // Log des résultats pour déboguer
-        \Log::info('Demandes récupérées : ', $demandes->toArray());
-    
-        // Retourner la vue avec les données
-        return view('agent.demandes', compact('demandes'));
-    }
+     {
+         // Récupérer l'ID de l'utilisateur connecté
+         $userId = auth()->user()->id;
+     
+         // Récupérer l'agent immobilier correspondant à cet utilisateur
+         $agent = AgentImmobilier::where('user_id', $userId)->first();
+     
+         // Vérifier si un agent a été trouvé
+         if (!$agent) {
+             abort(404, 'Agent immobilier introuvable pour cet utilisateur.');
+         }
+     
+         // Récupérer les demandes de maintenance liées aux biens de cet agent immobilier
+         $demandes = DemandeMaintenance::with(['locataire', 'bien'])
+             ->whereHas('bien', function ($query) use ($agent) {
+                 $query->where('agent_immobilier_id', $agent->id);
+             })
+             ->get();
+     
+         // Vérifier si des demandes ont été trouvées (pour les logs)
+         if ($demandes->isEmpty()) {
+             \Log::info("Aucune demande trouvée pour l'agent immobilier ID {$agent->id}.");
+         } else {
+             \Log::info("Demandes récupérées pour l'agent immobilier ID {$agent->id} : ", $demandes->toArray());
+         }
+     
+         // Retourner la vue avec les données des demandes
+         return view('agent.demandes', compact('demandes'));
+     }
+     
 
     /**
      * Récupère les demandes de maintenance regroupées par agence, locataire et bien.
@@ -53,28 +68,34 @@ public function indexGrouped()
     }
     
      // POUR QUE L'AGENT CHANGENT LES STATUT DEs DEMANDEs ENCOOURS OU TERMINE
-public function mettreAJourStatut(Request $request, $id)
-    {
-        // Valider le statut
-        $request->validate([
-            'statut' => 'required|in:en attente,en cours,terminée',
-        ]);
 
-        // Trouver la demande de maintenance
-        $demande = DemandeMaintenance::findOrFail($id);
-
-        // Vérifier si l'agent est autorisé à modifier cette demande
-        if ($demande->bien->agent_immobilier_id !== auth()->user()->id) {
-            abort(403, 'Action non autorisée.');
-        }
-
-        // Mettre à jour le statut
-        $demande->statut = $request->statut;
-        $demande->save();
-
-        // Rediriger avec un message de succès
-        return redirect()->route('agent.demandes')->with('success', 'Statut mis à jour avec succès.');
-    }
+    public function mettreAJourStatut(Request $request, $id)
+     {
+         Log::info("Requête reçue pour mettre à jour le statut : ", $request->all());
+     
+         $agentId = AgentImmobilier::where('user_id', auth()->user()->id)->value('id');
+         Log::info("Agent ID connecté : " . $agentId);
+     
+         $demande = DemandeMaintenance::find($id);
+         if (!$demande) {
+             Log::error("Demande introuvable pour ID : " . $id);
+             abort(404, 'Demande introuvable.');
+         }
+     
+         Log::info("Demande trouvée : ", $demande->toArray());
+         if ($demande->bien->agent_immobilier_id !== $agentId) {
+             Log::error("L'agent n'est pas autorisé à modifier cette demande.");
+             abort(403, 'Action non autorisée.');
+         }
+     
+         $demande->statut = $request->statut;
+         $demande->save();
+     
+         Log::info("Statut mis à jour avec succès pour la demande ID : " . $id);
+     
+         return redirect()->route('agent.demandes')->with('success', 'Statut mis à jour avec succès.');
+     }
+     
 
     
 

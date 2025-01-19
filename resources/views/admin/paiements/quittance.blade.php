@@ -165,7 +165,7 @@
                 </div>
                 <div class="payment-row">
                     <strong>Montant versé :</strong>
-                    <span class="montant">{{ number_format($paiement->montant, 2, ',', ' ') }} €</span>
+                    <span class="montant">{{ number_format($paiement->montant, 2, ',', ' ') }} FCFA</span>
                 </div>
             </div>
         </div>

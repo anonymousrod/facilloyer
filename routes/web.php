@@ -20,6 +20,7 @@ use App\Http\Controllers\ActionAdminController;
 Route::get('/', function () {
     return view('welcome');
 });
+
 //  GEstion de la langue local
 Route::get('/change-language/{lang}', function ($lang) {
     if (in_array($lang, ['en', 'es', 'de', 'fr'])) {

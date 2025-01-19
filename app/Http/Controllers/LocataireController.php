@@ -19,7 +19,6 @@ class LocataireController extends Controller
 {
 
 // Affiche les informations détaillées du locataire
-// Affiche les informations détaillées du locataire
 
 
 public function showInformations($id)
@@ -153,65 +152,63 @@ public function showProfil($locataireId)
     /**
      * Met à jour les informations du locataire connecté.
      */
-    public function update(Request $request, $id)
+public function update(Request $request, $id)
     {
-        // Validation des données, y compris le fichier
+        // Validation des champs
         $request->validate([
             'nom' => 'required|string|max:255',
             'prenom' => 'required|string|max:255',
             'adresse' => 'required|string|max:255',
             'telephone' => 'required|string|max:20',
             'date_naissance' => 'required|date',
-            'genre' => 'required|string|max:10',
-            'revenu_mensuel' => 'required|numeric',
-            'nombre_personne_foyer' => 'required|numeric',
-            'statut_matrimoniale' => 'required|string|max:20',
-            'statut_professionnel' => 'required|string|max:255',
+            'genre' => 'required|in:Masculin,Féminin',
+            'revenu_mensuel' => 'required|numeric|min:0',
+            'nombre_personne_foyer' => 'required|integer|min:1',
+            'statut_matrimoniale' => 'required|string|in:Célibataire,Marié(e),Divorcé(e),Veuf(ve)',
             'garant' => 'nullable|string|max:255',
-            'photo_profil' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'photo_profil' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Max 2 MB pour la photo
         ]);
-
-        $locataire = Locataire::findOrFail($id);
-        $user = Auth::user();
-
-        // Mise à jour des informations
-        $locataire->nom = $request->input('nom');
-        $locataire->prenom = $request->input('prenom');
-        $locataire->adresse = $request->input('adresse');
-        $locataire->telephone = $request->input('telephone');
-        $locataire->date_naissance = $request->input('date_naissance');
-        $locataire->genre = $request->input('genre');
-        $locataire->revenu_mensuel = $request->input('revenu_mensuel');
-        $locataire->nombre_personne_foyer = $request->input('nombre_personne_foyer');
-        $locataire->statut_matrimoniale = $request->input('statut_matrimoniale');
-        $locataire->statut_professionnel = $request->input('statut_professionnel');
-        $locataire->garant = $request->input('garant');
-
-        // Gestion de l'image (si un fichier est téléchargé)
-        if ($request->hasFile('photo_profil')) {
-            // Supprimer l'ancienne image si elle existe
-            if ($locataire->photo_profil && file_exists(public_path('images/profils/' . $locataire->photo_profil))) {
-                unlink(public_path('images/profils/' . $locataire->photo_profil));
+    
+        try {
+            // Récupération du locataire
+            $locataire = Locataire::findOrFail($id);
+    
+            // Mise à jour des champs simples
+            $locataire->nom = $request->nom;
+            $locataire->prenom = $request->prenom;
+            $locataire->adresse = $request->adresse;
+            $locataire->telephone = $request->telephone;
+            $locataire->date_naissance = $request->date_naissance;
+            $locataire->genre = $request->genre;
+            $locataire->revenu_mensuel = $request->revenu_mensuel;
+            $locataire->nombre_personne_foyer = $request->nombre_personne_foyer;
+            $locataire->statut_matrimoniale = $request->statut_matrimoniale;
+            $locataire->garant = $request->garant;
+    
+            // Gestion de la photo de profil
+            if ($request->hasFile('photo_profil')) {
+                // Supprimer l'ancienne photo si elle existe
+                if ($locataire->photo_profil && \Storage::exists($locataire->photo_profil)) {
+                    \Storage::delete($locataire->photo_profil);
+                }
+    
+                // Sauvegarder la nouvelle photo
+                $path = $request->file('photo_profil')->store('photos_locataires', 'public');
+                $locataire->photo_profil = $path;
             }
-
-            // Sauvegarder la nouvelle image
-            $imageName = time() . '.' . $request->photo_profil->extension();
-            $request->photo_profil->move(public_path('images/profils'), $imageName);
-            $locataire->photo_profil = $imageName;
+    
+            // Sauvegarder les modifications
+            $locataire->save();
+    
+            // Retourner une réponse ou redirection
+            return redirect()->route('locataire.locashow')->with('success', 'Vos informations ont été mises à jour avec succès.');
+        } catch (\Exception $e) {
+            // Gestion des erreurs
+            return back()->with('error', 'Une erreur s\'est produite lors de la mise à jour. Veuillez réessayer.');
         }
-
-
-        // Sauvegarde des modifications
-        $locataire->save();
-
-        // Mettre à jour le champ `name` de l'utilisateur
-        $user = $locataire->user; // Si `AgentImmobilier` a une relation avec `User`
-        $user->name = $request->input('nom') . ' ' . $request->input('prenom');
-        $user->save();
-
-        return redirect()->route('locataire.show', $user)->with('success', 'Les informations ont été mises à jour avec succès.');
     }
-
+    
+    
     /**
      * Remove the specified resource from storage.
      */
