@@ -53,10 +53,10 @@ public function showProfil($locataireId)
         // Retourne la vue du profil avec les données du locataire
         return view('admin.locataires.profil', compact('locataire'));
     }
-    
- 
 
-    
+
+
+
 
     /**
      * Display a listing of the resource.
@@ -255,29 +255,29 @@ public function agenceImmobiliereAssociee()
     {
         // Récupérer l'utilisateur connecté
         $user = Auth::user();
-    
+
         // Vérifier si l'utilisateur est connecté et est un locataire
         if (!$user || !$user->locataires()->exists()) {
             return redirect()->back()->with('error', 'Vous n\'êtes pas un locataire ou connecté.');
         }
-    
+
         // Récupérer le locataire et l'agence immobilière associée
         $locataire = $user->locataires()->first();
         $agent = $locataire->agent_immobilier; // Vérifiez que cette relation existe
-    
+
         // Vérifier si une agence est associée
         if (!$agent) {
             return redirect()->back()->with('error', 'Aucune agence immobilière associée.');
         }
-    
+
         // Debug : Affichez les données pour confirmer
         // dd($agent);
-    
+
         // Retourner la vue avec les données
         return view('locataire.agentinfo', compact('locataire', 'agent'));
     }
-    
-       
+
+
 
 
 public function updateEvaluation(Request $request, $id)
@@ -287,17 +287,17 @@ public function updateEvaluation(Request $request, $id)
             $request->validate([
                 'evaluation' => 'required|numeric|min:1|max:5',
             ]);
-    
+
             // Récupérer l'agent
             $agent = AgentImmobilier::find($id);
             if (!$agent) {
                 return response()->json(['error' => 'Agent non trouvé.'], 404);
             }
-    
+
             // Mise à jour de l'évaluation
             $agent->evaluation = $request->evaluation;
             $agent->save();
-    
+
             // Répondre avec succès
             return response()->json([
                 'success' => 'Évaluation mise à jour avec succès.',
@@ -307,7 +307,7 @@ public function updateEvaluation(Request $request, $id)
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
-    
+
 
 public function search(Request $request)
     {
