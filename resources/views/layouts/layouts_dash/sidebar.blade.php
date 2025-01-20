@@ -48,7 +48,7 @@
                                     </li><!--end nav-item-->
                                     <!-- <li class="nav-item">
                                         <a class="nav-link" href="t.t">
-                                        <i class="fas fa-user-tie menu-icon"></i> 
+                                        <i class="fas fa-user-tie menu-icon"></i>
                                             <span>Liste agents immobiliers</span>
                                         </a>
                                     </li> -->
@@ -104,7 +104,7 @@
 
                     <!-- ITEMS POUR LE LOCATAIRE -->
                     @if (Auth::user()->id_role == 2)
-                        
+
                         <!-- Dashboard -->
                         <li class="nav-item">
                             <a class="nav-link" href="{{route('dashboard')}}">
@@ -171,7 +171,7 @@
 
 
                         <!-- Modifier Mon Profil -->
-                         
+
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('locataire.locashow', Auth::user()->id) }}">
                                 <i class="iconoir-user menu-icon"></i> <!-- Icône pour modification de profil -->
@@ -186,12 +186,20 @@
                                 <span>Paramètres</span>
                             </a>
                         </li><!--end nav-item-->
-                
 
-                    @endif                    
-                    
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('user', Auth::user()->locataires->first()->agent_immobilier->user->id) }}">
+                                <i class="iconoir-settings menu-icon"></i> <!-- Icône pour messagerie -->
+                                <span>Messagerie</span>
+                            </a>
+                        </li>
+
+
+
+                    @endif
+
                         <!-- ITEMS POUR L'AGENT IMMOBILIER -->
-                
+
                     @if (Auth::user()->id_role == 3)
                         @if (Auth::user()->statut)
                             <!-- Si l'agent est validé -->
@@ -293,12 +301,14 @@
                                 </a>
 
                             </li><!--end nav-item-->
-
+                            @php
+                                $user= App\Models\User::where('id_role', 1)->get();
+                            @endphp
 
                             <li class="nav-item">
-                                <a class="nav-link" href="lol.html">
+                                <a class="nav-link" href="{{ route('user', $user->first()->id) }}">
                                     <i class="iconoir-view-grid menu-icon"></i>
-                                    <span>Discussion par chat</span>
+                                    <span>Messagerie</span>
                                 </a>
 
                             </li><!--end nav-item-->

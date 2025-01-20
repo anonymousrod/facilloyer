@@ -48,7 +48,6 @@ class ContratDeBailController extends Controller
             'caution_eau' => 'nullable|numeric',
             'caution_electricite' => 'nullable|numeric',
             'montant_total_frequence' => 'nullable|numeric',
-
             'lieu_signature' => 'required|string',
             'date_signature' => 'required|date',
             'locataire_id' => 'required|exists:locataires,id',
@@ -59,7 +58,7 @@ class ContratDeBailController extends Controller
             'mode_paiement' => 'required|string',
             'statut_contrat' => 'required|string',
         ]);
-
+        
         // Création du contrat de bail
         $contratDeBail = ContratsDeBail::create([
             'bien_id' => $request->bien_id,

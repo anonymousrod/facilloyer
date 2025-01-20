@@ -19,59 +19,52 @@
 
 {{-- script pour l'activation du statu par l'agent immobilier --}}
 
+<script>
+    toggleStatusButtons.forEach(button => {
+    button.addEventListener('change', function() {
+        const locataireId = this.dataset.id;
+        const isChecked = this.checked;
+        const statusLabel = this.nextElementSibling;
 
-<<<<<<< HEAD
+        // Confirmation message
+        const confirmation = confirm(
+            `Êtes-vous sûr de vouloir ${isChecked ? 'activer' : 'désactiver'} ce locataire ?`
+        );
 
-
-
-{{-- script pour l'activation du statut de l'agent  par le super administrateur --}}
-=======
-        toggleStatusButtons.forEach(button => {
-            button.addEventListener('change', function() {
-                const locataireId = this.dataset.id;
-                const isChecked = this.checked;
-                const statusLabel = this.nextElementSibling;
-
-                // Confirmation message
-                const confirmation = confirm(
-                    `Êtes-vous sûr de vouloir ${isChecked ? 'activer' : 'désactiver'} ce locataire ?`
-                );
-
-                if (confirmation) {
-                    // Envoyer la requête au backend pour mettre à jour le statut
-                    fetch(`/locataires/${locataireId}/toggle-status`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            },
-                            body: JSON.stringify({
-                                statut: isChecked
-                            })
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                statusLabel.textContent = isChecked ? 'Activé' :
-                                    'Désactivé';
-                            } else {
-                                alert('Une erreur s\'est produite. Veuillez réessayer.');
-                                this.checked = !isChecked; // Rétablir l'ancien état
-                            }
-                        })
-                        .catch(error => {
-                            console.error('Erreur :', error);
-                            alert('Une erreur s\'est produite. Veuillez réessayer.');
-                            this.checked = !isChecked; // Rétablir l'ancien état
-                        });
-                } else {
-                    this.checked = !isChecked; // Rétablir l'ancien état si annulation
-                }
-            });
-        });
+        if (confirmation) {
+            // Envoyer la requête au backend pour mettre à jour le statut
+            fetch(`/locataires/${locataireId}/toggle-status`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        statut: isChecked
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        statusLabel.textContent = isChecked ? 'Activé' :
+                            'Désactivé';
+                    } else {
+                        alert('Une erreur s\'est produite. Veuillez réessayer.');
+                        this.checked = !isChecked; // Rétablir l'ancien état
+                    }
+                })
+                .catch(error => {
+                    console.error('Erreur :', error);
+                    alert('Une erreur s\'est produite. Veuillez réessayer.');
+                    this.checked = !isChecked; // Rétablir l'ancien état
+                });
+        } else {
+            this.checked = !isChecked; // Rétablir l'ancien état si annulation
+        }
     });
+    });
+ 
 </script>
->>>>>>> exauce
 
 
 {{-- script pour le calendrier --}}
@@ -144,20 +137,20 @@
     }
 </script>
 <script>
-    document.querySelector('form').addEventListener('submit', function (event) {
-    // Capture la signature de l'agent immobilier
-    if (signatureAgentPad && !signatureAgentPad.isEmpty()) {
-        document.getElementById('signatureAgentInput').value = signatureAgentPad.toDataURL('image/png');
-    }
+    document.querySelector('form').addEventListener('submit', function(event) {
+        // Capture la signature de l'agent immobilier
+        if (signatureAgentPad && !signatureAgentPad.isEmpty()) {
+            document.getElementById('signatureAgentInput').value = signatureAgentPad.toDataURL('image/png');
+        }
 
-    // Capture la signature du locataire
-    if (signatureLocatairePad && !signatureLocatairePad.isEmpty()) {
-        document.getElementById('signatureLocataireInput').value = signatureLocatairePad.toDataURL('image/png');
-    }
+        // Capture la signature du locataire
+        if (signatureLocatairePad && !signatureLocatairePad.isEmpty()) {
+            document.getElementById('signatureLocataireInput').value = signatureLocatairePad.toDataURL(
+                'image/png');
+        }
 
-    // Vérification dans la console des valeurs des champs cachés
-    console.log(document.getElementById('signatureAgentInput').value);
-    console.log(document.getElementById('signatureLocataireInput').value);
+        // Vérification dans la console des valeurs des champs cachés
+        console.log(document.getElementById('signatureAgentInput').value);
+        console.log(document.getElementById('signatureLocataireInput').value);
     });
 </script>
-

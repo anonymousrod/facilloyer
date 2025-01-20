@@ -27,10 +27,10 @@
                                     @foreach ($articles as $article)
                                         <tr>
                                             <!-- Titre de l'Article -->
-                                            <td>{{ $article->titre_article }}</td>
+                                            <td>{{ \Illuminate\Support\Str::words($article->titre_article, 1, '...') }}</td>
 
                                             <!-- Résumé du Contenu -->
-                                            <td>{{ \Illuminate\Support\Str::limit($article->contenu_article, 50, '...') }}
+                                            <td>{{ \Illuminate\Support\Str::words($article->contenu_article, 1, '...') }}
                                             </td>
 
                                             <!-- Date de Création -->

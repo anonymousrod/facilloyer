@@ -13,9 +13,7 @@ use App\Http\Controllers\LocataireBienController;
 use App\Http\Controllers\LocataireController;
 use App\Http\Controllers\PaiementController;
 use App\Http\Controllers\ActionAdminController;
-
-
-
+use Chatify\Http\Controllers\CustomMessagesController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -116,8 +114,8 @@ Route::middleware(['auth'])->group(function () {
     Route::middleware(['auth'])->group(function() {
        // Afficher le formulaire de demande de maintenance
         Route::get('/locataire/demandes/create', [DemandeMaintenanceController::class, 'create'])->name('locataire.demandes.create');
-       
-    
+
+
         // Enregistrer la demande de maintenance
         Route::post('/locataire/demandes', [DemandeMaintenanceController::class, 'store'])->name('locataire.demandes.store');
 
@@ -143,7 +141,7 @@ Route::middleware(['auth'])->group(function () {
     });
 
 
-   
+
 // Routes pour les agents immobiliers
 Route::post('/admin/agents/toggle-status/{id}', [AgentImmobilierController::class, 'toggleStatus'])->name('admin.agents.toggleStatus');
 
@@ -189,7 +187,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
 });
 
 
-//GESTIONQUITTANCE D4UN PAIEMENT SPECIFIQUE 
+//GESTIONQUITTANCE D4UN PAIEMENT SPECIFIQUE
 
 
 
@@ -227,4 +225,5 @@ Route::resource('/Contrat_de_bail', ContratDeBailController::class)->names('cont
 Route::resource('/Article_contrat_bail', ArticleContratBailController::class)->names('article');
 
 
-
+//route chatify recherce perso
+Route::get('chatify/api/search', [CustomMessagesController::class, 'search'])->name('api.search');

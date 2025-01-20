@@ -172,7 +172,7 @@
                             <div id="contrat-details" style="display: none;">
                                 <p>IL A ÉTÉ CONVENU CE QUI SUIT :</p>
 
-                                <h6>ARTICLE 1 </u> : OBJET DU CONTRAT</h6>
+                                <h6><strong><u>ARTICLE 1</u> : OBJET DU CONTRAT</strong> </h6>
 
                                 <p>
                                     L’Agent Immobilier met à disposition du Locataire, en son nom propre ou en qualité de
@@ -183,7 +183,8 @@
                                     l’Agent Immobilier.
                                 </p>
 
-                                <h6>ARTICLE 2 </u> : DESCRIPTION DU BIEN</h6>
+                                <h6><strong><u>ARTICLE 2</u> : DESCRIPTION DU BIEN</strong> </h6>
+
                                 <p>
                                     Le bien loué est décrit comme suit :
                                 <ul>
@@ -195,7 +196,7 @@
                                     <li>Équipements : {{ $bien->description }}</li>
                                 </ul>
                                 L'ensemble faisant l'objet d'un titre de propriété, tel que ces locaux existent et se
-                                comportentsans qu'il ne soit nécessaire d'en faire une plus grand description, <strong>le
+                                comportent sans qu'il ne soit nécessaire d'en faire une plus grand description, <strong>le
                                     Preneur déclarant bien connaître les lieux et locaux pour les avoir visités</strong>.
                                 </p>
 
@@ -213,7 +214,8 @@
 
 
 
-                                <h6>ARTICLE 3 </u> : DURÉE DU CONTRAT</h6>
+                                <h6><strong><u>ARTICLE 3</u> : DURÉE DU CONTRAT</strong> </h6>
+
                                 <p>
                                     Le présent contrat est consenti et accepté pour une durée de
                                     {{ $contrat->date_debut->diffInMonths($contrat->date_fin) }} mois
@@ -234,40 +236,30 @@
 
                                 </p>
 
-                                <h6>ARTICLE 4</u> : LOYER ET MODALITÉS DE PAIEMENT</h6>
-                                @php
-                                    // Calculer le montant en fonction de la fréquence de paiement
-                                    $frequences = [
-                                        'mois' => 1,
-                                        'bimestre' => 2,
-                                        'trimestre' => 3,
-                                    ];
-                                    $multiplicateur = $frequences[$contrat->frequence_paiement] ?? 1; // Par défaut, 1 si la fréquence n'est pas reconnue
-                                    $montant = $bien->loyer_mensuel * $multiplicateur;
+                                 <h6><strong><u>ARTICLE 4</u> : LOYER ET MODALITÉS DE PAIEMENT</strong> </h6>
 
-                                @endphp
                                 @php
                                     // Convertir la fréquence en jours si c'est une période (mois, bimestre, trimestre)
-$frequences = [
-    'mois' => 30,
-    'bimestre' => 60,
-    'trimestre' => 90,
-];
-$delai_retard =
-    $frequences[$contrat->frequence_paiement] ?? $contrat->frequence_paiement; // Par défaut, la valeur brute si non reconnue
+                                    $frequences = [
+                                        'mois' => 30,
+                                        'bimestre' => 60,
+                                        'trimestre' => 90,
+                                        'semestriel' => 180, // Virgule ajoutée ici
+                                        'annuel' => 360,
+                                    ];
 
-// Formater la pénalité (ajouter un symbole si nécessaire)
-$penalite = is_numeric($contrat->penalite_retard)
-    ? $contrat->penalite_retard .
-        (strpos($contrat->penalite_retard, '%') !== false ? '' : ' Francs CFA')
-                                        : $contrat->penalite_retard;
+                                    // Par défaut, la valeur brute est utilisée si la clé n'est pas reconnue
+                                    $delai_retard =
+                                        $frequences[$contrat->frequence_paiement] ?? $contrat->frequence_paiement;
+
                                 @endphp
+
 
                                 <p>
                                     1. Le présent contrat est consenti et accepté pour un loyer mensuel de
                                     <strong>{{ number_format($bien->loyer_mensuel, 2) }} Francs CFA</strong> Payable par
                                     <strong>{{ $contrat->frequence_paiement }}</strong> et d'avance
-                                    soit <strong>{{ number_format($montant, 2) }}</strong> Francs CFA.
+                                    soit <strong>{{ $contrat->montant_total_frequence }}</strong> Francs CFA.
                                     Ce loyer est payable au plus tard le
                                     <strong>{{ $contrat->date_debut->addMonth(1)->day }}ème
                                         jour</strong> de chaque mois.
@@ -289,7 +281,7 @@ $penalite = is_numeric($contrat->penalite_retard)
                                     Le mode de paiement retenu est le paiement mobile.
                                     En cas de retard de paiement supérieur à
                                     <strong>{{ $delai_retard }}</strong> jours, une pénalité de
-                                    <strong>{{ $penalite }}</strong> sera appliquée.
+                                    <strong>{{ $contrat->penalite_retard }}</strong> sera appliquée.
                                 </p>
 
 
@@ -302,7 +294,8 @@ $penalite = is_numeric($contrat->penalite_retard)
                                 @if ($articles->count() > 0)
                                     @foreach ($articles as $article)
                                         @php $articleCounter++; @endphp
-                                        <h6>ARTICLE {{ $articleCounter }} : {{ $article->titre_article }} </h6>
+                                        <h6><strong><u>ARTICLE {{ $articleCounter }}</u> : {{ $article->titre_article }}</strong> </h6>
+
                                         <p> {{ $article->contenu_article }} </p>
                                     @endforeach
                                 @endif
@@ -310,7 +303,8 @@ $penalite = is_numeric($contrat->penalite_retard)
                                 <!-- Continuation des articles numérotés dynamiquement -->
                                 @php $articleCounter++; @endphp
 
-                                <h6><u>ARTICLE {{ $articleCounter }} </u> : DATE DE PRISE D'EFFET</h6>
+                                <h6><strong><u>ARTICLE {{ $articleCounter }}</u> : DATE DE PRISE D'EFFET</strong> </h6>
+
 
                                 <P>Le present contrat commence à courir à compter du
                                     <strong>{{ $contrat->date_debut->format('d/m/Y') }}</strong>
