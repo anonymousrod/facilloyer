@@ -17,6 +17,7 @@ use App\Http\Controllers\ActionAdminController;
 
 
 
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -108,11 +109,12 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/locataire/paiements/{id}/detail', [PaiementController::class, 'show'])->name('locataire.paiements.detail');
 
-
 });
 
 
 
+
+Route::get('/periodes', [PaiementController::class, 'trouverPeriode'])->name('periodes.show');
 
     Route::middleware(['auth'])->group(function() {
        // Afficher le formulaire de demande de maintenance
@@ -187,6 +189,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/paiements', [PaiementController::class, 'index'])->name('paiements.index');
     Route::get('/paiements/{id}/details', [PaiementController::class, 'afficherDetailsPaiement'])->name('paiements.details');
     Route::get('/paiements/{id}/quittance', [PaiementController::class, 'telechargerQuittancePaiement'])->name('paiements.quittance');
+    
 });
 
 

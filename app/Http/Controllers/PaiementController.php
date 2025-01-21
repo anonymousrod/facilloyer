@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Locataire;
+use App\Models\ContratsDeBail;
 use App\Models\Paiement;
 use App\Models\Bien;
 use Illuminate\Http\Request;
@@ -9,9 +10,9 @@ use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use PDF; // Si vous utilisez barryvdh/laravel-dompdf
 use Illuminate\Support\Facades\DB;
-use App\Models\ContratDeBailLocataire;
-use App\Models\Locataire;
 use Illuminate\Support\Facades\Schema;
+use App\Models\GestionPeriode;
+use Exception;
 
 
 
@@ -183,6 +184,94 @@ public function telechargerQuittancePaiement($id)
 
         return response()->download('chemin_du_fichier.pdf');
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// PaiementController.php
+
+public function trouverPeriode(Request $request)
+{
+    // Récupération de l'utilisateur connecté
+    $user = auth()->user();
+
+    // Vérification que l'utilisateur a bien un locataire associé
+    $locataire = $user->locataires()->first();
+    if (!$locataire) {
+        return response()->json(['message' => 'Aucun locataire trouvé pour cet utilisateur.'], 404);
+    }
+
+    // Récupération du contrat de bail actif du locataire
+    $contratBail = $locataire->contratsDeBail()->where('statut_contrat', '<>', 'Résilié')->first();
+    if (!$contratBail) {
+        return response()->json(['message' => 'Aucun contrat de bail actif trouvé'], 404);
+    }
+
+    // Date de début du contrat de bail
+    $dateDebutContrat = Carbon::parse($contratBail->date_debut);
+
+    // Recherche de la période en cours
+    $periode = 1;
+    $dateDebutPeriode = $dateDebutContrat->copy();
+    $dateFinPeriode = $dateDebutPeriode->copy()->addMonth();
+
+    while (!now()->between($dateDebutPeriode, $dateFinPeriode)) {
+        $periode++;
+        $dateDebutPeriode = $dateDebutContrat->copy()->addMonths($periode - 1);
+        $dateFinPeriode = $dateDebutPeriode->copy()->addMonth();
+    }
+
+    // Vérification si la période existe déjà dans la table 'gestion_periode'
+    $periodeExistante = GestionPeriode::where('locataire_id', $locataire->id)
+        ->where('date_debut_periode', $dateDebutPeriode)
+        ->where('date_fin_periode', $dateFinPeriode)
+        ->first();
+
+    if ($periodeExistante) {
+        // La période existe déjà, on retourne les informations
+        return view('periodes.show', [
+            'periode' => $periodeExistante,
+        ]);
+    } else {
+        // La période n'existe pas, on la crée
+        $nouvellePeriode = new GestionPeriode();
+        $nouvellePeriode->locataire_id = $locataire->id; // ID du locataire connecté
+        $nouvellePeriode->contrat_de_bail_id = $contratBail->id; // ID du contrat de bail
+        $nouvellePeriode->bien_id = $contratBail->bien_id; // ID du bien associé au contrat
+        $nouvellePeriode->date_debut_periode = $dateDebutPeriode; // Date de début de la période
+        $nouvellePeriode->date_fin_periode = $dateFinPeriode; // Date de fin de la période
+        $nouvellePeriode->montant_total_periode = 0; // Montant total initialisé à 0
+        $nouvellePeriode->complement_periode = 0; // Complément initialisé à 0
+        $nouvellePeriode->montant_restant_periode = 0; // Montant restant initialisé à 0
+        $nouvellePeriode->save();
+
+        return view('periodes.show', [
+            'periode' => $nouvellePeriode,
+        ]);
+    }
+}
+
+
+    
 
 
 

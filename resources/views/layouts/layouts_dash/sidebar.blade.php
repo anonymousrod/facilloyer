@@ -139,11 +139,14 @@
 
                         <!-- Effectuer un paiement -->
                         <li class="nav-item">
-                            <a class="nav-link" href="r.r">
+                            <a class="nav-link" href="{{ route('periodes.show') }}">
                                 <i class="iconoir-credit-card menu-icon"></i> <!-- Icône pour paiement -->
                                 <span>Effectuer un paiement</span>
                             </a>
-                        </li><!--end nav-item-->
+
+                        </li>
+
+
 
                         <!-- Historique des paiements -->
                         <li class="nav-item">

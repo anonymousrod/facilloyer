@@ -46,26 +46,18 @@ return new class extends Migration {
     {
         Schema::create('paiements', function (Blueprint $table) {
             $table->id();
-
-            // Clés étrangères
-            $table->unsignedBigInteger('locataire_id');
-            $table->unsignedBigInteger('bien_id');
-
-            // Champs pour les paiements
-            $table->decimal('montant_paye', 10, 2); // Montant payé
-            $table->decimal('montant_restant', 10, 2); // Montant restant
-            $table->decimal('montant_total_frequence', 10, 2); // Montant restant
-            $table->string('statut_paiement')->default('Partiellement payé'); // Partiellement ou totalement payé
-            $table->date('date_debut_frequence'); // Début de la période de paiement
-            $table->date('date_fin_frequence'); // Fin de la période de paiement
-            $table->string('frequence_paiement'); // Ex: Mensuel, Trimestriel
+            $table->foreignId('locataire_id')->constrained()->onDelete('cascade');
+            $table->foreignId('bien_id')->constrained()->onDelete('cascade');
+            $table->decimal('montant_paye', 10, 2);
+            $table->date('date_paiement');
+            $table->enum('statut_paiement', ['payé', 'echoué'])->default('echoué');
+            $table->string('mode_paiement')->nullable(); // Ex : carte, virement, espèces
+            $table->string('reference_paiement')->nullable(); // Référence unique du paiement
             $table->text('description')->nullable(); // Description complémentaire
-
             $table->timestamps();
 
-            // Définition des relations et contraintes
-            $table->foreign('locataire_id')->references('id')->on('locataires')->onDelete('cascade');
-            $table->foreign('bien_id')->references('id')->on('biens')->onDelete('cascade');
+            // Index pour améliorer les performances des requêtes
+            $table->index(['locataire_id', 'date_paiement']);
         });
     }
 

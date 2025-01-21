@@ -34,8 +34,8 @@ public function showInformations($id)
 
     // Filtrer les paiements du mois en cours
     $paiementsDuMois = Paiement::where('locataire_id', $locataire->id)
-        ->whereMonth('date_debut_frequence', now()->month)
-        ->whereYear('date_debut_frequence', now()->year)
+        ->whereMonth('date_paiement', now()->month)
+        ->whereYear('date_paiement', now()->year)
         ->get();
 
     return view('locataire.locashow', compact('locataire', 'paiementsDuMois'));

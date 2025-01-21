@@ -31,7 +31,7 @@ class LocataireSeeder extends Seeder
                     'telephone' => $faker->phoneNumber,
                     'date_naissance' => $faker->date(),
                     'genre' => $faker->randomElement(['Masculin', 'Féminin']),
-                    'revenu_mensuel' => $faker->numberBetween(500, 5000),
+                    'revenu_mensuel' => $faker->numberBetween(25000, 6500000),
                     'nombre_personne_foyer' => $faker->numberBetween(1, 5),
                     'statut_matrimoniale' => $faker->randomElement(['Célibataire', 'Marié']),
                     'statut_professionnel' => $faker->jobTitle,
