@@ -73,62 +73,54 @@
                             <p class="text-muted">{{ $bien->description }}</p>
                         @endif
 
+                        @if (Auth::user()->agent_immobiliers)
 
-                        <!-- Actions -->
-                        <div class="d-flex justify-content-center gap-3 mt-4">
-                            <a href="{{ route('biens.edit', $bien->id) }}" class="btn btn-link text-primary"
-                                title="Modifier">
-                                <i class="bi bi-pencil-square" style="font-size: 1.5rem;"></i>
-                            </a>
-                            <form action="{{ route('biens.destroy', $bien->id) }}" method="POST"
-                                onsubmit="return confirm('Voulez-vous vraiment supprimer ce bien ?');">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-link text-danger" title="Supprimer">
-                                    <i class="bi bi-trash" style="font-size: 1.5rem;"></i>
-                                </button>
-                            </form>
-
-                            {{-- <a href="{{route('assign.locataire', $bien->id)}}" class="btn btn-link text-success" title="Assigner à un locataire">
-                                <i class="bi bi-person-plus" style="font-size: 1.5rem;"></i>
-                            </a> --}}
-                            <!-- Bouton dynamique -->
-                            @if ($locataireAssigné)
-                                <!-- Si un locataire est déjà assigné -->
-                                <form action="{{ route('unassign.locataire', $bien->id) }}" method="POST"
-                                    onsubmit="return confirm('Voulez-vous vraiment désassigner ce locataire ?');">
+                            <!-- Actions -->
+                            <div class="d-flex flex-wrap justify-content-center gap-2 mt-4">
+                                <a href="{{ route('biens.edit', $bien->id) }}" class="btn btn-link text-primary"
+                                    title="Modifier">
+                                    <i class="bi bi-pencil-square" style="font-size: 1.5rem;"></i>
+                                </a>
+                                <form action="{{ route('biens.destroy', $bien->id) }}" method="POST"
+                                    onsubmit="return confirm('Voulez-vous vraiment supprimer ce bien ?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-link text-warning"
-                                        title="Désassigner le locataire">
-                                        <i class="bi bi-person-dash" style="font-size: 1.5rem;"></i>
+                                    <button type="submit" class="btn btn-link text-danger" title="Supprimer">
+                                        <i class="bi bi-trash" style="font-size: 1.5rem;"></i>
                                     </button>
                                 </form>
-                                <!-- Nouveau bouton Contrat de Bail -->
-
-                                @if ($contrat)
-                                    <a href="{{ route('contrat.edit', $contrat->id) }}" class="btn btn-link text-warning"
-                                        title="Modifier le contrat de bail">
-                                        <i class="bi bi-pencil-square" style="font-size: 1.5rem;"></i>
-                                        Modifier le contrat de bail
-                                    </a>
+                                @if ($locataireAssigné)
+                                    <!-- Si un locataire est déjà assigné -->
+                                    <form action="{{ route('unassign.locataire', $bien->id) }}" method="POST"
+                                        onsubmit="return confirm('Voulez-vous vraiment désassigner ce locataire ?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-link text-warning"
+                                            title="Désassigner le locataire">
+                                            <i class="bi bi-person-dash" style="font-size: 1.5rem;"></i>
+                                        </button>
+                                    </form>
+                                    @if (!$contrat)
+                                        {{-- <a href="{{ route('contrat.edit', $contrat->id) }}" class="btn btn-link text-warning" title="Modifier le contrat de bail">
+                                        <i class="bi bi-pencil-square" style="font-size: 1.5rem;"></i> Modifier le contrat de bail
+                                    </a> --}}
+                                        <a href="{{ route('contrat.create', ['bien_id' => $bien->id, 'locataire_id' => $locataireAssigné->locataire->id ?? null]) }}"
+                                            class="btn btn-link text-info" title="Créer un contrat de bail">
+                                            <i class="bi bi-file-earmark-text" style="font-size: 1.5rem;"></i> Créer un
+                                            contrat
+                                            de bail
+                                        </a>
+                                    @endif
                                 @else
-                                    <!-- Si aucun contrat n'existe -->
-                                    <a href="{{ route('contrat.create', ['bien_id' => $bien->id, 'locataire_id' => $locataireAssigné->locataire->id ?? null]) }}"
-                                        class="btn btn-link text-info" title="Créer un contrat de bail">
-                                        <i class="bi bi-file-earmark-text" style="font-size: 1.5rem;"></i>
-                                        Créer un contrat de bail
+                                    <!-- Si aucun locataire n'est assigné -->
+                                    <a href="{{ route('assign.locataire', $bien->id) }}" class="btn btn-link text-success"
+                                        title="Assigner à un locataire">
+                                        <i class="bi bi-person-plus" style="font-size: 1.5rem;"></i>
                                     </a>
                                 @endif
-                            @else
-                                <!-- Si aucun locataire n'est assigné -->
-                                <a href="{{ route('assign.locataire', $bien->id) }}" class="btn btn-link text-success"
-                                    title="Assigner à un locataire">
-                                    <i class="bi bi-person-plus" style="font-size: 1.5rem;"></i>
-                                </a>
-                            @endif
+                            </div>
+                        @endif
 
-                        </div>
 
 
                     </div>
@@ -160,8 +152,8 @@
                             </p>
 
                             <p>
-                                <strong>{{ $locataireAssigné->locataire->prenom }}
-                                    {{ $locataireAssigné->locataire->nom }},</strong> né(e) le
+                                <strong>{{ $locataireAssigné->locataire->nom }} {{ $locataireAssigné->locataire->prenom }}
+                                    ,</strong> né(e) le
                                 <strong>{{ $locataireAssigné->locataire->date_naissance->format('d/m/Y') }}</strong>,
                                 </strong>, domicilié(e) à
                                 <strong>{{ $locataireAssigné->locataire->adresse }}</strong>, ci-après désigné “Le
@@ -236,19 +228,19 @@
 
                                 </p>
 
-                                 <h6><strong><u>ARTICLE 4</u> : LOYER ET MODALITÉS DE PAIEMENT</strong> </h6>
+                                <h6><strong><u>ARTICLE 4</u> : LOYER ET MODALITÉS DE PAIEMENT</strong> </h6>
 
                                 @php
                                     // Convertir la fréquence en jours si c'est une période (mois, bimestre, trimestre)
-                                    $frequences = [
-                                        'mois' => 30,
-                                        'bimestre' => 60,
-                                        'trimestre' => 90,
-                                        'semestriel' => 180, // Virgule ajoutée ici
-                                        'annuel' => 360,
-                                    ];
+$frequences = [
+    'mois' => 30,
+    'bimestre' => 60,
+    'trimestre' => 90,
+    'semestriel' => 180, // Virgule ajoutée ici
+    'annuel' => 360,
+];
 
-                                    // Par défaut, la valeur brute est utilisée si la clé n'est pas reconnue
+// Par défaut, la valeur brute est utilisée si la clé n'est pas reconnue
                                     $delai_retard =
                                         $frequences[$contrat->frequence_paiement] ?? $contrat->frequence_paiement;
 
@@ -281,7 +273,7 @@
                                     Le mode de paiement retenu est le paiement mobile.
                                     En cas de retard de paiement supérieur à
                                     <strong>{{ $delai_retard }}</strong> jours, une pénalité de
-                                    <strong>{{ $contrat->penalite_retard }}</strong> sera appliquée.
+                                    <strong>{{ $contrat->penalite_retard }}</strong> Francs CFA sera appliquée.
                                 </p>
 
 
@@ -294,7 +286,8 @@
                                 @if ($articles->count() > 0)
                                     @foreach ($articles as $article)
                                         @php $articleCounter++; @endphp
-                                        <h6><strong><u>ARTICLE {{ $articleCounter }}</u> : {{ $article->titre_article }}</strong> </h6>
+                                        <h6><strong><u>ARTICLE {{ $articleCounter }}</u> :
+                                                {{ $article->titre_article }}</strong> </h6>
 
                                         <p> {{ $article->contenu_article }} </p>
                                     @endforeach
@@ -316,97 +309,95 @@
                                     Fait en trois (03) exemlaires originaux, remis à chaque partie.
                                 </p>
 
-                                <p>Fait à <strong>{{ $contrat->lieu_signature }}</strong>, le
+                                <p class="text-end m-5 mt-1 mb-1">A <strong>{{ $contrat->lieu_signature }}</strong>, le
                                     <strong>{{ \Carbon\Carbon::parse($contrat->date_signature)->format('d/m/Y') }}</strong>.
 
+                                <p class="text-center">( Signatures suivies de la mention manuscrite lue et approuvées)</p>
 
-                                    {{-- <!-- Signature Agent Immobilier -->
-                                    @if (Auth::user()->role->id == '3')
-                                        <div class="col-md-6">
-                                            <p><strong>Agent Immobilier</strong></p>
-                                            @if ($contrat->signature_agent_immobilier)
-                                                <p>Signature: <img src="" alt="Signature Agent Immobilier"
-                                                        width="150"></p>
-                                                <p>{{ $bien->agent_immobilier->nom_admin }}
-                                                    {{ $bien->agent_immobilier->prenom_admin }}</p>
-                                            @else
-                                                <p>Signature :
-                                                    <canvas id="signatureAgent" class="signature-canvas"></canvas>
-                                                </p>
-                                                <button type="button" id="clearAgent"
-                                                    class="btn btn-secondary">Effacer</button>
+                                <div class="row mt-1">
+
+                                    <!-- Colonne de gauche (Agent Immobilier) -->
+                                    <div class="col-md-6 p-5  text-start">
+                                        <p>Agent Immobilier</p>
+                                        @if ($contrat->signature_agent_immobilier)
+                                            <img src="{{ asset($contrat->signature_agent_immobilier) }}"
+                                                alt="Signature Agent Immobilier" width="150"
+                                                style="border: none; padding: 0; margin: 0; box-shadow: none;">
+                                            <strong>
+                                                <u>
+                                                    <p>{{ $bien->agent_immobilier->nom_admin }}
+                                                        {{ $bien->agent_immobilier->prenom_admin }}</p>
+                                                </u>
+                                            </strong>
+                                        @else
+                                            <p>Aucune signature trouvée.</p>
+                                            <strong>
+                                                <u>
+                                                    <p>{{ $bien->agent_immobilier->nom_admin }}
+                                                        {{ $bien->agent_immobilier->prenom_admin }}</p>
+                                                </u>
+                                            </strong>
+                                            @if (Auth::user()->agent_immobiliers)
+                                                <form method="POST"
+                                                    action="{{ route('contrats_de_bail.update_photo', $contrat->id) }}"
+                                                    enctype="multipart/form-data">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <div class="form-group">
+                                                        <label for="signature_agent_immobilier">Ajouter une signature
+                                                            :</label>
+                                                        <input type="file" class="form-control"
+                                                            id="signature_agent_immobilier"
+                                                            name="signature_agent_immobilier" accept="image/*" required>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-success mt-2">Enregistrer la
+                                                        signature</button>
+                                                </form>
                                             @endif
-                                        </div>
-                                    @endif
+                                        @endif
+                                    </div>
 
-                                    <!-- Signature Locataire -->
-                                    @if (Auth::user()->role->id == '2')
-                                        <div class="col-md-6">
-                                            <p><strong>Locataire</strong></p>
-                                            @if ($contrat->signature_locataire)
-                                                <p>Signature: <img src="" alt="Signature Locataire"
-                                                        width="150"></p>
-                                                <p>{{ $locataireAssigné->locataire->prenom }}
-                                                    {{ $locataireAssigné->locataire->nom }}</p>
-                                            @else
-                                                <p>Signature :
-                                                    <canvas id="signatureLocataire" class="signature-canvas"></canvas>
-                                                </p>
-                                                <button type="button" id="clearLocataire"
-                                                    class="btn btn-secondary">Effacer</button>
+                                    <!-- Colonne de droite (Le Preneur) -->
+                                    <div class="col-md-6 p-5  text-end">
+                                        <p>Le preneur </p>
+                                        @if ($contrat->signature_locataire)
+                                            <img src="{{ asset($contrat->signature_locataire) }}"
+                                                alt="Signature Agent Immobilier" width="150"
+                                                style="border: none; padding: 0; margin: 0; box-shadow: none;">
+                                            <strong>
+                                                <u>
+                                                    <p>{{ $locataireAssigné->locataire->nom }}
+                                                        {{ $locataireAssigné->locataire->prenom }}</p>
+                                                </u>
+                                            </strong>
+                                        @else
+                                            <p>Aucune signature trouvée.</p>
+                                            <strong>
+                                                <u>
+                                                    <p>{{ $locataireAssigné->locataire->nom }}
+                                                        {{ $locataireAssigné->locataire->prenom }}</p>
+                                                </u>
+                                            </strong>
+                                            @if (Auth::user()->locataires)
+                                                <form method="POST"
+                                                    action="{{ route('contrats_de_bail.update_photo', $contrat->id) }}"
+                                                    enctype="multipart/form-data">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <div class="form-group">
+                                                        <label for="signature_locataire">Ajouter une signature
+                                                            :</label>
+                                                        <input type="file" class="form-control"
+                                                            id="signature_locataire" name="signature_locataire"
+                                                            accept="image/*" required>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-success mt-2">Enregistrer la
+                                                        signature</button>
+                                                </form>
                                             @endif
-                                        </div>
-                                    @endif --}}
-
-                                    <!-- Signature Agent Immobilier -->
-                                    @if (Auth::user()->role->id == '3')
-                                        <div class="col-md-6">
-                                            <p><strong>Agent Immobilier</strong></p>
-                                            @if ($contrat->signature_agent_immobilier)
-                                                <p>Signature: <img src="{{ $contrat->signature_agent_immobilier }}"
-                                                        alt="Signature Agent Immobilier" width="150"></p>
-                                                <p>{{ $bien->agent_immobilier->nom_admin }}
-                                                    {{ $bien->agent_immobilier->prenom_admin }}</p>
-                                            @else
-                                                <p>Signature : <canvas id="signatureAgent" class="signature-canvas"
-                                                        width="400" height="200"></canvas></p>
-                                                <button type="button" id="clearAgent"
-                                                    class="btn btn-secondary">Effacer</button>
-                                            @endif
-                                        </div>
-                                    @endif
-
-                                    <!-- Signature Locataire -->
-                                    @if (Auth::user()->role->id == '2')
-                                        <div class="col-md-6">
-                                            <p><strong>Locataire</strong></p>
-                                            @if ($contrat->signature_locataire)
-                                                <p>Signature: <img src="{{ $contrat->signature_locataire }}"
-                                                        alt="Signature Locataire" width="150"></p>
-                                                <p>{{ $locataireAssigné->locataire->prenom }}
-                                                    {{ $locataireAssigné->locataire->nom }}</p>
-                                            @else
-                                                <p>Signature : <canvas id="signatureLocataire" class="signature-canvas"
-                                                        width="400" height="200"></canvas></p>
-                                                <button type="button" id="clearLocataire"
-                                                    class="btn btn-secondary">Effacer</button>
-                                            @endif
-                                        </div>
-                                    @endif
-
-                                <form method="POST" action="{{ route('contrat.update', $contrat->id) }}">
-                                    @csrf
-                                    @method('PUT')
-
-                                    <input type="hidden" name="signature_agent" id="signatureAgentInput">
-                                    <input type="hidden" name="signature_locataire" id="signatureLocataireInput">
-
-
-                                    <button type="submit" class="btn btn-primary">Enregistrer</button>
-                                </form>
-
-
-
+                                        @endif
+                                    </div>
+                                </div>
 
                             </div>
                             <button id="see-more-btn" class="btn btn-primary mt-2">Voir plus</button>
@@ -422,16 +413,9 @@
 
             </div>
 
-            <!-- Colonne secondaire -->
+            {{-- <!-- Colonne secondaire -->
             <div class="col-lg-4 col-md-12">
-                {{-- <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title text-muted">Informations supplémentaires</h4>
-                        <p class="text-muted">Cette section peut être utilisée pour ajouter des informations
-                            complémentaires, comme les caractéristiques du bien, les coordonnées de l'agent immobilier, ou
-                            d'autres détails.</p>
-                    </div>
-                </div> --}}
+
                 <div class="card shadow-sm">
                     <div class="card-body">
                         @if ($locataireAssigné)
@@ -531,12 +515,193 @@
                         </table>
                     </div>
                 </div>
+            </div> --}}
+
+            {{-- <!-- Colonne secondaire -->
+            <div class="col-lg-4 col-md-12">
+                <!-- Première carte -->
+                <div class="card shadow-sm mb-3">
+                    <div class="card-body">
+                        @if ($locataireAssigné)
+                            <div class="text-center">
+                                <img src="{{ asset($locataireAssigné->locataire->photo_profil) }}"
+                                    alt="Photo de {{ $locataireAssigné->locataire->nom }}" class="rounded-circle mb-3"
+                                    style="width: 100px; height: 100px; object-fit: cover;">
+                                <h5 class="text-primary">{{ $locataireAssigné->locataire->nom }}
+                                    {{ $locataireAssigné->locataire->prenom }}</h5>
+                            </div>
+                            <table class="table table-borderless">
+                                <tbody>
+                                    <tr>
+                                        <th class="fw-bold text-muted">Email</th>
+                                        <td>{{ $locataireAssigné->locataire->user->email }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="fw-bold text-muted">Statut</th>
+                                        <td><span class="badge bg-success">Locataire Assigné</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        @else
+                            <div class="text-center">
+                                <h5 class="text-danger">Aucun locataire assigné</h5>
+                                <p class="text-muted">Assignez un locataire pour voir ses informations ici.</p>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+
+                <!-- Deuxième carte -->
+                <div class="card shadow-sm">
+                    <div class="card-header">
+                        <h5 class="card-title text-muted">Informations du Bien</h5>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <tbody>
+                                <tr>
+                                    <th class="fw-bold">Propriétaire :</th>
+                                    <td>{{ $bien->name_proprietaire }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="fw-bold">Num_Propriétaire:</th>
+                                    <td>{{ $bien->proprietaire_numéro }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="fw-bold">Pièces :</th>
+                                    <td>{{ $bien->nombre_de_piece }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="fw-bold">Loyer :</th>
+                                    <td>{{ number_format($bien->loyer_mensuel, 0, ',', ' ') }} FCFA</td>
+                                </tr>
+                                <tr>
+                                    <th class="fw-bold">Statut :</th>
+                                    <td><span class="badge bg-success">{{ $bien->statut_bien }}</span></td>
+                                </tr>
+                                <tr>
+                                    <th class="fw-bold">Salon :</th>
+                                    <td>{{ $bien->nombre_de_salon }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="fw-bold">Cuisine :</th>
+                                    <td>{{ $bien->nombre_de_cuisine }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="fw-bold">Chambres :</th>
+                                    <td>{{ $bien->nbr_chambres }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="fw-bold">Salles de Bain :</th>
+                                    <td>{{ $bien->nbr_salles_de_bain }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="fw-bold">Superficie :</th>
+                                    <td>{{ $bien->superficie }} m²</td>
+                                </tr>
+                                <tr>
+                                    <th class="fw-bold">Type de Bien :</th>
+                                    <td>{{ $bien->type_bien }}</td>
+                                </tr>
+                                <tr>
+                                    <th class="fw-bold">Adresse :</th>
+                                    <td>{{ $bien->adresse_bien }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div> --}}
+
+            <!-- Colonne secondaire -->
+            <div class="col-lg-4 col-md-12">
+                <!-- Première carte : Locataire Assigné -->
+                <div class="card shadow-sm mb-3">
+                    <div class="body text-center">
+                        @if ($locataireAssigné)
+                            <a href="#"><img src="{{ asset($locataireAssigné->locataire->photo_profil) }}"
+                                    alt="Photo de {{ $locataireAssigné->locataire->nom }}"
+                                    class=" only rounded-circle mb-3"
+                                    style="width: 100px; height: 100px; object-fit: cover;"></a>
+                            <h4 class="text-primary">{{ $locataireAssigné->locataire->nom }}
+                                {{ $locataireAssigné->locataire->prenom }}</h4>
+                            <p class="text-muted mb-3">{{ $locataireAssigné->locataire->user->email }}</p>
+                            <span class="badge bg-success">Locataire Assigné</span>
+                        @else
+                            <h4 class="text-danger">Aucun locataire assigné</h4>
+                            <p class="text-muted">Assignez un locataire pour voir ses informations ici.</p>
+                        @endif
+                    </div>
+                </div>
+
+                <!-- Deuxième carte : Informations du Bien -->
+                <div class="card shadow-sm">
+                    <div class="header">
+                        <h5 class="card-title text-muted"><strong>Informations du Bien</strong></h5>
+                    </div>
+                    <div class="body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <tbody>
+                                    <tr>
+                                        <th scope="row" class="fw-bold">Propriétaire :</th>
+                                        <td>{{ $bien->name_proprietaire }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" class="fw-bold">Numéro du Propriétaire :</th>
+                                        <td>{{ $bien->proprietaire_numéro }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" class="fw-bold">Loyer :</th>
+                                        <td>{{ number_format($bien->loyer_mensuel, 0, ',', ' ') }} FCFA</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" class="fw-bold">Statut :</th>
+                                        <td><span class="badge bg-success">{{ $bien->statut_bien }}</span></td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" class="fw-bold">Superficie :</th>
+                                        <td>{{ $bien->superficie }} m²</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" class="fw-bold">Type de Bien :</th>
+                                        <td>{{ $bien->type_bien }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" class="fw-bold">Adresse :</th>
+                                        <td>{{ $bien->adresse_bien }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" class="fw-bold">Chambres :</th>
+                                        <td>{{ $bien->nbr_chambres }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" class="fw-bold">Salles de Bain :</th>
+                                        <td>{{ $bien->nbr_salles_de_bain }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" class="fw-bold">Cuisine :</th>
+                                        <td>{{ $bien->nombre_de_cuisine }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" class="fw-bold">Salon :</th>
+                                        <td>{{ $bien->nombre_de_salon }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th scope="row" class="fw-bold">Pièces :</th>
+                                        <td>{{ $bien->nombre_de_piece }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
+
         </div>
     </div>
 @endsection
 
-<!-- Ajout de CSS pour l'effet de survol -->
 <!-- Ajout de CSS personnalisé pour le style -->
 <style>
     .container-fluid {
@@ -569,10 +734,32 @@
         /* Optionnel : ajoute un contour léger */
     }
 
-    .signature-canvas {
-        border: 1px solid #ccc;
-        /* touch-action: none; */
-        /* Désactiver le comportement tactile natif */
-        cursor: crosshair;
+    .card {
+        border: none;
+        border-radius: 10px;
+    }
+
+    .card .body {
+        padding: 15px;
+    }
+
+    .card .header {
+        background: #f7f7f7;
+        border-bottom: 1px solid #e0e0e0;
+        padding: 10px 15px;
+        border-radius: 10px 10px 0 0;
+    }
+
+    .only {
+        border: 3px solid #007bff;
+    }
+
+    .table th {
+        font-weight: bold;
+        color: #6c757d;
+    }
+
+    .table td {
+        font-size: 14px;
     }
 </style>

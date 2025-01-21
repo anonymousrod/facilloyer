@@ -115,9 +115,9 @@
 
                         <!-- Consulter son contrat de bail -->
                         <li class="nav-item">
-                            <a class="nav-link" href="lol.html">
+                            <a class="nav-link" href="{{ route('locataire_bien', Auth::user()->id) }}">
                                 <i class="iconoir-book menu-icon"></i> <!-- Icône pour contrat de bail -->
-                                <span>Consulter son contrat de bail</span>
+                                <span>Bien loué</span>
                             </a>
                         </li><!--end nav-item-->
 
@@ -170,12 +170,12 @@
                         </li>
 
 
-                        <!-- Modifier Mon Profil -->
+                        <!-- Profil -->
 
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('locataire.locashow', Auth::user()->id) }}">
                                 <i class="iconoir-user menu-icon"></i> <!-- Icône pour modification de profil -->
-                                <span>Modifier Mon Profil</span>
+                                <span>Profil</span>
                             </a>
                         </li><!--end nav-item-->
 

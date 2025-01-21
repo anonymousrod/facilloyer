@@ -172,13 +172,15 @@
                                 </div>
 
                                 <!-- Statut du Contrat -->
-                                <div class="col-md-6">
+                                <input type="hidden" name="statut_contrat" id="statut_contrat"
+                                value="Active">
+                                {{-- <div class="col-md-6">
                                     <label for="statut_contrat" class="form-label fw-bold">Statut du Contrat</label>
                                     <select name="statut_contrat" id="statut_contrat" class="form-select" required>
                                         <option value="actif">Actif</option>
                                         <option value="termine">Terminé</option>
                                     </select>
-                                </div>
+                                </div> --}}
                             </div>
 
                             <!-- Bouton de soumission -->

@@ -1,8 +1,8 @@
-@extends('layouts.master_dash') 
+@extends('layouts.master_dash')
 
-@section('title', 'Profil') 
+@section('title', 'Profil')
 
-@section('content') 
+@section('content')
 <div class="container mt-4">
     <!-- Titre et bouton d'édition -->
     <div class="d-flex justify-content-between align-items-center mb-4">
@@ -22,10 +22,10 @@
                 <!-- Photo de profil -->
                 <div class="col-md-4 text-center">
                     @if ($locataire->photo_profil)
-                        <img src="{{ asset('storage/' . $locataire->photo_profil) }}" alt="Photo de profil" 
+                        <img src="{{ asset('storage/' . $locataire->photo_profil) }}" alt="Photo de profil"
                              class="img-fluid rounded-circle shadow-sm" style="max-width: 150px;">
                     @else
-                        <img src="{{ asset('images/default-avatar.png') }}" alt="Photo par défaut" 
+                        <img src="{{ asset('images/default-avatar.png') }}" alt="Photo par défaut"
                              class="img-fluid rounded-circle shadow-sm" style="max-width: 150px;">
                     @endif
                 </div>
@@ -53,37 +53,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- Biens loués -->
-    <div class="card shadow-sm mb-4 rounded-3 border-0">
-        <div class="card-header bg-light py-3 border-bottom">
-            <h4 class="mb-0 text-secondary">Biens Loués</h4>
-        </div>
-        <div class="card-body">
-            @if ($locataire->biens->isEmpty())
-                <p class="text-muted">Aucun bien loué.</p>
-            @else
-                <table class="table table-striped table-hover align-middle">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Bien</th>
-                            <th>Adresse</th>
-                            <th>Loyer mensuel</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($locataire->biens as $bien)
-                            <tr>
-                                <td>{{ $bien->name_bien }}</td>
-                                <td>{{ $bien->adresse_bien }}</td>
-                                <td>{{ number_format($bien->loyer_mensuel, 2, ',', ' ') }} €</td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            @endif
         </div>
     </div>
 

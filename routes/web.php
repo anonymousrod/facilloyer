@@ -33,6 +33,9 @@ Route::get('/change-language/{lang}', function ($lang) {
 Route::get('/locataire/{id}/locashow', [LocataireController::class, 'showInformations'])
 ->name('locataire.locashow');
 
+Route::get('/locataire/{id}/locatairebien', [LocataireController::class, 'showlocatairebien'])
+->name('locataire_bien');
+
 Route::middleware(['auth'])->group(function () {
 
 
@@ -225,5 +228,10 @@ Route::resource('/Contrat_de_bail', ContratDeBailController::class)->names('cont
 Route::resource('/Article_contrat_bail', ArticleContratBailController::class)->names('article');
 
 
-//route chatify recherce perso
-Route::get('chatify/api/search', [CustomMessagesController::class, 'search'])->name('api.search');
+//route pour update contrat de bail
+Route::put('/contrats-de-bail/{id}/update-photo', [ContratDeBailController::class, 'updatePhoto'])->name('contrats_de_bail.update_photo');
+
+//
+//route pour afficher les info des bien
+Route::get('/biens/{bien_id}/{agent_id?}', [BienController::class, 'show'])->name('biens.show');
+

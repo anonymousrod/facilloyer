@@ -63,7 +63,7 @@
         }
     });
     });
- 
+
 </script>
 
 
@@ -108,7 +108,7 @@
 <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
 
 
-<script>
+{{-- <script>
     // Fonction d'initialisation pour SignaturePad Agent Immobilier
     var signatureAgentCanvas = document.getElementById('signatureAgent');
 
@@ -153,4 +153,4 @@
         console.log(document.getElementById('signatureAgentInput').value);
         console.log(document.getElementById('signatureLocataireInput').value);
     });
-</script>
+</script> --}}
