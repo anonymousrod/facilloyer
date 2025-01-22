@@ -222,16 +222,9 @@ public function trouverPeriode(Request $request)
     }
 
     // Récupération du contrat de bail actif du locataire
-   
-    
     $contratBail = $locataire->contratsDeBail()->where('statut_contrat', '<>', 'Résilié')->first();
     if (!$contratBail) {
         return response()->json(['message' => 'Aucun contrat de bail actif trouvé'], 404);
-    }
-
-    $bien = $contratBail->bien; // Récupération du bien
-    if (!$bien) {
-        return response()->json(['message' => 'Aucun bien associé trouvé'], 404);
     }
 
     // Date de début du contrat de bail
