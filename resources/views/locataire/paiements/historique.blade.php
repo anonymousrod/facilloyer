@@ -108,7 +108,8 @@
                             <tbody>
                                 @forelse($paiements as $paiement)
                                 <tr>
-                                    <td>{{ $paiement->date_debut_frequence ? $paiement->date_debut_frequence->format('d/m/Y') : 'Date non disponible' }}</td>
+                                    <td>{{ $paiement->date_paiement ? \Carbon\Carbon::parse($paiement->date_paiement)->format('d/m/Y') : 'Date non disponible' }}</td>
+
                                     <td>#{{ str_pad($paiement->id, 6, '0', STR_PAD_LEFT) }}</td>
                                     <td><strong>{{ number_format($paiement->montant_paye, 2, ',', ' ') }} FCFA</strong></td>
                                     <td class="action-icons">
@@ -128,6 +129,7 @@
                                 </tr>
                                 @endforelse
                             </tbody>
+
                         </table>
                     </div>
                 </div>

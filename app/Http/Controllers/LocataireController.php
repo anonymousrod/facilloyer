@@ -34,12 +34,14 @@ class LocataireController extends Controller
         }
 
         // Filtrer les paiements du mois en cours
-        $paiementsDuMois = Paiement::where('locataire_id', $locataire->id)
-            ->whereMonth('date_debut_frequence', now()->month)
-            ->whereYear('date_debut_frequence', now()->year)
-            ->get();
+        // $paiementsDuMois = Paiement::where('locataire_id', $locataire->id)
+        //     ->whereMonth('date_debut_frequence', now()->month)
+        //     ->whereYear('date_debut_frequence', now()->year)
+        //     ->get();
 
-        return view('locataire.locashow', compact('locataire', 'paiementsDuMois'));
+        // return view('locataire.locashow', compact('locataire', 'paiementsDuMois'));
+        return view('locataire.locashow', compact('locataire',));
+
     }
 
     public function showlocatairebien($id)

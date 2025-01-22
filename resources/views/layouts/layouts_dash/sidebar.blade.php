@@ -117,7 +117,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('locataire_bien', Auth::user()->id) }}">
                                 <i class="iconoir-book menu-icon"></i> <!-- Icône pour contrat de bail -->
-                                <span>Bien loué</span>
+                                <span>Bien loué / Contrat</span>
                             </a>
                         </li><!--end nav-item-->
 
@@ -156,13 +156,12 @@
                             </a>
                         </li><!--end nav-item-->
 
-                        <!-- Assistance en ligne -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="lol.html">
-                                <i class="iconoir-chat-bubble menu-icon"></i> <!-- Icône pour assistance en ligne -->
+                        <!-- <li class="nav-item">
+                            <a class="nav-link" href="{{ route('user', Auth::user()->locataires->first()->agent_immobilier->user->id) }}">
+                                <i class="iconoir-chat-bubble menu-icon"></i> 
                                 <span>Assistance en ligne</span>
                             </a>
-                        </li><!--end nav-item-->
+                        </li> -->
 
                         <!-- Informations de l’agence ou de l’agent -->
                         <li class="nav-item">
@@ -192,8 +191,8 @@
 
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('user', Auth::user()->locataires->first()->agent_immobilier->user->id) }}">
-                                <i class="iconoir-settings menu-icon"></i> <!-- Icône pour messagerie -->
-                                <span>Messagerie</span>
+                                <i class="iconoir-phone menu-icon"></i> <!-- Icône pour messagerie -->
+                                <span>Assistance en ligne</span>
                             </a>
                         </li>
 
