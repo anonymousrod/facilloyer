@@ -70,7 +70,7 @@ class ArticleContratBailController extends Controller
         $article = ArticleContratBail::findOrFail($id);
 
         $request->validate([
-            'agent_immobilier_id' => 'required|exists:agent_immobilier,id',
+            // 'agent_immobilier_id' => 'required|exists:agent_immobilier,id',
             'titre_article' => 'required|string|max:255',
             'contenu_article' => 'required|string',
         ]);

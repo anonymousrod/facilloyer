@@ -114,10 +114,37 @@
                                     <select name="frequence_paiement" id="frequence_paiement" class="form-select"
                                         required>
                                         <option value="mois">Mois</option>
+                                        <option value="annuel">Annuel</option>
                                         <option value="bimestre">Bimestre</option>
                                         <option value="trimestre">Trimestre</option>
+                                        <option value="semestriel">Semestriel</option>
                                     </select>
                                 </div>
+
+                                <!-- Script pour calculer montant_total_frequence -->
+                                <script>
+                                    document.addEventListener('DOMContentLoaded', function() {
+                                        const loyer = parseFloat(document.getElementById('loyer_bien').value || 0);
+                                        const frequenceSelect = document.getElementById('frequence_paiement');
+                                        const montantField = document.getElementById('montant_total_frequence');
+
+                                        function updateMontant() {
+                                            const frequence = frequenceSelect.value;
+                                            let mois = 1; // Par défaut, un mois
+                                            if (frequence === 'bimestre') mois = 2;
+                                            else if (frequence === 'trimestre') mois = 3;
+                                            else if (frequence === 'semestriel') mois = 6;
+                                            else if (frequence === 'annuel') mois = 12;
+
+                                            const montant = loyer * mois;
+                                            montantField.value = montant;
+                                            console.log(`Montant mis à jour : ${montant}`); // Debug
+                                        }
+
+                                        frequenceSelect.addEventListener('change', updateMontant);
+                                        updateMontant(); // Calcul initial
+                                    });
+                                </script>
 
                                 <!-- Mode de Paiement -->
                                 <div class="col-md-6">
@@ -128,6 +155,14 @@
                                     </select>
                                 </div>
 
+                                <!-- Champ caché pour montant_total_frequence -->
+                                <input type="hidden" name="montant_total_frequence" id="montant_total_frequence"
+                                    value="">
+                                <!-- Champ caché pour loyer_bien -->
+
+                                <input type="hidden" id="loyer_bien" value="{{ $bien->loyer_mensuel }}">
+
+
                                 <!-- Renouvellement Automatique -->
                                 <div class="col-md-6">
                                     <label for="renouvellement_automatique" class="form-label fw-bold">Renouvellement
@@ -137,13 +172,15 @@
                                 </div>
 
                                 <!-- Statut du Contrat -->
-                                <div class="col-md-6">
+                                <input type="hidden" name="statut_contrat" id="statut_contrat"
+                                value="Active">
+                                {{-- <div class="col-md-6">
                                     <label for="statut_contrat" class="form-label fw-bold">Statut du Contrat</label>
                                     <select name="statut_contrat" id="statut_contrat" class="form-select" required>
                                         <option value="actif">Actif</option>
                                         <option value="termine">Terminé</option>
                                     </select>
-                                </div>
+                                </div> --}}
                             </div>
 
                             <!-- Bouton de soumission -->

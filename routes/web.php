@@ -15,7 +15,6 @@ use App\Http\Controllers\PaiementController;
 use App\Http\Controllers\ActionAdminController;
 use Chatify\Http\Controllers\CustomMessagesController;
 
-
 Route::get('/', function () {
     return view('welcome');
 });

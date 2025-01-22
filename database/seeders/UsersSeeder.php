@@ -16,7 +16,10 @@ class UsersSeeder extends Seeder
     public function run(): void
     {
         $faker = Factory::create();
-        $role = Role::where('id', '!=',  1)->get()->pluck('id')->toArray();
+        // $role = Role::where('id', '!=',  1)
+        //     ->where('id', '!=', 2) // Exclure le rôle de locataire
+        //     ->where('id', '!=', 3) // Exclure le rôle de locataire
+        //     ->get()->pluck('id')->toArray();
 
         // Créer un utilisateur administrateur
         User::create([
@@ -28,20 +31,20 @@ class UsersSeeder extends Seeder
         ]);
 
         // Créer des utilisateurs aléatoires
-        for ($i = 0; $i < 20; $i++) {
-            $rand_role = $faker->randomElement($role);
+        // for ($i = 0; $i < 20; $i++) {
+        //     $rand_role = $faker->randomElement($role);
 
-            // Définir le statut basé sur le rôle
-            // $faker_statut = ($rand_role == 3) ? false : $faker->boolean();
+        //     // Définir le statut basé sur le rôle
+        //     // $faker_statut = ($rand_role == 3) ? false : $faker->boolean();
 
-            User::create([
-                'id_role' => $rand_role,
-                'name' => $faker->lastName,
-                'email' => $faker->unique()->safeEmail,
-                'password' => Hash::make('123456789'),
-                'statut' => $faker->boolean(), // Utilisation de booléens corrects
-                'must_change_password' => $faker->boolean(), // Utilisation de booléens corrects
-            ]);
-        }
+        //     User::create([
+        //         'id_role' => $rand_role,
+        //         'name' => $faker->lastName,
+        //         'email' => $faker->unique()->safeEmail,
+        //         'password' => Hash::make('123456789'),
+        //         'statut' => $faker->boolean(), // Utilisation de booléens corrects
+        //         'must_change_password' => $faker->boolean(), // Utilisation de booléens corrects
+        //     ]);
+        // }
     }
 }

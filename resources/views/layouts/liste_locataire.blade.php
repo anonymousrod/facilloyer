@@ -50,11 +50,19 @@
                                                     </label>
                                                 </div>
                                             </td>
-                                            <td>
-                                                {{-- {{ route('locataire.show', $locataire->id) }} --}}
+                                            {{-- <td>
+                                                {{ route('locataire.show', $locataire->id) }}
                                                 <a href=""
                                                     class="btn btn-sm btn-info">
                                                     <i class="fas fa-eye"></i> Voir Détails
+                                                </a>
+                                            </td> --}}
+                                            <td class="text-center align-middle">
+                                                <a href="" class="btn btn-outline-primary">
+                                                    <span class="bi bi-info-circle-fill"></span>
+                                                </a>
+                                                <a href="{{ route('user', $locataire->user->id) }}" class="btn btn-outline-primary">
+                                                    <span class="bi bi-chat-dots-fill"></span> <!-- Icône de chat -->
                                                 </a>
                                             </td>
 

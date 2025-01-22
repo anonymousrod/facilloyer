@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\ContratDeBailLocataire;
 use App\Models\ContratDeBail;
 use App\Models\Paiement;
@@ -21,16 +22,16 @@ class LocataireController extends Controller
 // Affiche les informations détaillées du locataire
 
 
-public function showInformations($id)
-{
-    // Récupérer le locataire, ses relations et les biens loués
-    $locataire = Locataire::with(['user', 'agent_immobilier', 'biens.paiements'])
-        ->where('user_id', $id)
-        ->firstOrFail();
+    public function showInformations($id)
+    {
+        // Récupérer le locataire, ses relations et les biens loués
+        $locataire = Locataire::with(['user', 'agent_immobilier', 'biens.paiements'])
+            ->where('user_id', $id)
+            ->firstOrFail();
 
-    if (!$locataire) {
-        abort(404, "Locataire non trouvé avec l'ID $id");
-    }
+        if (!$locataire) {
+            abort(404, "Locataire non trouvé avec l'ID $id");
+        }
 
     // Filtrer les paiements du mois en cours
     $paiementsDuMois = Paiement::where('locataire_id', $locataire->id)
@@ -38,14 +39,34 @@ public function showInformations($id)
         ->whereYear('date_paiement', now()->year)
         ->get();
 
-    return view('locataire.locashow', compact('locataire', 'paiementsDuMois'));
-}
+        return view('locataire.locashow', compact('locataire', 'paiementsDuMois'));
+    }
+
+    public function showlocatairebien($id)
+    {
+        // Récupérer le locataire, ses relations et les biens loués
+        $locataire = Locataire::with(['user', 'agent_immobilier', 'biens.paiements'])
+            ->where('user_id', $id)
+            ->firstOrFail();
+
+        if (!$locataire) {
+            abort(404, "Locataire non trouvé avec l'ID $id");
+        }
+
+        // Filtrer les paiements du mois en cours
+        // $paiementsDuMois = Paiement::where('locataire_id', $locataire->id)
+        //     ->whereMonth('date_debut_frequence', now()->month)
+        //     ->whereYear('date_debut_frequence', now()->year)
+        //     ->get();
+
+        return view('locataire.locataire_bien', compact('locataire'));
+    }
 
 
 
 
-// admin use pour afficher chaque les profil locataire
-public function showProfil($locataireId)
+    // admin use pour afficher chaque les profil locataire
+    public function showProfil($locataireId)
     {
         // Récupère le locataire par son ID, y compris ses informations liées à l'utilisateur (user)
         $locataire = Locataire::with('user')->findOrFail($locataireId);
@@ -61,7 +82,7 @@ public function showProfil($locataireId)
     /**
      * Display a listing of the resource.
      */
- public function index()
+    public function index()
     {
         $agent_id = Auth::user()->agent_immobiliers->first()->id;
         //pour l'affichage des locataires
@@ -140,13 +161,13 @@ public function showProfil($locataireId)
     public function edit()
     {
         // Récupérer le locataire connecté
-         $locataire = Auth::user()->locataires->first();
+        $locataire = Auth::user()->locataires->first();
 
-         if (!$locataire) {
-             abort(404, 'Aucun locataire associé à cet utilisateur.');
-         }
+        if (!$locataire) {
+            abort(404, 'Aucun locataire associé à cet utilisateur.');
+        }
 
-         return view('locataire.edit', compact('locataire'));
+        return view('locataire.edit', compact('locataire'));
     }
 
     /**
@@ -224,7 +245,7 @@ public function update(Request $request, $id)
     }
 
     // Change le mot de passe
-public function changePassword(Request $request)
+    public function changePassword(Request $request)
     {
         // Validation des entrées
         $request->validate([
@@ -251,7 +272,7 @@ public function changePassword(Request $request)
         return response()->json(['success' => true]);
     }
 
-public function agenceImmobiliereAssociee()
+    public function agenceImmobiliereAssociee()
     {
         // Récupérer l'utilisateur connecté
         $user = Auth::user();
@@ -280,7 +301,7 @@ public function agenceImmobiliereAssociee()
 
 
 
-public function updateEvaluation(Request $request, $id)
+    public function updateEvaluation(Request $request, $id)
     {
         try {
             // Validation
@@ -309,15 +330,16 @@ public function updateEvaluation(Request $request, $id)
     }
 
 
-public function search(Request $request)
+    public function search(Request $request)
     {
         $query = $request->input('query'); // Texte de recherche
         $bienId = $request->input('bien_id'); // ID du bien
 
         // Locataires non assignés à ce bien
-        $locataires = Locataire::whereDoesntHave('locataireBiens', function ($q) use ($bienId) {
-            $q->where('bien_id', $bienId);
-        })
+        $locataires = Locataire::where('agent_id', Auth::user()->agent_immobiliers->first()->id)
+            ->whereDoesntHave('locataireBiens', function ($q) use ($bienId) {
+                $q->where('bien_id', $bienId);
+            })
             ->where(function ($q) use ($query) {
                 $q->where('nom', 'like', "%$query%")
                     ->orWhere('prenom', 'like', "%$query%");

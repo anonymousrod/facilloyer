@@ -69,7 +69,7 @@
                                             </td> --}}
 
                                             <td class="text-center align-middle">
-                                                <a href="{{ route('biens.show', $bien->id )}}" class="btn btn-outline-primary">
+                                                <a href="{{ route('biens.show', ['bien_id' =>$bien->id]  )}}" class="btn btn-outline-primary">
                                                     <span class="bi bi-info-circle-fill"></span>
                                                 </a>
                                                 <!-- Button supprimer modal -->

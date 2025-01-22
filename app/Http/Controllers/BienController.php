@@ -86,20 +86,28 @@ class BienController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $bien_id, ?string $agent_id = null)
     {
-        $agent_connecter = Auth::user()->agent_immobiliers->first()->id;
-        $bien = Bien::findOrFail($id);
+        if (Auth::user()->locataires) {
+            $articles = ArticleContratBail::where('agent_immobilier_id', $agent_id)->get();
+        }
+        if (!Auth::user()->locataires) {
+
+            $agent_connecter = Auth::user()->agent_immobiliers->first()->id;
+            $articles = ArticleContratBail::where('agent_immobilier_id', $agent_connecter)->get();
+
+        }
+        $bien = Bien::findOrFail($bien_id);
 
         // Vérifier si un locataire est assigné à ce bien
-        $locataireAssigné = LocataireBien::where('bien_id', $id)->with('locataire')->first();
+        $locataireAssigné = LocataireBien::where('bien_id', $bien_id)->with('locataire')->first();
         // Selectionner les contrat de bail relier au bien
 
         $contrat = ContratsDeBail::where('bien_id', $bien->id)
-        ->where('locataire_id', $locataireAssigné ?->locataire->id)
-        ->first();
+            ->where('locataire_id', $locataireAssigné?->locataire->id)
+            ->first();
 
-        $articles = ArticleContratBail::where('agent_immobilier_id', $agent_connecter)->get();
+
 
         return view('layouts.bien_detail', [
             'bien' => $bien,
