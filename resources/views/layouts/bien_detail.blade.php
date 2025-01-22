@@ -73,7 +73,7 @@
                             <p class="text-muted">{{ $bien->description }}</p>
                         @endif
 
-                        @if (Auth::user()->agent_immobiliers)
+                        @if (Auth::user()->id_role == 3)
 
                             <!-- Actions -->
                             <div class="d-flex flex-wrap justify-content-center gap-2 mt-4">
@@ -337,7 +337,7 @@ $frequences = [
                                                         {{ $bien->agent_immobilier->prenom_admin }}</p>
                                                 </u>
                                             </strong>
-                                            @if (Auth::user()->agent_immobiliers)
+                                            @if (Auth::user()->id_role == 3)
                                                 <form method="POST"
                                                     action="{{ route('contrats_de_bail.update_photo', $contrat->id) }}"
                                                     enctype="multipart/form-data">
@@ -378,7 +378,7 @@ $frequences = [
                                                         {{ $locataireAssigné->locataire->prenom }}</p>
                                                 </u>
                                             </strong>
-                                            @if (Auth::user()->locataires)
+                                            @if (Auth::user()->id_role == 2)
                                                 <form method="POST"
                                                     action="{{ route('contrats_de_bail.update_photo', $contrat->id) }}"
                                                     enctype="multipart/form-data">

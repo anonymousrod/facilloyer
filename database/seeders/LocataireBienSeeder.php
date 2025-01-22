@@ -17,20 +17,26 @@ class LocataireBienSeeder extends Seeder
         $locataires = Locataire::all();
 
         foreach ($locataires as $locataire) {
-            // Récupérer tous les biens qui ne sont pas déjà associés à ce locataire
-            $biensDisponibles = Bien::whereDoesntHave('locataires', function($query) use ($locataire) {
-                $query->where('locataire_id', $locataire->id);
-            })->get();
+            // Récupérer l'agent immobilier associé au locataire
+            $agentId = $locataire->agent_id;
 
-            // Vérifier s'il y a des biens disponibles
-            if ($biensDisponibles->count() > 0) {
-                // Sélectionner entre 1 et 3 biens
-                $nombreBiens = min(3, $biensDisponibles->count());
-                $biensSelectionnes = $biensDisponibles->random(max(1, $nombreBiens));
+            if ($agentId) {
+                // Récupérer les biens de cet agent immobilier qui ne sont pas déjà associés à ce locataire
+                $biensDisponibles = Bien::where('agent_immobilier_id', $agentId)
+                    ->whereDoesntHave('locataires', function ($query) use ($locataire) {
+                        $query->where('locataire_id', $locataire->id);
+                    })->get();
 
-                // Attacher les biens sélectionnés au locataire
-                foreach ($biensSelectionnes as $bien) {
-                    $locataire->biens()->attach($bien->id);
+                // Vérifier s'il y a des biens disponibles
+                if ($biensDisponibles->count() > 0) {
+                    // Sélectionner entre 1 et 3 biens au hasard
+                    $nombreBiens = min(3, $biensDisponibles->count());
+                    $biensSelectionnes = $biensDisponibles->random(max(1, $nombreBiens));
+
+                    // Attacher les biens sélectionnés au locataire
+                    foreach ($biensSelectionnes as $bien) {
+                        $locataire->biens()->attach($bien->id);
+                    }
                 }
             }
         }
