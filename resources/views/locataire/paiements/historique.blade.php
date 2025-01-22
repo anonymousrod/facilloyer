@@ -105,7 +105,8 @@
                                     <th>Actions</th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody>   
+                                
                                 @forelse($paiements as $paiement)
                                 <tr>
                                     <td>{{ $paiement->date_paiement ? \Carbon\Carbon::parse($paiement->date_paiement)->format('d/m/Y') : 'Date non disponible' }}</td>
