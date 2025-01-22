@@ -136,6 +136,8 @@ class ContratDeBailController extends Controller
             ->with('success', 'Contrat de bail mis à jour avec succès.');
     }
 
+    
+
     private function saveSignatureImage($base64Data, $filename)
     {
         $base64Data = str_replace('data:image/png;base64,', '', $base64Data);
