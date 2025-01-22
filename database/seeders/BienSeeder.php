@@ -22,7 +22,7 @@ class BienSeeder extends Seeder
 
         foreach ($AgentImmobiliers as  $AgentImmobilier) {
             // creer un random de nombre de bien pour chaque agent immobilier
-            $nb_bien = rand(20, 30);
+            $nb_bien = rand(30, 40);
             for ($i = 0; $i < $nb_bien; $i++) {
                 Bien::create([
                     'agent_immobilier_id' => $AgentImmobilier,

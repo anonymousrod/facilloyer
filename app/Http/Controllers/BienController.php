@@ -88,10 +88,10 @@ class BienController extends Controller
      */
     public function show(string $bien_id, ?string $agent_id = null)
     {
-        if (Auth::user()->locataires) {
+        if (Auth::user()->id_role == 2) {
             $articles = ArticleContratBail::where('agent_immobilier_id', $agent_id)->get();
         }
-        if (!Auth::user()->locataires) {
+        if (Auth::user()->id_role == 3) {
 
             $agent_connecter = Auth::user()->agent_immobiliers->first()->id;
             $articles = ArticleContratBail::where('agent_immobilier_id', $agent_connecter)->get();

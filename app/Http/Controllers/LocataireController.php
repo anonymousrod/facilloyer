@@ -189,11 +189,11 @@ public function update(Request $request, $id)
             'garant' => 'nullable|string|max:255',
             'photo_profil' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Max 2 MB pour la photo
         ]);
-    
+
         try {
             // Récupération du locataire
             $locataire = Locataire::findOrFail($id);
-    
+
             // Mise à jour des champs simples
             $locataire->nom = $request->nom;
             $locataire->prenom = $request->prenom;
@@ -205,22 +205,22 @@ public function update(Request $request, $id)
             $locataire->nombre_personne_foyer = $request->nombre_personne_foyer;
             $locataire->statut_matrimoniale = $request->statut_matrimoniale;
             $locataire->garant = $request->garant;
-    
+
             // Gestion de la photo de profil
             if ($request->hasFile('photo_profil')) {
                 // Supprimer l'ancienne photo si elle existe
                 if ($locataire->photo_profil && \Storage::exists($locataire->photo_profil)) {
                     \Storage::delete($locataire->photo_profil);
                 }
-    
+
                 // Sauvegarder la nouvelle photo
                 $path = $request->file('photo_profil')->store('photos_locataires', 'public');
                 $locataire->photo_profil = $path;
             }
-    
+
             // Sauvegarder les modifications
             $locataire->save();
-    
+
             // Retourner une réponse ou redirection
             return redirect()->route('locataire.locashow')->with('success', 'Vos informations ont été mises à jour avec succès.');
         } catch (\Exception $e) {
@@ -228,8 +228,8 @@ public function update(Request $request, $id)
             return back()->with('error', 'Une erreur s\'est produite lors de la mise à jour. Veuillez réessayer.');
         }
     }
-    
-    
+
+
     /**
      * Remove the specified resource from storage.
      */

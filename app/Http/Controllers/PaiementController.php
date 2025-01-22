@@ -21,31 +21,32 @@ class PaiementController extends Controller
 
 {
   // historique de paiement par le locataire pour un loctaire en fonction de ces biens
-public function historique()
-    {
-        $user = Auth::user();
-        $locataire = $user->locataires()->first();
-        
-        if (!$locataire) {
-            return redirect()->route('dashboard')
-                ->with('error', 'Accès non autorisé.');
-        }
-    
-        // Récupérer les derniers paiements avec pagination pour un scroll infini
-        $paiements = Paiement::where('locataire_id', $locataire->id)
-            ->orderBy('date_debut_frequence', 'desc') // Trie par la date de début de la fréquence des paiements
-            ->paginate(10); // 10 paiements par page pour la pagination
-    
-        // Optionnel : calculer des statistiques
-        $stats = [
-            'total_paye' => $paiements->sum('montant_paye'),
-            'nombre_paiements' => $paiements->count(),
-            'montant_moyen' => $paiements->count() > 0 ? $paiements->sum('montant_paye') / $paiements->count() : 0,
-        ];
-    
-        // Retourner la vue avec les paiements paginés
-        return view('locataire.paiements.historique', compact('paiements', 'stats'));
-    }
+  public function historique()
+  {
+      $user = Auth::user();
+      $locataire = $user->locataires()->first();
+      
+      if (!$locataire) {
+          return redirect()->route('dashboard')
+              ->with('error', 'Accès non autorisé.');
+      }
+  
+      // Récupérer tous les paiements pour le locataire connecté
+      $paiements = Paiement::where('locataire_id', $locataire->id)
+          ->orderBy('date_paiement', 'desc') // Trie par date de paiement décroissante
+          ->paginate(10); // Pagination : 10 paiements par page
+      
+      // Optionnel : calcul des statistiques
+      $stats = [
+          'total_paye' => $paiements->sum('montant_paye'),
+          'nombre_paiements' => $paiements->count(),
+          'montant_moyen' => $paiements->count() > 0 ? $paiements->sum('montant_paye') / $paiements->count() : 0,
+      ];
+  
+      // Retourner la vue avec les paiements et les statistiques
+      return view('locataire.paiements.historique', compact('paiements', 'stats'));
+  }
+  
     
 
 
@@ -221,9 +222,16 @@ public function trouverPeriode(Request $request)
     }
 
     // Récupération du contrat de bail actif du locataire
+   
+    
     $contratBail = $locataire->contratsDeBail()->where('statut_contrat', '<>', 'Résilié')->first();
     if (!$contratBail) {
         return response()->json(['message' => 'Aucun contrat de bail actif trouvé'], 404);
+    }
+
+    $bien = $contratBail->bien; // Récupération du bien
+    if (!$bien) {
+        return response()->json(['message' => 'Aucun bien associé trouvé'], 404);
     }
 
     // Date de début du contrat de bail

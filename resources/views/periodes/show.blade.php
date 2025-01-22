@@ -83,8 +83,8 @@
                 {{-- Informations sur le bien --}}
                 <div class="mb-4">
                     <h5 class="text-primary">Détails du bien</h5>
-                    <p class="mb-1"><strong>Adresse :</strong> {{ $periode->contratDeBail->bien->adresse_bien }}</p>
-                    <p class="mb-1"><strong>Type :</strong> {{ $periode->contratDeBail->bien->type_bien }}</p>
+                    <p class="mb-1"><strong>Adresse :</strong> {{ $periode->contratDeBail->bien->adresse_bien}}</p>
+                    <p class="mb-1"><strong>Type :</strong> {{ $periode->contratDeBail->bien->type_bien}}</p>
                 </div>
                 <hr>
 
