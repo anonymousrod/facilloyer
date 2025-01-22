@@ -56,40 +56,6 @@
         </div>
     </div>
 
-<<<<<<< HEAD
-=======
-    <!-- Biens loués -->
-    <div class="card shadow-sm mb-4 rounded-3 border-0">
-        <div class="card-header bg-light py-3 border-bottom">
-            <h4 class="mb-0 text-secondary">Biens Loués</h4>
-        </div>
-        <div class="card-body">
-            @if ($locataire->biens->isEmpty())
-                <p class="text-muted">Aucun bien loué.</p>
-            @else
-                <table class="table table-striped table-hover align-middle">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Bien</th>
-                            <th>Adresse</th>
-                            <th>Loyer mensuel</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($locataire->biens as $bien)
-                            <tr>
-                                <td>{{ $bien->name_bien ?? 'Non rempli' }}</td>
-                                <td>{{ $bien->adresse_bien ?? 'Non rempli' }}</td>
-                                <td>{{ $bien->loyer_mensuel ? number_format($bien->loyer_mensuel, 2, ',', ' ') . ' FCFA' : 'Non rempli' }}</td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            @endif
-        </div>
-    </div>
-
->>>>>>> rod
     <!-- Agent immobilier -->
     <div class="card shadow-sm rounded-3 border-0">
         <div class="card-header bg-light py-3 border-bottom">
