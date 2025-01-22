@@ -125,7 +125,7 @@
                                         <tr>
                                             <td>{{ $bien->adresse_bien }}</td>
                                             <td>{{ $bien->type_bien }}</td>
-                                            <td>{{ number_format($bien->loyer_mensuel, 2) }} €</td>
+                                            <td>{{ number_format($bien->loyer_mensuel, 2) }} FCFA</td>
                                             <td>
                                                 <span class="badge 
                                                     @if ($bien->statut_bien == 'Disponible') bg-success 

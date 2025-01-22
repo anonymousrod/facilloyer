@@ -39,7 +39,7 @@ class BienSeeder extends Seeder
                     'superficie' => $faker->numberBetween(20, 500), // m²
                     // 'annee_construction' => $faker->year(),
                     'description' => $faker->paragraph(),
-                    'loyer_mensuel' => $faker->numberBetween(40000, 70000),  // Génère un nombre entier entre 200 et 2000
+                    'loyer_mensuel' => $faker->numberBetween(88000, 310000),  // Génère un nombre entier entre 200 et 2000
                     'photo_bien' => '/storage/facker/photo_bien/' . rand(1, 6) . '.JPG',
                     'photo2_bien' => '/storage/facker/photo_bien/' . rand(1, 6) . '.JPG',
                     'photo3_bien' => '/storage/facker/photo_bien/' . rand(1, 6) . '.JPG',

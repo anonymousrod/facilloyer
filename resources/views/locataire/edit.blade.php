@@ -65,7 +65,7 @@
 
                         <!-- Revenu mensuel -->
                         <div class="form-group mb-3">
-                            <label for="revenu_mensuel" class="fw-semibold">Revenu mensuel (€) <span class="text-danger">*</span></label>
+                            <label for="revenu_mensuel" class="fw-semibold">Revenu mensuel (FCFA) <span class="text-danger">*</span></label>
                             <input type="number" id="revenu_mensuel" name="revenu_mensuel" class="form-control border-primary"
                                 value="{{ old('revenu_mensuel', $locataire->revenu_mensuel) }}" placeholder="Entrez votre revenu mensuel" required>
                         </div>

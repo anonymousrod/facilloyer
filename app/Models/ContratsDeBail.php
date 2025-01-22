@@ -54,7 +54,7 @@ class ContratsDeBail extends Model
     protected $fillable = [
         //new
         'locataire_id',
-        'date_debut',
+        'date_debut',// c'est cette ligne on veux utiliseé dans la fonction
         'date_fin',
         'renouvellement_automatique',
         'montant_total_frequence',
@@ -87,4 +87,10 @@ class ContratsDeBail extends Model
     {
         return $this->belongsTo(Locataire::class);
     }
+
+    public function periodes()
+{
+    return $this->hasMany(GestionPeriode::class, 'contrat_de_bail_id');
+}
+
 }

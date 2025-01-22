@@ -140,7 +140,7 @@
                         <div class="col-md-6">
                             <div class="info-box">
                                 <h6 class="fw-bold text-primary"><i class="bi bi-briefcase"></i> Informations Professionnelles</h6>
-                                <p><i class="bi bi-cash-coin"></i> <strong>Revenu Mensuel :</strong> {{ number_format($locataire->revenu_mensuel, 2, ',', ' ') }} €</p>
+                                <p><i class="bi bi-cash-coin"></i> <strong>Revenu Mensuel :</strong> {{ number_format($locataire->revenu_mensuel, 2, ',', ' ') }} FCFA</p>
                                 <p><i class="bi bi-person-workspace"></i> <strong>Statut :</strong> {{ $locataire->statut_professionnel }}</p>
                                 <p><i class="bi bi-people"></i> <strong>Matrimonial :</strong> {{ $locataire->statut_matrimoniale }}</p>
                                 <p><i class="bi bi-person-check"></i> <strong>Garant :</strong> {{ $locataire->garant ?? 'Non renseigné' }}</p>
