@@ -147,7 +147,7 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('periodes.show') }}">
                                 <i class="iconoir-credit-card menu-icon"></i> <!-- Icône pour paiement -->
-                                <span>Effectuer un paiement</span>
+                                <span>Processus de paiement</span>
                             </a>
 
                         </li>

@@ -121,8 +121,8 @@
 
                 {{-- Bouton pour effectuer un paiement --}}
                 <div class="text-center">
-                    <a href="o.p" class="btn btn-success btn-lg shadow">
-                        <i class="fas fa-credit-card"></i> Effectuer un paiement
+                    <a href="{{ route('paiement.partiepaiement') }}" class="btn btn-success btn-lg shadow">
+                        <i></i> Continuer
                     </a>
                 </div>
             </div>

@@ -112,9 +112,16 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
+  /// ROUTE SUCCESIVE POUR GERER PAIEMENT 
 
+     /// ROUTE 1
 
-Route::get('/periodes', [PaiementController::class, 'trouverPeriode'])->name('periodes.show');
+    Route::get('/periodes', [PaiementController::class, 'trouverPeriode'])->name('periodes.show');
+
+    /// ROUTE 2
+    Route::get('/paiement/partiepaiement', [PaiementController::class, 'partiepaiement'])->name('paiement.partiepaiement');
+    Route::post('/paiement/complement', [PaiementController::class, 'ajouterComplement'])->name('paiement.complement');
+
 
     Route::middleware(['auth'])->group(function() {
        // Afficher le formulaire de demande de maintenance
