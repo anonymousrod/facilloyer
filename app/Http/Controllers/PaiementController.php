@@ -8,11 +8,15 @@ use App\Models\Bien;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use GuzzleHttp\Client;
 use PDF; // Si vous utilisez barryvdh/laravel-dompdf
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use App\Models\GestionPeriode;
 use Exception;
+use Kkiapay\Kkiapay;
+
+
 
 
 
@@ -358,21 +362,51 @@ public function partiepaiement(Request $request)
 
 
 
-// public function ajouterComplement(Request $request)
-// {
-//     $request->validate([
-//         'periode_id' => 'required|exists:gestion_periode,id',
-//         'complement_periode' => 'required|numeric|min:0',
-//     ]);
 
-//     $gestionPeriode = GestionPeriode::findOrFail($request->periode_id);
+    // Afficher le formulaire de paiement
+    public function showForm()
+    {
+        return view('payments.form');
+    }
 
-//     // Mise à jour du montant total avec le complément
-//     $gestionPeriode->montant_total_periode += $request->complement_periode;
-//     $gestionPeriode->save();
+    // Callback après le paiement
+public function paymentCallback(Request $request)
+    {
+        $transactionId = $request->input('transaction_id');
+        $amount = $request->input('amount');
 
-//     return redirect()->back()->with('success', 'Le complément a été ajouté avec succès.');
-// }
+        // Vérification des données
+        if (!$transactionId || !$amount) {
+            return response()->json(['success' => false, 'message' => 'Données de paiement invalides.']);
+        }
+
+        $user = auth()->user();
+        $locataire = Locataire::where('user_id', $user->id)->first();
+
+        if (!$locataire) {
+            return response()->json(['success' => false, 'message' => 'Locataire non trouvé.']);
+        }
+
+        $periode = GestionPeriode::where('locataire_id', $locataire->id)->latest()->first();
+
+        if (!$periode) {
+            return response()->json(['success' => false, 'message' => 'Période de paiement introuvable.']);
+        }
+
+        // Enregistrer le paiement dans la base de données
+        Paiement::create([
+            'locataire_id' => $locataire->id,
+            'bien_id' => $locataire->biens()->first()->id ?? null,
+            'montant_paye' => $amount,
+            'date_paiement' => now(),
+            'statut_paiement' => 'payé',
+            'reference_paiement' => $transactionId,
+        ]);
+
+        return response()->json(['success' => true, 'amount' => $amount]);
+    }
+
+
 
 
 
@@ -380,3 +414,4 @@ public function partiepaiement(Request $request)
 
 
 }
+

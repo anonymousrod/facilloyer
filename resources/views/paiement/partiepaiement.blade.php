@@ -1,6 +1,7 @@
 @extends('layouts.master_dash')
 
 @section('content')
+
 <div class="container mt-5">
     <h2 class="text-center mb-4">Paiement pour ce mois</h2>
 
@@ -74,7 +75,7 @@
     <!-- Bouton "Payer maintenant" -->
     @if (!$complementRequis)
         <div class="d-flex justify-content-center mt-4">
-            <a href="j.m" class="btn btn-success btn-lg shadow">
+            <a href="{{ route('payments.form') }}" class="btn btn-success btn-lg shadow">
                 <i class="fas fa-credit-card"></i> Payer maintenant
             </a>
         </div>

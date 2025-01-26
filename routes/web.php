@@ -122,6 +122,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/paiement/partiepaiement', [PaiementController::class, 'partiepaiement'])->name('paiement.partiepaiement');
     Route::post('/paiement/complement', [PaiementController::class, 'ajouterComplement'])->name('paiement.complement');
 
+      
+
+
 
     Route::middleware(['auth'])->group(function() {
        // Afficher le formulaire de demande de maintenance
@@ -245,3 +248,15 @@ Route::put('/contrats-de-bail/{id}/update-photo', [ContratDeBailController::clas
 //route pour afficher les info des bien
 Route::get('/biens/{bien_id}/{agent_id?}', [BienController::class, 'show'])->name('biens.show');
 
+
+
+
+
+
+
+
+
+
+
+Route::get('/payments/form', [PaiementController::class, 'showForm'])->name('payments.form');
+Route::post('/payments/callback', [PaiementController::class, 'paymentCallback'])->name('payments.callback');

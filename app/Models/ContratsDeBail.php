@@ -54,7 +54,7 @@ class ContratsDeBail extends Model
     protected $fillable = [
         //new
         'locataire_id',
-        'date_debut',// c'est cette ligne on veux utiliseé dans la fonction
+        'date_debut',// c'est cette ligne on veux utiliseé dans la fonction gestion de paiement
         'date_fin',
         'renouvellement_automatique',
         'montant_total_frequence',
