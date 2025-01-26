@@ -21,49 +21,48 @@
 
 <script>
     toggleStatusButtons.forEach(button => {
-    button.addEventListener('change', function() {
-        const locataireId = this.dataset.id;
-        const isChecked = this.checked;
-        const statusLabel = this.nextElementSibling;
+        button.addEventListener('change', function() {
+            const locataireId = this.dataset.id;
+            const isChecked = this.checked;
+            const statusLabel = this.nextElementSibling;
 
-        // Confirmation message
-        const confirmation = confirm(
-            `Êtes-vous sûr de vouloir ${isChecked ? 'activer' : 'désactiver'} ce locataire ?`
-        );
+            // Confirmation message
+            const confirmation = confirm(
+                `Êtes-vous sûr de vouloir ${isChecked ? 'activer' : 'désactiver'} ce locataire ?`
+            );
 
-        if (confirmation) {
-            // Envoyer la requête au backend pour mettre à jour le statut
-            fetch(`/locataires/${locataireId}/toggle-status`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    body: JSON.stringify({
-                        statut: isChecked
+            if (confirmation) {
+                // Envoyer la requête au backend pour mettre à jour le statut
+                fetch(`/locataires/${locataireId}/toggle-status`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            statut: isChecked
+                        })
                     })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        statusLabel.textContent = isChecked ? 'Activé' :
-                            'Désactivé';
-                    } else {
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            statusLabel.textContent = isChecked ? 'Activé' :
+                                'Désactivé';
+                        } else {
+                            alert('Une erreur s\'est produite. Veuillez réessayer.');
+                            this.checked = !isChecked; // Rétablir l'ancien état
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Erreur :', error);
                         alert('Une erreur s\'est produite. Veuillez réessayer.');
                         this.checked = !isChecked; // Rétablir l'ancien état
-                    }
-                })
-                .catch(error => {
-                    console.error('Erreur :', error);
-                    alert('Une erreur s\'est produite. Veuillez réessayer.');
-                    this.checked = !isChecked; // Rétablir l'ancien état
-                });
-        } else {
-            this.checked = !isChecked; // Rétablir l'ancien état si annulation
-        }
+                    });
+            } else {
+                this.checked = !isChecked; // Rétablir l'ancien état si annulation
+            }
+        });
     });
-    });
-
 </script>
 
 
@@ -106,11 +105,13 @@
 {{-- script pour js signature_pad --}}
 {{-- <script src=" {{ asset('node_modules/signature_pad/dist/signature_pad.umd.min.js')}} "></script> --}}
 <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+{{-- <script src="https://cdn.jsdelivr.net/npm/signature_pad"></script> --}}
 
 
-{{-- <script>
+{{--
+<script>
     // Fonction d'initialisation pour SignaturePad Agent Immobilier
-    var signatureAgentCanvas = document.getElementById('signatureAgent');
+    var signatureAgentCanvas = document.getElementById('signature-pad');
 
     if (signatureAgentCanvas) {
         var signatureAgentPad = new SignaturePad(signatureAgentCanvas, {

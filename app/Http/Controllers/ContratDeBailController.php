@@ -101,41 +101,90 @@ class ContratDeBailController extends Controller
     }
 
     //update signature_photo_only
-    public function updatePhoto(Request $request, string $id)
-    {
-        $contrat = ContratsDeBail::findOrFail($id);
+    // public function updatePhoto(Request $request, string $id)
+    // {
+    //     $contrat = ContratsDeBail::findOrFail($id);
 
-        // Validation du fichier uploadé
+    //     // Validation du fichier uploadé
+    //     $request->validate([
+    //         'signature_agent_immobilier' => 'nullable|image|mimes:svg,jpeg,png,jpg,gif|max:2048',
+    //         'signature_locataire' => 'nullable|image|mimes:svg,jpeg,png,jpg,gif|max:2048',
+    //     ]);
+
+    //     // Stocker la nouvelle signature
+    //     if ($request->hasFile('signature_agent_immobilier')) {
+    //         $signaturePath = $request->file('signature_agent_immobilier')->store('signatures_agent', 'public');
+
+    //         // Ajouter `/storage/` au chemin pour l'URL publique
+    //         $signaturePublicPath = '/storage/' . $signaturePath;
+
+    //         // Mettre à jour le champ dans la base de données
+    //         $contrat->update(['signature_agent_immobilier' => $signaturePublicPath]);
+    //     }
+
+    //     if ($request->hasFile('signature_locataire')) {
+    //         $signaturePath = $request->file('signature_locataire')->store('signatures_locataire', 'public');
+
+    //         // Ajouter `/storage/` au chemin pour l'URL publique
+    //         $signaturePublicPath = '/storage/' . $signaturePath;
+
+    //         // Mettre à jour le champ dans la base de données
+    //         $contrat->update(['signature_locataire' => $signaturePublicPath]);
+    //     }
+
+    //     // Retour avec message de succès
+    //     return redirect()->back()->with('success', 'Signature mise à jour avec succès!');
+    // }
+
+    //update photot signature pad
+    public function saveSignature(Request $request)
+    {
+        // Validation des données
         $request->validate([
-            'signature_agent_immobilier' => 'nullable|image|mimes:svg,jpeg,png,jpg,gif|max:2048',
-            'signature_locataire' => 'nullable|image|mimes:svg,jpeg,png,jpg,gif|max:2048',
+            'signature' => 'required|string', // base64 est une chaîne
+            'type' => 'required|string|in:agent,locataire',
+            'contrat_id' => 'required|exists:contrats_de_bail,id',
         ]);
 
-        // Stocker la nouvelle signature
-        if ($request->hasFile('signature_agent_immobilier')) {
-            $signaturePath = $request->file('signature_agent_immobilier')->store('signatures_agent', 'public');
+        // Récupération de l'ID du contrat
+        $contratId = $request->contrat_id;
 
-            // Ajouter `/storage/` au chemin pour l'URL publique
-            $signaturePublicPath = '/storage/' . $signaturePath;
+        // Récupérer le contrat à partir de l'ID
+        $contrat = ContratsDeBail::findOrFail($contratId);
 
-            // Mettre à jour le champ dans la base de données
-            $contrat->update(['signature_agent_immobilier' => $signaturePublicPath]);
+        // Décoder l'image base64
+        $image_parts = explode(";base64,", $request->signature);
+        $image_type_aux = explode("image/", $image_parts[0]);
+        $image_type = $image_type_aux[1]; // ex: png
+        $image_base64 = base64_decode($image_parts[1]);
+
+        // Générer un nom de fichier unique pour la signature
+        $fileName = $request->type . '_signature_' . time() . '.' . $image_type;
+        $filePath = 'signatures/' . $fileName;
+
+        // Enregistrer l'image dans le dossier public
+        $folderPath = public_path('storage/signatures/');
+        if (!file_exists($folderPath)) {
+            mkdir($folderPath, 0777, true); // Créer le dossier s'il n'existe pas
         }
-        
-        if ($request->hasFile('signature_locataire')) {
-            $signaturePath = $request->file('signature_locataire')->store('signatures_locataire', 'public');
+        file_put_contents($folderPath . $fileName, $image_base64);
 
-            // Ajouter `/storage/` au chemin pour l'URL publique
-            $signaturePublicPath = '/storage/' . $signaturePath;
-
-            // Mettre à jour le champ dans la base de données
-            $contrat->update(['signature_locataire' => $signaturePublicPath]);
+        // Mettre à jour la signature dans le contrat
+        if ($request->type == 'agent') {
+            $contrat->signature_agent_immobilier = '/storage/' . $filePath;
+        } elseif ($request->type == 'locataire') {
+            $contrat->signature_locataire = '/storage/' . $filePath;
         }
 
-        // Retour avec message de succès
-        return redirect()->back()->with('success', 'Signature mise à jour avec succès!');
+        // Sauvegarder les modifications
+        $contrat->save();
+
+        // Retourner une réponse JSON
+        return response()->json([
+            'message' => 'Signature sauvegardée avec succès.',
+            'file' => $filePath,
+        ]);
     }
-
 
     /**
      * Update the specified resource in storage.

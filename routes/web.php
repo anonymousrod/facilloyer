@@ -190,7 +190,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/paiements', [PaiementController::class, 'index'])->name('paiements.index');
     Route::get('/paiements/{id}/details', [PaiementController::class, 'afficherDetailsPaiement'])->name('paiements.details');
     Route::get('/paiements/{id}/quittance', [PaiementController::class, 'telechargerQuittancePaiement'])->name('paiements.quittance');
-    
+
 });
 
 
@@ -233,7 +233,8 @@ Route::resource('/Article_contrat_bail', ArticleContratBailController::class)->n
 
 
 //route pour update contrat de bail
-Route::put('/contrats-de-bail/{id}/update-photo', [ContratDeBailController::class, 'updatePhoto'])->name('contrats_de_bail.update_photo');
+// Route::put('/contrats-de-bail/{id}/update-photo', [ContratDeBailController::class, 'updatePhoto'])->name('contrats_de_bail.update_photo');
+Route::post('/save-signature', [ContratDeBailController::class, 'saveSignature'])->name('save.signature');
 
 //
 //route pour afficher les info des bien

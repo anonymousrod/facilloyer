@@ -23,7 +23,8 @@
                         @foreach ($locataire->biens as $bien)
                             <tr>
                                 <td>{{ $bien->name_bien }}</td>
-                                <td>{{ $bien->adresse_bien }}</td>
+                                <td>{{ \Illuminate\Support\Str::words($bien->adresse_bien, 1, '...') }}
+                                </td>
                                 <td>{{ number_format($bien->loyer_mensuel, 2, ',', ' ') }} €</td>
                                 <td class="text-center align-middle">
                                     <a href="{{ route('biens.show', ['bien_id' => $bien->id, 'agent_id' => $locataire->agent_immobilier->id]  )}}" class="btn btn-outline-primary">
