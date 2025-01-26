@@ -240,3 +240,5 @@ Route::post('/save-signature', [ContratDeBailController::class, 'saveSignature']
 //route pour afficher les info des bien
 Route::get('/biens/{bien_id}/{agent_id?}', [BienController::class, 'show'])->name('biens.show');
 
+//export contrat bail
+Route::get('/export/contrat-de-bail/{bien_id}/{agent_id?}', [ContratDeBailController::class, 'export'])->name('contrat.export');

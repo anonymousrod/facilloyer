@@ -1,6 +1,7 @@
 @extends('layouts.master_dash')
 @section('title', 'Détail du bien')
 @section('content')
+
     <div class="container-fluid">
         @if (session('success'))
             <div class="alert alert-success text-center">
@@ -312,75 +313,8 @@ $frequences = [
                                 <p class="text-end m-5 mt-1 mb-1">A <strong>{{ $contrat->lieu_signature }}</strong>, le
                                     <strong>{{ \Carbon\Carbon::parse($contrat->date_signature)->format('d/m/Y') }}</strong>.
 
-                                <p class="text-center">( Signatures suivies de la mention manuscrite lue et approuvées)</p>
+                                <p class="text-center">( Signatures suivies de la mention manuscrite lue et approuvées )</p>
 
-                                {{-- <div class="row mt-1">
-
-                                    <!-- Colonne de gauche (Agent Immobilier) -->
-
-                                    <div class="col-md-6 p-5  text-start">
-                                        <p>Agent Immobilier</p>
-                                        @if ($contrat->signature_agent_immobilier)
-                                            <img class="img_bg" src="{{ asset($contrat->signature_agent_immobilier) }}"
-                                                alt="Signature Agent Immobilier" width="150">
-                                            <strong>
-                                                <u>
-                                                    <p>{{ $bien->agent_immobilier->nom_admin }}
-                                                        {{ $bien->agent_immobilier->prenom_admin }}</p>
-                                                </u>
-                                            </strong>
-                                        @else
-                                            <p>Aucune signature trouvée.</p>
-                                            <strong>
-                                                <u>
-                                                    <p>{{ $bien->agent_immobilier->nom_admin }}
-                                                        {{ $bien->agent_immobilier->prenom_admin }}</p>
-                                                </u>
-                                            </strong>
-                                            @if (Auth::user()->id_role == 3)
-                                                <div id="signature-pad-agent" class="signature-pad">
-                                                    <canvas id="canvas-agent" width="300" height="150"></canvas>
-                                                </div>
-                                                <button type="button" id="save-signature-agent"
-                                                    class="btn btn-primary">Sauvegarder la signature</button>
-                                                <button type="button" id="effacer-agent"
-                                                    class="btn btn-secondary mt-2">Effacer </button>
-                                            @endif
-                                        @endif
-                                    </div>
-
-                                    <!-- Colonne de droite (Le Preneur) -->
-                                    <div class="col-md-6 p-5  text-end">
-                                        <p>Le preneur </p>
-                                        @if ($contrat->signature_locataire)
-                                            <img src="{{ asset($contrat->signature_locataire) }}"
-                                                alt="Signature Agent Immobilier" width="150">
-                                            <strong>
-                                                <u>
-                                                    <p>{{ $locataireAssigné->locataire->nom }}
-                                                        {{ $locataireAssigné->locataire->prenom }}</p>
-                                                </u>
-                                            </strong>
-                                        @else
-                                            <p>Aucune signature trouvée.</p>
-                                            <strong>
-                                                <u>
-                                                    <p>{{ $locataireAssigné->locataire->nom }}
-                                                        {{ $locataireAssigné->locataire->prenom }}</p>
-                                                </u>
-                                            </strong>
-                                            @if (Auth::user()->id_role == 2)
-                                                <div id="signature-pad-locataire" class="signature-pad">
-                                                    <canvas id="canvas-locataire" width="400" height="200"></canvas>
-                                                </div>
-                                                <button type="button" id="save-signature-locataire"
-                                                    class="btn btn-primary">Sauvegarder la signature</button>
-                                                <button type="button" id="effacer-locataire"
-                                                    class="btn btn-secondary mt-2">Effacer </button>
-                                            @endif
-                                        @endif
-                                    </div>
-                                </div> --}}
                                 <div class="row mt-3">
 
                                     <!-- Colonne de gauche (Agent Immobilier) -->
@@ -405,7 +339,7 @@ $frequences = [
                                             </strong>
                                             @if (Auth::user()->id_role == 3)
                                                 <div id="signature-pad-agent" class="signature-pad mb-3">
-                                                    <canvas id="canvas-agent" width="100%" height="150"></canvas>
+                                                    <canvas id="canvas-agent" width="290" height="150"></canvas>
                                                 </div>
                                                 <button type="button" id="save-signature-agent"
                                                     class="btn btn-primary btn-block">Sauvegarder la signature</button>
@@ -450,12 +384,19 @@ $frequences = [
 
 
                             </div>
-                            <button id="see-more-btn" class="btn btn-primary mt-2">Voir plus</button>
+                            <button id="see-more-btn" class="btn btn-primary ">Voir plus</button>
+                            @if ($contrat->signature_agent_immobilier && $contrat->signature_locataire)
+                                <a href="{{ route('contrat.export', ['bien_id' => $bien->id, 'agent_id' => $locataireAssigné->locataire->agent_immobilier->id]) }}"
+                                    class="btn btn-success">
+                                    Exporter en PDF
+                                </a>
+                            @endif
                         @else
                             <p>Aucun contrat trouvé pour ce bien et ce locataire.</p>
                         @endif
                     </div>
                 </div>
+
 
 
 
@@ -613,8 +554,6 @@ $frequences = [
     .table td {
         font-size: 14px;
     }
-
-
 </style>
 <style>
     .signature-pad {

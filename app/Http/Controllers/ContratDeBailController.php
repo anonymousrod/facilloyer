@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ArticleContratBail;
 use App\Models\Bien;
 use App\Models\ContratDeBailLocataire;
 use App\Models\ContratsDeBail;
 use App\Models\Locataire;
+use App\Models\LocataireBien;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
-
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Auth;
 
 class ContratDeBailController extends Controller
 {
@@ -185,6 +188,39 @@ class ContratDeBailController extends Controller
             'file' => $filePath,
         ]);
     }
+
+    //export contrat de bail
+
+    public function export(string $bien_id, ?string $agent_id = null)
+    {
+        // Récupérer les articles en fonction du rôle de l'utilisateur connecté
+        if (Auth::user()->id_role == 2) {
+            $articles = ArticleContratBail::where('agent_immobilier_id', $agent_id)->get();
+        }
+        if (Auth::user()->id_role == 3) {
+            $agent_connecter = Auth::user()->agent_immobiliers->first()->id;
+            $articles = ArticleContratBail::where('agent_immobilier_id', $agent_connecter)->get();
+        }
+
+        // Récupérer le bien, locataire assigné et contrat
+        $bien = Bien::findOrFail($bien_id);
+        $locataireAssigné = LocataireBien::where('bien_id', $bien_id)->with('locataire')->first();
+        $contrat = ContratsDeBail::where('bien_id', $bien->id)
+            ->where('locataire_id', $locataireAssigné?->locataire->id)
+            ->first();
+
+        // Générer le PDF
+        $pdf = PDF::loadView('exports.contrat_pdf', [
+            'bien' => $bien,
+            'locataireAssigné' => $locataireAssigné,
+            'contrat' => $contrat,
+            'articles' => $articles,
+        ]);
+
+        // Retourner le PDF pour téléchargement
+        return $pdf->download('contrat_de_bail_' . $bien->id . '.pdf');
+    }
+
 
     /**
      * Update the specified resource in storage.
