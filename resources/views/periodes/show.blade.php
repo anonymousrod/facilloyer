@@ -2,57 +2,79 @@
 
 @section('content')
     <style>
-        /* Styles personnalisés */
+        /* Styles personnalisés pour un design moderne */
         .card-header {
-            background: linear-gradient(45deg, #1E88E5, #42A5F5);
+            background: linear-gradient(90deg, #4E54C8, #8F94FB);
             color: #fff;
-            border-radius: 8px 8px 0 0;
+            font-family: 'Roboto', sans-serif;
+            font-size: 26px;
+            font-weight: bold;
+            padding: 20px;
+            border-radius: 12px 12px 0 0;
+            text-align: center;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
         }
 
         .card {
-            border-radius: 8px;
+            border-radius: 12px;
             overflow: hidden;
+            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
+            background: #ffffff;
         }
 
-        h3, h5 {
+        h5 {
             font-family: 'Roboto', sans-serif;
-            font-weight: 500;
+            font-weight: bold;
+            color: #4E54C8;
         }
 
         p {
             font-family: 'Roboto', sans-serif;
             font-size: 16px;
-            line-height: 1.6;
+            color: #555;
+            line-height: 1.8;
         }
 
         .btn-success {
-            background: #66BB6A;
+            background: linear-gradient(90deg, #FF9800, #FFC107);
+            color: #fff;
             border: none;
-            border-radius: 50px;
-            transition: background-color 0.3s ease, transform 0.2s ease;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: bold;
+            padding: 12px 30px;
+            text-transform: uppercase;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0px 4px 10px rgba(255, 152, 0, 0.4);
         }
 
         .btn-success:hover {
-            background: #43A047;
-            transform: scale(1.05);
+            background: linear-gradient(90deg, #F57C00, #FFA726);
+            transform: translateY(-3px);
+            box-shadow: 0px 6px 15px rgba(255, 152, 0, 0.6);
         }
 
-        .btn-success i {
-            margin-right: 5px;
+        .important-warning {
+            background: #F44336;
+            color: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            animation: pulse 1.5s infinite;
+            text-align: center;
         }
 
-        hr {
-            border: 0;
-            border-top: 1px solid #E0E0E0;
-            margin: 15px 0;
+        @keyframes pulse {
+            0%, 100% {
+                box-shadow: 0 0 10px rgba(255, 87, 34, 0.5);
+            }
+            50% {
+                box-shadow: 0 0 20px rgba(255, 87, 34, 1);
+            }
         }
 
         @media (max-width: 768px) {
-            h3 {
-                font-size: 20px;
-            }
-
-            h5 {
+            h3, h5 {
                 font-size: 18px;
             }
 
@@ -61,68 +83,49 @@
             }
 
             .btn-success {
-                font-size: 14px;
-                padding: 10px 20px;
+                font-size: 16px;
+                padding: 10px 25px;
             }
         }
     </style>
 
-    <div class="container my-4">
-        <div class="card shadow-lg border-0">
-            <div class="card-header text-center py-3">
-                <h3 class="mb-0">Paiement De ce Mois</h3>
+    <div class="container my-5">
+        <div class="card">
+            <div class="card-header">
+                Paiement - Mois En Cours
             </div>
             <div class="card-body p-4">
                 {{-- Informations du locataire --}}
                 <div class="mb-4">
-                    <h5 class="text-primary">Informations du locataire</h5>
-                    <p class="mb-1"><strong>Nom :</strong> {{ $periode->locataire->nom }} {{ $periode->locataire->prenom }}</p>
+                    <h5><i class="fas fa-user-circle"></i> Informations du locataire</h5>
+                    <p><strong>Nom :</strong> {{ $periode->locataire->nom }} {{ $periode->locataire->prenom }}</p>
                 </div>
-                <hr>
 
                 {{-- Informations sur le bien --}}
                 <div class="mb-4">
-                    <h5 class="text-primary">Détails du bien</h5>
-                    <p class="mb-1"><strong>Adresse :</strong> {{ $periode->contratDeBail->bien->name_bien }}</p>
-                    <p class="mb-1"><strong>Type :</strong> {{ $periode->contratDeBail->bien->type_bien }}</p>
-                    <p class="mb-1"><strong>Adresse :</strong> {{ $periode->contratDeBail->bien->adresse_bien }}</p>
-
+                    <h5><i class="fas fa-home"></i> Détails du bien</h5>
+                    <p><strong>Nom :</strong> {{ $periode->contratDeBail->bien->name_bien }}</p>
+                    <p><strong>Type :</strong> {{ $periode->contratDeBail->bien->type_bien }}</p>
+                    <p><strong>Adresse :</strong> {{ $periode->contratDeBail->bien->adresse_bien }}</p>
                 </div>
-                <hr>
 
                 {{-- Informations sur la période --}}
                 <div class="mb-4">
-                    <h5 class="text-primary">Période de facturation</h5>
-                    <p class="mb-1"><strong>Du :</strong> {{ \Carbon\Carbon::parse($periode->date_debut_periode)->format('d/m/Y') }}</p>
-                    <p class="mb-1"><strong>Au :</strong> {{ \Carbon\Carbon::parse($periode->date_fin_periode)->format('d/m/Y') }}</p>
+                    <h5><i class="fas fa-calendar-alt"></i> Période de facturation</h5>
+                    <p><strong>Du :</strong> {{ \Carbon\Carbon::parse($periode->date_debut_periode)->format('d/m/Y') }}</p>
+                    <p><strong>Au :</strong> {{ \Carbon\Carbon::parse($periode->date_fin_periode)->format('d/m/Y') }}</p>
                 </div>
-                <hr>
 
-                {{-- Informations financières --}}
-                <div class="mb-4">
-                    <h5 class="text-primary">Avnt de continuer</h5>
-                    <!-- <p class="mb-1"><strong>Montant total :</strong> {{ number_format($periode->montant_total_periode, 2) }} FCFA</p> -->
-                    <!-- <p class="mb-1"><strong>Complément :</strong> {{ number_format($periode->complement_periode, 2) }} FCFA</p> -->
-                    <p class="mb-1"><strong>IMPORTANT  :</strong> 
-                        <span class="text-danger font-weight-bold">
-                            Verifiez que le paiement a affectué est pour ce Bien et cette periode !!
-                        </span>
-
-                    </p>
-                    <!-- <p class="mb-1"><strong>Montant restant :</strong>  -->
-                        <!-- <span class="text-danger font-weight-bold">
-                            {{ number_format($periode->montant_restant_periode, 2) }} FCFA
-                        </span> -->
-                    
-
-                    <!-- </p> -->
+                {{-- Avertissement important --}}
+                <div class="important-warning">
+                    <i class="fas fa-exclamation-circle"></i> 
+                    Vérifiez qu'il s'agit du bien pour lequel la periode ( mois actuel du loyer) est exact  et decouvrez le restant a payez 
                 </div>
-                <hr>
 
-                {{-- Bouton pour effectuer un paiement --}}
-                <div class="text-center">
-                    <a href="{{ route('paiement.partiepaiement') }}" class="btn btn-success btn-lg shadow">
-                        <i></i> Continuer
+                {{-- Bouton de paiement --}}
+                <div class="text-center mt-4">
+                    <a href="{{ route('paiement.partiepaiement') }}" class="btn btn-success">
+                        <i class="fas fa-credit-card"></i> Continuer
                     </a>
                 </div>
             </div>
