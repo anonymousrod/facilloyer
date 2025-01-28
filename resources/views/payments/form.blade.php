@@ -123,7 +123,7 @@
                 alert("Veuillez saisir un montant valide !");
                 return;
             }
-            if (montant > 1000000) { // Exemple : Limite arbitraire
+            if (montant > 10000000) { // Exemple : Limite arbitraire
                 alert("Le montant dépasse la limite autorisée !");
                 return;
             }
