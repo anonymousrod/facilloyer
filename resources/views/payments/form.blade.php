@@ -119,9 +119,12 @@
         // Ajouter un écouteur d'événement pour ouvrir le widget Kkiapay au clic sur le bouton
         payButton.addEventListener('click', function () {
             const montant = parseFloat(montantInput.value) || 0;
-
             if (montant <= 0) {
                 alert("Veuillez saisir un montant valide !");
+                return;
+            }
+            if (montant > 1000000) { // Exemple : Limite arbitraire
+                alert("Le montant dépasse la limite autorisée !");
                 return;
             }
 
@@ -131,7 +134,7 @@
                 sandbox: true, // Mode test activé
                 key: 'ef4bf4407fe711efbca255daf9c4feeb', // Remplacez par votre clé publique Kkiapay
                 theme: '#1E88E5', // Couleur du thème du widget
-                callback: 'dashboard', // Redirection après un paiement réussi
+                callback:"{{ route('payments.callback')}}", // Redirection après un paiement réussi
                 data: 'Paiement pour un locataire', // Informations supplémentaires sur la transaction
             });
         });

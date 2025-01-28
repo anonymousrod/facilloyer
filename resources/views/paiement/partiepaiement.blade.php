@@ -66,7 +66,7 @@
         <div class="alert alert-info shadow-sm">
             <strong>Note :</strong> Le montant total de la période a été déterminé.
             <br>Vous pouvez vérifier les informations ci-dessus et payer maintenant.
-            <br>En cas de souci, contactez votre agence par le menu "Assistance".
+            <br>En cas de souci, contactez votre agence par le menu "Assistance en ligne".
         </div>
     @endif
 

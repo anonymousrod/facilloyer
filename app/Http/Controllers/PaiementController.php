@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Schema;
 use App\Models\GestionPeriode;
 use Exception;
 use Kkiapay\Kkiapay;
+use Illuminate\Support\Facades\Log;
+
 
 
 
@@ -369,49 +371,81 @@ public function partiepaiement(Request $request)
         return view('payments.form');
     }
 
-    // Callback après le paiement
-public function paymentCallback(Request $request)
+    
+    public function handleCallback(Request $request)
     {
-        $transactionId = $request->input('transaction_id');
-        $amount = $request->input('amount');
+        Log::info('Callback reçu : ', $request->all());
+        Log::info('Headers reçus : ', $request->headers->all());
+        Log::info('Données brutes reçues : ', ['body' => $request->getContent()]);
+    
+        $secret = 'monsecretclef123456'; // Remplacez par votre clé secrète
+        $signature = $request->header('x-kkiapay-secret');
 
-        // Vérification des données
-        if (!$transactionId || !$amount) {
-            return response()->json(['success' => false, 'message' => 'Données de paiement invalides.']);
+        if (is_null($signature)) {
+            Log::error('En-tête x-kkiapay-secret manquant.');
+            return response()->json(['message' => 'Signature manquante.'], 400);
         }
 
-        $user = auth()->user();
-        $locataire = Locataire::where('user_id', $user->id)->first();
-
-        if (!$locataire) {
-            return response()->json(['success' => false, 'message' => 'Locataire non trouvé.']);
+        $rawBody = $request->getContent();
+        if (!$this->verifySignature($signature, $rawBody, $secret)) {
+            Log::error('Signature invalide.');
+            return response()->json(['message' => 'Signature invalide.'], 400);
         }
 
-        $periode = GestionPeriode::where('locataire_id', $locataire->id)->latest()->first();
+        try {
+            $data = json_decode($rawBody, true); // Utilisez json_decode si Kkiapay envoie un JSON
+            
+            $validator = Validator::make($data, [
+                'amount' => 'required|numeric|min:0',
+                'status' => 'required|string',
+                'paymentMethod' => 'required|string',
+                'transaction_id' => 'required|string',
+                'reason' => 'nullable|string',
+            ]);
 
-        if (!$periode) {
-            return response()->json(['success' => false, 'message' => 'Période de paiement introuvable.']);
+            if ($validator->fails()) {
+                Log::error('Données invalides : ', $validator->errors()->all());
+                return response()->json(['message' => 'Données invalides.'], 422);
+            }
+
+            if (strtolower($data['status']) !== 'success') {
+                Log::warning('Paiement non validé.', $data);
+                return response()->json(['message' => 'Paiement non validé.'], 400);
+            }
+
+            $user = auth()->user();
+            if (!$user) {
+                Log::error('Utilisateur non authentifié.');
+                return response()->json(['message' => 'Utilisateur non authentifié.'], 401);
+            }
+
+            $locataire = Locataire::where('user_id', $user->id)->first();
+            if (!$locataire) {
+                Log::error('Locataire introuvable.');
+                return response()->json(['message' => 'Locataire introuvable.'], 404);
+            }
+
+            $bien = $locataire->biens()->first();
+            $paiement = Paiement::create([
+                'locataire_id' => $locataire->id,
+                'bien_id' => $bien->id ?? null,
+                'montant_paye' => $data['amount'],
+                'date_paiement' => now(),
+                'statut_paiement' => strtolower($data['status']),
+                'mode_paiement' => $data['paymentMethod'],
+                'reference_paiement' => $data['transaction_id'],
+                'description' => $data['reason'] ?? 'Paiement effectué via Kkiapay.',
+            ]);
+
+            Log::info('Paiement enregistré.', $paiement->toArray());
+            return response()->json(['message' => 'Paiement enregistré avec succès.'], 200);
+        } catch (\Exception $e) {
+            Log::error('Erreur interne : ' . $e->getMessage());
+            return response()->json(['message' => 'Erreur interne.'], 500);
         }
-
-        // Enregistrer le paiement dans la base de données
-        Paiement::create([
-            'locataire_id' => $locataire->id,
-            'bien_id' => $locataire->biens()->first()->id ?? null,
-            'montant_paye' => $amount,
-            'date_paiement' => now(),
-            'statut_paiement' => 'payé',
-            'reference_paiement' => $transactionId,
-        ]);
-
-        return response()->json(['success' => true, 'amount' => $amount]);
     }
 
-
-
-
-
-
-
+   
 
 }
 

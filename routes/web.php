@@ -259,4 +259,4 @@ Route::get('/biens/{bien_id}/{agent_id?}', [BienController::class, 'show'])->nam
 
 
 Route::get('/payments/form', [PaiementController::class, 'showForm'])->name('payments.form');
-Route::post('/payments/callback', [PaiementController::class, 'paymentCallback'])->name('payments.callback');
+Route::get('/paiements/callback', [PaiementController::class, 'handleCallback'])->name('payments.callback');
