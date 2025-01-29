@@ -209,6 +209,13 @@ class ContratDeBailController extends Controller
             ->where('locataire_id', $locataireAssigné?->locataire->id)
             ->first();
 
+        // return view('exports.contrat_pdf', [
+        //     'bien' => $bien,
+        //     'locataireAssigné' => $locataireAssigné,
+        //     'contrat' => $contrat,
+        //     'articles' => $articles,
+        // ]);
+
         // Générer le PDF
         $pdf = PDF::loadView('exports.contrat_pdf', [
             'bien' => $bien,
