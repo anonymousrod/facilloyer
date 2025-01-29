@@ -15,7 +15,6 @@ use App\Http\Controllers\PaiementController;
 use App\Http\Controllers\ActionAdminController;
 use Chatify\Http\Controllers\CustomMessagesController;
 
-
 Route::get('/', function () {
     return view('welcome');
 });
@@ -113,9 +112,19 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
+  /// ROUTE SUCCESIVE POUR GERER PAIEMENT
+
+     /// ROUTE 1
+
+    Route::get('/periodes', [PaiementController::class, 'trouverPeriode'])->name('periodes.show');
+
+    /// ROUTE 2
+    Route::get('/paiement/partiepaiement', [PaiementController::class, 'partiepaiement'])->name('paiement.partiepaiement');
+    Route::post('/paiement/complement', [PaiementController::class, 'ajouterComplement'])->name('paiement.complement');
 
 
-Route::get('/periodes', [PaiementController::class, 'trouverPeriode'])->name('periodes.show');
+
+
 
     Route::middleware(['auth'])->group(function() {
        // Afficher le formulaire de demande de maintenance
@@ -242,3 +251,6 @@ Route::get('/biens/{bien_id}/{agent_id?}', [BienController::class, 'show'])->nam
 
 //export contrat bail
 Route::get('/export/contrat-de-bail/{bien_id}/{agent_id?}', [ContratDeBailController::class, 'export'])->name('contrat.export');
+
+Route::get('/payments/form', [PaiementController::class, 'showForm'])->name('payments.form');
+Route::get('/paiements/callback', [PaiementController::class, 'handleCallback'])->name('payments.callback');

@@ -8,11 +8,17 @@ use App\Models\Bien;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use GuzzleHttp\Client;
 use PDF; // Si vous utilisez barryvdh/laravel-dompdf
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use App\Models\GestionPeriode;
 use Exception;
+use Kkiapay\Kkiapay;
+use Illuminate\Support\Facades\Log;
+
+
+
 
 
 
@@ -21,32 +27,33 @@ class PaiementController extends Controller
 
 {
   // historique de paiement par le locataire pour un loctaire en fonction de ces biens
-public function historique()
-    {
-        $user = Auth::user();
-        $locataire = $user->locataires()->first();
-        
-        if (!$locataire) {
-            return redirect()->route('dashboard')
-                ->with('error', 'Accès non autorisé.');
-        }
-    
-        // Récupérer les derniers paiements avec pagination pour un scroll infini
-        $paiements = Paiement::where('locataire_id', $locataire->id)
-            ->orderBy('date_debut_frequence', 'desc') // Trie par la date de début de la fréquence des paiements
-            ->paginate(10); // 10 paiements par page pour la pagination
-    
-        // Optionnel : calculer des statistiques
-        $stats = [
-            'total_paye' => $paiements->sum('montant_paye'),
-            'nombre_paiements' => $paiements->count(),
-            'montant_moyen' => $paiements->count() > 0 ? $paiements->sum('montant_paye') / $paiements->count() : 0,
-        ];
-    
-        // Retourner la vue avec les paiements paginés
-        return view('locataire.paiements.historique', compact('paiements', 'stats'));
-    }
-    
+  public function historique()
+  {
+      $user = Auth::user();
+      $locataire = $user->locataires()->first();
+
+      if (!$locataire) {
+          return redirect()->route('dashboard')
+              ->with('error', 'Accès non autorisé.');
+      }
+
+      // Récupérer tous les paiements pour le locataire connecté
+      $paiements = Paiement::where('locataire_id', $locataire->id)
+          ->orderBy('date_paiement', 'desc') // Trie par date de paiement décroissante
+          ->paginate(10); // Pagination : 10 paiements par page
+
+      // Optionnel : calcul des statistiques
+      $stats = [
+          'total_paye' => $paiements->sum('montant_paye'),
+          'nombre_paiements' => $paiements->count(),
+          'montant_moyen' => $paiements->count() > 0 ? $paiements->sum('montant_paye') / $paiements->count() : 0,
+      ];
+
+      // Retourner la vue avec les paiements et les statistiques
+      return view('locataire.paiements.historique', compact('paiements', 'stats'));
+  }
+
+
 
 
 public function store(Request $request)
@@ -60,10 +67,10 @@ public function store(Request $request)
                 'mode_paiement' => 'required|string', // Exemple : 'Carte', 'Virement', etc.
                 'date' => 'required|date',
             ]);
-    
+
             // Récupérer le locataire
             $locataire = Locataire::findOrFail($validatedData['locataire_id']);
-            
+
             // Créer le paiement
             $paiement = new Paiement();
             $paiement->locataire_id = $validatedData['locataire_id'];
@@ -74,20 +81,20 @@ public function store(Request $request)
             $paiement->date = Carbon::parse($validatedData['date']);
             $paiement->mode_paiement = $validatedData['mode_paiement'];
             $paiement->status = $paiement->montant >= $paiement->montant_total_periode ? 'Payé' : 'En attente';
-    
+
             // Sauvegarder le paiement
             $paiement->save();
-    
+
             // Optionnel : mettre à jour le statut du paiement s'il est complet
             $paiement->updateStatus();
-    
+
             // Retourner une réponse
             return response()->json([
                 'message' => 'Paiement créé avec succès',
                 'paiement' => $paiement
             ]);
         }
-    
+
 
        // PAIEMENT DETAIL POUR UN LOCTAIRE
 public function show($id)
@@ -95,39 +102,39 @@ public function show($id)
             // Récupération de l'utilisateur connecté (locataire)
             $user = Auth::user();
             $locataire = $user->locataires()->first();
-        
+
             // Vérification si le locataire a le paiement
             $paiement = Paiement::with('bien') // Charger également les informations du logement (bien)
                 ->where('locataire_id', $locataire->id)
                 ->findOrFail($id); // Trouver le paiement par ID ou retourner une erreur 404
-        
+
             // Calcul du montant payé (même si dans ce cas c'est déjà dans l'objet $paiement)
             $montantPaye = $paiement->montant_paye;
-        
+
             // Passer les données à la vue
             return view('locataire.paiements.detail', compact('paiement', 'montantPaye'));
         }
-         
 
-    // LOCTAIRE QUUITTANCE D'UN PAIEMENT SËCIFIUQE 
+
+    // LOCTAIRE QUUITTANCE D'UN PAIEMENT SËCIFIUQE
 
 public function generateQuittance($id)
         {
             // Récupérer les informations du paiement à partir de l'ID
             $paiement = Paiement::findOrFail($id);
-            
+
             // Récupérer les informations du bien
             $bien = $paiement->bien;
-        
+
             // Passer les données à la vue
             $pdf = PDF::loadView('locataire.paiements.quittance', compact('paiement', 'bien'));
-        
+
             // Retourner le PDF généré en tant que téléchargement
             return $pdf->download("quittance_paiement_{$paiement->id}.pdf");
         }
 
-    
-    
+
+
 
 /**
      * Affiche A lADMINISTRATEUR  la liste des paiements regroupés par agence, locataire et bien.
@@ -138,7 +145,7 @@ public function index(Request $request)
             // Recherche des paiements par locataire ou agence
             $query = Paiement::with(['bien.agent_immobilier', 'locataire'])
                              ->orderBy('created_at', 'desc');
-    
+
             if ($request->has('search')) {
                 $searchTerm = $request->input('search');
                 $query->whereHas('locataire', function($q) use ($searchTerm) {
@@ -149,18 +156,18 @@ public function index(Request $request)
                     $q->where('nom_agence', 'like', "%{$searchTerm}%");
                 });
             }
-    
+
             // Récupère les paiements paginés, 5 paiements par agence
             $paiements = $query->get()->groupBy(function ($paiement) {
                 return $paiement->bien->agent_immobilier->nom_agence ?? 'Agence inconnue';
             });
-    
+
             return view('admin.paiements.index', compact('paiements'));
         }
-    
+
         // Méthodes supplémentaires (afficherDetailsPaiement, telechargerQuittancePaiement) restent inchangées.
-    
-    
+
+
 
     /**
      * Affiche  A LADMINISTRATEUR les détails d'un paiement spécifique.
@@ -207,7 +214,7 @@ public function telechargerQuittancePaiement($id)
 
 
 
-// PaiementController.php
+// ETAPE DE PAIEMENT   FONCTION 01
 
 public function trouverPeriode(Request $request)
 {
@@ -271,9 +278,174 @@ public function trouverPeriode(Request $request)
 }
 
 
+
+
+
+//ETAPE DE PAOEMENT FONCTION 02
+
+public function partiepaiement(Request $request)
+{
+    $user = auth()->user(); // Utilisateur actuellement connecté
+
+    // Vérifier si l'utilisateur est bien associé à un locataire
+    $locataire = Locataire::where('user_id', $user->id)->first();
+
+    if (!$locataire) {
+        return response()->json(['message' => 'Aucun locataire associé à cet utilisateur.'], 404);
+    }
+
+    $locataireId = $locataire->id; // ID du locataire
+
+    // Étape 1 : Récupération de la dernière période de gestion
+    $gestionPeriode = GestionPeriode::where('locataire_id', $locataireId)
+        ->orderBy('id', 'desc')
+        ->first();
+
+    if (!$gestionPeriode) {
+        return response()->json(['message' => 'Aucune période de gestion trouvée.'], 404);
+    }
+
+    // Vérification du montant total de la période
+    if ($gestionPeriode->montant_total_periode != 0) {
+        // Calcul du montant restant
+        $paiementsEffectues = Paiement::where('locataire_id', $locataireId)
+            ->whereBetween('date_paiement', [$gestionPeriode->date_debut_periode, $gestionPeriode->date_fin_periode])
+            ->sum('montant_paye');
+
+        $montantRestant = $gestionPeriode->montant_total_periode - $paiementsEffectues;
+        $gestionPeriode->montant_restant_periode = $montantRestant > 0 ? $montantRestant : 0;
+        $gestionPeriode->save();
+
+    } else {
+        // Si montant_total_periode = 0
+        $complementPeriode = $request->input('complement_periode', null); // Valeur par défaut null
+
+        if (!is_null($complementPeriode)) {
+            // Récupération du loyer mensuel via la relation avec biens et contrats
+            $contrat = ContratsDeBail::where('locataire_id', $locataireId)
+                ->with('bien')
+                ->first();
+
+            if (!$contrat || !$contrat->bien) {
+                return response()->json(['message' => 'Aucun contrat de bail ou bien associé trouvé.'], 404);
+            }
+
+            $loyerMensuel = $contrat->bien->loyer_mensuel;
+
+            // Calcul du nouveau montant total pour la période
+            $montantTotalPeriode = $loyerMensuel + $complementPeriode;
+            $gestionPeriode->montant_total_periode = $montantTotalPeriode;
+            $gestionPeriode->complement_periode = $complementPeriode;
+            $gestionPeriode->save();
+
+            // Calcul du montant restant
+            $paiementsEffectues = Paiement::where('locataire_id', $locataireId)
+                ->whereBetween('date_paiement', [$gestionPeriode->date_debut_periode, $gestionPeriode->date_fin_periode])
+                ->sum('montant_paye');
+
+            $montantRestant = $montantTotalPeriode - $paiementsEffectues;
+            $gestionPeriode->montant_restant_periode = $montantRestant > 0 ? $montantRestant : 0;
+            $gestionPeriode->save();
+        } else {
+            // Si aucun montant total défini et aucun complément fourni
+            return view('paiement.partiepaiement', [
+                'gestionPeriode' => $gestionPeriode,
+                'complementRequis' => true, // Indiquer que le complément est requis
+            ]);
+        }
+    }
+
+    // Retourner les informations pour la vue
+    return view('paiement.partiepaiement', [
+        'gestionPeriode' => $gestionPeriode,
+        'complementRequis' => false, // Complément non requis
+    ]);
+}
+
+
+
+
+    // Afficher le formulaire de paiement
+    public function showForm()
+    {
+        return view('payments.form');
+    }
+
     
+    public function handleCallback(Request $request)
+    {
+        Log::info('Callback reçu : ', $request->all());
+        Log::info('Headers reçus : ', $request->headers->all());
+        Log::info('Données brutes reçues : ', ['body' => $request->getContent()]);
+    
+        $secret = 'monsecretclef123456'; // Remplacez par votre clé secrète
+        $signature = $request->header('x-kkiapay-secret');
 
+        if (is_null($signature)) {
+            Log::error('En-tête x-kkiapay-secret manquant.');
+            return response()->json(['message' => 'Signature manquante.'], 400);
+        }
 
+        $rawBody = $request->getContent();
+        if (!$this->verifySignature($signature, $rawBody, $secret)) {
+            Log::error('Signature invalide.');
+            return response()->json(['message' => 'Signature invalide.'], 400);
+        }
 
+        try {
+            $data = json_decode($rawBody, true); // Utilisez json_decode si Kkiapay envoie un JSON
+            
+            $validator = Validator::make($data, [
+                'amount' => 'required|numeric|min:0',
+                'status' => 'required|string',
+                'paymentMethod' => 'required|string',
+                'transaction_id' => 'required|string',
+                'reason' => 'nullable|string',
+            ]);
+
+            if ($validator->fails()) {
+                Log::error('Données invalides : ', $validator->errors()->all());
+                return response()->json(['message' => 'Données invalides.'], 422);
+            }
+
+            if (strtolower($data['status']) !== 'success') {
+                Log::warning('Paiement non validé.', $data);
+                return response()->json(['message' => 'Paiement non validé.'], 400);
+            }
+
+            $user = auth()->user();
+            if (!$user) {
+                Log::error('Utilisateur non authentifié.');
+                return response()->json(['message' => 'Utilisateur non authentifié.'], 401);
+            }
+
+            $locataire = Locataire::where('user_id', $user->id)->first();
+            if (!$locataire) {
+                Log::error('Locataire introuvable.');
+                return response()->json(['message' => 'Locataire introuvable.'], 404);
+            }
+
+            $bien = $locataire->biens()->first();
+            $paiement = Paiement::create([
+                'locataire_id' => $locataire->id,
+                'bien_id' => $bien->id ?? null,
+                'montant_paye' => $data['amount'],
+                'date_paiement' => now(),
+                'statut_paiement' => strtolower($data['status']),
+                'mode_paiement' => $data['paymentMethod'],
+                'reference_paiement' => $data['transaction_id'],
+                'description' => $data['reason'] ?? 'Paiement effectué via Kkiapay.',
+            ]);
+
+            Log::info('Paiement enregistré.', $paiement->toArray());
+            return response()->json(['message' => 'Paiement enregistré avec succès.'], 200);
+        } catch (\Exception $e) {
+            Log::error('Erreur interne : ' . $e->getMessage());
+            return response()->json(['message' => 'Erreur interne.'], 500);
+        }
+    }
+
+   
 
 }
+

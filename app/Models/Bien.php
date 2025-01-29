@@ -104,4 +104,9 @@ class Bien extends Model
     {
         return $this->hasMany(DemandeMaintenance::class);
     }
+
+    public function gestionPeriodes() 
+    {
+        return $this->hasMany(GestionPeriode::class); 
+    }
 }

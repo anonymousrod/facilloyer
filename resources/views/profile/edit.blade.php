@@ -60,42 +60,42 @@
                             <div class="d-flex flex-wrap justify-content-center gap-3">
                                 <div class="btn btn-info text-white d-flex align-items-center justify-content-center rounded-circle" 
                                      style="width: 60px; height: 60px;" 
-                                     onclick="window.location.href='a.fr'">
+                                     onclick="window.location.href='{{ route('dashboard') }}'">
                                     <i class="fas fa-home"></i>
                                 </div>
                                 <div class="btn btn-warning text-white d-flex align-items-center justify-content-center rounded-circle" 
                                      style="width: 60px; height: 60px;" 
-                                     onclick="window.location.href='a.fr'">
+                                     onclick="window.location.href='{{ route('periodes.show') }}'">
                                     <i class="fas fa-money-check-alt"></i>
                                 </div>
-                                <div class="btn btn-success text-white d-flex align-items-center justify-content-center rounded-circle" 
+                                <!-- <div class="btn btn-success text-white d-flex align-items-center justify-content-center rounded-circle" 
                                      style="width: 60px; height: 60px;" 
                                      onclick="window.location.href='a.fr'">
                                     <i class="fas fa-file-invoice-dollar"></i>
-                                </div>
+                                </div> -->
                                 <div class="btn btn-dark text-white d-flex align-items-center justify-content-center rounded-circle" 
                                      style="width: 60px; height: 60px;" 
-                                     onclick="window.location.href='a.fr'">
+                                     onclick="window.location.href='{{ route('user', Auth::user()->locataires->first()->agent_immobilier->user->id) }}'">
                                     <i class="fas fa-headset"></i>
                                 </div>
                                 <div class="btn btn-primary text-white d-flex align-items-center justify-content-center rounded-circle" 
                                      style="width: 60px; height: 60px;" 
-                                     onclick="window.location.href='a.fr'">
+                                     onclick="window.location.href='{{ route('locataire.locashow', Auth::user()->id) }}'">
                                     <i class="fas fa-user-circle"></i>
                                 </div>
                                 <div class="btn btn-danger text-white d-flex align-items-center justify-content-center rounded-circle" 
                                      style="width: 60px; height: 60px;" 
-                                     onclick="window.location.href='a.fr'">
+                                     onclick="window.location.href='{{route('profile.edit', Auth::user()->id)}}'">
                                     <i class="fas fa-cogs"></i>
                                 </div>
                                 <div class="btn btn-secondary text-white d-flex align-items-center justify-content-center rounded-circle" 
                                      style="width: 60px; height: 60px;" 
-                                     onclick="window.location.href='a.fr'">
+                                     onclick="window.location.href='notif de aieent.f'">
                                     <i class="fas fa-bell"></i>
                                 </div>
                                 <div class="btn btn-info text-white d-flex align-items-center justify-content-center rounded-circle" 
                                      style="width: 60px; height: 60px;" 
-                                     onclick="window.location.href='a.fr'">
+                                     onclick="window.location.href='{{route('locataire.paiements.historique')}}'">
                                     <i class="fas fa-clipboard-list"></i>
                                 </div>
                             </div>
@@ -165,12 +165,12 @@
                             <div class="d-flex flex-wrap justify-content-center gap-3">
                                 <div class="btn btn-info text-white d-flex align-items-center justify-content-center rounded-circle" 
                                      style="width: 60px; height: 60px;" 
-                                     onclick="window.location.href='a.fr'">
+                                     onclick="window.location.href='{{route('dashboard')}}'">
                                     <i class="fas fa-home"></i>
                                 </div>
                                 <div class="btn btn-warning text-white d-flex align-items-center justify-content-center rounded-circle" 
                                      style="width: 60px; height: 60px;" 
-                                     onclick="window.location.href='a.fr'">
+                                     onclick="window.location.href='">
                                     <i class="fas fa-money-check-alt"></i>
                                 </div>
                                 <div class="btn btn-success text-white d-flex align-items-center justify-content-center rounded-circle" 
@@ -180,7 +180,7 @@
                                 </div>
                                 <div class="btn btn-dark text-white d-flex align-items-center justify-content-center rounded-circle" 
                                      style="width: 60px; height: 60px;" 
-                                     onclick="window.location.href='a.fr'">
+                                     onclick="window.location.href='{{ route('locataire.index')}}'">
                                     <i class="fas fa-headset"></i>
                                 </div>
                                 <div class="btn btn-primary text-white d-flex align-items-center justify-content-center rounded-circle" 
@@ -190,7 +190,7 @@
                                 </div>
                                 <div class="btn btn-danger text-white d-flex align-items-center justify-content-center rounded-circle" 
                                      style="width: 60px; height: 60px;" 
-                                     onclick="window.location.href='a.fr'">
+                                     onclick="window.location.href='{{ route('agent.demandes')}}'">
                                     <i class="fas fa-cogs"></i>
                                 </div>
                                 <div class="btn btn-secondary text-white d-flex align-items-center justify-content-center rounded-circle" 

@@ -1,5 +1,5 @@
 @extends('layouts.master_dash')
-@section('title', 'Profil')
+@section('title', 'BIEN ET CONTRAT DE BAIL')
 @section('content')
     <!-- Biens loués -->
     <div class="card shadow-sm mb-4 rounded-3 border-0">
