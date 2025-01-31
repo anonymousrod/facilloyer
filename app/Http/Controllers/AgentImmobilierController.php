@@ -1,9 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\User;
 use Illuminate\Support\Str;
 use App\Models\AgentImmobilier;
+use App\Models\GestionPeriode;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,19 +18,19 @@ class AgentImmobilierController extends Controller
     {
         // Récupération des agents immobiliers avec leurs utilisateurs
         $agents = AgentImmobilier::with('user')->get();
-    
+
         // Retourne la vue avec les données
         return view('admin.agents.index', compact('agents'));
     }
-    
+
     // Méthode pour changer le statut de l'utilisateur lié
- public function toggleStatus(Request $request, $id)
+    public function toggleStatus(Request $request, $id)
     {
         try {
             $agent = User::findOrFail($id); // Vérifie si l'utilisateur existe
             $agent->statut = $request->statut ? 1 : 0; // Met à jour le statut
             $agent->save();
-    
+
             return response()->json([
                 'success' => true,
                 'message' => 'Statut mis à jour avec succès.',
@@ -42,10 +44,10 @@ class AgentImmobilierController extends Controller
             ], 500);
         }
     }
-public function updateStatus($id)
+    public function updateStatus($id)
     {
         $agent = AgentImmobilier::withTrashed()->findOrFail($id);
-    
+
         // Si l'agent est déjà désactivé (soft delete), on le réactive
         if ($agent->deleted_at) {
             $agent->restore();
@@ -56,13 +58,13 @@ public function updateStatus($id)
             return redirect()->back()->with('success', 'L\'agent a été désactivé.');
         }
     }
-    
-    
- 
 
-    
 
-    
+
+
+
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -134,11 +136,11 @@ public function updateStatus($id)
     {
         // Récupérer l'agent immobilier avec ses relations
         $agent = AgentImmobilier::with(['user', 'biens',])->findOrFail($id);
-    
+
         // Retourner la vue avec les données de l'agent
         return view('admin.agents.show', compact('agent'));
     }
-    
+
 
     /**
      * Show the form for editing the specified resource.
@@ -213,5 +215,25 @@ public function updateStatus($id)
     public function destroy(string $id)
     {
         //
+    }
+
+    // gestion periode fonction
+    public function info_gestion()
+    {
+        $user = Auth::user();
+
+        // Vérifier si l'utilisateur connecté est un agent immobilier
+        $agent = AgentImmobilier::where('user_id', $user->id)->first();
+
+        if (!$agent) {
+            return abort(403, 'Accès non autorisé.');
+        }
+
+        // Récupérer les périodes de gestion liées aux locataires de cet agent
+        $gestionPeriodes = GestionPeriode::whereHas('locataire', function ($query) use ($agent) {
+            $query->where('agent_id', $agent->id);
+        })->get();
+
+        return view('layouts.liste_gestion_periode', compact('gestionPeriodes'));
     }
 }

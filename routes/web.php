@@ -254,3 +254,6 @@ Route::get('/export/contrat-de-bail/{bien_id}/{agent_id?}', [ContratDeBailContro
 
 Route::get('/payments/form', [PaiementController::class, 'showForm'])->name('payments.form');
 Route::get('/paiements/callback', [PaiementController::class, 'handleCallback'])->name('payments.callback');
+
+//gestion_periode
+Route::get('/information_montant', [AgentImmobilierController::class, 'info_gestion'])->name('information_gestion');

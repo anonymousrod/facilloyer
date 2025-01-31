@@ -164,7 +164,7 @@
 
                         <!-- <li class="nav-item">
                             <a class="nav-link" href="{{ route('user', Auth::user()->locataires->first()->agent_immobilier->user->id) }}">
-                                <i class="iconoir-chat-bubble menu-icon"></i> 
+                                <i class="iconoir-chat-bubble menu-icon"></i>
                                 <span>Assistance en ligne</span>
                             </a>
                         </li> -->
@@ -287,10 +287,19 @@
                                 </div><!--end startbarGerer_bien-->
                             </li><!--end nav-item-->
 
+
                             <li class="nav-item">
                                 <a class="nav-link" href="lol.html">
                                     <i class="iconoir-view-grid menu-icon"></i>
                                     <span>Suivi des paiements</span>
+                                </a>
+
+                            </li><!--end nav-item-->
+
+                            <li class="nav-item">
+                                <a class="nav-link" href=" {{ route('information_gestion') }} ">
+                                    <i class="iconoir-view-grid menu-icon"></i>
+                                    <span>Information</span>
                                 </a>
 
                             </li><!--end nav-item-->
