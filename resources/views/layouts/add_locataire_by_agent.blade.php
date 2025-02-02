@@ -1,4 +1,6 @@
 @extends('layouts.master_dash')
-@section('content') 
+@section('title', 'Enregistrer un Locataire')
+
+@section('content')
     @include('auth.register')
-@endsection 
+@endsection

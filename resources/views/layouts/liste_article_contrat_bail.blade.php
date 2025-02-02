@@ -1,21 +1,25 @@
+
+
 @extends('layouts.master_dash')
 @section('title', 'Liste des Articles')
+
 @section('content')
     <div class="container-xxl">
         <div class="row justify-content-center">
             <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
+                <div class="card shadow-lg">
+                    <div class="card-header bg-primary text-white m-3 mb-2">
                         <div class="row align-items-center">
                             <div class="col">
-                                <h4 class="card-title">Liste des Biens - Exportations Disponibles</h4>
-                            </div><!--end col-->
-                        </div> <!--end row-->
-                    </div><!--end card-header-->
+                                <h4 class="card-title mb-0">Liste des Articles</h4>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="card-body pt-0">
                         <div class="table-responsive">
-                            <table class="table datatable" id="datatable_2">
-                                <thead>
+                            <table class="table table-striped table-hover datatable" id="datatable_2">
+                                <thead class="bg-secondary text-white">
                                     <tr>
                                         <th>Titre</th>
                                         <th>Résumé</th>
@@ -26,14 +30,8 @@
                                 <tbody>
                                     @foreach ($articles as $article)
                                         <tr>
-                                            <!-- Titre de l'Article -->
                                             <td>{{ \Illuminate\Support\Str::words($article->titre_article, 1, '...') }}</td>
-
-                                            <!-- Résumé du Contenu -->
-                                            <td>{{ \Illuminate\Support\Str::words($article->contenu_article, 1, '...') }}
-                                            </td>
-
-                                            <!-- Date de Création -->
+                                            <td>{{ \Illuminate\Support\Str::words($article->contenu_article, 1, '...') }}</td>
                                             <td>{{ $article->created_at->format('d/m/Y') }}</td>
 
                                             <!-- Actions -->
@@ -70,22 +68,11 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                            <a href="" class="btn btn-sm btn-primary pdf">
-                                <i class="fas fa-file-pdf"></i> Exporter en PDF
-                            </a>
-                            {{-- <button type="button" class="btn btn-sm btn-primary csv">Export PDF</button> --}}
-                            {{-- <button type="button" class="btn btn-sm btn-primary sql">Export SQL</button>
-                    <button type="button" class="btn btn-sm btn-primary txt">Export TXT</button>
-                    <button type="button" class="btn btn-sm btn-primary json">Export JSON</button> --}}
                         </div>
-                    </div><!--end card-body-->
-                </div><!--end card-->
-            </div> <!--end col-->
-        </div><!--end row-->
-
-
-        {{-- voir le script equivalent dans layouts script... --}}
-
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 @endsection

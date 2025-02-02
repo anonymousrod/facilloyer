@@ -8,7 +8,7 @@
                     <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col">
-                                <h4 class="card-title">Tableau des Locataires - Exportations Disponibles</h4>
+                                <h4 class="card-title">Liste des Locataires - Exportations Disponibles</h4>
                             </div><!--end col-->
                         </div> <!--end row-->
                     </div><!--end card-header-->

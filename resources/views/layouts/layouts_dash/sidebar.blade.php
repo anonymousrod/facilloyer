@@ -224,7 +224,7 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="#sidebarGerer_locataires" data-bs-toggle="collapse"
                                     role="button" aria-expanded="false" aria-controls="sidebarGerer_locataires">
-                                    <i class="iconoir-view-grid menu-icon"></i>
+                                    <i class="iconoir-user menu-icon"></i>
                                     <span>Gérer les locataires</span>
                                 </a>
                                 <div class="collapse " id="sidebarGerer_locataires">
@@ -232,10 +232,10 @@
 
 
                                         <li class="nav-item">
-                                            <a class="nav-link" href="{{route('locataire.create')}}">Ajouter locataire</a>
+                                            <a class="nav-link" href="{{route('locataire.create')}}">Enregistrer </a>
                                         </li><!--end nav-item-->
                                         <li class="nav-item">
-                                            <a class="nav-link" href="{{ route('locataire.index')}}">Liste locataire</a>
+                                            <a class="nav-link" href="{{ route('locataire.index')}}">Liste </a>
                                         </li><!--end nav-item-->
 
 
@@ -246,7 +246,7 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="#sidebarGerer_bien" data-bs-toggle="collapse" role="button"
                                     aria-expanded="false" aria-controls="sidebarGerer_bien">
-                                    <i class="iconoir-view-grid menu-icon"></i>
+                                    <i class="iconoir-home menu-icon"></i>
                                     <span>Gestion des biens</span>
                                 </a>
                                 <div class="collapse " id="sidebarGerer_bien">
@@ -254,7 +254,7 @@
 
 
                                         <li class="nav-item">
-                                            <a class="nav-link" href="{{ route('biens.create') }}">Ajouter </a>
+                                            <a class="nav-link" href="{{ route('biens.create') }}">Enregistrer </a>
                                         </li><!--end nav-item-->
                                         <li class="nav-item">
                                             <a class="nav-link" href="{{ route('biens.index') }}">Liste </a>
@@ -268,7 +268,7 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="#sidebarGerer_contrat_bail" data-bs-toggle="collapse"
                                     role="button" aria-expanded="false" aria-controls="sidebarGerer_contrat_bail">
-                                    <i class="iconoir-view-grid menu-icon"></i>
+                                    <i class="fas fa-indent menu-icon"></i>
                                     <span>Gestion des Articles</span>
                                 </a>
                                 <div class="collapse " id="sidebarGerer_contrat_bail">
@@ -276,10 +276,10 @@
 
 
                                         <li class="nav-item">
-                                            <a class="nav-link" href="{{route('article.create')}}">Créer un article</a>
+                                            <a class="nav-link" href="{{route('article.create')}}">Enregistrer</a>
                                         </li><!--end nav-item-->
                                         <li class="nav-item">
-                                            <a class="nav-link" href="{{route('article.index')}}"> Lise des Articles</a>
+                                            <a class="nav-link" href="{{route('article.index')}}">Liste</a>
                                         </li><!--end nav-item-->
 
 
@@ -290,7 +290,7 @@
 
                             <li class="nav-item">
                                 <a class="nav-link" href="lol.html">
-                                    <i class="iconoir-view-grid menu-icon"></i>
+                                    <i class="far fa-eye menu-icon"></i>
                                     <span>Suivi des paiements</span>
                                 </a>
 
@@ -298,22 +298,22 @@
 
                             <li class="nav-item">
                                 <a class="nav-link" href=" {{ route('information_gestion') }} ">
-                                    <i class="iconoir-view-grid menu-icon"></i>
-                                    <span>Information</span>
+                                    <i class="iconoir-stats-up-square menu-icon"></i>
+                                    <span>Auditer Loyer</span>
                                 </a>
 
                             </li><!--end nav-item-->
 
-                            <li class="nav-item">
+                            {{-- <li class="nav-item">
                                 <a class="nav-link" href="lol.html">
                                     <i class="iconoir-view-grid menu-icon"></i>
                                     <span>Consulter les rapports financiers</span>
                                 </a>
 
-                            </li><!--end nav-item-->
+                            </li><!--end nav-item--> --}}
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('agent.demandes')}}">
-                                    <i class="iconoir-view-grid menu-icon"></i>
+                                    <i class="iconoir-tools menu-icon"></i>
                                     <span>Voir les demande de maintenances</span>
                                 </a>
 
