@@ -32,22 +32,20 @@ Route::get('/change-language/{lang}', function ($lang) {
 // route modifiez mon prodfill locataire
 
 Route::get('/locataire/{id}/locashow', [LocataireController::class, 'showInformations'])
-->name('locataire.locashow');
+    ->name('locataire.locashow');
 
 Route::get('/locataire/{id}/locatairebien', [LocataireController::class, 'showlocatairebien'])
-->name('locataire_bien');
+    ->name('locataire_bien');
 
 Route::middleware(['auth'])->group(function () {
 
 
-// Assurez-vous que cette route est placée AVANT les routes resource
-Route::get('/locataire/agentinfo', [LocataireController::class, 'agenceImmobiliereAssociee'])->name('locataire.agentinfo');
-
-
+    // Assurez-vous que cette route est placée AVANT les routes resource
+    Route::get('/locataire/agentinfo', [LocataireController::class, 'agenceImmobiliereAssociee'])->name('locataire.agentinfo');
 });
 // noté agence
 Route::put('/agent/evaluation/{id}', [AgentImmobilierController::class, 'updateEvaluation'])
-->name('agent.updateEvaluation');
+    ->name('agent.updateEvaluation');
 
 
 
@@ -101,59 +99,57 @@ Route::middleware(['auth'])->group(function () {
 
 
     Route::post('/locataire/paiements/create', [PaiementController::class, 'create'])
-    ->name('locataire.paiements.create');
+        ->name('locataire.paiements.create');
 
     // Route pour la quittance de loyer
     Route::get('/locataire/paiements/{id}/quittance', [PaiementController::class, 'generateQuittance'])
         ->name('locataire.paiements.quittance');
 
     Route::get('/locataire/paiements/{id}/detail', [PaiementController::class, 'show'])->name('locataire.paiements.detail');
-
+    Route::get('/agent/paiements/{id}/detail', [PaiementController::class, 'show'])->name('agent_historique_detail');
 });
 
 
-  /// ROUTE SUCCESIVE POUR GERER PAIEMENT
+/// ROUTE SUCCESIVE POUR GERER PAIEMENT
 
-     /// ROUTE 1
+/// ROUTE 1
 
-    Route::get('/periodes', [PaiementController::class, 'trouverPeriode'])->name('periodes.show');
+Route::get('/periodes', [PaiementController::class, 'trouverPeriode'])->name('periodes.show');
 
-    /// ROUTE 2
-    Route::get('/paiement/partiepaiement', [PaiementController::class, 'partiepaiement'])->name('paiement.partiepaiement');
-    Route::post('/paiement/complement', [PaiementController::class, 'ajouterComplement'])->name('paiement.complement');
-
-
+/// ROUTE 2
+Route::get('/paiement/partiepaiement', [PaiementController::class, 'partiepaiement'])->name('paiement.partiepaiement');
+Route::post('/paiement/complement', [PaiementController::class, 'ajouterComplement'])->name('paiement.complement');
 
 
 
-    Route::middleware(['auth'])->group(function() {
-       // Afficher le formulaire de demande de maintenance
-        Route::get('/locataire/demandes/create', [DemandeMaintenanceController::class, 'create'])->name('locataire.demandes.create');
 
 
-        // Enregistrer la demande de maintenance
-        Route::post('/locataire/demandes', [DemandeMaintenanceController::class, 'store'])->name('locataire.demandes.store');
-
-        // Voir la liste des demandes de maintenance du locataire
-        Route::get('/locataire/demandes/index', [DemandeMaintenanceController::class, 'index'])->name('locataire.demandes.index');
+Route::middleware(['auth'])->group(function () {
+    // Afficher le formulaire de demande de maintenance
+    Route::get('/locataire/demandes/create', [DemandeMaintenanceController::class, 'create'])->name('locataire.demandes.create');
 
 
-        // AGENT IMMOBILIERS VOIR LES DEMANDES
+    // Enregistrer la demande de maintenance
+    Route::post('/locataire/demandes', [DemandeMaintenanceController::class, 'store'])->name('locataire.demandes.store');
 
-        Route::get('/agent/demandes', [DemandeMaintenanceController::class, 'afficherDemandesAgent'])->name('agent.demandes');
-
-        // mise a jour des stauts des demandes par l'agent immobilier
-        Route::patch('/agent/demandes/{id}', [DemandeMaintenanceController::class, 'mettreAJourStatut'])->name('agent.demandes.update');
-
-
-    });
+    // Voir la liste des demandes de maintenance du locataire
+    Route::get('/locataire/demandes/index', [DemandeMaintenanceController::class, 'index'])->name('locataire.demandes.index');
 
 
-    // ADMINITRATEUR DEMANDE MANTENANCE SUPERVISION
-    Route::prefix('admin')->middleware('auth')->group(function () {
-        Route::get('demandes-maintenance/grouped', [DemandeMaintenanceController::class, 'indexGrouped'])
-            ->name('admin.demandes.grouped');
-    });
+    // AGENT IMMOBILIERS VOIR LES DEMANDES
+
+    Route::get('/agent/demandes', [DemandeMaintenanceController::class, 'afficherDemandesAgent'])->name('agent.demandes');
+
+    // mise a jour des stauts des demandes par l'agent immobilier
+    Route::patch('/agent/demandes/{id}', [DemandeMaintenanceController::class, 'mettreAJourStatut'])->name('agent.demandes.update');
+});
+
+
+// ADMINITRATEUR DEMANDE MANTENANCE SUPERVISION
+Route::prefix('admin')->middleware('auth')->group(function () {
+    Route::get('demandes-maintenance/grouped', [DemandeMaintenanceController::class, 'indexGrouped'])
+        ->name('admin.demandes.grouped');
+});
 
 
 
@@ -199,7 +195,6 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::get('/paiements', [PaiementController::class, 'index'])->name('paiements.index');
     Route::get('/paiements/{id}/details', [PaiementController::class, 'afficherDetailsPaiement'])->name('paiements.details');
     Route::get('/paiements/{id}/quittance', [PaiementController::class, 'telechargerQuittancePaiement'])->name('paiements.quittance');
-
 });
 
 
@@ -257,3 +252,7 @@ Route::get('/paiements/callback', [PaiementController::class, 'handleCallback'])
 
 //gestion_periode
 Route::get('/information_montant', [AgentImmobilierController::class, 'info_gestion'])->name('information_gestion');
+
+// Historique des paiements
+Route::get('/agent/paiements/historique', [PaiementController::class, 'historiqueTousLocataires'])
+    ->name('agent_immo_historique');

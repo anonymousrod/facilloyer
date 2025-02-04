@@ -289,7 +289,7 @@
 
 
                             <li class="nav-item">
-                                <a class="nav-link" href="lol.html">
+                                <a class="nav-link" href="{{route('agent_immo_historique')}}">
                                     <i class="far fa-eye menu-icon"></i>
                                     <span>Suivi des paiements</span>
                                 </a>
