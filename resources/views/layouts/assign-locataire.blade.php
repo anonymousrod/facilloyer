@@ -1,37 +1,3 @@
-{{-- @extends('layouts.master_dash')
-
-@section('title', 'Asign_locaaire')
-@section('content')
-<div class="container">
-    <h1>Assigner un locataire au bien : {{ $bien->name_bien }}</h1>
-
-    @if (session('error'))
-        <div class="alert alert-danger">{{ session('error') }}</div>
-    @endif
-
-    @if (session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
-
-    <form method="POST" action="{{ route('assign.locataire', $bien->id) }}">
-        @csrf
-        <div class="form-group">
-            <label for="locataire">Choisir un locataire :</label>
-            <select name="locataire_id" id="locataire" class="form-control">
-                <option value="" disabled selected>-- Sélectionner un locataire --</option>
-                @foreach ($locataires as $locataire)
-                    <option value="{{ $locataire->id }}">
-                        {{ $locataire->nom }} {{ $locataire->prenom }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
-
-        <button type="submit" class="btn btn-primary mt-3">Assigner</button>
-    </form>
-</div>
-@endsection --}}
-
 @extends('layouts.master_dash')
 
 @section('title', 'Assigner un locataire')

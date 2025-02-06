@@ -95,7 +95,6 @@ class BienController extends Controller
 
             $agent_connecter = Auth::user()->agent_immobiliers->first()->id;
             $articles = ArticleContratBail::where('agent_immobilier_id', $agent_connecter)->get();
-
         }
         $bien = Bien::findOrFail($bien_id);
 
@@ -106,6 +105,12 @@ class BienController extends Controller
         $contrat = ContratsDeBail::where('bien_id', $bien->id)
             ->where('locataire_id', $locataireAssigné?->locataire->id)
             ->first();
+
+        if (request()->has('notification_id')) {
+            auth()->user()->notifications()
+                ->where('id', request('notification_id'))
+                ->update(['read_at' => now()]);
+        }
 
 
 

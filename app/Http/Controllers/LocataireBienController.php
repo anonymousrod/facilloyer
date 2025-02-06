@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Bien;
 use App\Models\Locataire;
 use App\Models\LocataireBien;
+use App\Notifications\TenantAssignedToProperty;
 use Illuminate\Http\Request;
 
 class LocataireBienController extends Controller
@@ -62,6 +63,13 @@ class LocataireBienController extends Controller
             'locataire_id' => $request->locataire_id,
             'bien_id' => $id,
         ]);
+
+        // Récupérer le bien et le locataire
+        $bien = Bien::findOrFail($id);
+        $locataire = Locataire::findOrFail($request->locataire_id);
+
+        // Envoyer la notification au locataire via son utilisateur associé
+        $locataire->user->notify(new TenantAssignedToProperty($bien, $locataire));
 
         return redirect()->route('biens.show', $id)->with('success', 'Locataire assigné avec succès.');
     }

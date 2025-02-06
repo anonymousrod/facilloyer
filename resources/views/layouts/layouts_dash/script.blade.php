@@ -155,3 +155,23 @@
         console.log(document.getElementById('signatureLocataireInput').value);
     });
 </script> --}}
+
+<!-- Définir userID pour le script -->
+<script>
+    window.userID = {{ auth()->user()->id }};
+</script>
+
+<!-- Ton script de notifications en temps réel -->
+<script>
+    window.Echo.private(`App.Models.User.${userID}`)
+        .notification((notification) => {
+            // Jouer le son de notification
+            new Audio('/notification.mp3').play();
+
+            // Mettre à jour le badge de notification
+            let badge = document.querySelector('#notif-badge');
+            let count = parseInt(badge.innerText) || 0;
+            badge.innerText = count + 1;
+        });
+</script>
+
