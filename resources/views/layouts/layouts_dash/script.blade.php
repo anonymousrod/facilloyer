@@ -161,17 +161,56 @@
     window.userID = {{ auth()->user()->id }};
 </script>
 
-<!-- Ton script de notifications en temps réel -->
+
+
+<!-- Scripts pour les notifications en temps réel -->
+@vite(['resources/js/app.js'])
+{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/pusher-js/7.0.3/pusher.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.11.2/dist/echo.iife.js"></script> --}}
+
 <script>
-    window.Echo.private(`App.Models.User.${userID}`)
-        .notification((notification) => {
-            // Jouer le son de notification
-            new Audio('/notification.mp3').play();
+    document.addEventListener("DOMContentLoaded", function() {
+        if (!window.userID) {
+            window.userID = "{{ auth()->id() }}";
+        }
 
-            // Mettre à jour le badge de notification
-            let badge = document.querySelector('#notif-badge');
-            let count = parseInt(badge.innerText) || 0;
-            badge.innerText = count + 1;
-        });
+        if (window.userID) {
+            // // Initialiser Laravel Echo et Pusher
+            // window.Echo = new Echo({
+            //     broadcaster: 'pusher',
+            //     key: "{{ env('PUSHER_APP_KEY') }}",
+            //     cluster: "{{ env('PUSHER_APP_CLUSTER') }}",
+            //     forceTLS: true,
+            //     encrypted: true
+            // });
+
+            // Écouter les notifications en temps réel
+            window.Echo.private(`App.Models.User.${window.userID}`)
+                .notification((notification) => {
+                    console.log("🔔 Nouvelle notification reçue :", notification);
+
+                    // Jouer le son de notification
+                    let audio = new Audio('/notification.mp3');
+                    audio.play().catch(error => console.log("🎵 Erreur de lecture audio :", error));
+
+                    // Mettre à jour le badge de notification
+                    let badge = document.getElementById("notif-badge");
+                    if (badge) {
+                        let count = parseInt(badge.innerText) || 0;
+                        badge.innerText = count + 1;
+                        badge.classList.remove('hidden');
+                    }
+
+                    // Ajouter la notification dans la liste
+                    let notifList = document.getElementById("notif-list");
+                    if (notifList) {
+                        let notifItem = document.createElement("a");
+                        notifItem.href = notification.url;
+                        notifItem.classList.add("block", "p-4", "hover:bg-gray-100");
+                        notifItem.innerText = notification.message;
+                        notifList.prepend(notifItem);
+                    }
+                });
+        }
+    });
 </script>
-

@@ -206,17 +206,24 @@
                                 <span>Assistance en ligne</span>
                             </a>
                         </li>
-
-                        @auth
+                        {{-- @auth
                             <div x-data="{ open: false }" class="relative">
+                                <!-- Bouton des notifications -->
                                 <button @click="open = !open">
-                                    🔔
-                                    <span class="bg-red-500 text-white rounded-full px-2 py-1 text-xs">
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="Y.Y">
+                                            <i class="iconoir-bell menu-icon"></i> <!-- Icône pour les notifications -->
+                                            <span>Notifications</span>
+                                            <span id="notif-badge" class="bg-red-500 text-white rounded-full px-2 py-1 text-xs">
                                         {{ auth()->user()->unreadNotifications->count() }}
                                     </span>
+                                        </a>
+                                    </li><!--end nav-item-->
+
                                 </button>
 
-                                <div x-show="open" class="absolute bg-white shadow-lg mt-2 w-64">
+                                <!-- Liste des notifications -->
+                                <div x-show="open" class="absolute bg-white shadow-lg mt-2 w-64" id="notif-list">
                                     @foreach (auth()->user()->unreadNotifications as $notification)
                                         <a href="{{ $notification->data['url'] }}?notification_id={{ $notification->id }}"
                                             class="block p-4 hover:bg-gray-100">
@@ -225,7 +232,69 @@
                                     @endforeach
                                 </div>
                             </div>
-                        @endauth
+                        @endauth --}}
+
+
+                        {{-- <li class="nav-item relative" x-data="{ open: false }">
+                            <a class="nav-link flex items-center space-x-2 cursor-pointer relative" @click="open = !open">
+                                <!-- Conteneur icône + badge -->
+                                <div class="relative">
+                                    <i class="iconoir-bell menu-icon text-xl"></i>
+                                    <!-- Badge de notification positionné sur l'icône -->
+                                    @if (auth()->user()->unreadNotifications->count() > 0)
+                                        <span class="absolute -top-2 -right-2 bg-red-500  rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold border border-white transform translate-x-1/2 -translate-y-1/2">
+                                            {{ auth()->user()->unreadNotifications->count() }}
+                                        </span>
+                                    @endif
+                                </div>
+
+                                <span>Notifications</span>
+                            </a>
+
+                            <!-- Liste des notifications -->
+                            <div x-show="open" @click.outside="open = false"
+                                class="absolute right-0 bg-white shadow-lg mt-2 w-64 rounded-lg p-2 z-50">
+                                @forelse(auth()->user()->unreadNotifications as $notification)
+                                    <a href="{{ $notification->data['url'] }}?notification_id={{ $notification->id }}"
+                                        class="block p-3 text-gray-800 hover:bg-gray-100 rounded">
+                                        {{ $notification->data['message'] }}
+                                    </a>
+                                @empty
+                                    <p class="text-center text-gray-500 p-3">Aucune nouvelle notification</p>
+                                @endforelse
+                            </div>
+                        </li> --}}
+                        {{-- <div class="nav-item relative" x-data="{ open: false }">
+                            <a class="nav-link flex items-center space-x-2 cursor-pointer relative"
+                                @click="open = !open">
+                                <div class="relative">
+                                    <i class="iconoir-bell menu-icon text-xl"></i>
+                                    <!-- Badge de notification positionné sur l'icône -->
+                                    @if (auth()->user()->unreadNotifications->count() > 0)
+                                        <span
+                                            class="absolute -top-2 -right-2 bg-red-500  text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                                            {{ auth()->user()->unreadNotifications->count() }}
+                                        </span>
+                                    @endif
+                                </div>
+                                <span>Notifications</span>
+                            </a>
+
+                            <!-- Liste des notifications -->
+                            <div x-show="open" @click.outside="open = false"
+                                class="absolute right-0 bg-white shadow-lg mt-2 w-64 rounded-lg p-2 z-50">
+                                @forelse(auth()->user()->unreadNotifications as $notification)
+                                    <a href="{{ $notification->data['url'] }}?notification_id={{ $notification->id }}"
+                                        class="block p-3 text-gray-800 hover:bg-gray-100 rounded">
+                                        {{ $notification->data['message'] }}
+                                    </a>
+                                @empty
+                                    <p class="text-center text-gray-500 p-3">Aucune nouvelle notification</p>
+                                @endforelse
+                            </div>
+                        </div> --}}
+
+
 
                     @endif
 

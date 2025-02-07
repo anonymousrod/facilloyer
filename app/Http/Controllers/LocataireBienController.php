@@ -70,6 +70,7 @@ class LocataireBienController extends Controller
 
         // Envoyer la notification au locataire via son utilisateur associé
         $locataire->user->notify(new TenantAssignedToProperty($bien, $locataire));
+        // dd("Notification envoyée", $locataire->user);
 
         return redirect()->route('biens.show', $id)->with('success', 'Locataire assigné avec succès.');
     }

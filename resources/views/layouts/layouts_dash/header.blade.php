@@ -1,3 +1,39 @@
+<style>
+    .alert-count {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        width: 18px;
+        height: 18px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        font-size: 10px;
+        font-weight: 500;
+        color: #fff;
+        background: #f62718;
+        border: 2px solid var(--header-color);
+    }
+
+    .notify-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .header-notifications-list .dropdown-item {
+        padding: 12px 16px;
+        transition: all 0.2s;
+    }
+
+    .header-notifications-list .dropdown-item:hover {
+        background-color: #f8f9fa;
+    }
+</style>
     <!-- Top Bar Start -->
     <div class="topbar d-print-none">
         <div class="container-xxl">
@@ -39,6 +75,20 @@
                         </div>
 
                     </li><!--end topbar-language-->
+
+                    {{-- pour la notification --}}
+
+
+                    <li class="topbar-item relative" x-data="{ open: false }">
+                        <a class="nav-link nav-icon position-relative" href="#" >
+                            <i class="iconoir-bell"></i>
+                                <span id="notif-badge" class="alert-count">
+                                    {{ auth()->user()->unreadNotifications->count() }}
+                                </span>
+                        </a>
+
+                    </li>
+
 
                     <li class="topbar-item">
                         <a class="nav-link nav-icon" href="javascript:void(0);" id="light-dark-mode">
