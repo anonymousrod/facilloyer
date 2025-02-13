@@ -79,19 +79,12 @@
 
                 </li><!--end topbar-language-->
 
-                {{-- pour la notification par defaux --}}
-
-
-
-                {{-- <li class="topbar-item relative" x-data="{ open: false }">
-                        <a class="nav-link nav-icon position-relative" href="#" >
-                            <i class="iconoir-bell"></i>
-                                <span id="notif-badge" class="alert-count">
-                                    {{ auth()->user()->unreadNotifications->count() }}
-                                </span>
-                        </a>
-
-                    </li> --}}
+                <li class="topbar-item">
+                    <a class="nav-link nav-icon" href="javascript:void(0);" id="light-dark-mode">
+                        <i class="icofont-moon dark-mode"></i>
+                        <i class="icofont-sun light-mode"></i>
+                    </a>
+                </li>
 
                 {{-- pour la notification par defaux suite --}}
                 <li class="dropdown topbar-item">
@@ -131,18 +124,19 @@
                                     </div>
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                @empty
-                                    {{-- <div class="dropdown-item text-center py-3">
+                            @empty
+                                {{-- <div class="dropdown-item text-center py-3">
                                         <i class="iconoir-bell-off fs-24 text-muted"></i>
                                         <p class="text-muted mb-0">Aucune nouvelle notification</p>
                                     </div> --}}
-                                    <div id="empty-notif" class="dropdown-item text-center py-3">
-                                        <i class="iconoir-bell-off fs-24 text-muted"></i>
-                                        <p class="text-muted mb-0">Aucune nouvelle notification</p>
-                                    </div>
+                                <div id="empty-notif" class="dropdown-item text-center py-3">
+                                    <i class="iconoir-bell-off fs-24 text-muted"></i>
+                                    <p class="text-muted mb-0">Aucune nouvelle notification</p>
+                                </div>
                             @endforelse
                             <a class="dropdown-item text-info" href="#"><i
-                                    class="las la-eye fs-18 me-1 align-text-bottom"></i> Voir toutes les notifications</a>
+                                    class="las la-eye fs-18 me-1 align-text-bottom"></i> Voir toutes les
+                                notifications</a>
 
                         </div>
 
@@ -151,12 +145,7 @@
 
 
 
-                <li class="topbar-item">
-                    <a class="nav-link nav-icon" href="javascript:void(0);" id="light-dark-mode">
-                        <i class="icofont-moon dark-mode"></i>
-                        <i class="icofont-sun light-mode"></i>
-                    </a>
-                </li>
+
 
                 <li class="dropdown topbar-item">
                     @if (Auth::check())
