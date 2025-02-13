@@ -156,35 +156,174 @@
     });
 </script> --}}
 
-<!-- Définir userID pour le script -->
-<script>
-    window.userID = {{ auth()->user()->id }};
-</script>
+
 
 
 
 <!-- Scripts pour les notifications en temps réel -->
-@vite(['resources/js/app.js'])
-{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/pusher-js/7.0.3/pusher.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.11.2/dist/echo.iife.js"></script> --}}
-
+<!-- Définir userID pour le script -->
 <script>
+    window.userID = {{ auth()->user()->id }};
+</script>
+@vite(['resources/js/app.js'])
+<script>
+    // document.addEventListener("DOMContentLoaded", function() {
+    //     if (!window.userID) {
+    //         window.userID = "{{ auth()->id() }}";
+    //     }
+
+    //     if (window.userID) {
+
+
+    //         // Écouter les notifications en temps réel
+    //         window.Echo.private(`App.Models.User.${window.userID}`)
+    //             .notification((notification) => {
+    //                 console.log("🔔 Nouvelle notification reçue :", notification);
+
+    //                 // Jouer le son de notification
+    //                 let audio = new Audio('/notification.mp3');
+    //                 audio.play().catch(error => console.log("🎵 Erreur de lecture audio :", error));
+
+    //                 // Mettre à jour le badge de notification
+    //                 let badge = document.getElementById("notif-badge");
+    //                 if (badge) {
+    //                     let count = parseInt(badge.innerText) || 0;
+    //                     badge.innerText = count + 1;
+    //                     badge.classList.remove('hidden');
+    //                 }
+
+    //                 // Ajouter la notification dans la liste
+    //                 let notifList = document.getElementById("notif-list");
+    //                 if (notifList) {
+    //                     let notifItem = document.createElement("a");
+    //                     notifItem.href = notification.url;
+    //                     notifItem.classList.add("block", "p-4", "hover:bg-gray-100");
+    //                     notifItem.innerText = notification.message;
+    //                     notifList.prepend(notifItem);
+    //                 }
+    //             });
+    //     }
+    // });
+
+    // pas mal
+    // document.addEventListener("DOMContentLoaded", function() {
+    //     if (!window.userID) {
+    //         window.userID = "{{ auth()->id() }}";
+    //     }
+
+    //     if (window.userID) {
+    //         window.Echo.private(`App.Models.User.${window.userID}`)
+    //             .notification((notification) => {
+    //                 console.log("🔔 Nouvelle notification reçue :", notification);
+
+    //                 // Jouer le son de notification
+    //                 let audio = new Audio('/notification.mp3');
+    //                 audio.play().catch(error => console.log("🎵 Erreur de lecture audio :", error));
+
+    //                 // Mettre à jour le badge de notification
+    //                 let badge = document.getElementById("notif-badge");
+    //                 if (badge) {
+    //                     let count = parseInt(badge.innerText) || 0;
+    //                     badge.innerText = count + 1;
+    //                     badge.classList.remove('hidden');
+    //                 }
+
+    //                 // Ajouter la notification dans la liste dynamiquement
+    //                 let notifList = document.getElementById("notif-list");
+    //                 if (notifList) {
+    //                     let notifItem = document.createElement("a");
+    //                     notifItem.href = notification.url + `?notification_id=${notification.id}`;
+    //                     notifItem.classList.add("dropdown-item");
+
+    //                     notifItem.innerHTML = `
+    //                     <div class="d-flex align-items-center">
+    //                         <div class="flex-shrink-0">
+    //                             <div class="notify-icon bg-light-${notification.type ?? 'primary'} text-${notification.type ?? 'primary'}">
+    //                                 <i class="${notification.icon ?? 'iconoir-bell'}"></i>
+    //                             </div>
+    //                         </div>
+    //                         <div class="flex-grow-1 ms-3">
+    //                             <p class="msg-info mb-0">${notification.message}</p>
+    //                             <small class="text-muted">À l'instant</small>
+    //                         </div>
+    //                     </div>
+    //                 `;
+
+    //                     // Ajouter la notification en haut de la liste
+    //                     notifList.prepend(notifItem);
+    //                 }
+    //             });
+    //     }
+    // });
+
     document.addEventListener("DOMContentLoaded", function() {
         if (!window.userID) {
             window.userID = "{{ auth()->id() }}";
         }
 
         if (window.userID) {
-            // // Initialiser Laravel Echo et Pusher
-            // window.Echo = new Echo({
-            //     broadcaster: 'pusher',
-            //     key: "{{ env('PUSHER_APP_KEY') }}",
-            //     cluster: "{{ env('PUSHER_APP_CLUSTER') }}",
-            //     forceTLS: true,
-            //     encrypted: true
-            // });
+            window.Echo.private(`App.Models.User.${window.userID}`)
+                .notification((notification) => {
+                    console.log("🔔 Nouvelle notification reçue :", notification);
 
-            // Écouter les notifications en temps réel
+                    // Jouer le son de notification
+                    let audio = new Audio('/notification.mp3');
+                    audio.play().catch(error => console.log("🎵 Erreur de lecture audio :", error));
+
+                    // Mettre à jour le badge de notification
+                    let badge = document.getElementById("notif-badge");
+                    if (badge) {
+                        let count = parseInt(badge.innerText) || 0;
+                        badge.innerText = count + 1;
+                        badge.classList.remove('hidden');
+                    }
+
+                    // Ajouter la notification dans la liste dynamiquement
+                    let notifList = document.getElementById("notif-list");
+                    if (notifList) {
+                        // Supprimer le message "Aucune nouvelle notification" s'il existe
+                        let emptyNotif = document.getElementById("empty-notif");
+                        if (emptyNotif) {
+                            emptyNotif.remove();
+                        }
+
+                        let notifItem = document.createElement("a");
+                        notifItem.href = notification.url + `?notification_id=${notification.id}`;
+                        notifItem.classList.add("dropdown-item");
+
+                        notifItem.innerHTML = `
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                                <div class="notify-icon bg-light-${notification.type ?? 'primary'} text-${notification.type ?? 'primary'}">
+                                    <i class="${notification.icon ?? 'iconoir-bell'}"></i>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <p class="msg-info mb-0">${notification.message}</p>
+                                <small class="text-muted">À l'instant</small>
+                            </div>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                    `;
+
+                        // Ajouter la notification en haut de la liste
+                        notifList.prepend(notifItem);
+                    }
+                });
+        }
+    });
+</script>
+
+{{-- <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        if (!window.userID) {
+            window.userID = "{{ auth()->id() }}";
+        }
+
+        if (window.userID) {
+            console.log("📡 Connexion à Pusher pour l'utilisateur :", window.userID);
+
+            // Écoute les notifications en temps réel
             window.Echo.private(`App.Models.User.${window.userID}`)
                 .notification((notification) => {
                     console.log("🔔 Nouvelle notification reçue :", notification);
@@ -205,12 +344,31 @@
                     let notifList = document.getElementById("notif-list");
                     if (notifList) {
                         let notifItem = document.createElement("a");
-                        notifItem.href = notification.url;
-                        notifItem.classList.add("block", "p-4", "hover:bg-gray-100");
-                        notifItem.innerText = notification.message;
+                        notifItem.href = notification.data.url;
+                        notifItem.classList.add("dropdown-item");
+
+                        notifItem.innerHTML = `
+                            <div class="d-flex align-items-center">
+                                <div class="flex-shrink-0">
+                                    <div class="notify-icon bg-light-${notification.data.type ?? 'primary'} text-${notification.data.type ?? 'primary'}">
+                                        <i class="${notification.data.icon ?? 'iconoir-bell'}"></i>
+                                    </div>
+                                </div>
+                                <div class="flex-grow-1 ms-3">
+                                    <p class="msg-info mb-0">${notification.data.message}</p>
+                                    <small class="text-muted">${new Date(notification.created_at).toLocaleString()}</small>
+                                </div>
+                            </div>
+                        `;
+
                         notifList.prepend(notifItem);
+
+                        // Ajouter une ligne de séparation après chaque notification
+                        let divider = document.createElement("div");
+                        divider.classList.add("dropdown-divider");
+                        notifList.prepend(divider);
                     }
                 });
         }
     });
-</script>
+</script> --}}
