@@ -57,8 +57,11 @@ class PaiementController extends Controller
     // historique (agent immo) de paiement  pour un loctaire en fonction de ces biens
     public function historiqueTousLocataires()
     {
+        if (!Auth::check()) {
+            return redirect()->route('login')->with('error', 'Vous devez être connecté.');
+        }
+
         $agent = Auth::user()->agent_immobiliers->first();
-        // $agent = $user->agentImmobilier()->first();
 
         if (!$agent) {
             return redirect()->route('dashboard')
@@ -157,6 +160,12 @@ class PaiementController extends Controller
 
             // Calcul du montant payé (même si dans ce cas c'est déjà dans l'objet $paiement)
             $montantPaye = $paiement->montant_paye;
+
+            if (request()->has('notification_id')) {
+                auth()->user()->notifications()
+                    ->where('id', request('notification_id'))
+                    ->update(['read_at' => now()]);
+            }
 
             // Passer les données à la vue
             return view('locataire.paiements.detail', compact('paiement', 'montantPaye'));

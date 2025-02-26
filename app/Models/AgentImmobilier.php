@@ -10,6 +10,9 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\Notifiable; // Ajoutez ceci !
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+
 
 /**
  * Class AgentImmobilier
@@ -35,7 +38,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class AgentImmobilier extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, HasFactory, Notifiable;
 
     protected $table = 'agent_immobilier';
 
@@ -75,16 +78,18 @@ class AgentImmobilier extends Model
     }
 
     public function demandesMaintenance()
-{
-    return $this->hasMany(DemandeMaintenance::class, 'agent_immobilier_id');
-}
+    {
+        return $this->hasMany(DemandeMaintenance::class, 'agent_immobilier_id');
+    }
 
-public function locataires()
-{
-    return $this->hasMany(Locataire::class, 'agent_id'); // 'agent_id' doit être la clé étrangère dans la table locataires
-}
+    public function locataires()
+    {
+        return $this->hasMany(Locataire::class, 'agent_id'); // 'agent_id' doit être la clé étrangère dans la table locataires
+    }
 
-
-
-
+    // Méthode pour récupérer l'email de l'utilisateur
+    public function routeNotificationForMail()
+    {
+        return $this->user->email; // On récupère l'email de l'utilisateur associé
+    }
 }

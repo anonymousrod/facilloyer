@@ -46,6 +46,7 @@ return new class extends Migration {
     {
         Schema::create('paiements', function (Blueprint $table) {
             $table->id();
+            $table->boolean('notified')->default(false);
             $table->foreignId('locataire_id')->constrained()->onDelete('cascade');
             $table->foreignId('bien_id')->constrained()->onDelete('cascade');
             $table->decimal('montant_paye', 10, 2);

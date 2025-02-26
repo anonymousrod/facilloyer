@@ -12,6 +12,7 @@ class Paiement extends Model
 
     protected $fillable = [
         'locataire_id',
+        'notified',
         'bien_id',
         'montant_paye',
         'date_paiement',
@@ -52,5 +53,5 @@ class Paiement extends Model
     }
 
 
-    
+
 }
