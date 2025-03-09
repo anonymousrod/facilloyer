@@ -32,7 +32,6 @@ class CheckNewPayments extends Command
                 $agent->user->notify(new PaymentReceivedNotification($payment));
 
                 // Envoyer la notification par SMS (exemple avec Twilio)
-                //a commenter pour le moment
                 $this->sendSmsNotification($agent->telephone_agence, "Nouveau paiement de " . $payment->montant_paye . "€ reçu.");
             }
 

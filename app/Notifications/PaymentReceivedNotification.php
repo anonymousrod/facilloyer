@@ -70,7 +70,7 @@ class PaymentReceivedNotification extends Notification implements ShouldQueue
             ->subject('Nouveau paiement reçu')
             ->greeting('Bonjour,')
             ->line("Un paiement de " . $this->paiement->montant_paye . " € a été effectué par un locataire.")
-            // ->action('Voir le paiement', route('paiements.show', $this->paiement->id))
+            ->action('Se connecter', url('/login'))
             ->line('Merci d\'utiliser notre plateforme.');
     }
 }
