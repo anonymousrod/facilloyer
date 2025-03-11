@@ -39,7 +39,7 @@ class DemandeMaintenanceNotification extends Notification implements ShouldQueue
     {
         return [
             'demande_id' => $this->demande->id,
-            'message' => "Vous avez reçu une nouvelle demande de maintenance ",
+            'message' => "📢 Vous avez reçu une nouvelle demande de maintenance ",
             'url' => route('agent.demandes')
         ];
     }
@@ -51,7 +51,7 @@ class DemandeMaintenanceNotification extends Notification implements ShouldQueue
     {
         return new BroadcastMessage([
             'demande_id' => $this->demande->id,
-            'message' => "📢 Nouvelle demande de maintenance pour le bien situé à {$this->demande->bien->adresse_bien}.",
+            'message' => "📢 Vous avez reçu une nouvelle demande de maintenance.",
             'url' => route('agent.demandes')
         ]);
     }

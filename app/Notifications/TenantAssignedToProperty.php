@@ -33,7 +33,7 @@ class TenantAssignedToProperty extends Notification implements ShouldQueue
     {
         return [
             'bien_id' => $this->bien->id,
-            'message' => "Un bien vous a été attribué : {$this->bien->nom}.",
+            'message' => "📢 Un bien au nom de  {$this->bien->name_bien} vous a été attribué.",
             'url' => route('biens.show', $this->bien)
         ];
     }
@@ -42,7 +42,7 @@ class TenantAssignedToProperty extends Notification implements ShouldQueue
     {
         return new BroadcastMessage([
             'bien_id' => $this->bien->id,
-            'message' => "Un bien vous a été attribué : {$this->bien->nom}.",
+            'message' => "📢 Un bien au nom de  {$this->bien->name_bien} vous a été attribué.",
             'url' => route('biens.show', $this->bien)
         ]);
     }

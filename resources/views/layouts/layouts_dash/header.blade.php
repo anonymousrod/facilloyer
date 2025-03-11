@@ -97,9 +97,9 @@
                         </span> </a>
 
                     <div class="dropdown-menu dropdown-menu-end py-0">
-                        <div class="d-flex align-items-center dropdown-item py-2 bg-secondary-subtle">
-                            <div class="flex-shrink-0">
-                                <h1>Notifications </h1>
+                        <div class="d-flex align-items-center dropdown-item py-1 bg-secondary-subtle">
+                            <div class="flex-shrink-0 pt-1">
+                                <h3>Notifications non lu </h3>
                             </div>
                             <div class="flex-grow-1 ms-2 text-truncate align-self-center">
                             </div><!--end media-body-->
@@ -134,7 +134,7 @@
                                     <p class="text-muted mb-0">Aucune nouvelle notification</p>
                                 </div>
                             @endforelse
-                            <a class="dropdown-item text-info" href="#"><i
+                            <a class="dropdown-item text-info" href=" {{route('all_notification')}} "><i
                                     class="las la-eye fs-18 me-1 align-text-bottom"></i> Voir toutes les
                                 notifications</a>
 

@@ -13,6 +13,7 @@ use App\Http\Controllers\LocataireBienController;
 use App\Http\Controllers\LocataireController;
 use App\Http\Controllers\PaiementController;
 use App\Http\Controllers\ActionAdminController;
+use App\Http\Controllers\NotificationController;
 use Chatify\Http\Controllers\CustomMessagesController;
 
 Route::get('/', function () {
@@ -256,3 +257,20 @@ Route::get('/information_montant', [AgentImmobilierController::class, 'info_gest
 // Historique des paiements
 Route::get('/agent/paiements/historique', [PaiementController::class, 'historiqueTousLocataires'])
     ->name('agent_immo_historique');
+
+// Route::get('notification_all', function () {
+//     return view('layouts.all_notification');
+// })->name('all_notification');
+
+//NOTIFICATION ROUTE
+Route::middleware(['auth'])->group(function () {
+    Route::get('/notifications', [NotificationController::class, 'index'])->name('all_notification');
+    Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+    Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
+});
+
+
+Route::get('/notifications/fetch', [NotificationController::class, 'fetch'])->name('notifications.fetch');
+Route::delete('/notifications/delete-all', [NotificationController::class, 'deleteAll'])->name('notifications.delete-all');
+Route::delete('/notifications/{id}', [NotificationController::class, 'deleteNotification'])->name('notifications.delete');
+
