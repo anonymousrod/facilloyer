@@ -1,5 +1,5 @@
 @extends('layouts.master_dash')
-@section('title', isset($bien) ? 'Modifier un Bien' : 'Enregistrer un Bien') {{-- Titre dynamique en fonction de l'action --}}
+@section('title', isset($bien) ? 'Modifier un Bien' : 'Enregistrer un Bien')
 @section('content')
     <div class="container-xxl">
         <div class="row justify-content-center">

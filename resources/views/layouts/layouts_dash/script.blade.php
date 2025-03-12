@@ -13,9 +13,9 @@
 <script src="{{ asset('assets/js/pages/datatable.init.js') }} "></script>
 <!-- script pour page edit -->
 
-<script src="assets/libs/simplebar/simplebar.min.js"></script>
-<script src="assets/libs/tobii/js/tobii.min.js"></script>
-<script src="assets/js/pages/profile.init.js"></script>
+<script src=" {{asset('assets/libs/simplebar/simplebar.min.js')}} "></script>
+<script src=" {{asset('assets/libs/tobii/js/tobii.min.js')}} "></script>
+<script src=" asset('assets/js/pages/profile.init.js') "></script>
 
 {{-- script pour l'activation du statu par l'agent immobilier --}}
 
@@ -68,8 +68,8 @@
 
 {{-- script pour le calendrier --}}
 
-<script src="assets/libs/fullcalendar/index.global.min.js"></script>
-<script src="assets/js/pages/calendar.init.js"></script>
+<script src=" {{ asset('assets/libs/fullcalendar/index.global.min.js') }} "></script>
+<script src=" {{ asset('assets/js/pages/calendar.init.js') }} "></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 {{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
