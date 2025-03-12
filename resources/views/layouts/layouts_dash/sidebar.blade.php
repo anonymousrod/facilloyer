@@ -206,7 +206,7 @@
                                 <span>Assistance en ligne</span>
                             </a>
                         </li>
-              
+
 
 
 
@@ -334,13 +334,6 @@
                                     <i class="iconoir-chat-bubble menu-icon"></i>
                                     <!-- Remplacé par une icône de chat -->
                                     <span>Assistance en ligne</span>
-                                </a>
-                            </li><!--end nav-item-->
-
-                            <li class="nav-item">
-                                <a class="nav-link" href="Y.Y">
-                                    <i class="iconoir-bell menu-icon"></i> <!-- Icône pour les notifications -->
-                                    <span>Notifications</span>
                                 </a>
                             </li><!--end nav-item-->
                         @else

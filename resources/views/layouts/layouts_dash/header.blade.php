@@ -134,7 +134,7 @@
                                     <p class="text-muted mb-0">Aucune nouvelle notification</p>
                                 </div>
                             @endforelse
-                            <a class="dropdown-item text-info" href=" {{route('all_notification')}} "><i
+                            <a class="dropdown-item text-info" href=" {{ route('all_notification') }} "><i
                                     class="las la-eye fs-18 me-1 align-text-bottom"></i> Voir toutes les
                                 notifications</a>
 
@@ -142,120 +142,108 @@
 
                     </div>
                 </li>
-
-
-
-
-
+                {{-- pour le profil  --}}
                 <li class="dropdown topbar-item">
-                    @if (Auth::check())
+                    <a class="nav-link dropdown-toggle arrow-none nav-icon" data-bs-toggle="dropdown" href="#"
+                        role="button" aria-haspopup="false" aria-expanded="false">
+                        {{-- <img src=" {{ asset('assets/images/users/avatar-4.jpg') }} " alt=""
+                            class=""> --}}
                         @php
                             $user = Auth::user();
-                            $role = $user->id_role; // Récupération du rôle de l'utilisateur
-$imageUrl = 'assets/images/default-avatar.png'; // Image par défaut si aucune image n'est définie
-
-                            // Vérifie le rôle pour récupérer la photo de profil
-                            if ($role == 1) {
-                                // Admin
-                                $imageUrl = $user->photo_profil ?? 'assets/images/default-admin.png';
-                            } elseif ($role == 2) {
-                                // Locataire
-                                $locataire = $user->locataires()->first();
-                                if ($locataire && $locataire->photo_profil) {
-                                    $imageUrl = asset('storage/' . $locataire->photo_profil); // Si l'image est stockée dans "storage"
-    }
-} elseif ($role == 3) {
-    // Agent immobilier
-    $agent = $user->agent_immobiliers()->first();
-    if ($agent && $agent->photo_profil) {
-        $imageUrl = asset('storage/' . $agent->photo_profil); // Si l'image est stockée dans "storage"
-                                }
-                            }
                         @endphp
-
-                        <a class="nav-link dropdown-toggle arrow-none nav-icon" data-bs-toggle="dropdown" href="#"
-                            role="button" aria-haspopup="false" aria-expanded="false">
-                            <img src="{{ $imageUrl }}" alt="Profil utilisateur" class="thumb-lg rounded-circle"
-                                height="150">
-                        </a>
-                    @endif
-
-
+                        @if ($user->id_role == 2)
+                            @if ($user->locataires->first()->photo_profil)
+                                <img src="{{ asset($user->locataires->first()->photo_profil) }}"
+                                    alt="Avatar de {{ $user->locataires->first()->prenom }}"
+                                    class="thumb-lg rounded-circle " width="40">
+                            @else
+                                <img src="https://ui-avatars.com/api/?name={{ $user->locataires->first()->nom }} {{ $user->locataires->first()->prenom }} &background=random"
+                                    alt="Avatar de {{ $user->locataires->first()->prenom }}"
+                                    class="thumb-lg rounded-circle " width="40">
+                            @endif
+                        @elseif ($user->id_role == 3)
+                            @if ($user->agent_immobiliers->first()->photo_profil)
+                                <img src=" {{ asset($user->agent_immobiliers->first()->photo_profil)}} "
+                                    alt="Avatar de {{ $user->agent_immobiliers->first()->prenom }}"
+                                    class="thumb-lg rounded-circle " width="40">
+                            @else
+                                <img src="https://ui-avatars.com/api/?name={{ $user->agent_immobiliers->first()->nom }} {{ $user->agent_immobiliers->first()->prenom }} &background=random"
+                                    alt="Avatar de {{ $user->agent_immobiliers->first()->prenom }}"
+                                    class="thumb-lg rounded-circle " width="40">
+                            @endif
+                        @else
+                            <img src="https://ui-avatars.com/api/?name={{ $user->name }} &background=random"
+                                alt="Avatar de {{ $user->name }}" class="thumb-lg rounded-circle " width="40">
+                        @endif
+                    </a>
                     <div class="dropdown-menu dropdown-menu-end py-0">
                         <div class="d-flex align-items-center dropdown-item py-2 bg-secondary-subtle">
                             <div class="flex-shrink-0">
-                                <img src="assets/images/users/avatar-1.png " alt=""
-                                    class="thumb-md rounded-circle">
+
+                                    @if ($user->id_role == 2)
+                                    @if ($user->locataires->first()->photo_profil)
+                                        <img src="{{ asset($user->locataires->first()->photo_profil) }}"
+                                            alt="Avatar de {{ $user->locataires->first()->prenom }}"
+                                            class="thumb-md rounded-circle ">
+                                    @else
+                                        <img src="https://ui-avatars.com/api/?name={{ $user->locataires->first()->nom }} {{ $user->locataires->first()->prenom }} &background=random"
+                                            alt="Avatar de {{ $user->locataires->first()->prenom }}"
+                                            class="thumb-md rounded-circle ">
+                                    @endif
+                                @elseif ($user->id_role == 3)
+                                    @if ($user->agent_immobiliers->first()->photo_profil)
+                                        <img src=" {{ asset($user->agent_immobiliers->first()->photo_profil)}} "
+                                            alt="Avatar de {{ $user->agent_immobiliers->first()->prenom }}"
+                                            class="thumb-md rounded-circle ">
+                                    @else
+                                        <img src="https://ui-avatars.com/api/?name={{ $user->agent_immobiliers->first()->nom }} {{ $user->agent_immobiliers->first()->prenom }} &background=random"
+                                            alt="Avatar de {{ $user->agent_immobiliers->first()->prenom }}"
+                                            class="thumb-md rounded-circle ">
+                                    @endif
+                                @else
+                                    <img src="https://ui-avatars.com/api/?name={{ $user->name }} &background=random"
+                                        alt="Avatar de {{ $user->name }}" class="thumb-md rounded-circle ">
+                                @endif
                             </div>
                             <div class="flex-grow-1 ms-2 text-truncate align-self-center">
-                                @if (Auth::check())
-                                    @php
-                                        $user = Auth::user();
-                                        $role = $user->id_role; // Récupère le rôle de l'utilisateur
-$nomComplet = '';
-$suite = '';
-
-// Vérifie le rôle pour afficher le nom approprié
-if ($role == 1) {
-    // Admin
-    $nomComplet = 'Administrateur'; // Nom générique pour l'admin
-                                        } elseif ($role == 2) {
-                                            // Locataire
-                                            $locataire = $user->locataires()->first();
-                                            if ($locataire) {
-                                                $nomComplet = $locataire->nom . ' ' . $locataire->prenom;
-                                            } else {
-                                                $nomComplet = 'Nom non défini'; // Si aucun locataire n'est lié
-    }
-} elseif ($role == 3) {
-    // Agent immobilier
-    $agent = $user->agent_immobiliers()->first();
-    if ($agent) {
-        $nomComplet = $agent->nom_admin . '  :' . $agent->prenom_admin; // Remplacez `nom` et `prenom` par les bons champs du modèle `AgentImmobilier`
-        $suite = $agent->nom_agence;
-    } else {
-        $nomComplet = 'Nom non défini'; // Si aucun agent immobilier n'est lié
-                                            }
-                                        } else {
-                                            $nomComplet = 'Sans statut'; // Si le rôle est inconnu
-                                        }
-                                    @endphp
-
-                                    <h6 class="fw-bold mb-0">{{ $nomComplet }}</h6>
-                                    <p class="text-muted">{{ $user->email }}</p>
-                                    <h6 class="fw-bold mb-0">{{ $suite }}</h6>
+                                <h6 class="my-0 fw-medium text-dark fs-13">
+                                    {{ \Illuminate\Support\Str::words(Auth::user()->name, 2, '...') }}
+                                </h6>
+                                @if (Auth::user()->id_role == 1)
+                                    <small class="text-muted mb-0">Administrateur</small>
                                 @endif
-
-
+                                @if (Auth::user()->id_role == 2)
+                                    <small class="text-muted mb-0">Locataire</small>
+                                @endif
+                                @if (Auth::user()->id_role == 3)
+                                    <small class="text-muted mb-0">Agence immobilière</small>
+                                @endif
                             </div><!--end media-body-->
                         </div>
                         <div class="dropdown-divider mt-0"></div>
-                        <small class="text-muted px-2 pb-1 d-block">Account </small>
-                        <a class="dropdown-item" href="{{ route('profile.edit') }}"><i
-                                class="las la-cog fs-18 me-1 align-text-bottom"></i> Settings</a>
-                        {{-- <small class="text-muted px-2 py-1 d-block">Settings</small> --}}
-                        <!-- POUR LE LOCATAIRE -->
+                        <small class="text-muted px-2 pb-1 d-block">Compte</small>
                         @if (Auth::user()->id_role == 2)
                             <a class="dropdown-item" href="{{ route('locataire.locashow', Auth::user()->id) }}"><i
-                                    class="las la-user fs-18 me-1 align-text-bottom"></i>Completez Mon Profil</a>
-                            <a class="dropdown-item" href="pages-faq.html"><i
-                                    class="las la-question-circle fs-18 me-1 align-text-bottom"></i> Help Center</a>
-                            <div class="dropdown-divider mb-0"></div>
+                                    class="las la-user fs-18 me-1 align-text-bottom"></i>Profil</a>
                         @endif
-
-                        {{-- <a class="dropdown-item text-danger" href="auth-login.html"><i
-                                    class="las la-power-off fs-18 me-1 align-text-bottom"></i> Déconnexion</a> --}}
-                        <!-- Authentication -->
+                        @if (Auth::user()->id_role == 3)
+                            <a class="dropdown-item" href="#"><i
+                                    class="las la-user fs-18 me-1 align-text-bottom"></i>Profil</a>
+                        @endif
+                        <a class="dropdown-item" href="{{ route('profile.edit') }}"><i
+                                class="las la-cog fs-18 me-1 align-text-bottom"></i> Paramètre</a>
+                        <div class="dropdown-divider mb-0"></div>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
 
                             <x-dropdown-link :href="route('logout')"
                                 onclick="event.preventDefault();
-                                                this.closest('form').submit();">
+                                                            this.closest('form').submit();">
 
-
-                                <i class="text-danger  las la-power-off fs-18 me-1 align-text-bottom"></i>
-                                <span>{{ __('Déconnexion') }}</span>
+                                <button class="dropdown-item  d-flex align-items-center">
+                                    <i class="text-danger las la-power-off fs-18 me-1 align-text-bottom"></i>
+                                    <span>{{ __('Déconnexion') }}</span>
+                                </button>
                             </x-dropdown-link>
                         </form>
                     </div>
@@ -263,7 +251,7 @@ if ($role == 1) {
 
             </ul><!--end topbar-nav-->
         </nav>
-        <!-- end navbar-->
+        <!-- end navbar -->
     </div>
 </div>
 <!-- Top Bar End -->
