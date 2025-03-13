@@ -20,12 +20,12 @@
                         <!-- Section Profil -->
                         <div class="col-lg-4 col-md-6">
                             <div class="position-relative">
-                                <img src="{{ Auth::user()->profile_picture ?? asset('assets/images/users/avatar-1.png') }}" 
-                                     alt="Avatar" 
-                                     class="rounded-circle shadow mb-2" 
+                                <img src="{{ Auth::user()->locataires->first()->photo_profil ?? asset('assets/images/users/avatar-1.png') }}"
+                                     alt="Avatar"
+                                     class="rounded-circle shadow mb-2"
                                      width="80" height="80">
-                                <a href="a.fr" 
-                                   class="btn btn-primary btn-sm position-absolute bottom-0 end-0 rounded-circle d-flex align-items-center justify-content-center" 
+                                <a href="a.fr"
+                                   class="btn btn-primary btn-sm position-absolute bottom-0 end-0 rounded-circle d-flex align-items-center justify-content-center"
                                    style="width: 30px; height: 30px;">
                                     <i class="fas fa-camera"></i>
                                 </a>
@@ -58,43 +58,43 @@
                         <!-- Section Actions -->
                         <div class="col-lg-4">
                             <div class="d-flex flex-wrap justify-content-center gap-3">
-                                <div class="btn btn-info text-white d-flex align-items-center justify-content-center rounded-circle" 
-                                     style="width: 60px; height: 60px;" 
+                                <div class="btn btn-info text-white d-flex align-items-center justify-content-center rounded-circle"
+                                     style="width: 60px; height: 60px;"
                                      onclick="window.location.href='{{ route('dashboard') }}'">
                                     <i class="fas fa-home"></i>
                                 </div>
-                                <div class="btn btn-warning text-white d-flex align-items-center justify-content-center rounded-circle" 
-                                     style="width: 60px; height: 60px;" 
+                                <div class="btn btn-warning text-white d-flex align-items-center justify-content-center rounded-circle"
+                                     style="width: 60px; height: 60px;"
                                      onclick="window.location.href='{{ route('periodes.show') }}'">
                                     <i class="fas fa-money-check-alt"></i>
                                 </div>
-                                <!-- <div class="btn btn-success text-white d-flex align-items-center justify-content-center rounded-circle" 
-                                     style="width: 60px; height: 60px;" 
+                                <!-- <div class="btn btn-success text-white d-flex align-items-center justify-content-center rounded-circle"
+                                     style="width: 60px; height: 60px;"
                                      onclick="window.location.href='a.fr'">
                                     <i class="fas fa-file-invoice-dollar"></i>
                                 </div> -->
-                                <div class="btn btn-dark text-white d-flex align-items-center justify-content-center rounded-circle" 
-                                     style="width: 60px; height: 60px;" 
+                                <div class="btn btn-dark text-white d-flex align-items-center justify-content-center rounded-circle"
+                                     style="width: 60px; height: 60px;"
                                      onclick="window.location.href='{{ route('user', Auth::user()->locataires->first()->agent_immobilier->user->id) }}'">
                                     <i class="fas fa-headset"></i>
                                 </div>
-                                <div class="btn btn-primary text-white d-flex align-items-center justify-content-center rounded-circle" 
-                                     style="width: 60px; height: 60px;" 
+                                <div class="btn btn-primary text-white d-flex align-items-center justify-content-center rounded-circle"
+                                     style="width: 60px; height: 60px;"
                                      onclick="window.location.href='{{ route('locataire.locashow', Auth::user()->id) }}'">
                                     <i class="fas fa-user-circle"></i>
                                 </div>
-                                <div class="btn btn-danger text-white d-flex align-items-center justify-content-center rounded-circle" 
-                                     style="width: 60px; height: 60px;" 
+                                <div class="btn btn-danger text-white d-flex align-items-center justify-content-center rounded-circle"
+                                     style="width: 60px; height: 60px;"
                                      onclick="window.location.href='{{route('profile.edit', Auth::user()->id)}}'">
                                     <i class="fas fa-cogs"></i>
                                 </div>
-                                <div class="btn btn-secondary text-white d-flex align-items-center justify-content-center rounded-circle" 
-                                     style="width: 60px; height: 60px;" 
-                                     onclick="window.location.href='notif de aieent.f'">
+                                <div class="btn btn-secondary text-white d-flex align-items-center justify-content-center rounded-circle"
+                                     style="width: 60px; height: 60px;"
+                                     onclick="window.location.href='{{ route('all_notification') }}'">
                                     <i class="fas fa-bell"></i>
                                 </div>
-                                <div class="btn btn-info text-white d-flex align-items-center justify-content-center rounded-circle" 
-                                     style="width: 60px; height: 60px;" 
+                                <div class="btn btn-info text-white d-flex align-items-center justify-content-center rounded-circle"
+                                     style="width: 60px; height: 60px;"
                                      onclick="window.location.href='{{route('locataire.paiements.historique')}}'">
                                     <i class="fas fa-clipboard-list"></i>
                                 </div>
@@ -125,12 +125,12 @@
                         <!-- Section Profil -->
                         <div class="col-lg-4 col-md-6">
                             <div class="position-relative">
-                                <img src="{{ Auth::user()->profile_picture ?? asset('assets/images/users/avatar-1.png') }}" 
-                                     alt="Avatar" 
-                                     class="rounded-circle shadow mb-2" 
+                                <img src="{{ Auth::user()->profile_picture ?? asset('assets/images/users/avatar-1.png') }}"
+                                     alt="Avatar"
+                                     class="rounded-circle shadow mb-2"
                                      width="80" height="80">
-                                <a href="a.fr" 
-                                   class="btn btn-primary btn-sm position-absolute bottom-0 end-0 rounded-circle d-flex align-items-center justify-content-center" 
+                                <a href="a.fr"
+                                   class="btn btn-primary btn-sm position-absolute bottom-0 end-0 rounded-circle d-flex align-items-center justify-content-center"
                                    style="width: 30px; height: 30px;">
                                     <i class="fas fa-camera"></i>
                                 </a>
@@ -163,43 +163,43 @@
                         <!-- Section Actions -->
                         <div class="col-lg-4">
                             <div class="d-flex flex-wrap justify-content-center gap-3">
-                                <div class="btn btn-info text-white d-flex align-items-center justify-content-center rounded-circle" 
-                                     style="width: 60px; height: 60px;" 
+                                <div class="btn btn-info text-white d-flex align-items-center justify-content-center rounded-circle"
+                                     style="width: 60px; height: 60px;"
                                      onclick="window.location.href='{{route('dashboard')}}'">
                                     <i class="fas fa-home"></i>
                                 </div>
-                                <div class="btn btn-warning text-white d-flex align-items-center justify-content-center rounded-circle" 
-                                     style="width: 60px; height: 60px;" 
+                                <div class="btn btn-warning text-white d-flex align-items-center justify-content-center rounded-circle"
+                                     style="width: 60px; height: 60px;"
                                      onclick="window.location.href='">
                                     <i class="fas fa-money-check-alt"></i>
                                 </div>
-                                <div class="btn btn-success text-white d-flex align-items-center justify-content-center rounded-circle" 
-                                     style="width: 60px; height: 60px;" 
+                                <div class="btn btn-success text-white d-flex align-items-center justify-content-center rounded-circle"
+                                     style="width: 60px; height: 60px;"
                                      onclick="window.location.href='a.fr'">
                                     <i class="fas fa-file-invoice-dollar"></i>
                                 </div>
-                                <div class="btn btn-dark text-white d-flex align-items-center justify-content-center rounded-circle" 
-                                     style="width: 60px; height: 60px;" 
+                                <div class="btn btn-dark text-white d-flex align-items-center justify-content-center rounded-circle"
+                                     style="width: 60px; height: 60px;"
                                      onclick="window.location.href='{{ route('locataire.index')}}'">
                                     <i class="fas fa-headset"></i>
                                 </div>
-                                <div class="btn btn-primary text-white d-flex align-items-center justify-content-center rounded-circle" 
-                                     style="width: 60px; height: 60px;" 
+                                <div class="btn btn-primary text-white d-flex align-items-center justify-content-center rounded-circle"
+                                     style="width: 60px; height: 60px;"
                                      onclick="window.location.href='a.fr'">
                                     <i class="fas fa-user-circle"></i>
                                 </div>
-                                <div class="btn btn-danger text-white d-flex align-items-center justify-content-center rounded-circle" 
-                                     style="width: 60px; height: 60px;" 
+                                <div class="btn btn-danger text-white d-flex align-items-center justify-content-center rounded-circle"
+                                     style="width: 60px; height: 60px;"
                                      onclick="window.location.href='{{ route('agent.demandes')}}'">
                                     <i class="fas fa-cogs"></i>
                                 </div>
-                                <div class="btn btn-secondary text-white d-flex align-items-center justify-content-center rounded-circle" 
-                                     style="width: 60px; height: 60px;" 
+                                <div class="btn btn-secondary text-white d-flex align-items-center justify-content-center rounded-circle"
+                                     style="width: 60px; height: 60px;"
                                      onclick="window.location.href='a.fr'">
                                     <i class="fas fa-bell"></i>
                                 </div>
-                                <div class="btn btn-info text-white d-flex align-items-center justify-content-center rounded-circle" 
-                                     style="width: 60px; height: 60px;" 
+                                <div class="btn btn-info text-white d-flex align-items-center justify-content-center rounded-circle"
+                                     style="width: 60px; height: 60px;"
                                      onclick="window.location.href='a.fr'">
                                     <i class="fas fa-clipboard-list"></i>
                                 </div>
@@ -230,12 +230,12 @@
                         <!-- Section Profil -->
                         <div class="col-lg-4 col-md-6">
                             <div class="position-relative">
-                                <img src="{{ Auth::user()->profile_picture ?? asset('assets/images/users/avatar-1.png') }}" 
-                                     alt="Avatar" 
-                                     class="rounded-circle shadow mb-2" 
+                                <img src="{{ Auth::user()->profile_picture ?? asset('assets/images/users/avatar-1.png') }}"
+                                     alt="Avatar"
+                                     class="rounded-circle shadow mb-2"
                                      width="80" height="80">
-                                <a href="a.fr" 
-                                   class="btn btn-primary btn-sm position-absolute bottom-0 end-0 rounded-circle d-flex align-items-center justify-content-center" 
+                                <a href="a.fr"
+                                   class="btn btn-primary btn-sm position-absolute bottom-0 end-0 rounded-circle d-flex align-items-center justify-content-center"
                                    style="width: 30px; height: 30px;">
                                     <i class="fas fa-camera"></i>
                                 </a>
@@ -268,43 +268,43 @@
                         <!-- Section Actions -->
                         <div class="col-lg-4">
                             <div class="d-flex flex-wrap justify-content-center gap-3">
-                                <div class="btn btn-info text-white d-flex align-items-center justify-content-center rounded-circle" 
-                                     style="width: 60px; height: 60px;" 
+                                <div class="btn btn-info text-white d-flex align-items-center justify-content-center rounded-circle"
+                                     style="width: 60px; height: 60px;"
                                      onclick="window.location.href='a.fr'">
                                     <i class="fas fa-home"></i>
                                 </div>
-                                <div class="btn btn-warning text-white d-flex align-items-center justify-content-center rounded-circle" 
-                                     style="width: 60px; height: 60px;" 
+                                <div class="btn btn-warning text-white d-flex align-items-center justify-content-center rounded-circle"
+                                     style="width: 60px; height: 60px;"
                                      onclick="window.location.href='a.fr'">
                                     <i class="fas fa-money-check-alt"></i>
                                 </div>
-                                <div class="btn btn-success text-white d-flex align-items-center justify-content-center rounded-circle" 
-                                     style="width: 60px; height: 60px;" 
+                                <div class="btn btn-success text-white d-flex align-items-center justify-content-center rounded-circle"
+                                     style="width: 60px; height: 60px;"
                                      onclick="window.location.href='a.fr'">
                                     <i class="fas fa-file-invoice-dollar"></i>
                                 </div>
-                                <div class="btn btn-dark text-white d-flex align-items-center justify-content-center rounded-circle" 
-                                     style="width: 60px; height: 60px;" 
+                                <div class="btn btn-dark text-white d-flex align-items-center justify-content-center rounded-circle"
+                                     style="width: 60px; height: 60px;"
                                      onclick="window.location.href='a.fr'">
                                     <i class="fas fa-headset"></i>
                                 </div>
-                                <div class="btn btn-primary text-white d-flex align-items-center justify-content-center rounded-circle" 
-                                     style="width: 60px; height: 60px;" 
+                                <div class="btn btn-primary text-white d-flex align-items-center justify-content-center rounded-circle"
+                                     style="width: 60px; height: 60px;"
                                      onclick="window.location.href='a.fr'">
                                     <i class="fas fa-user-circle"></i>
                                 </div>
-                                <div class="btn btn-danger text-white d-flex align-items-center justify-content-center rounded-circle" 
-                                     style="width: 60px; height: 60px;" 
+                                <div class="btn btn-danger text-white d-flex align-items-center justify-content-center rounded-circle"
+                                     style="width: 60px; height: 60px;"
                                      onclick="window.location.href='a.fr'">
                                     <i class="fas fa-cogs"></i>
                                 </div>
-                                <div class="btn btn-secondary text-white d-flex align-items-center justify-content-center rounded-circle" 
-                                     style="width: 60px; height: 60px;" 
+                                <div class="btn btn-secondary text-white d-flex align-items-center justify-content-center rounded-circle"
+                                     style="width: 60px; height: 60px;"
                                      onclick="window.location.href='a.fr'">
                                     <i class="fas fa-bell"></i>
                                 </div>
-                                <div class="btn btn-info text-white d-flex align-items-center justify-content-center rounded-circle" 
-                                     style="width: 60px; height: 60px;" 
+                                <div class="btn btn-info text-white d-flex align-items-center justify-content-center rounded-circle"
+                                     style="width: 60px; height: 60px;"
                                      onclick="window.location.href='a.fr'">
                                     <i class="fas fa-clipboard-list"></i>
                                 </div>
@@ -327,9 +327,9 @@
   @endif
 
 
-        
 
-        
+
+
 
         <div class="row justify-content-center">
 
@@ -338,8 +338,8 @@
                 <div class="card">
                     <div class="card-header">
                         <!-- <div class="row align-items-center"> -->
-                                <h6 class="card-title">Information sur la connexion</h6>                      
-                            
+                                <h6 class="card-title">Information sur la connexion</h6>
+
                     </div>
                     <div class="card-body pt-0">
                         <p class="text-muted fw-medium mb-3">.</p>
@@ -358,10 +358,10 @@
                         </ul>
                     </div><!--end card-body-->
 
-                </div><!--end card--> 
-            </div> <!--end col--> 
+                </div><!--end card-->
+            </div> <!--end col-->
             <div class="col-md-8">
-                <ul class="nav nav-tabs mb-3" role="tablist">                                   
+                <ul class="nav nav-tabs mb-3" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link fw-medium" data-bs-toggle="tab" href="#settings" role="tab" aria-selected="true">Modifier ton email ou ton mon mot de passe</a>
                     </li>
@@ -372,13 +372,13 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class="row align-items-center">
-                                    <div class="col">                      
-                                        <h4 class="card-title">Adresse email</h4>                      
-                                    </div><!--end col-->                                                       
-                                </div>  <!--end row-->                                  
+                                    <div class="col">
+                                        <h4 class="card-title">Adresse email</h4>
+                                    </div><!--end col-->
+                                </div>  <!--end row-->
                             </div><!--end card-header-->
                             @include('profile.partials.update-profile-information-form')
-                                            
+
                         </div><!--end card-->
 
                         <!-- section pour modifier le password -->
@@ -388,15 +388,15 @@
                             </div><!--end card-header-->
                              @include('profile.partials.update-password-form')
                         </div><!--end card-->
-                       
+
                     </div>
                 <!-- </div>  -->
-            </div> <!--end col-->                                                       
+            </div> <!--end col-->
         </div><!--end row-->
 
-                          
+
     </div><!-- container -->
-    
+
 
 
     <!--end footer-->

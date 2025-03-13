@@ -139,14 +139,6 @@
                             </a>
                         </li><!--end nav-item-->
 
-                        <!-- Notifications d’échéances importantes -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="lol.html">
-                                <i class="iconoir-bell menu-icon"></i> <!-- Icône pour notifications -->
-                                <span>Notifications d’échéances importantes</span>
-                            </a>
-                        </li><!--end nav-item-->
-
                         <!-- Effectuer un paiement -->
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('periodes.show') }}">
