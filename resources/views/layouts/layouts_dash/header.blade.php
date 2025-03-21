@@ -47,7 +47,7 @@
                     </button>
                 </li>
                 <li class="mx-3 welcome-text">
-                    
+
                     <h3 class="mb-0 fw-bold text-truncate">Mon Tableau de Bord!</h3>
                     <!-- <h6 class="mb-0 fw-normal text-muted text-truncate fs-14">Here's your overview this week.</h6> -->
                 </li>
@@ -163,13 +163,13 @@
                                     class="thumb-lg rounded-circle " width="40">
                             @endif
                         @elseif ($user->id_role == 3)
-                            @if ($user->agent_immobiliers->first()->photo_profil)
-                                <img src=" {{ asset($user->agent_immobiliers->first()->photo_profil)}} "
+                            @if ($user->agent_immobiliers->first()?->photo_profil)
+                                <img src=" {{ asset($user->agent_immobiliers->first()->photo_profil) }} "
                                     alt="Avatar de {{ $user->agent_immobiliers->first()->prenom }}"
                                     class="thumb-lg rounded-circle " width="40">
                             @else
-                                <img src="https://ui-avatars.com/api/?name={{ $user->agent_immobiliers->first()->nom }} {{ $user->agent_immobiliers->first()->prenom }} &background=random"
-                                    alt="Avatar de {{ $user->agent_immobiliers->first()->prenom }}"
+                                <img src="https://ui-avatars.com/api/?name={{ $user->agent_immobiliers->first()?->nom }} {{ $user->agent_immobiliers->first()?->prenom }} &background=random"
+                                    alt="Avatar de {{ $user->agent_immobiliers->first()?->prenom }}"
                                     class="thumb-lg rounded-circle " width="40">
                             @endif
                         @else
@@ -181,7 +181,7 @@
                         <div class="d-flex align-items-center dropdown-item py-2 bg-secondary-subtle">
                             <div class="flex-shrink-0">
 
-                                    @if ($user->id_role == 2)
+                                @if ($user->id_role == 2)
                                     @if ($user->locataires->first()->photo_profil)
                                         <img src="{{ asset($user->locataires->first()->photo_profil) }}"
                                             alt="Avatar de {{ $user->locataires->first()->prenom }}"
@@ -192,13 +192,13 @@
                                             class="thumb-md rounded-circle ">
                                     @endif
                                 @elseif ($user->id_role == 3)
-                                    @if ($user->agent_immobiliers->first()->photo_profil)
-                                        <img src=" {{ asset($user->agent_immobiliers->first()->photo_profil)}} "
-                                            alt="Avatar de {{ $user->agent_immobiliers->first()->prenom }}"
+                                    @if ($user->agent_immobiliers->first()?->photo_profil)
+                                        <img src=" {{ asset($user->agent_immobiliers->first()?->photo_profil) }} "
+                                            alt="Avatar de {{ $user->agent_immobiliers->first()?->prenom }}"
                                             class="thumb-md rounded-circle ">
                                     @else
-                                        <img src="https://ui-avatars.com/api/?name={{ $user->agent_immobiliers->first()->nom }} {{ $user->agent_immobiliers->first()->prenom }} &background=random"
-                                            alt="Avatar de {{ $user->agent_immobiliers->first()->prenom }}"
+                                        <img src="https://ui-avatars.com/api/?name={{ $user->agent_immobiliers->first()?->nom }} {{ $user->agent_immobiliers->first()?->prenom }} &background=random"
+                                            alt="Avatar de {{ $user->agent_immobiliers->first()?->prenom }}"
                                             class="thumb-md rounded-circle ">
                                     @endif
                                 @else
@@ -228,8 +228,10 @@
                                     class="las la-user fs-18 me-1 align-text-bottom"></i>Profil</a>
                         @endif
                         @if (Auth::user()->id_role == 3)
-                            <a class="dropdown-item" href="#"><i
-                                    class="las la-user fs-18 me-1 align-text-bottom"></i>Profil</a>
+                            @if (Auth::user()->statut)
+                                <a class="dropdown-item" href=" {{ route('profil_agent') }} "><i
+                                        class="las la-user fs-18 me-1 align-text-bottom"></i>Profil</a>
+                            @endif
                         @endif
                         <a class="dropdown-item" href="{{ route('profile.edit') }}"><i
                                 class="las la-cog fs-18 me-1 align-text-bottom"></i> Paramètre</a>

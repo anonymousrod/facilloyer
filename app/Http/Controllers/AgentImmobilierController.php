@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Support\Str;
 use App\Models\AgentImmobilier;
 use App\Models\GestionPeriode;
+use App\Models\Locataire;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -58,14 +59,6 @@ class AgentImmobilierController extends Controller
             return redirect()->back()->with('success', 'L\'agent a été désactivé.');
         }
     }
-
-
-
-
-
-
-
-
     /**
      * Show the form for creating a new resource.
      */
@@ -235,5 +228,15 @@ class AgentImmobilierController extends Controller
         })->get();
 
         return view('layouts.liste_gestion_periode', compact('gestionPeriodes'));
+    }
+
+    public function showProfiles()
+    {
+        // Récupérer l'agent immobilier lié à l'utilisateur connecté
+        $agent = AgentImmobilier::with('user')->where('user_id', Auth::id())->firstOrFail();
+        $locataire = Locataire::where('agent_id', $agent->id);
+        $Nlocataire = $locataire->count();
+        // Retourner la vue avec les données de l'agent
+        return view('layouts.profil_agent', compact('agent', 'Nlocataire'));
     }
 }

@@ -258,9 +258,11 @@ Route::get('/information_montant', [AgentImmobilierController::class, 'info_gest
 Route::get('/agent/paiements/historique', [PaiementController::class, 'historiqueTousLocataires'])
     ->name('agent_immo_historique');
 
-// Route::get('notification_all', function () {
-//     return view('layouts.all_notification');
-// })->name('all_notification');
+// Route::get('profil_agent', function () {
+//     return view('layouts.profil_agent');
+// })->name('profil_agent');
+Route::get('/profil_agent', [AgentImmobilierController::class, 'showProfiles'])->name('profil_agent');
+
 
 //NOTIFICATION ROUTE
 Route::middleware(['auth'])->group(function () {
