@@ -50,6 +50,13 @@ class PaiementController extends Controller
             'montant_moyen' => $paiements->count() > 0 ? $paiements->sum('montant_paye') / $paiements->count() : 0,
         ];
 
+        //concernant notification
+        if (request()->has('notification_id')) {
+            auth()->user()->notifications()
+                ->where('id', request('notification_id'))
+                ->update(['read_at' => now()]);
+        }
+
         // Retourner la vue avec les paiements et les statistiques
         return view('locataire.paiements.historique', compact('paiements', 'stats'));
     }

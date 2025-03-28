@@ -67,5 +67,8 @@ class Kernel extends HttpKernel
     {
         // Exécuter la commande toutes les minutes
         $schedule->command('payments:check-new')->everyMinute();
+        $schedule->command('rappel:loyer')->daily();
+
     }
+
 }
