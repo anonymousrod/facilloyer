@@ -33,6 +33,15 @@
     .header-notifications-list .dropdown-item:hover {
         background-color: #f8f9fa;
     }
+
+    .msg-info {
+        white-space: normal;
+        /* Permet au texte de se couper sur plusieurs lignes */
+        word-wrap: break-word;
+        /* Coupe les mots trop longs */
+        overflow-wrap: break-word;
+        /* Alternative pour éviter le débordement */
+    }
 </style>
 <!-- Top Bar Start -->
 <div class="topbar d-print-none">
@@ -118,7 +127,7 @@
                                             </div>
                                         </div>
                                         <div class="flex-grow-1 ms-3">
-                                            <p class="msg-info mb-0">{{ $notification->data['message'] }}</p>
+                                            <p class="msg-info mb-0">{{ \Illuminate\Support\Str::words($notification->data['message'], 14, '...') }}</p>
                                             <small
                                                 class="text-muted">{{ $notification->created_at->diffForHumans() }}</small>
                                         </div>

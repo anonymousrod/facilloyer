@@ -13,8 +13,8 @@
 <script src="{{ asset('assets/js/pages/datatable.init.js') }} "></script>
 <!-- script pour page edit -->
 
-<script src=" {{asset('assets/libs/simplebar/simplebar.min.js')}} "></script>
-<script src=" {{asset('assets/libs/tobii/js/tobii.min.js')}} "></script>
+<script src=" {{ asset('assets/libs/simplebar/simplebar.min.js') }} "></script>
+<script src=" {{ asset('assets/libs/tobii/js/tobii.min.js') }} "></script>
 <script src=" asset('assets/js/pages/profile.init.js') "></script>
 
 {{-- script pour l'activation du statu par l'agent immobilier --}}
@@ -167,9 +167,73 @@
 </script>
 @vite(['resources/js/app.js'])
 <script>
+    // document.addEventListener("DOMContentLoaded", function() {
+    //     if (!window.userID) {
+    //         window.userID = "{{ auth()->id() }}";
+    //     }
+
+    //     if (window.userID) {
+    //         window.Echo.private(`App.Models.User.${window.userID}`)
+    //             .notification((notification) => {
+    //                 console.log("🔔 Nouvelle notification reçue :", notification);
+
+    //                 // Jouer le son de notification
+    //                 let audio = new Audio('/notification.mp3');
+    //                 audio.play().catch(error => console.log("🎵 Erreur de lecture audio :", error));
+
+    //                 // Mettre à jour le badge de notification
+    //                 let badge = document.getElementById("notif-badge");
+    //                 if (badge) {
+    //                     let count = parseInt(badge.innerText) || 0;
+    //                     badge.innerText = count + 1;
+    //                     badge.classList.remove('hidden');
+    //                 }
+
+    //                 // Ajouter la notification dans la liste dynamiquement
+    //                 let notifList = document.getElementById("notif-list");
+    //                 if (notifList) {
+    //                     // Supprimer le message "Aucune nouvelle notification" s'il existe
+    //                     let emptyNotif = document.getElementById("empty-notif");
+    //                     if (emptyNotif) {
+    //                         emptyNotif.remove();
+    //                     }
+
+    //                     let notifItem = document.createElement("a");
+    //                     notifItem.href = notification.url + `?notification_id=${notification.id}`;
+    //                     notifItem.classList.add("dropdown-item");
+
+    //                     notifItem.innerHTML = `
+    //                     <div class="d-flex align-items-center">
+    //                         <div class="flex-shrink-0">
+    //                             <div class="notify-icon bg-light-${notification.type ?? 'primary'} text-${notification.type ?? 'primary'}">
+    //                                 <i class="${notification.icon ?? 'iconoir-bell'}"></i>
+    //                             </div>
+    //                         </div>
+    //                         <div class="flex-grow-1 ms-3">
+    //                             <p class="msg-info mb-0">${notification.message}</p>
+    //                             <small class="text-muted">À l'instant</small>
+    //                         </div>
+    //                     </div>
+    //                     <div class="dropdown-divider"></div>
+    //                 `;
+
+    //                     // Ajouter la notification en haut de la liste
+    //                     notifList.prepend(notifItem);
+    //                 }
+    //             });
+    //     }
+    // });
     document.addEventListener("DOMContentLoaded", function() {
         if (!window.userID) {
             window.userID = "{{ auth()->id() }}";
+        }
+
+        function truncateWords(text, numWords) {
+            let words = text.split(" ");
+            if (words.length > numWords) {
+                return words.slice(0, numWords).join(" ") + "...";
+            }
+            return text;
         }
 
         if (window.userID) {
@@ -203,19 +267,19 @@
                         notifItem.classList.add("dropdown-item");
 
                         notifItem.innerHTML = `
-                        <div class="d-flex align-items-center">
-                            <div class="flex-shrink-0">
-                                <div class="notify-icon bg-light-${notification.type ?? 'primary'} text-${notification.type ?? 'primary'}">
-                                    <i class="${notification.icon ?? 'iconoir-bell'}"></i>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1 ms-3">
-                                <p class="msg-info mb-0">${notification.message}</p>
-                                <small class="text-muted">À l'instant</small>
+                    <div class="d-flex align-items-center">
+                        <div class="flex-shrink-0">
+                            <div class="notify-icon bg-light-${notification.type ?? 'primary'} text-${notification.type ?? 'primary'}">
+                                <i class="${notification.icon ?? 'iconoir-bell'}"></i>
                             </div>
                         </div>
-                        <div class="dropdown-divider"></div>
-                    `;
+                        <div class="flex-grow-1 ms-3">
+                            <p class="msg-info mb-0">${truncateWords(notification.message, 14)}</p>
+                            <small class="text-muted">À l'instant</small>
+                        </div>
+                    </div>
+                    <div class="dropdown-divider"></div>
+                `;
 
                         // Ajouter la notification en haut de la liste
                         notifList.prepend(notifItem);

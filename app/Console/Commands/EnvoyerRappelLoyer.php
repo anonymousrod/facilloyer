@@ -38,7 +38,14 @@ class EnvoyerRappelLoyer extends Command
             $rappelAvantFin = $dateFin->copy()->subDays(3); // 3 jours avant la fin
 
             // $aujourdHui = Carbon::now();
+            // $aujourdHui = Carbon::createFromFormat('Y-m-d', '2025-03-27');
+            //UTILE POUR LES TESTE
             $aujourdHui = Carbon::createFromFormat('Y-m-d', '2025-03-27');
+            $this->info("Début période : {$dateDebut->toDateString()}");
+            $this->info("Fin période : {$dateFin->toDateString()}");
+            $this->info("Milieu période : {$moitiePeriode->toDateString()}");
+            $this->info("Rappel avant fin : {$rappelAvantFin->toDateString()}");
+            $this->info("Aujourd'hui : {$aujourdHui->toDateString()}");
 
             // Vérifier si on est à la moitié de la période ou 3 jours avant la fin
             if ($aujourdHui->isSameDay($moitiePeriode) || $aujourdHui->isSameDay($rappelAvantFin)) {
