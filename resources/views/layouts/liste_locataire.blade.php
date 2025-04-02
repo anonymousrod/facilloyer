@@ -58,7 +58,7 @@
                                                 </a>
                                             </td> --}}
                                             <td class="text-center align-middle">
-                                                <a href="" class="btn btn-outline-primary">
+                                                <a href="{{ route('locataire.locashow', $locataire->user->id) }}" class="btn btn-outline-primary">
                                                     <span class="bi bi-info-circle-fill"></span>
                                                 </a>
                                                 <a href="{{ route('user', $locataire->user->id) }}" class="btn btn-outline-primary">

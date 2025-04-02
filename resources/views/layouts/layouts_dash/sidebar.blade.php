@@ -104,7 +104,7 @@
                             </a>
                         </li><!--end nav-item-->
                         <li class="nav-item">
-                            <a class="nav-link" href="t.t">
+                            <a class="nav-link" href="{{ route('user', Auth::user()->id) }}">
                                 <i class="iconoir-chat-bubble menu-icon"></i> <!-- Remplacé par une icône de chat -->
                                 <span>Assistance en ligne</span>
                             </a>
