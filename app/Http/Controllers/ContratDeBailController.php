@@ -80,9 +80,11 @@ class ContratDeBailController extends Controller
             'montant_total_frequence' => $request->montant_total_frequence,
             'mode_paiement' => $request->mode_paiement,
             'renouvellement_automatique' => $request->has('renouvellement_automatique'),
+            'ajouter_articles_par_defaut' => $request->has('ajouter_articles_par_defaut'),
             'statut_contrat' => $request->statut_contrat,
         ]);
-
+        // Si l'option est activée, on ajoute les articles par défaut
+        $contratDeBail->ajouterArticlesParDefaut();
         // Retourner vers la page avec succès
         return redirect()->route('biens.show', $request->bien_id)->with('success', 'Contrat de bail ajouté avec succès!');
     }
@@ -207,7 +209,13 @@ class ContratDeBailController extends Controller
         $locataireAssigné = LocataireBien::where('bien_id', $bien_id)->with('locataire')->first();
         $contrat = ContratsDeBail::where('bien_id', $bien->id)
             ->where('locataire_id', $locataireAssigné?->locataire->id)
+            ->with('articles') // Charge les articles liés au contrat
             ->first();
+
+        // Récupérer les articles associés à ce contrat de bail à travers la table pivot
+        if ($contrat) {
+            $articles = $contrat->articles; // Relation définie dans le modèle ContratsDeBail
+        }
 
         // return view('exports.contrat_pdf', [
         //     'bien' => $bien,
@@ -221,7 +229,7 @@ class ContratDeBailController extends Controller
             'bien' => $bien,
             'locataireAssigné' => $locataireAssigné,
             'contrat' => $contrat,
-            'articles' => $articles,
+            'articles' => $contrat?->articles ?? [],
         ]);
 
         // Retourner le PDF pour téléchargement
@@ -246,5 +254,13 @@ class ContratDeBailController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function detachArticle($contratId, $articleId)
+    {
+        $contrat = ContratsDeBail::findOrFail($contratId);
+        $contrat->articles()->detach($articleId);
+
+        return back()->with('success', 'Article retiré du contrat.');
     }
 }

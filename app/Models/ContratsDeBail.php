@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Class ContratsDeBail
@@ -54,9 +55,10 @@ class ContratsDeBail extends Model
     protected $fillable = [
         //new
         'locataire_id',
-        'date_debut',// c'est cette ligne on veux utiliseé dans la fonction gestion de paiement
+        'date_debut', // c'est cette ligne on veux utiliseé dans la fonction gestion de paiement
         'date_fin',
         'renouvellement_automatique',
+        'ajouter_articles_par_defaut',
         'montant_total_frequence',
         'frequence_paiement',
         'penalite_retard',
@@ -88,9 +90,33 @@ class ContratsDeBail extends Model
         return $this->belongsTo(Locataire::class);
     }
 
-    public function periodes()
-{
-    return $this->hasMany(GestionPeriode::class, 'contrat_de_bail_id');
-}
+    // Relation avec les articles par défaut via la table pivot
+    public function articles()
+    {
+        return $this->belongsToMany(ArticleContratBail::class, 'contrat_de_bail_article', 'contrat_de_bail_id', 'article_source_id')
+            ->withPivot('titre_article', 'contenu_article')
+            ->withTimestamps();
+    }
 
+    // Méthode pour ajouter les articles par défaut
+
+    public function ajouterArticlesParDefaut()
+    {
+        if ($this->ajouter_articles_par_defaut) {
+            // Récupérer les articles par défaut de l'agent immobilier connecté
+            $articles = ArticleContratBail::where('agent_immobilier_id', Auth::user()->agent_immobiliers->first()->id)->get();
+            foreach ($articles as $article) {
+                // Attacher chaque article à ce contrat
+                $this->articles()->attach($article->id, [
+                    'titre_article' => $article->titre_article,
+                    'contenu_article' => $article->contenu_article
+                ]);
+            }
+        }
+    }
+
+    public function periodes()
+    {
+        return $this->hasMany(GestionPeriode::class, 'contrat_de_bail_id');
+    }
 }

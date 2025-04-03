@@ -83,12 +83,23 @@ class ArticleContratBailController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    // public function destroy(string $id)
+    // {
+    //     $article = ArticleContratBail::findOrFail($id);
+
+    //     $article->delete();
+
+    //     return redirect()->route('article.index')->with('success', 'Article supprimé avec succès.');
+    // }
+    public function destroy($id)
     {
-        $article = ArticleContratBail::findOrFail($id);
+        try {
+            $article = ArticleContratBail::findOrFail($id);
+            $article->delete();
 
-        $article->delete();
-
-        return redirect()->route('article.index')->with('success', 'Article supprimé avec succès.');
+            return back()->with('success', 'Article supprimé avec succès.');
+        } catch (\Exception $e) {
+            return back()->with('error', $e->getMessage());
+        }
     }
 }

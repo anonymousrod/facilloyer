@@ -33,6 +33,8 @@ return new class extends Migration
             $table->string('penalite_retard')->nullable();
             $table->string('mode_paiement'); // Exemple : virement, espèces
             $table->boolean('renouvellement_automatique')->default(false); // Renouvellement automatique
+            //ajouter article ou pas
+            $table->boolean('ajouter_articles_par_defaut')->default(false);
             $table->string('statut_contrat')->default('actif'); // Statut du contrat : actif, terminé, etc.
             // Signatures
             $table->string('lieu_signature');

@@ -134,7 +134,8 @@
                         <h5 class="card-title">Contrat de Location</h5>
                     </div>
                     <div class="card-body">
-                        @if ($contrat)
+
+                        @if ($contrat?->signature_agent_immobilier || Auth::user()->id_role === 3 )
                             <h6 class="card-subtitle mb-2 text-muted">Contrat de Location entre l’Agent Immobilier et le
                                 Locataire</h6>
                             <p>ENTRE LES SOUSSIGNÉS :</p>
@@ -180,17 +181,17 @@
 
                                 <p>
                                     Le bien loué est décrit comme suit :
-                                <ul>
-                                    <li>Superficie : {{ $bien->superficie }} m²</li>
-                                    <li>Nombre de pièces totale : {{ $bien->nombre_de_piece }} (incluant
-                                        {{ $bien->nbr_chambres }} chambres, {{ $bien->nombre_de_salon }} salons,
-                                        {{ $bien->nombre_de_cuisine }} cuisine, {{ $bien->nbr_salles_de_bain }} salles de
-                                        bains )</li>
-                                    <li>Équipements : {{ $bien->description }}</li>
-                                </ul>
-                                L'ensemble faisant l'objet d'un titre de propriété, tel que ces locaux existent et se
-                                comportent sans qu'il ne soit nécessaire d'en faire une plus grand description, <strong>le
-                                    Preneur déclarant bien connaître les lieux et locaux pour les avoir visités</strong>.
+                                    <ul>
+                                        <li>Superficie : {{ $bien->superficie }} m²</li>
+                                        <li>Nombre de pièces totale : {{ $bien->nombre_de_piece }} (incluant
+                                            {{ $bien->nbr_chambres }} chambres, {{ $bien->nombre_de_salon }} salons,
+                                            {{ $bien->nombre_de_cuisine }} cuisine, {{ $bien->nbr_salles_de_bain }} salles de
+                                            bains )</li>
+                                        <li>Équipements : {{ $bien->description }}</li>
+                                    </ul>
+                                    L'ensemble faisant l'objet d'un titre de propriété, tel que ces locaux existent et se
+                                    comportent sans qu'il ne soit nécessaire d'en faire une plus grand description, <strong>le
+                                        Preneur déclarant bien connaître les lieux et locaux pour les avoir visités</strong>.
                                 </p>
 
                                 @php
@@ -233,15 +234,15 @@
 
                                 @php
                                     // Convertir la fréquence en jours si c'est une période (mois, bimestre, trimestre)
-$frequences = [
-    'mois' => 30,
-    'bimestre' => 60,
-    'trimestre' => 90,
-    'semestriel' => 180, // Virgule ajoutée ici
-    'annuel' => 360,
-];
+                                    $frequences = [
+                                        'mois' => 30,
+                                        'bimestre' => 60,
+                                        'trimestre' => 90,
+                                        'semestriel' => 180, // Virgule ajoutée ici
+                                        'annuel' => 360,
+                                    ];
 
-// Par défaut, la valeur brute est utilisée si la clé n'est pas reconnue
+                                    // Par défaut, la valeur brute est utilisée si la clé n'est pas reconnue
                                     $delai_retard =
                                         $frequences[$contrat->frequence_paiement] ?? $contrat->frequence_paiement;
 
@@ -288,9 +289,16 @@ $frequences = [
                                     @foreach ($articles as $article)
                                         @php $articleCounter++; @endphp
                                         <h6><strong><u>ARTICLE {{ $articleCounter }}</u> :
-                                                {{ $article->titre_article }}</strong> </h6>
+                                                {{ $article->pivot->titre_article }}</strong> </h6>
+                                                <p> {{ $article->pivot->contenu_article }} </p>
+                                                @if (Auth::user()->id_role === 3 && !$contrat->signature_locataire)
+                                                        <form action="{{ route('contrats.detachArticle', ['contratId' => $contrat->id, 'articleId' => $article->id]) }}" method="POST">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn btn-danger">Retirer</button>
 
-                                        <p> {{ $article->contenu_article }} </p>
+                                                        </form>
+                                                @endif
                                     @endforeach
                                 @endif
 

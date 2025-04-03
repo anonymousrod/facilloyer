@@ -1,13 +1,23 @@
-
-
 @extends('layouts.master_dash')
 @section('title', 'Liste des Articles')
 
 @section('content')
-    <div class="container-xxl">
+    <div class="container-fluid">
         <div class="row justify-content-center">
             <div class="col-12">
                 <div class="card shadow-lg">
+                    @if (session('success'))
+                        <div class="alert alert-success text-center m-3 mb-1">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
+                    @if (session('error'))
+                        <div class="alert alert-danger text-center m-3 mb-1">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+
                     <div class="card-header bg-primary text-white m-3 mb-2">
                         <div class="row align-items-center">
                             <div class="col">
@@ -31,7 +41,8 @@
                                     @foreach ($articles as $article)
                                         <tr>
                                             <td>{{ \Illuminate\Support\Str::words($article->titre_article, 1, '...') }}</td>
-                                            <td>{{ \Illuminate\Support\Str::words($article->contenu_article, 1, '...') }}</td>
+                                            <td>{{ \Illuminate\Support\Str::words($article->contenu_article, 1, '...') }}
+                                            </td>
                                             <td>{{ $article->created_at->format('d/m/Y') }}</td>
 
                                             <!-- Actions -->
@@ -43,7 +54,8 @@
                                                     <i class="bi bi-eye"></i>
                                                 </a> --}}
 
-                                                <a href="{{ route('article.show', $article->id )}}" class="btn btn-outline-primary">
+                                                <a href="{{ route('article.show', $article->id) }}"
+                                                    class="btn btn-outline-primary">
                                                     <span class="bi bi-info-circle-fill"></span>
                                                 </a>
 
