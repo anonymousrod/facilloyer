@@ -135,7 +135,7 @@
                     </div>
                     <div class="card-body">
 
-                        @if ($contrat?->signature_agent_immobilier || Auth::user()->id_role === 3 )
+                        @if ($contrat?->signature_agent_immobilier || Auth::user()->id_role === 3 && $contrat )
                             <h6 class="card-subtitle mb-2 text-muted">Contrat de Location entre l’Agent Immobilier et le
                                 Locataire</h6>
                             <p>ENTRE LES SOUSSIGNÉS :</p>
