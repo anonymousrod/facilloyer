@@ -11,7 +11,7 @@
                             <div class="col-lg-4 align-self-center mb-3 mb-lg-0">
                                 <div class="d-flex align-items-center flex-row flex-wrap">
                                     <div class="position-relative me-3">
-                                        <img src="{{ asset($agent->photo_profil) }}" alt="Photo de profil" height="120" class="rounded-circle">
+                                        <img src="{{asset($agent->photo_profil)}}" alt="Photo de profil" height="120" class="rounded-circle">
                                     </div>
                                     <div class="">
                                         <h5 class="fw-semibold fs-22 mb-1">{{ \Illuminate\Support\Str::words($agent->nom_agence, 2, '...') }}</h5>
