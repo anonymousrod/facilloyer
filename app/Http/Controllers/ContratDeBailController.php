@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ArticleContratBail;
 use App\Models\Bien;
+use App\Models\ContratDeBailArticle;
 use App\Models\ContratDeBailLocataire;
 use App\Models\ContratsDeBail;
 use App\Models\Locataire;
@@ -89,6 +90,8 @@ class ContratDeBailController extends Controller
         return redirect()->route('biens.show', $request->bien_id)->with('success', 'Contrat de bail ajouté avec succès!');
     }
 
+
+
     /**
      * Display the specified resource.
      */
@@ -104,42 +107,6 @@ class ContratDeBailController extends Controller
     {
         //
     }
-
-    //update signature_photo_only
-    // public function updatePhoto(Request $request, string $id)
-    // {
-    //     $contrat = ContratsDeBail::findOrFail($id);
-
-    //     // Validation du fichier uploadé
-    //     $request->validate([
-    //         'signature_agent_immobilier' => 'nullable|image|mimes:svg,jpeg,png,jpg,gif|max:2048',
-    //         'signature_locataire' => 'nullable|image|mimes:svg,jpeg,png,jpg,gif|max:2048',
-    //     ]);
-
-    //     // Stocker la nouvelle signature
-    //     if ($request->hasFile('signature_agent_immobilier')) {
-    //         $signaturePath = $request->file('signature_agent_immobilier')->store('signatures_agent', 'public');
-
-    //         // Ajouter `/storage/` au chemin pour l'URL publique
-    //         $signaturePublicPath = '/storage/' . $signaturePath;
-
-    //         // Mettre à jour le champ dans la base de données
-    //         $contrat->update(['signature_agent_immobilier' => $signaturePublicPath]);
-    //     }
-
-    //     if ($request->hasFile('signature_locataire')) {
-    //         $signaturePath = $request->file('signature_locataire')->store('signatures_locataire', 'public');
-
-    //         // Ajouter `/storage/` au chemin pour l'URL publique
-    //         $signaturePublicPath = '/storage/' . $signaturePath;
-
-    //         // Mettre à jour le champ dans la base de données
-    //         $contrat->update(['signature_locataire' => $signaturePublicPath]);
-    //     }
-
-    //     // Retour avec message de succès
-    //     return redirect()->back()->with('success', 'Signature mise à jour avec succès!');
-    // }
 
     //update photot signature pad
     public function saveSignature(Request $request)
@@ -253,7 +220,9 @@ class ContratDeBailController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $contrat = ContratsDeBail::findOrFail($id);
+        $contrat->delete();
+        return back()->with('success', 'Contrat supprimé avec succès.');
     }
 
     public function detachArticle($contratId, $articleId)
@@ -262,5 +231,33 @@ class ContratDeBailController extends Controller
         $contrat->articles()->detach($articleId);
 
         return back()->with('success', 'Article retiré du contrat.');
+    }
+
+    //supprimer article specifique
+    public function supprimerArticleSpecifique($articleId)
+    {
+        $article = \App\Models\ContratDeBailArticle::findOrFail($articleId);
+        $bien_id = $article->contrat->bien->id;
+
+        $article->delete();
+
+        return redirect()->route('biens.show', $bien_id)
+            ->with('success', 'Article spécifique supprimé avec succès.');
+    }
+
+    public function updateArticleSpecifique(Request $request, $articleId)
+    {
+        $request->validate([
+            'titre_article' => 'required|string|max:255',
+            'contenu_article' => 'required|string',
+        ]);
+
+        $article = ContratDeBailArticle::findOrFail($articleId);
+        $article->update([
+            'titre_article' => $request->titre_article,
+            'contenu_article' => $request->contenu_article,
+        ]);
+
+        return redirect()->back()->with('success', 'Article spécifique mis à jour.');
     }
 }

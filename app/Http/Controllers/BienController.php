@@ -143,7 +143,7 @@ class BienController extends Controller
         // Sélectionner les contrats de bail liés à ce bien et locataire
         $contrat = ContratsDeBail::where('bien_id', $bien->id)
             ->where('locataire_id', $locataireAssigné?->locataire->id)
-            ->with('articles') // Charge les articles liés au contrat
+            ->with(['articles', 'articlesSpecifiques']) // Charge les articles liés au contrat
             ->first();
 
         // Récupérer les articles associés à ce contrat de bail à travers la table pivot

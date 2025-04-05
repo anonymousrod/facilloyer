@@ -1,38 +1,3 @@
-{{-- @extends('layouts.master_dash')
-
-@section('title', '📢 Mes Notifications')
-
-@section('content')
-    <div class="container py-4">
-        <!-- Titre -->
-        <div>
-            <h2 class="fw-bold">📢 Mes Notifications</h2>
-        </div>
-
-        <!-- Boutons et Actions -->
-        <div class="d-flex flex-wrap align-items-center mb-4 gap-2">
-            <button id="filter-all" class="btn btn-outline-primary btn-sm active">Tout</button>
-            <button id="filter-unread" class="btn btn-outline-secondary btn-sm">Non lu</button>
-
-            <form action="{{ route('notifications.read-all') }}" method="POST" id="mark-all-read">
-                @csrf
-                <button type="submit" class="btn btn-primary btn-sm mt-2">
-                    <i class="fas fa-check-double"></i> Tout marquer comme lu
-                </button>
-            </form>
-
-            <button id="delete-all" class="btn btn-danger btn-sm">
-                <i class="fas fa-trash"></i> Tout supprimer
-            </button>
-        </div>
-
-        <!-- Liste des notifications -->
-        <div class="list-group" id="notifications-container">
-            @include('layouts.notification_liste', ['notifications' => $notifications])
-        </div>
-    </div>
-@endsection --}}
-
 @extends('layouts.master_dash')
 
 @section('title', '📢 Mes Notifications')

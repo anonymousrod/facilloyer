@@ -115,6 +115,19 @@ class ContratsDeBail extends Model
         }
     }
 
+    public function articlesSpecifiques()
+    {
+        return $this->hasMany('App\Models\ContratDeBailArticle', 'contrat_de_bail_id')
+            ->whereNull('article_source_id');
+    }
+
+    public function modificationRequests()
+    {
+        return $this->hasMany(ContratModificationRequest::class, 'contrat_de_bail_id');
+    }
+
+
+
     public function periodes()
     {
         return $this->hasMany(GestionPeriode::class, 'contrat_de_bail_id');

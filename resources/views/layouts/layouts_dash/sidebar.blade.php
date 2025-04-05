@@ -138,6 +138,14 @@
                                 <span>Demande de maintenance/réparations</span>
                             </a>
                         </li><!--end nav-item-->
+                        <!-- Demande de modification -->
+                        <li class="nav-item">
+                            <a class="nav-link" href=" {{ route('demandes.modification') }} ">
+                                <i class="iconoir-stats-up-square menu-icon"></i>
+                                <span>Demande de modification</span>
+                            </a>
+
+                        </li><!--end nav-item-->
 
                         <!-- Effectuer un paiement -->
                         <li class="nav-item">
@@ -285,6 +293,13 @@
                                     </ul><!--end nav-->
                                 </div><!--end startbarGerer_bien-->
                             </li><!--end nav-item-->
+                            <li class="nav-item">
+                                <a class="nav-link" href=" {{ route('demandes.modification') }} ">
+                                    <i class="iconoir-stats-up-square menu-icon"></i>
+                                    <span>Demande de modification</span>
+                                </a>
+
+                            </li><!--end nav-item-->
 
 
                             <li class="nav-item">
@@ -302,6 +317,8 @@
                                 </a>
 
                             </li><!--end nav-item-->
+
+
 
                             {{-- <li class="nav-item">
                                 <a class="nav-link" href="lol.html">
