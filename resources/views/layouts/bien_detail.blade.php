@@ -164,7 +164,7 @@
                                 </button>
                             </div>
                         @endif
-                        @if ($contrat->modificationRequests->where('statut', 'en_attente')->count())
+                        @if ($contrat?->modificationRequests?->where('statut', 'en_attente')->count())
                             <div class="d-flex gap-3 flex-wrap">
                                 <button type="button" class="btn p-0 border-0 d-flex align-items-center text-info">
                                     <i class="fas fa-edit me-1"></i>Demande de modification en attente
