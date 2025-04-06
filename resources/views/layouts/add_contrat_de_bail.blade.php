@@ -165,10 +165,18 @@
 
                                 <!-- Renouvellement Automatique -->
                                 <div class="col-md-6">
-                                    <label for="renouvellement_automatique" class="form-label fw-bold">Renouvellement
-                                        Automatique</label>
-                                    <input type="checkbox" name="renouvellement_automatique"
-                                        id="renouvellement_automatique">
+                                    <div>
+                                        <label for="renouvellement_automatique" class="form-label fw-bold">Renouvellement
+                                            Automatique</label>
+                                        <input type="checkbox" name="renouvellement_automatique"
+                                            id="renouvellement_automatique">
+                                    </div>
+                                    <div class="mt-2">
+                                        <label for="ajouter_articles_par_defaut" class="form-label fw-bold">Ajouter des articles par defaut
+                                            </label>
+                                        <input type="checkbox" name="ajouter_articles_par_defaut"
+                                            id="ajouter_articles_par_defaut">
+                                    </div>
                                 </div>
 
                                 <!-- Statut du Contrat -->

@@ -104,7 +104,7 @@
                             </a>
                         </li><!--end nav-item-->
                         <li class="nav-item">
-                            <a class="nav-link" href="t.t">
+                            <a class="nav-link" href="{{ route('user', Auth::user()->id) }}">
                                 <i class="iconoir-chat-bubble menu-icon"></i> <!-- Remplacé par une icône de chat -->
                                 <span>Assistance en ligne</span>
                             </a>
@@ -137,6 +137,14 @@
                                 <i class="iconoir-wrench menu-icon"></i> <!-- Icône pour demande de maintenance -->
                                 <span>Demande de maintenance/réparations</span>
                             </a>
+                        </li><!--end nav-item-->
+                        <!-- Demande de modification -->
+                        <li class="nav-item">
+                            <a class="nav-link" href=" {{ route('demandes.modification') }} ">
+                                <i class="iconoir-stats-up-square menu-icon"></i>
+                                <span>Demande de modification</span>
+                            </a>
+
                         </li><!--end nav-item-->
 
                         <!-- Effectuer un paiement -->
@@ -285,6 +293,13 @@
                                     </ul><!--end nav-->
                                 </div><!--end startbarGerer_bien-->
                             </li><!--end nav-item-->
+                            <li class="nav-item">
+                                <a class="nav-link" href=" {{ route('demandes.modification') }} ">
+                                    <i class="iconoir-stats-up-square menu-icon"></i>
+                                    <span>Demande de modification</span>
+                                </a>
+
+                            </li><!--end nav-item-->
 
 
                             <li class="nav-item">
@@ -302,6 +317,8 @@
                                 </a>
 
                             </li><!--end nav-item-->
+
+
 
                             {{-- <li class="nav-item">
                                 <a class="nav-link" href="lol.html">

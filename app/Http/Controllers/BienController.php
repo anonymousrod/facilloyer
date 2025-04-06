@@ -86,41 +86,87 @@ class BienController extends Controller
     /**
      * Display the specified resource.
      */
+    // public function show(string $bien_id, ?string $agent_id = null)
+    // {
+    //     if (Auth::user()->id_role == 2) {
+    //         $articles = ArticleContratBail::where('agent_immobilier_id', $agent_id)->get();
+    //     }
+    //     if (Auth::user()->id_role == 3) {
+
+    //         $agent_connecter = Auth::user()->agent_immobiliers->first()->id;
+    //         $articles = ArticleContratBail::where('agent_immobilier_id', $agent_connecter)->get();
+    //     }
+    //     $bien = Bien::findOrFail($bien_id);
+
+    //     // Vérifier si un locataire est assigné à ce bien
+    //     $locataireAssigné = LocataireBien::where('bien_id', $bien_id)->with('locataire')->first();
+    //     // Selectionner les contrat de bail relier au bien
+
+    //     $contrat = ContratsDeBail::where('bien_id', $bien->id)
+    //         ->where('locataire_id', $locataireAssigné?->locataire->id)
+    //         ->first();
+
+    //     if (request()->has('notification_id')) {
+    //         auth()->user()->notifications()
+    //             ->where('id', request('notification_id'))
+    //             ->update(['read_at' => now()]);
+    //     }
+
+
+
+    //     return view('layouts.bien_detail', [
+    //         'bien' => $bien,
+    //         'locataireAssigné' => $locataireAssigné,
+    //         'contrat' => $contrat,
+    //         'articles' => $articles,
+    //     ]);
+    // }
     public function show(string $bien_id, ?string $agent_id = null)
     {
-        if (Auth::user()->id_role == 2) {
-            $articles = ArticleContratBail::where('agent_immobilier_id', $agent_id)->get();
-        }
-        if (Auth::user()->id_role == 3) {
+        // if (Auth::user()->id_role == 2) {
+        //     // Récupérer les articles liés à l'agent immobilier dans la table pivot
+        //     $articles = ArticleContratBail::where('agent_immobilier_id', $agent_id)->get();
+        // }
+        // if (Auth::user()->id_role == 3) {
+        //     // Récupérer l'ID de l'agent connecté
+        //     $agent_connecter = Auth::user()->agent_immobiliers->first()->id;
+        //     // Récupérer les articles par défaut associés à cet agent immobilier
+        //     $articles = ArticleContratBail::where('agent_immobilier_id', $agent_connecter)->get();
+        // }
 
-            $agent_connecter = Auth::user()->agent_immobiliers->first()->id;
-            $articles = ArticleContratBail::where('agent_immobilier_id', $agent_connecter)->get();
-        }
+        // Récupérer le bien
         $bien = Bien::findOrFail($bien_id);
 
         // Vérifier si un locataire est assigné à ce bien
         $locataireAssigné = LocataireBien::where('bien_id', $bien_id)->with('locataire')->first();
-        // Selectionner les contrat de bail relier au bien
 
+        // Sélectionner les contrats de bail liés à ce bien et locataire
         $contrat = ContratsDeBail::where('bien_id', $bien->id)
             ->where('locataire_id', $locataireAssigné?->locataire->id)
+            ->with(['articles', 'articlesSpecifiques']) // Charge les articles liés au contrat
             ->first();
 
+        // Récupérer les articles associés à ce contrat de bail à travers la table pivot
+        if ($contrat) {
+            $articles = $contrat->articles; // Relation définie dans le modèle ContratsDeBail
+        }
+
+        // Gérer les notifications
         if (request()->has('notification_id')) {
             auth()->user()->notifications()
                 ->where('id', request('notification_id'))
                 ->update(['read_at' => now()]);
         }
 
-
-
+        // dd($articles);
         return view('layouts.bien_detail', [
             'bien' => $bien,
             'locataireAssigné' => $locataireAssigné,
             'contrat' => $contrat,
-            'articles' => $articles,
+            'articles' => $contrat?->articles ?? [],
         ]);
     }
+
 
 
 

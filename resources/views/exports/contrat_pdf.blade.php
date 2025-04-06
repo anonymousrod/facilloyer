@@ -206,9 +206,9 @@
                         @foreach ($articles as $article)
                             @php $articleCounter++; @endphp
                             <h6><strong><u>ARTICLE {{ $articleCounter }}</u> :
-                                    {{ $article->titre_article }}</strong> </h6>
+                                    {{ $article->pivot->titre_article }}</strong> </h6>
 
-                            <p> {{ $article->contenu_article }} </p>
+                            <p> {{ $article->pivot->contenu_article }} </p>
                         @endforeach
                     @endif
 
@@ -283,6 +283,7 @@
                             <strong>{{ $locataireAssigné->locataire->nom }} {{ $locataireAssigné->locataire->prenom }}</strong>
                         </div>
                     </div> --}}
+
                     <div class="signature-section">
                         <table style="width: 100%; border-collapse: collapse;">
                             <tr>
@@ -291,15 +292,15 @@
                                     @if ($contrat->signature_agent_immobilier)
                                         <img src="{{ public_path($contrat->signature_agent_immobilier) }}" alt="Signature Agent Immobilier" style="max-width: 100%; max-height: 120px;">
                                     @endif
-                                    <strong>{{ $bien->agent_immobilier->nom_admin }} {{ $bien->agent_immobilier->prenom_admin }}</strong>
+                                    <p><strong>{{ $bien->agent_immobilier->nom_admin }} {{ $bien->agent_immobilier->prenom_admin }}</strong></p>
                                 </td>
                                 {{-- border: 1px dashed #007bff; --}}
-                                <td style="width: 50%; text-align: center; padding: 15px; ">
+                                <td style="width: 50%; text-align: center;  padding: 15px; ">
                                     <p class="font-weight-bold">Locataire</p>
                                     @if ($contrat->signature_locataire)
                                         <img src="{{ public_path($contrat->signature_locataire) }}" alt="Signature Locataire" style="max-width: 100%; max-height: 120px;">
                                     @endif
-                                    <strong>{{ $locataireAssigné->locataire->nom }} {{ $locataireAssigné->locataire->prenom }}</strong>
+                                    <p><strong>{{ $locataireAssigné->locataire->nom }} {{ $locataireAssigné->locataire->prenom }}</strong></p>
                                 </td>
                             </tr>
                         </table>

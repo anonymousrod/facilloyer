@@ -13,6 +13,7 @@ use App\Http\Controllers\LocataireBienController;
 use App\Http\Controllers\LocataireController;
 use App\Http\Controllers\PaiementController;
 use App\Http\Controllers\ActionAdminController;
+use App\Http\Controllers\ContratModificationRequestController;
 use App\Http\Controllers\NotificationController;
 use Chatify\Http\Controllers\CustomMessagesController;
 
@@ -35,7 +36,9 @@ Route::get('/change-language/{lang}', function ($lang) {
 Route::get('/locataire/{id}/locashow', [LocataireController::class, 'showInformations'])
     ->name('locataire.locashow');
 
-Route::get('/locataire/{id}/locatairebien', [LocataireController::class, 'showlocatairebien'])
+// Route::get('/locataire/{id}/locatairebien', [LocataireController::class, 'showlocatairebien'])
+//     ->name('locataire_bien');
+Route::get('/locataire/{id}/locatairebien', [LocataireBienController::class, 'showlocatairebien'])
     ->name('locataire_bien');
 
 Route::middleware(['auth'])->group(function () {
@@ -235,6 +238,33 @@ Route::delete('/biens/{bien}/unassign-locataire', [LocataireBienController::clas
 Route::resource('/Contrat_de_bail', ContratDeBailController::class)->names('contrat');
 //route article
 Route::resource('/Article_contrat_bail', ArticleContratBailController::class)->names('article');
+Route::delete('/contrats/{contratId}/articles/{articleId}', [ContratDeBailController::class, 'detachArticle'])
+    ->name('contrats.detachArticle');
+
+// route article specifique
+
+// Route pour ajouter un article spécifique à un contrat
+Route::get('/contrats/{contratId}/article-specifique', [ArticleContratBailController::class, 'create_specifique'])
+    ->name('article.create_specifique');
+//pour enregistrer
+Route::post('/contrats/{contratId}/ajouter-article', [ArticleContratBailController::class, 'ajouterArticleSpecifique'])
+    ->name('article.ajouterArticleSpecifique');
+// pour supprimer article specifique
+Route::delete('/contrats/articles-specifiques/{article}', [ContratDeBailController::class, 'supprimerArticleSpecifique'])
+    ->name('contrats.articlesSpecifiques.supprimer');
+// mettre a jour article specifique
+Route::put('/contrats/articles-specifiques/{article}', [ContratDeBailController::class, 'updateArticleSpecifique'])
+    ->name('contrats.articlesSpecifiques.update');
+
+//route de demande de modification contrat de bail
+
+Route::post('/modification/demander', [ContratModificationRequestController::class, 'demander'])->name('modification.demander');
+Route::put('/modification/accepter/{id}', [ContratModificationRequestController::class, 'accepter'])->name('modification.accepter');
+Route::put('/modification/refuser/{id}', [ContratModificationRequestController::class, 'refuser'])->name('modification.refuser');
+
+Route::get('/demandes-modification', [ContratModificationRequestController::class, 'showDemandesModification'])
+    ->name('demandes.modification')
+    ->middleware('auth');
 
 
 //route pour update contrat de bail
@@ -275,4 +305,3 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/notifications/fetch', [NotificationController::class, 'fetch'])->name('notifications.fetch');
 Route::delete('/notifications/delete-all', [NotificationController::class, 'deleteAll'])->name('notifications.delete-all');
 Route::delete('/notifications/{id}', [NotificationController::class, 'deleteNotification'])->name('notifications.delete');
-

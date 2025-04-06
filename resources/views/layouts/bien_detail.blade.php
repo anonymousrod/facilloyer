@@ -82,14 +82,16 @@
                                     title="Modifier">
                                     <i class="bi bi-pencil-square" style="font-size: 1.5rem;"></i>
                                 </a>
-                                <form action="{{ route('biens.destroy', $bien->id) }}" method="POST"
-                                    onsubmit="return confirm('Voulez-vous vraiment supprimer ce bien ?');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-link text-danger" title="Supprimer">
-                                        <i class="bi bi-trash" style="font-size: 1.5rem;"></i>
-                                    </button>
-                                </form>
+                                @if (!$contrat)
+                                    <form action="{{ route('biens.destroy', $bien->id) }}" method="POST"
+                                        onsubmit="return confirm('Voulez-vous vraiment supprimer ce bien ?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-link text-danger" title="Supprimer">
+                                            <i class="bi bi-trash" style="font-size: 1.5rem;"></i>
+                                        </button>
+                                    </form>
+                                @endif
                                 @if ($locataireAssigné)
                                     <!-- Si un locataire est déjà assigné -->
                                     <form action="{{ route('unassign.locataire', $bien->id) }}" method="POST"
@@ -121,20 +123,92 @@
                                 @endif
                             </div>
                         @endif
-
-
-
+                        
                     </div>
                 </div>
 
                 <!-- Carousel Card (déjà existant) -->
 
                 <div class="card mb-4">
-                    <div class="card-header">
-                        <h5 class="card-title">Contrat de Location</h5>
+
+                    <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+                        <h5 class="card-title m-0">Contrat de Location et gestion de ses articles</h5>
+
+                        @if ($contrat && Auth::user()->id_role === 3 && !$contrat->signature_locataire)
+                            <div class="d-flex gap-3 flex-wrap">
+                                <a href="{{ route('article.create_specifique', $contrat->id) }}"
+                                    class="btn p-0 border-0 d-flex align-items-center text-primary">
+                                    <i class="fas fa-plus me-1"></i> Article Spécifique
+                                </a>
+
+                                <form method="POST" action="{{ route('contrat.destroy', $contrat->id) }}" class="m-0 p-0">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn p-0 border-0 d-flex align-items-center text-danger"
+                                        onclick="return confirm('Confirmer la suppression du contrat ?')">
+                                        <i class="fas fa-trash-alt me-1"></i> Supprimer ce Contrat
+                                    </button>
+                                </form>
+                            </div>
+                        @endif
+                        @if (
+                                $contrat?->signature_locataire &&
+                                $contrat?->signature_agent_immobilier &&
+                                !$contrat?->modificationRequests->where('statut', 'en_attente')->count()
+                            )
+
+                            <div class="d-flex gap-3 flex-wrap">
+                                <button type="button" class="btn p-0 border-0 d-flex align-items-center text-info"
+                                    data-bs-toggle="modal" data-bs-target="#modificationModal">
+                                    <i class="fas fa-edit me-1"></i> Faire une demande de modification
+                                </button>
+                            </div>
+                        @endif
+                        @if ($contrat && $contrat->modificationRequests->where('statut', 'en_attente')->count())
+                        <div class="d-flex gap-3 flex-wrap">
+                                <button type="button" class="btn p-0 border-0 d-flex align-items-center text-info">
+                                    <i class="fas fa-edit me-1"></i>Demande de modification en attente
+                                </button>
+                            </div>
+                        @endif
+
+                        {{-- Modal de demande de modification --}}
+                        <div class="modal fade" id="modificationModal" tabindex="-1"
+                            aria-labelledby="modificationModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="modificationModalLabel">Demander une modification de
+                                            contrat</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form method="POST" action="{{ route('modification.demander') }}">
+                                            @csrf
+                                            <input type="hidden" name="contrat_de_bail_id" value="{{ $contrat?->id }}">
+
+                                            <div class="mb-3">
+                                                <label for="motif" class="form-label">Motif de la modification</label>
+                                                <textarea name="motif" class="form-control" id="motif" rows="4" required></textarea>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <button type="submit" class="btn btn-primary">Envoyer la demande</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
                     </div>
+
+
                     <div class="card-body">
-                        @if ($contrat)
+
+                        @if ($contrat?->signature_agent_immobilier || (Auth::user()->id_role === 3 && $contrat))
                             <h6 class="card-subtitle mb-2 text-muted">Contrat de Location entre l’Agent Immobilier et le
                                 Locataire</h6>
                             <p>ENTRE LES SOUSSIGNÉS :</p>
@@ -278,26 +352,124 @@ $frequences = [
                                 </p>
 
 
+
                                 @php
-                                    // Initialisation du compteur d'articles à 5
                                     $articleCounter = 4;
                                 @endphp
 
-                                <!-- Affichage des articles de la table Article -->
+                                <!-- 🎯 Articles par défaut via la table pivot -->
                                 @if ($articles->count() > 0)
                                     @foreach ($articles as $article)
                                         @php $articleCounter++; @endphp
                                         <h6><strong><u>ARTICLE {{ $articleCounter }}</u> :
-                                                {{ $article->titre_article }}</strong> </h6>
+                                                {{ $article->pivot->titre_article }}</strong></h6>
+                                        <p>{{ $article->pivot->contenu_article }}</p>
 
-                                        <p> {{ $article->contenu_article }} </p>
+                                        {{-- @if (Auth::user()->id_role === 3 && !$contrat->signature_locataire)
+                                            <form
+                                                action="{{ route('contrats.detachArticle', ['contratId' => $contrat->id, 'articleId' => $article->id]) }}"
+                                                method="POST">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger">Retirer</button>
+
+                                            </form>
+                                        @endif --}}
+                                        @if (Auth::user()->id_role === 3 && !$contrat->signature_locataire)
+                                            <form
+                                                action="{{ route('contrats.detachArticle', ['contratId' => $contrat->id, 'articleId' => $article->id]) }}"
+                                                method="POST" class="m-0 p-0 mb-2">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit"
+                                                    class="btn p-0 border-0 d-flex align-items-center text-danger">
+                                                    <i class="fas fa-times me-1"></i> Retirer
+                                                </button>
+                                            </form>
+                                        @endif
                                     @endforeach
                                 @endif
 
-                                <!-- Continuation des articles numérotés dynamiquement -->
-                                @php $articleCounter++; @endphp
+                                <!-- 🎯 Articles spécifiques (uniquement liés au contrat dans contrat_de_bail_article) -->
+                                @if ($contrat && $contrat->articlesSpecifiques->count() > 0)
+                                    @foreach ($contrat->articlesSpecifiques as $article)
+                                        @php $articleCounter++; @endphp
+                                        <h6><strong><u>ARTICLE {{ $articleCounter }}</u> :
+                                                {{ $article->titre_article }}</strong></h6>
+                                        <p>{{ $article->contenu_article }}</p>
+                                        @if (Auth::user()->id_role === 3 && !$contrat->signature_locataire)
+                                            <div class="d-flex gap-3 mb-3 align-items-center">
+                                                <!-- 🟡 Bouton Modifier -->
+                                                <button type="button"
+                                                    class="btn p-0 border-0 d-flex align-items-center text-info"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#editModal{{ $article->id }}">
+                                                    <i class="fas fa-edit me-1"></i> Modifier
+                                                </button>
 
-                                <h6><strong><u>ARTICLE {{ $articleCounter }}</u> : DATE DE PRISE D'EFFET</strong> </h6>
+                                                <!-- 🔴 Bouton Supprimer -->
+                                                <form
+                                                    action="{{ route('contrats.articlesSpecifiques.supprimer', $article->id) }}"
+                                                    method="POST" class="m-0 p-0">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit"
+                                                        class="btn p-0 border-0 d-flex align-items-center text-danger">
+                                                        <i class="fas fa-trash-alt me-1"></i> Supprimer
+                                                    </button>
+                                                </form>
+                                            </div>
+
+                                            <!-- 🔽 Modal Bootstrap pour modification -->
+                                            <div class="modal fade" id="editModal{{ $article->id }}" tabindex="-1"
+                                                aria-labelledby="editModalLabel{{ $article->id }}" aria-hidden="true">
+                                                <div class="modal-dialog modal-lg">
+                                                    <div class="modal-content">
+                                                        <form
+                                                            action="{{ route('contrats.articlesSpecifiques.update', $article->id) }}"
+                                                            method="POST">
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title"
+                                                                    id="editModalLabel{{ $article->id }}">Modifier
+                                                                    l’article</h5>
+                                                                <button type="button" class="btn-close"
+                                                                    data-bs-dismiss="modal" aria-label="Fermer"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div class="mb-3">
+                                                                    <label for="titre_article{{ $article->id }}"
+                                                                        class="form-label">Titre de l’article</label>
+                                                                    <input type="text" class="form-control"
+                                                                        id="titre_article{{ $article->id }}"
+                                                                        name="titre_article"
+                                                                        value="{{ $article->titre_article }}" required>
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label for="contenu_article{{ $article->id }}"
+                                                                        class="form-label">Contenu de l’article</label>
+                                                                    <textarea class="form-control" id="contenu_article{{ $article->id }}" name="contenu_article" rows="5"
+                                                                        required>{{ $article->contenu_article }}</textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                    data-bs-dismiss="modal">Annuler</button>
+                                                                <button type="submit" class="btn btn-primary">💾
+                                                                    Enregistrer</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    @endforeach
+                                @endif
+
+                                <!-- Exemple d'article fixe -->
+                                @php $articleCounter++; @endphp
+                                <h6><strong><u>ARTICLE {{ $articleCounter }}</u> : DATE DE PRISE D'EFFET</strong></h6>
 
 
                                 <P>Le present contrat commence à courir à compter du
@@ -313,7 +485,8 @@ $frequences = [
                                 <p class="text-end m-5 mt-1 mb-1">A <strong>{{ $contrat->lieu_signature }}</strong>, le
                                     <strong>{{ \Carbon\Carbon::parse($contrat->date_signature)->format('d/m/Y') }}</strong>.
 
-                                <p class="text-center">( Signatures suivies de la mention manuscrite lue et approuvées )</p>
+                                <p class="text-center">( Signatures suivies de la mention manuscrite lue et approuvées )
+                                </p>
 
                                 <div class="row mt-3">
 
@@ -321,7 +494,8 @@ $frequences = [
                                     <div class="col-12 col-md-6 p-4 text-start">
                                         <p class="font-weight-bold">Agent Immobilier</p>
                                         @if ($contrat->signature_agent_immobilier)
-                                            <img class="img-fluid" src="{{ asset($contrat->signature_agent_immobilier) }}"
+                                            <img class="img-fluid"
+                                                src="{{ asset($contrat->signature_agent_immobilier) }}"
                                                 alt="Signature Agent Immobilier" width="150">
                                             <strong>
                                                 <u>

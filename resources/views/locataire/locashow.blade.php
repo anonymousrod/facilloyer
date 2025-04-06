@@ -4,13 +4,15 @@
 
 @section('content')
 <div class="container mt-4">
+    @if (Auth::user()->id_role === 2)
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4 class="fw-bold text-primary">Mon Profil</h4>
+            <a href="{{ route('locataire.edit', $locataire->user_id) }}" class="btn btn-outline-primary btn-sm px-3">
+                <i class="fas fa-edit me-2"></i>Modifier
+            </a>
+        </div>
+    @endif
     <!-- Titre et bouton d'édition -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h4 class="fw-bold text-primary">Mon Profil</h4>
-        <a href="{{ route('locataire.edit', $locataire->user_id) }}" class="btn btn-outline-primary btn-sm px-3">
-            <i class="fas fa-edit me-2"></i>Modifier
-        </a>
-    </div>
 
     <!-- Informations générales -->
     <div class="card shadow-sm mb-4 rounded-3 border-0">
@@ -21,9 +23,13 @@
             <div class="row">
                 <!-- Photo de profil -->
                 <div class="col-md-4 text-center">
+                    @if ($locataire->photo_profil)
                         <img src="{{ asset($locataire->photo_profil) }}" alt="Photo de profil"
-                        class="img-fluid rounded-circle shadow-sm" style="max-width: 150px;">
-                   
+                             class="img-fluid rounded-circle shadow-sm" style="max-width: 150px;">
+                    @else
+                        <img src="{{ asset('images/default-avatar.png') }}" alt="Photo par défaut"
+                             class="img-fluid rounded-circle shadow-sm" style="max-width: 150px;">
+                    @endif
                 </div>
                 <!-- Informations du locataire -->
                 <div class="col-md-8">
@@ -52,22 +58,24 @@
         </div>
     </div>
 
-    <!-- Agent immobilier -->
-    <div class="card shadow-sm rounded-3 border-0">
-        <div class="card-header bg-light py-3 border-bottom">
-            <h4 class="mb-0 text-secondary">Agent Immobilier Associé</h4>
+    @if (Auth::user()->id_role === 2)
+        <!-- Agent immobilier -->
+        <div class="card shadow-sm rounded-3 border-0">
+            <div class="card-header bg-light py-3 border-bottom">
+                <h4 class="mb-0 text-secondary">Agent Immobilier Associé</h4>
+            </div>
+            <div class="card-body">
+                @if ($locataire->agent_immobilier)
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><strong>Agence :</strong> {{ $locataire->agent_immobilier->nom_agence ?? 'Non rempli' }}</li>
+                        <li class="mb-2"><strong>Nom de l'agent :</strong> {{ $locataire->agent_immobilier->nom_admin ?? 'Non rempli' }}</li>
+                        <li class="mb-2"><strong>Prénom de l'agent :</strong> {{ $locataire->agent_immobilier->prenom_admin ?? 'Non rempli' }}</li>
+                    </ul>
+                @else
+                    <p class="text-muted">Aucun agent immobilier associé.</p>
+                @endif
+            </div>
         </div>
-        <div class="card-body">
-            @if ($locataire->agent_immobilier)
-                <ul class="list-unstyled">
-                    <li class="mb-2"><strong>Agence :</strong> {{ $locataire->agent_immobilier->nom_agence ?? 'Non rempli' }}</li>
-                    <li class="mb-2"><strong>Nom de l'agent :</strong> {{ $locataire->agent_immobilier->nom_admin ?? 'Non rempli' }}</li>
-                    <li class="mb-2"><strong>Prénom de l'agent :</strong> {{ $locataire->agent_immobilier->prenom_admin ?? 'Non rempli' }}</li>
-                </ul>
-            @else
-                <p class="text-muted">Aucun agent immobilier associé.</p>
-            @endif
-        </div>
-    </div>
+    @endif
 </div>
 @endsection
