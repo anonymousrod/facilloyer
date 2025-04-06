@@ -19,7 +19,7 @@
                     <h5 class="mb-3"><i class="fas fa-image me-2"></i>Photo de Profil</h5>
                     <div class="text-center mb-4">
                         @if(!empty($agent->photo_profil))
-                            <img src="{{ asset('storage/' . $agent->photo_profil) }}" 
+                            <img src="{{asset($agent->photo_profil) }}" 
                                  alt="Photo de profil" 
                                  class="img-thumbnail shadow rounded-circle" 
                                  style="max-width: 180px;">

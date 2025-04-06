@@ -9,14 +9,14 @@
                 <div class="card-body p-0">
                     <!-- Banner Image -->
                     <div class="position-relative">
-                        <img src="{{ asset('images/profile-banner.jpg') }}" alt="Banner" class="img-fluid w-100" style="height: 250px; object-fit: cover;">
+                        <img src="{{ asset('images/profile-banner.jpeg') }}" alt="Banner" class="img-fluid w-100" style="height: 250px; object-fit: cover;">
                     </div>
 
                     <div class="position-absolute top-50 start-50 translate-middle">
                         <!-- Profile Avatar -->
                         <div class="rounded-circle overflow-hidden shadow" style="width: 150px; height: 150px;">
                             @if ($agent->photo_profil)
-                                <img src="{{ asset('uploads/agents/' . $agent->photo_profil) }}" 
+                                <img src="{{ asset($agent->photo_profil) }}" 
                                      alt="Photo de profil" 
                                      class="img-fluid" 
                                      style="width: 100%; height: 100%; object-fit: cover;">

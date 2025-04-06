@@ -109,7 +109,7 @@
                 <div class="card-header" style="background-image: url('{{ asset('images/header-bg.jpg') }}');">
                     <div class="profile-photo text-center">
                         @if($locataire->photo_profil)
-                            <img src="{{ asset('storage/' . $locataire->photo_profil) }}" alt="Photo de Profil">
+                            <img src="{{ asset($locataire->photo_profil) }}" alt="Photo de Profil">
                         @else
                             <img src="https://via.placeholder.com/120" alt="Photo de Profil">
                         @endif

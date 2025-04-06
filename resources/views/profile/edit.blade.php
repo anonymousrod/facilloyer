@@ -125,29 +125,18 @@
                         <!-- Section Profil -->
                         <div class="col-lg-4 col-md-6">
                             <div class="position-relative">
-                                <img src="{{ Auth::user()->profile_picture ?? asset('assets/images/users/avatar-1.png') }}"
-                                     alt="Avatar"
+                            <img src="{{ Auth::user()->agent_immobiliers->first() ->photo_profil ?? asset('assets/images/users/avatar-1.png') }}"
+                            alt="Avatar"
                                      class="rounded-circle shadow mb-2"
                                      width="80" height="80">
-                                <a href="a.fr"
+                                     <a href="{{ route('agent_immobilier.create') }}"
                                    class="btn btn-primary btn-sm position-absolute bottom-0 end-0 rounded-circle d-flex align-items-center justify-content-center"
                                    style="width: 30px; height: 30px;">
                                     <i class="fas fa-camera"></i>
                                 </a>
                             </div>
                             <div>
-                                @if(Auth::check())
-                                    @php
-                                        $locataire = Auth::user()->locataires()->first();
-                                    @endphp
-                                    @if($locataire)
-                                        <h6 class="fw-bold">{{ $locataire->nom }} {{ $locataire->prenom }}</h6>
-                                        <p class="text-muted mb-0">{{ Auth::user()->email }}</p>
-                                    @else
-                                        <h6 class="fw-bold">Nom non défini</h6>
-                                        <p class="text-muted mb-0">{{ Auth::user()->email }}</p>
-                                    @endif
-                                @endif
+                                
                             </div>
                         </div>
 

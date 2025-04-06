@@ -23,13 +23,9 @@
             <div class="row">
                 <!-- Photo de profil -->
                 <div class="col-md-4 text-center">
-                    @if ($locataire->photo_profil)
                         <img src="{{ asset($locataire->photo_profil) }}" alt="Photo de profil"
-                             class="img-fluid rounded-circle shadow-sm" style="max-width: 150px;">
-                    @else
-                        <img src="{{ asset('images/default-avatar.png') }}" alt="Photo par défaut"
-                             class="img-fluid rounded-circle shadow-sm" style="max-width: 150px;">
-                    @endif
+                        class="img-fluid rounded-circle shadow-sm" style="max-width: 150px;">
+
                 </div>
                 <!-- Informations du locataire -->
                 <div class="col-md-8">
