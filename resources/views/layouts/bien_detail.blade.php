@@ -164,13 +164,16 @@
                                 </button>
                             </div>
                         @endif
+
                         @if ($contrat?->modificationRequests?->where('statut', 'en_attente')->count())
                             <div class="d-flex gap-3 flex-wrap">
-                                <button type="button" class="btn p-0 border-0 d-flex align-items-center text-info">
-                                    <i class="fas fa-edit me-1"></i>Demande de modification en attente
-                                </button>
+                                <a href="{{ route('demandes.modification') }}"
+                                    class="btn p-0 border-0 d-flex align-items-center text-info text-decoration-none">
+                                    <i class="fas fa-clock text-warning me-1"></i>Demande de modification en attente
+                                </a>
                             </div>
                         @endif
+
 
                         {{-- Modal de demande de modification --}}
                         <div class="modal fade" id="modificationModal" tabindex="-1"
