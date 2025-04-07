@@ -36,7 +36,9 @@ Route::get('/change-language/{lang}', function ($lang) {
 Route::get('/locataire/{id}/locashow', [LocataireController::class, 'showInformations'])
     ->name('locataire.locashow');
 
-Route::get('/locataire/{id}/locatairebien', [LocataireController::class, 'showlocatairebien'])
+// Route::get('/locataire/{id}/locatairebien', [LocataireController::class, 'showlocatairebien'])
+//     ->name('locataire_bien');
+Route::get('/locataire/{id}/locatairebien', [LocataireBienController::class, 'showlocatairebien'])
     ->name('locataire_bien');
 
 Route::middleware(['auth'])->group(function () {

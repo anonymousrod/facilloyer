@@ -24,7 +24,7 @@
                     <form action="{{ route('locataire.demandes.store') }}" method="POST">
                         @csrf
                         <div class="form-group mb-4">
-                            <label for="bien_id" class="form-label fw-bold">Sélectionner un bien</label>
+                            <label for="bien_id" class="form-label fw-bold">Sélectionner un bien actuellement occupé</label>
                             <select name="bien_id" id="bien_id" class="form-control shadow-sm rounded" required>
                                 <option value="">Choisir un bien</option>
                                 @foreach ($biens as $bien)

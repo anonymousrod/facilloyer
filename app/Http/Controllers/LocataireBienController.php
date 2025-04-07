@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Bien;
 use App\Models\Locataire;
 use App\Models\LocataireBien;
+use Illuminate\Support\Collection; // Import Collection
 use App\Notifications\TenantAssignedToProperty;
 use Illuminate\Http\Request;
 
@@ -40,6 +41,7 @@ class LocataireBienController extends Controller
             'locataires' => $locataires,
         ]);
     }
+    
 
 
     public function assignLocataire(Request $request, $id)
@@ -144,4 +146,32 @@ class LocataireBienController extends Controller
     {
         //
     }
+
+    public function showlocatairebien()
+{
+    // Récupérer l'utilisateur connecté
+    $user = auth()->user();
+
+    // Récupérer le locataire associé à l'utilisateur connecté
+    $locataire = Locataire::where('user_id', $user->id)->firstOrFail();
+
+   // Récupérer les enregistrements de LocataireBien pour ce locataire
+   $locataireBiens = LocataireBien::where('locataire_id', $locataire->id)->get();
+
+   // Récupérer les biens associés à ces enregistrements
+   $biensLoues = [];
+   foreach ($locataireBiens as $locataireBien) {
+       $bien = Bien::find($locataireBien->bien_id);
+       if ($bien) {
+           $biensLoues[] = $bien;
+       }
+   }
+
+   // Convertir le tableau en collection Laravel
+   $biensLoues = collect($biensLoues);
+
+   return view('locataire.locataire_bien', compact('biensLoues', 'locataire'));
+    
+}
+    
 }

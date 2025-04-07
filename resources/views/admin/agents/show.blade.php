@@ -40,7 +40,7 @@
                     <p class="text-muted">Évaluation : <strong>{{ $agent->evaluation }} ★</strong></p>
 
                     <!-- Button to toggle activation status -->
-                    <form action="{{ route('agents.updateStatus', $agent->id) }}" method="POST">
+                    <!-- <form action="{{ route('agents.updateStatus', $agent->id) }}" method="POST">
                         @csrf
                         @method('PATCH')
                         @if ($agent->deleted_at)
@@ -52,7 +52,7 @@
                                 <i class="fas fa-ban"></i> Désactiver
                             </button>
                         @endif
-                    </form>
+                    </form> -->
                 </div>
             </div>
 
@@ -82,7 +82,7 @@
                         <li class="list-group-item">
                             <strong>Carte d'identité :</strong>
                             @if ($agent->carte_identite_pdf)
-                                <a href="{{ asset('uploads/documents/' . $agent->carte_identite_pdf) }}" 
+                                <a href="{{ asset($agent->carte_identite_pdf) }}" 
                                    target="_blank" 
                                    class="btn btn-sm btn-outline-primary ms-2">Voir</a>
                             @else
@@ -92,7 +92,7 @@
                         <li class="list-group-item">
                             <strong>RCCM :</strong>
                             @if ($agent->rccm_pdf)
-                                <a href="{{ asset('uploads/documents/' . $agent->rccm_pdf) }}" 
+                                <a href="{{ asset($agent->rccm_pdf) }}" 
                                    target="_blank" 
                                    class="btn btn-sm btn-outline-primary ms-2">Voir</a>
                             @else

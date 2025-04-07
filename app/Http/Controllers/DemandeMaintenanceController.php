@@ -6,6 +6,7 @@ use App\Models\DemandeMaintenance;
 use App\Models\Locataire;
 use App\Models\AgentImmobilier;
 use App\Models\Bien;
+use App\Models\LocataireBien;
 use App\Notifications\DemandeMaintenanceNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -107,22 +108,40 @@ class DemandeMaintenanceController extends Controller
 
 
     // Afficher le formulaire de demande de maintenance pour un locataire
+    // public function create()
+    // {
+    //     // Récupérer le locataire connecté
+    //     $locataire = Auth::user()->locataires()->first();
+
+    //     // Vérifier si le locataire a des biens associés
+    //     if (!$locataire) {
+    //         return redirect()->route('dashbord')->with('error', 'Il faut etre un locataire pour soumettre une demande de maintenance');
+    //     }
+
+    //     // Récupérer les biens associés au locataire
+    //     $biens = $locataire->biens;
+
+    //     // Passer les biens à la vue
+    //     return view('locataire.demandes.create', compact('biens'));
+    // }
+
     public function create()
-    {
-        // Récupérer le locataire connecté
-        $locataire = Auth::user()->locataires()->first();
+{
+    $locataire = Auth::user()->locataires()->first();
 
-        // Vérifier si le locataire a des biens associés
-        if (!$locataire) {
-            return redirect()->route('dashbord')->with('error', 'Il faut etre un locataire pour soumettre une demande de maintenance');
-        }
-
-        // Récupérer les biens associés au locataire
-        $biens = $locataire->biens;
-
-        // Passer les biens à la vue
-        return view('locataire.demandes.create', compact('biens'));
+    if (!$locataire) {
+        return redirect()->route('dashbord')->with('error', 'Aucun locataire associé à votre compte.');
     }
+
+    // Récupérer les biens actuellement liés au locataire (encore actifs)
+    $biens = LocataireBien::where('locataire_id', $locataire->id)
+                ->whereNull('deleted_at') // si tu utilises SoftDeletes
+                ->with('bien')
+                ->get()
+                ->pluck('bien');
+
+    return view('locataire.demandes.create', compact('biens'));
+}
 
     // Enregistrer une nouvelle demande de maintenance
     public function store(Request $request)
