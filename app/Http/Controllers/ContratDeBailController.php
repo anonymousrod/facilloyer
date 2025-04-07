@@ -176,7 +176,7 @@ class ContratDeBailController extends Controller
         $locataireAssigné = LocataireBien::where('bien_id', $bien_id)->with('locataire')->first();
         $contrat = ContratsDeBail::where('bien_id', $bien->id)
             ->where('locataire_id', $locataireAssigné?->locataire->id)
-            ->with('articles') // Charge les articles liés au contrat
+            ->with(['articles', 'articlesSpecifiques']) // Charge les articles liés au contrat
             ->first();
 
         // Récupérer les articles associés à ce contrat de bail à travers la table pivot
@@ -184,12 +184,7 @@ class ContratDeBailController extends Controller
             $articles = $contrat->articles; // Relation définie dans le modèle ContratsDeBail
         }
 
-        // return view('exports.contrat_pdf', [
-        //     'bien' => $bien,
-        //     'locataireAssigné' => $locataireAssigné,
-        //     'contrat' => $contrat,
-        //     'articles' => $articles,
-        // ]);
+
 
         // Générer le PDF
         $pdf = PDF::loadView('exports.contrat_pdf', [

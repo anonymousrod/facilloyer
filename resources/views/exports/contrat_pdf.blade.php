@@ -7,7 +7,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
-
         .signature-section {
             display: flex;
             /* Active Flexbox */
@@ -127,7 +126,7 @@
 
 
 
-                    <h6><strong><u>ARTICLE 3</u> : DURÉE DU CONTRAT</strong> </h6>
+                    <h6 class="mt-3"><strong><u>ARTICLE 3</u> : DURÉE DU CONTRAT</strong> </h6>
 
                     <p>
                         Le présent contrat est consenti et accepté pour une durée de
@@ -153,15 +152,15 @@
 
                     @php
                         // Convertir la fréquence en jours si c'est une période (mois, bimestre, trimestre)
-                        $frequences = [
-                            'mois' => 30,
-                            'bimestre' => 60,
-                            'trimestre' => 90,
-                            'semestriel' => 180, // Virgule ajoutée ici
-                            'annuel' => 360,
-                        ];
+$frequences = [
+    'mois' => 30,
+    'bimestre' => 60,
+    'trimestre' => 90,
+    'semestriel' => 180, // Virgule ajoutée ici
+    'annuel' => 360,
+];
 
-                        // Par défaut, la valeur brute est utilisée si la clé n'est pas reconnue
+// Par défaut, la valeur brute est utilisée si la clé n'est pas reconnue
                         $delai_retard = $frequences[$contrat->frequence_paiement] ?? $contrat->frequence_paiement;
 
                     @endphp
@@ -201,7 +200,7 @@
                         $articleCounter = 4;
                     @endphp
 
-                    <!-- Affichage des articles de la table Article -->
+                    <!-- 🎯 Articles par défaut via la table pivot -->
                     @if ($articles->count() > 0)
                         @foreach ($articles as $article)
                             @php $articleCounter++; @endphp
@@ -209,6 +208,17 @@
                                     {{ $article->pivot->titre_article }}</strong> </h6>
 
                             <p> {{ $article->pivot->contenu_article }} </p>
+                        @endforeach
+                    @endif
+
+                    <!-- 🎯 Articles spécifiques (uniquement liés au contrat dans contrat_de_bail_article) -->
+                    @if ($contrat && $contrat->articlesSpecifiques->count() > 0)
+                        @foreach ($contrat->articlesSpecifiques as $article)
+                            @php $articleCounter++; @endphp
+                            <h6><strong><u>ARTICLE {{ $articleCounter }}</u> :
+                                    {{ $article->titre_article }}</strong></h6>
+                            <p>{{ $article->contenu_article }}</p>
+
                         @endforeach
                     @endif
 
@@ -233,56 +243,7 @@
 
                     <p class="text-center">( Signatures suivies de la mention manuscrite lue et approuvées)</p>
 
-                    {{-- <div class="row align-items-center mt-3">
-                        <!-- Colonne de gauche (Agent Immobilier) -->
-                        <div class="col-6 text-start px-3">
-                            <p class="font-weight-bold">Agent Immobilier</p>
-                            @if ($contrat->signature_agent_immobilier)
-                                <div class="d-flex flex-column align-items-start">
-                                    <img class="img-fluid mb-2" src="{{ public_path($contrat->signature_agent_immobilier) }}"
-                                         alt="Signature Agent Immobilier" width="150">
-                                    <strong>
-                                        <u>
-                                            <p>{{ $bien->agent_immobilier->nom_admin }} {{ $bien->agent_immobilier->prenom_admin }}</p>
-                                        </u>
-                                    </strong>
-                                </div>
-                            @endif
-                        </div>
 
-                        <!-- Colonne de droite (Le Preneur) -->
-                        <div class="col-6 text-end px-3">
-                            <p class="font-weight-bold">Le Preneur</p>
-                            @if ($contrat->signature_locataire)
-                                <div class="d-flex flex-column align-items-end">
-                                    <img class="img-fluid mb-2" src="{{ public_path($contrat->signature_locataire) }}"
-                                         alt="Signature Locataire" width="150">
-                                    <strong>
-                                        <u>
-                                            <p>{{ $locataireAssigné->locataire->nom }} {{ $locataireAssigné->locataire->prenom }}</p>
-                                        </u>
-                                    </strong>
-                                </div>
-                            @endif
-                        </div>
-                    </div> --}}
-                    {{-- <div class="signature-section">
-                        <div class="signature-box">
-                            <p class="font-weight-bold">Agent Immobilier</p>
-                            @if ($contrat->signature_agent_immobilier)
-                                <img src="{{asset($contrat->signature_agent_immobilier) }}" alt="Signature Agent Immobilier">
-                            @endif
-                            <strong>{{ $bien->agent_immobilier->nom_admin }} {{ $bien->agent_immobilier->prenom_admin }}</strong>
-                        </div>
-
-                        <div class="signature-box">
-                            <p class="font-weight-bold">Locataire</p>
-                            @if ($contrat->signature_locataire)
-                                <img src="{{asset($contrat->signature_locataire) }}" alt="Signature Locataire">
-                            @endif
-                            <strong>{{ $locataireAssigné->locataire->nom }} {{ $locataireAssigné->locataire->prenom }}</strong>
-                        </div>
-                    </div> --}}
 
                     <div class="signature-section">
                         <table style="width: 100%; border-collapse: collapse;">
@@ -290,24 +251,26 @@
                                 <td style="width: 50%; text-align: center; padding: 15px; ">
                                     <p class="font-weight-bold">Agent Immobilier</p>
                                     @if ($contrat->signature_agent_immobilier)
-                                        <img src="{{ public_path($contrat->signature_agent_immobilier) }}" alt="Signature Agent Immobilier" style="max-width: 100%; max-height: 120px;">
+                                        <img src="{{ public_path($contrat->signature_agent_immobilier) }}"
+                                            alt="Signature Agent Immobilier"
+                                            style="max-width: 100%; max-height: 120px;">
                                     @endif
-                                    <p><strong>{{ $bien->agent_immobilier->nom_admin }} {{ $bien->agent_immobilier->prenom_admin }}</strong></p>
+                                    <p><strong>{{ $bien->agent_immobilier->nom_admin }}
+                                            {{ $bien->agent_immobilier->prenom_admin }}</strong></p>
                                 </td>
                                 {{-- border: 1px dashed #007bff; --}}
                                 <td style="width: 50%; text-align: center;  padding: 15px; ">
                                     <p class="font-weight-bold">Locataire</p>
                                     @if ($contrat->signature_locataire)
-                                        <img src="{{ public_path($contrat->signature_locataire) }}" alt="Signature Locataire" style="max-width: 100%; max-height: 120px;">
+                                        <img src="{{ public_path($contrat->signature_locataire) }}"
+                                            alt="Signature Locataire" style="max-width: 100%; max-height: 120px;">
                                     @endif
-                                    <p><strong>{{ $locataireAssigné->locataire->nom }} {{ $locataireAssigné->locataire->prenom }}</strong></p>
+                                    <p><strong>{{ $locataireAssigné->locataire->nom }}
+                                            {{ $locataireAssigné->locataire->prenom }}</strong></p>
                                 </td>
                             </tr>
                         </table>
                     </div>
-
-
-
                 @else
                     <p class="text-center">Aucun contrat trouvé.</p>
             @endif

@@ -368,16 +368,6 @@ $frequences = [
                                                 {{ $article->pivot->titre_article }}</strong></h6>
                                         <p>{{ $article->pivot->contenu_article }}</p>
 
-                                        {{-- @if (Auth::user()->id_role === 3 && !$contrat->signature_locataire)
-                                            <form
-                                                action="{{ route('contrats.detachArticle', ['contratId' => $contrat->id, 'articleId' => $article->id]) }}"
-                                                method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger">Retirer</button>
-
-                                            </form>
-                                        @endif --}}
                                         @if (Auth::user()->id_role === 3 && !$contrat->signature_locataire)
                                             <form
                                                 action="{{ route('contrats.detachArticle', ['contratId' => $contrat->id, 'articleId' => $article->id]) }}"
