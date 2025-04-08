@@ -179,9 +179,7 @@
                                     </div>
                                 </div>
 
-                                <!-- Statut du Contrat -->
-                                <input type="hidden" name="statut_contrat" id="statut_contrat"
-                                value="Active">
+
                                 {{-- <div class="col-md-6">
                                     <label for="statut_contrat" class="form-label fw-bold">Statut du Contrat</label>
                                     <select name="statut_contrat" id="statut_contrat" class="form-select" required>

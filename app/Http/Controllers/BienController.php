@@ -143,6 +143,7 @@ class BienController extends Controller
         // Sélectionner les contrats de bail liés à ce bien et locataire
         $contrat = ContratsDeBail::where('bien_id', $bien->id)
             ->where('locataire_id', $locataireAssigné?->locataire->id)
+            ->where('statut_contrat', 'actif')
             ->with(['articles', 'articlesSpecifiques']) // Charge les articles liés au contrat
             ->first();
 
@@ -150,6 +151,22 @@ class BienController extends Controller
         if ($contrat) {
             $articles = $contrat->articles; // Relation définie dans le modèle ContratsDeBail
         }
+
+        //$frequence utiliser dans l'afficharge de contrat de bail
+        // Convertir la fréquence en jours si c'est une période (mois, bimestre, trimestre)
+        $frequences = [
+            'mois' => 30,
+            'bimestre' => 60,
+            'trimestre' => 90,
+            'semestriel' => 180, // Virgule ajoutée ici
+            'annuel' => 360,
+        ];
+
+        // Par défaut, la valeur brute est utilisée si la clé n'est pas reconnue
+            $delai_retard =
+                $frequences[$contrat?->frequence_paiement] ?? $contrat?->frequence_paiement;
+
+
 
         // Gérer les notifications
         if (request()->has('notification_id')) {
@@ -163,6 +180,8 @@ class BienController extends Controller
             'bien' => $bien,
             'locataireAssigné' => $locataireAssigné,
             'contrat' => $contrat,
+            'frequences' => $frequences,
+            'delai_retard' => $delai_retard,
             'articles' => $contrat?->articles ?? [],
         ]);
     }

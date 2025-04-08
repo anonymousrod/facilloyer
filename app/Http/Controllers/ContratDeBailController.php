@@ -60,7 +60,7 @@ class ContratDeBailController extends Controller
             'frequence_paiement' => 'required|string',
             'penalite_retard' => 'nullable|numeric',
             'mode_paiement' => 'required|string',
-            'statut_contrat' => 'required|string',
+            // 'statut_contrat' => 'required|string',
         ]);
 
         // Création du contrat de bail
@@ -82,7 +82,7 @@ class ContratDeBailController extends Controller
             'mode_paiement' => $request->mode_paiement,
             'renouvellement_automatique' => $request->has('renouvellement_automatique'),
             'ajouter_articles_par_defaut' => $request->has('ajouter_articles_par_defaut'),
-            'statut_contrat' => $request->statut_contrat,
+            // 'statut_contrat' => $request->statut_contrat,
         ]);
         // Si l'option est activée, on ajoute les articles par défaut
         $contratDeBail->ajouterArticlesParDefaut();

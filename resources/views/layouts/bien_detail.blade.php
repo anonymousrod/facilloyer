@@ -78,11 +78,11 @@
 
                             <!-- Actions -->
                             <div class="d-flex flex-wrap justify-content-center gap-2 mt-4">
-                                <a href="{{ route('biens.edit', $bien->id) }}" class="btn btn-link text-primary"
-                                    title="Modifier">
-                                    <i class="bi bi-pencil-square" style="font-size: 1.5rem;"></i>
-                                </a>
                                 @if (!$contrat)
+                                    <a href="{{ route('biens.edit', $bien->id) }}" class="btn btn-link text-primary"
+                                        title="Modifier">
+                                        <i class="bi bi-pencil-square" style="font-size: 1.5rem;"></i>
+                                    </a>
                                     <form action="{{ route('biens.destroy', $bien->id) }}" method="POST"
                                         onsubmit="return confirm('Voulez-vous vraiment supprimer ce bien ?');">
                                         @csrf
@@ -93,20 +93,18 @@
                                     </form>
                                 @endif
                                 @if ($locataireAssigné)
-                                    <!-- Si un locataire est déjà assigné -->
-                                    <form action="{{ route('unassign.locataire', $bien->id) }}" method="POST"
-                                        onsubmit="return confirm('Voulez-vous vraiment désassigner ce locataire ?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-link text-warning"
-                                            title="Désassigner le locataire">
-                                            <i class="bi bi-person-dash" style="font-size: 1.5rem;"></i>
-                                        </button>
-                                    </form>
+
                                     @if (!$contrat)
-                                        {{-- <a href="{{ route('contrat.edit', $contrat->id) }}" class="btn btn-link text-warning" title="Modifier le contrat de bail">
-                                        <i class="bi bi-pencil-square" style="font-size: 1.5rem;"></i> Modifier le contrat de bail
-                                    </a> --}}
+                                        <!-- Si un locataire est déjà assigné -->
+                                        <form action="{{ route('unassign.locataire', $bien->id) }}" method="POST"
+                                            onsubmit="return confirm('Voulez-vous vraiment désassigner ce locataire ?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-link text-warning"
+                                                title="Désassigner le locataire">
+                                                <i class="bi bi-person-dash" style="font-size: 1.5rem;"></i>
+                                            </button>
+                                        </form>
                                         <a href="{{ route('contrat.create', ['bien_id' => $bien->id, 'locataire_id' => $locataireAssigné->locataire->id ?? null]) }}"
                                             class="btn btn-link text-info" title="Créer un contrat de bail">
                                             <i class="bi bi-file-earmark-text" style="font-size: 1.5rem;"></i> Créer un
@@ -132,7 +130,9 @@
                 <div class="card mb-4">
 
                     <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
-                        <h5 class="card-title m-0">Contrat de Location et gestion de ses articles</h5>
+                        <h5 class="card-title m-0">
+                            {{ Auth::user()->id_role == 3 ? 'Contrat de Location et gestion de ses articles' : 'Contrat de Location' }}
+                        </h5>
 
                         @if ($contrat && Auth::user()->id_role === 3 && !$contrat->signature_locataire)
                             <div class="d-flex gap-3 flex-wrap">
@@ -152,11 +152,9 @@
                             </div>
                         @endif
                         @if (
-                                $contrat?->signature_locataire &&
+                            $contrat?->signature_locataire &&
                                 $contrat?->signature_agent_immobilier &&
-                                !$contrat?->modificationRequests->where('statut', 'en_attente')->count()
-                            )
-
+                                !$contrat?->modificationRequests->where('statut', 'en_attente')->count())
                             <div class="d-flex gap-3 flex-wrap">
                                 <button type="button" class="btn p-0 border-0 d-flex align-items-center text-info"
                                     data-bs-toggle="modal" data-bs-target="#modificationModal">
@@ -308,28 +306,13 @@
 
                                 <h6><strong><u>ARTICLE 4</u> : LOYER ET MODALITÉS DE PAIEMENT</strong> </h6>
 
-                                @php
-                                    // Convertir la fréquence en jours si c'est une période (mois, bimestre, trimestre)
-$frequences = [
-    'mois' => 30,
-    'bimestre' => 60,
-    'trimestre' => 90,
-    'semestriel' => 180, // Virgule ajoutée ici
-    'annuel' => 360,
-];
-
-// Par défaut, la valeur brute est utilisée si la clé n'est pas reconnue
-                                    $delai_retard =
-                                        $frequences[$contrat->frequence_paiement] ?? $contrat->frequence_paiement;
-
-                                @endphp
 
 
                                 <p>
                                     1. Le présent contrat est consenti et accepté pour un loyer mensuel de
                                     <strong>{{ number_format($bien->loyer_mensuel, 2) }} Francs CFA</strong> Payable par
-                                    <strong>{{ $contrat->frequence_paiement }}</strong> et d'avance
-                                    soit <strong>{{ $contrat->montant_total_frequence }}</strong> Francs CFA.
+                                    {{-- <strong>{{ $contrat->frequence_paiement }}</strong> --}} <strong>mois</strong> et d'avance
+                                    {{-- soit <strong>{{ $contrat->montant_total_frequence }}</strong> Francs CFA --}}.
                                     Ce loyer est payable au plus tard le
                                     <strong>{{ $contrat->date_debut->addMonth(1)->day }}ème
                                         jour</strong> de chaque mois.
