@@ -280,27 +280,88 @@ class PaiementController extends Controller
 
     // ETAPE DE PAIEMENT   FONCTION 01
 
+    // public function trouverPeriode(Request $request)
+    // {
+    //     // Récupération de l'utilisateur connecté
+    //     $user = auth()->user();
+
+    //     // Vérification que l'utilisateur a bien un locataire associé
+    //     $locataire = $user->locataires()->first();
+    //     if (!$locataire) {
+    //         return redirect()->route('dashboard')->with('error', '❌ Aucun locataire trouvé pour votre compte.');
+    //     }
+
+    //     // Récupération du contrat de bail actif du locataire
+    //     $contratBail = $locataire->contratsDeBail()->where('statut_contrat', '<>', 'Résilié')->first();
+    //     if (!$contratBail) {
+    //         return redirect()->route('dashboard')->with('error', '❌ Vous n\'avez pas de contrat de bail actif.');
+    //     }
+
+    //     // Date de début du contrat de bail
+    //     $dateDebutContrat = Carbon::parse($contratBail->date_debut);
+
+    //     // Recherche de la période en cours
+    //     $periode = 1;
+    //     $dateDebutPeriode = $dateDebutContrat->copy();
+    //     $dateFinPeriode = $dateDebutPeriode->copy()->addMonth();
+
+    //     while (!now()->between($dateDebutPeriode, $dateFinPeriode)) {
+    //         $periode++;
+    //         $dateDebutPeriode = $dateDebutContrat->copy()->addMonths($periode - 1);
+    //         $dateFinPeriode = $dateDebutPeriode->copy()->addMonth();
+    //     }
+
+    //     // Vérification si la période existe déjà dans la table 'gestion_periode'
+    //     $periodeExistante = GestionPeriode::where('locataire_id', $locataire->id)
+    //         ->where('date_debut_periode', $dateDebutPeriode)
+    //         ->where('date_fin_periode', $dateFinPeriode)
+    //         ->first();
+
+    //     if ($periodeExistante) {
+    //         // La période existe déjà, on retourne les informations
+    //         return view('periodes.show', [
+    //             'periode' => $periodeExistante,
+    //         ]);
+    //     } else {
+    //         // La période n'existe pas, on la crée
+    //         $nouvellePeriode = new GestionPeriode();
+    //         $nouvellePeriode->locataire_id = $locataire->id; // ID du locataire connecté
+    //         $nouvellePeriode->contrat_de_bail_id = $contratBail->id; // ID du contrat de bail
+    //         $nouvellePeriode->bien_id = $contratBail->bien_id; // ID du bien associé au contrat
+    //         $nouvellePeriode->date_debut_periode = $dateDebutPeriode; // Date de début de la période
+    //         $nouvellePeriode->date_fin_periode = $dateFinPeriode; // Date de fin de la période
+    //         $nouvellePeriode->montant_total_periode = 0; // Montant total initialisé à 0
+    //         $nouvellePeriode->complement_periode = 0; // Complément initialisé à 0
+    //         $nouvellePeriode->montant_restant_periode = 0; // Montant restant initialisé à 0
+    //         $nouvellePeriode->save();
+
+    //         return view('periodes.show', [
+    //             'periode' => $nouvellePeriode,
+    //         ]);
+    //     }
+    // }
+
     public function trouverPeriode(Request $request)
     {
-        // Récupération de l'utilisateur connecté
         $user = auth()->user();
-
-        // Vérification que l'utilisateur a bien un locataire associé
         $locataire = $user->locataires()->first();
+
         if (!$locataire) {
-            return response()->json(['message' => 'Aucun locataire trouvé pour cet utilisateur.'], 404);
+            return redirect()->route('dashboard')->with('error', '❌ Aucun locataire trouvé pour votre compte.');
         }
 
-        // Récupération du contrat de bail actif du locataire
         $contratBail = $locataire->contratsDeBail()->where('statut_contrat', '<>', 'Résilié')->first();
+
         if (!$contratBail) {
-            return response()->json(['message' => 'Aucun contrat de bail actif trouvé'], 404);
+            // Pas de contrat actif, on retourne la vue avec un message d'info
+            return view('periodes.show', [
+                'periode' => null,
+                'message' => "⚠️ Vous n'avez pas de contrat de bail actif.",
+            ]);
         }
 
-        // Date de début du contrat de bail
+        // Début période
         $dateDebutContrat = Carbon::parse($contratBail->date_debut);
-
-        // Recherche de la période en cours
         $periode = 1;
         $dateDebutPeriode = $dateDebutContrat->copy();
         $dateFinPeriode = $dateDebutPeriode->copy()->addMonth();
@@ -311,33 +372,26 @@ class PaiementController extends Controller
             $dateFinPeriode = $dateDebutPeriode->copy()->addMonth();
         }
 
-        // Vérification si la période existe déjà dans la table 'gestion_periode'
         $periodeExistante = GestionPeriode::where('locataire_id', $locataire->id)
             ->where('date_debut_periode', $dateDebutPeriode)
             ->where('date_fin_periode', $dateFinPeriode)
             ->first();
 
         if ($periodeExistante) {
-            // La période existe déjà, on retourne les informations
-            return view('periodes.show', [
-                'periode' => $periodeExistante,
-            ]);
+            return view('periodes.show', ['periode' => $periodeExistante]);
         } else {
-            // La période n'existe pas, on la crée
             $nouvellePeriode = new GestionPeriode();
-            $nouvellePeriode->locataire_id = $locataire->id; // ID du locataire connecté
-            $nouvellePeriode->contrat_de_bail_id = $contratBail->id; // ID du contrat de bail
-            $nouvellePeriode->bien_id = $contratBail->bien_id; // ID du bien associé au contrat
-            $nouvellePeriode->date_debut_periode = $dateDebutPeriode; // Date de début de la période
-            $nouvellePeriode->date_fin_periode = $dateFinPeriode; // Date de fin de la période
-            $nouvellePeriode->montant_total_periode = 0; // Montant total initialisé à 0
-            $nouvellePeriode->complement_periode = 0; // Complément initialisé à 0
-            $nouvellePeriode->montant_restant_periode = 0; // Montant restant initialisé à 0
+            $nouvellePeriode->locataire_id = $locataire->id;
+            $nouvellePeriode->contrat_de_bail_id = $contratBail->id;
+            $nouvellePeriode->bien_id = $contratBail->bien_id;
+            $nouvellePeriode->date_debut_periode = $dateDebutPeriode;
+            $nouvellePeriode->date_fin_periode = $dateFinPeriode;
+            $nouvellePeriode->montant_total_periode = 0;
+            $nouvellePeriode->complement_periode = 0;
+            $nouvellePeriode->montant_restant_periode = 0;
             $nouvellePeriode->save();
 
-            return view('periodes.show', [
-                'periode' => $nouvellePeriode,
-            ]);
+            return view('periodes.show', ['periode' => $nouvellePeriode]);
         }
     }
 
@@ -345,7 +399,8 @@ class PaiementController extends Controller
 
 
 
-    //ETAPE DE PAOEMENT FONCTION 02
+
+    //ETAPE DE PAIEMENT FONCTION 02
 
     public function partiepaiement(Request $request)
     {
@@ -355,7 +410,7 @@ class PaiementController extends Controller
         $locataire = Locataire::where('user_id', $user->id)->first();
 
         if (!$locataire) {
-            return response()->json(['message' => 'Aucun locataire associé à cet utilisateur.'], 404);
+            return redirect()->route('dashboard')->with('error', '❌ Aucun contrat de bail ou bien associé trouvé.');
         }
 
         $locataireId = $locataire->id; // ID du locataire
@@ -366,7 +421,7 @@ class PaiementController extends Controller
             ->first();
 
         if (!$gestionPeriode) {
-            return response()->json(['message' => 'Aucune période de gestion trouvée.'], 404);
+            return redirect()->route('dashboard')->with('error', '❌ Aucune période de gestion n\'a été trouvée.');
         }
 
         // Vérification du montant total de la période
@@ -390,7 +445,7 @@ class PaiementController extends Controller
                     ->first();
 
                 if (!$contrat || !$contrat->bien) {
-                    return response()->json(['message' => 'Aucun contrat de bail ou bien associé trouvé.'], 404);
+                    return redirect()->route('dashboard')->with('error', '❌ Aucun contrat de bail ou bien associé trouvé.');
                 }
 
                 $loyerMensuel = $contrat->bien->loyer_mensuel;

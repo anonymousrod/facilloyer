@@ -23,7 +23,6 @@ return new class extends Migration
             $table->float('caution_eau')->nullable();
             $table->float('caution_electricite')->nullable();
             // $table->string('adresse_bien');
-
             //new
             $table->date('date_debut');//du contrat
             $table->date('date_fin')->nullable();//du contrat
