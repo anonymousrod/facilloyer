@@ -150,27 +150,27 @@
 
                     <h6><strong><u>ARTICLE 4</u> : LOYER ET MODALITÉS DE PAIEMENT</strong> </h6>
 
-                    @php
+                    {{-- @php
                         // Convertir la fréquence en jours si c'est une période (mois, bimestre, trimestre)
-$frequences = [
-    'mois' => 30,
-    'bimestre' => 60,
-    'trimestre' => 90,
-    'semestriel' => 180, // Virgule ajoutée ici
-    'annuel' => 360,
-];
+                        $frequences = [
+                            'mois' => 30,
+                            'bimestre' => 60,
+                            'trimestre' => 90,
+                            'semestriel' => 180, // Virgule ajoutée ici
+                            'annuel' => 360,
+                        ];
 
-// Par défaut, la valeur brute est utilisée si la clé n'est pas reconnue
-                        $delai_retard = $frequences[$contrat->frequence_paiement] ?? $contrat->frequence_paiement;
+                        // Par défaut, la valeur brute est utilisée si la clé n'est pas reconnue
+                                                $delai_retard = $frequences[$contrat->frequence_paiement] ?? $contrat->frequence_paiement;
 
-                    @endphp
+                    @endphp --}}
 
 
                     <p>
                         1. Le présent contrat est consenti et accepté pour un loyer mensuel de
                         <strong>{{ number_format($bien->loyer_mensuel, 2) }} Francs CFA</strong> Payable par
-                        <strong>{{ $contrat->frequence_paiement }}</strong> et d'avance
-                        soit <strong>{{ $contrat->montant_total_frequence }}</strong> Francs CFA.
+                        {{-- <strong>{{ $contrat->frequence_paiement }}</strong> --}} <strong>mois</strong>  et d'avance
+                        {{-- soit <strong>{{ $contrat->montant_total_frequence }}</strong> Francs CFA--}}.
                         Ce loyer est payable au plus tard le
                         <strong>{{ $contrat->date_debut->addMonth(1)->day }}ème
                             jour</strong> de chaque mois.
@@ -235,7 +235,9 @@ $frequences = [
                     <p>En foi de quoi les parties contractantes ont opposé leurs noms, cachets et signatures
                     </p>
                     <p>
-                        Fait en trois (03) exemplaires originaux, remis à chaque partie.
+                        Ce contrat numérique tient lieu d’original pour les deux parties et peut être exporté à
+                        tout moment par chacune d’elles depuis leur espace personnel sur la plateforme
+                        {{ config('app.name') }}.
                     </p>
 
                     <p class="text-end m-5 mt-1 mb-1">À <strong>{{ $contrat->lieu_signature }}</strong>, le

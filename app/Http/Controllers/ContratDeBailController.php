@@ -183,6 +183,22 @@ class ContratDeBailController extends Controller
         if ($contrat) {
             $articles = $contrat->articles; // Relation définie dans le modèle ContratsDeBail
         }
+        //$frequence utiliser dans l'afficharge de contrat de bail
+        // Convertir la fréquence en jours si c'est une période (mois, bimestre, trimestre)
+        $frequences = [
+            'mois' => 30,
+            'bimestre' => 60,
+            'trimestre' => 90,
+            'semestriel' => 180, // Virgule ajoutée ici
+            'annuel' => 360,
+        ];
+
+        // Par défaut, la valeur brute est utilisée si la clé n'est pas reconnue
+        $delai_retard =
+            $frequences[$contrat?->frequence_paiement] ?? $contrat?->frequence_paiement;
+
+
+
 
 
 
@@ -191,6 +207,7 @@ class ContratDeBailController extends Controller
             'bien' => $bien,
             'locataireAssigné' => $locataireAssigné,
             'contrat' => $contrat,
+            'delai_retard' => $delai_retard,
             'articles' => $contrat?->articles ?? [],
         ]);
 

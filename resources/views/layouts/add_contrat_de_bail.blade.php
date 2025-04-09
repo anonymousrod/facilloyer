@@ -81,8 +81,11 @@
                                 </div>
 
                                 <!-- Date de Signature (Champ Caché) -->
-                                <input type="hidden" name="date_signature" id="date_signature"
-                                    value="{{ now()->format('Y-m-d') }}">
+                                <div class="col-md-6">
+                                    <label for="date_signature" class="form-label fw-bold">Date de création du contrat</label>
+                                    <input type="date" class="form-control" name="date_signature" id="date_signature"
+                                        required>
+                                </div>
 
                                 <hr class="custom-hr">
 
@@ -92,7 +95,6 @@
                                     <input type="text" class="form-control" id="locataire_id"
                                         value="{{ $locataire->nom }} {{ $locataire->prenom }}" readonly>
                                     <input type="hidden" name="locataire_id" value="{{ $locataire->id }}">
-
                                 </div>
 
                                 <!-- Date de Début du Contrat -->
@@ -111,13 +113,13 @@
                                 <div class="col-md-6">
                                     <label for="frequence_paiement" class="form-label fw-bold">Fréquence de
                                         Paiement</label>
-                                    <select name="frequence_paiement" id="frequence_paiement" class="form-select"
-                                        required>
+                                    <select type="hidden" name="frequence_paiement" id="frequence_paiement"
+                                        class="form-select" required>
                                         <option value="mois">Mois</option>
-                                        <option value="annuel">Annuel</option>
+                                        {{-- <option value="annuel">Annuel</option>
                                         <option value="bimestre">Bimestre</option>
                                         <option value="trimestre">Trimestre</option>
-                                        <option value="semestriel">Semestriel</option>
+                                        <option value="semestriel">Semestriel</option> --}}
                                     </select>
                                 </div>
 
@@ -166,14 +168,16 @@
                                 <!-- Renouvellement Automatique -->
                                 <div class="col-md-6">
                                     <div>
-                                        <label for="renouvellement_automatique" class="form-label fw-bold">Renouvellement
-                                            Automatique</label>
+                                        <!-- Champ pour mise a jour concernant renouvellement_automatique -->
+                                        <label for="renouvellement_automatique" class="form-label fw-bold">Renouvellable
+                                        </label>
                                         <input type="checkbox" name="renouvellement_automatique"
                                             id="renouvellement_automatique">
                                     </div>
                                     <div class="mt-2">
-                                        <label for="ajouter_articles_par_defaut" class="form-label fw-bold">Ajouter des articles par defaut
-                                            </label>
+                                        <label for="ajouter_articles_par_defaut" class="form-label fw-bold">Ajouter des
+                                            articles par defaut
+                                        </label>
                                         <input type="checkbox" name="ajouter_articles_par_defaut"
                                             id="ajouter_articles_par_defaut">
                                     </div>

@@ -113,7 +113,7 @@
     <div class="filigrane-drapeau"></div>
 
     <!-- Filigrane "FACILOYER" -->
-    <div class="filigrane-faciloyer">FACILOYER</div>
+    <div class="filigrane-faciloyer">{{ config('app.name') }}</div>
 
     <div class="container">
         <!-- En-tête du contrat -->
@@ -185,7 +185,7 @@
 
         <!-- Footer -->
         <div class="footer">
-            <p>&copy; Faciloyer - Tous droits réservés</p>
+            <p>&copy; {{ config('app.name') }} - Tous droits réservés</p>
         </div>
     </div>
 

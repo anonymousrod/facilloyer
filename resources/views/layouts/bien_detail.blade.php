@@ -455,7 +455,9 @@
                                 <p>En fois de quoi les parties contractantes ont opposé leurs noms, cachets et signatures
                                 </p>
                                 <p>
-                                    Fait en trois (03) exemlaires originaux, remis à chaque partie.
+                                    Ce contrat numérique tient lieu d’original pour les deux parties et peut être exporté à
+                                    tout moment par chacune d’elles depuis leur espace personnel sur la plateforme
+                                    {{ config('app.name') }}.
                                 </p>
 
                                 <p class="text-end m-5 mt-1 mb-1">A <strong>{{ $contrat->lieu_signature }}</strong>, le
