@@ -22,8 +22,10 @@ class ContratDeBailController extends Controller
      */
     public function index()
     {
-        //
+        $contrats = ContratsDeBail::with(['bien', 'locataire'])->get();
+        return view('layouts.list_all_contrat_by_admin', compact('contrats'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -196,11 +198,6 @@ class ContratDeBailController extends Controller
         // Par défaut, la valeur brute est utilisée si la clé n'est pas reconnue
         $delai_retard =
             $frequences[$contrat?->frequence_paiement] ?? $contrat?->frequence_paiement;
-
-
-
-
-
 
         // Générer le PDF
         $pdf = PDF::loadView('exports.contrat_pdf', [

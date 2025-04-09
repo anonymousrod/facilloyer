@@ -35,7 +35,7 @@ return new class extends Migration
             $table->boolean('renouvellement_automatique')->default(false); // Renouvellement automatique
             //ajouter article ou pas
             $table->boolean('ajouter_articles_par_defaut')->default(false);
-            $table->string('statut_contrat')->default('actif'); // Statut du contrat : actif, terminé, etc.
+            $table->string('statut_contrat')->default('Actif'); // Statut du contrat : actif, terminé, etc.
             // Signatures
             $table->string('lieu_signature');
             $table->date('date_signature');

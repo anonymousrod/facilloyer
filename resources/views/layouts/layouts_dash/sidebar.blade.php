@@ -88,6 +88,14 @@
                             </a>
                         </li><!--end nav-item-->
 
+                        <!-- Tous les contrats de bail -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('contrat.index') }}">
+                                <i class="fas fa-book menu-icon"></i> <!-- Icône pour audit contrats -->
+                                <span>Voir tous les contrats de bail</span>
+                            </a>
+                        </li><!--end nav-item-->
+
                         <!-- Nouveau menu 1 : Gestion de la maintenance -->
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.demandes.grouped') }} ">

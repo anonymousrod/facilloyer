@@ -151,6 +151,7 @@
                                 </form>
                             </div>
                         @endif
+                        {{-- if pour modificationrequest --}}
                         @if (
                             $contrat?->signature_locataire &&
                                 $contrat?->signature_agent_immobilier &&
@@ -209,7 +210,10 @@
 
                     <div class="card-body">
 
-                        @if ($contrat?->signature_agent_immobilier || (Auth::user()->id_role === 3 && $contrat))
+                        @if (
+                            ($contrat?->signature_agent_immobilier && Auth::user()->id_role != 1 )||
+                                (Auth::user()->id_role === 3 && $contrat) ||
+                                (Auth::user()->id_role === 1 && $contrat->signature_agent_immobilier && $contrat->signature_locataire))
                             <h6 class="card-subtitle mb-2 text-muted">Contrat de Location entre l’Agent Immobilier et le
                                 Locataire</h6>
                             <p>ENTRE LES SOUSSIGNÉS :</p>
@@ -228,11 +232,13 @@
                             </p>
 
                             <p>
-                                <strong>{{ $locataireAssigné->locataire->nom }} {{ $locataireAssigné->locataire->prenom }}
+                                <strong>{{ $locataireAssigné ? $locataireAssigné->locataire->nom : $contrat->locataire->nom }}
+                                    {{ $locataireAssigné ? $locataireAssigné->locataire->prenom : $contrat->locataire->prenom }}
                                     ,</strong> né(e) le
-                                <strong>{{ $locataireAssigné->locataire->date_naissance->format('d/m/Y') }}</strong>,
+                                <strong>{{ $locataireAssigné ? $locataireAssigné->locataire->date_naissance->format('d/m/Y') : $contrat->locataire->date_naissance->format('d/m/Y') }}</strong>,
                                 </strong>, domicilié(e) à
-                                <strong>{{ $locataireAssigné->locataire->adresse }}</strong>, ci-après désigné “Le
+                                <strong>{{ $locataireAssigné ? $locataireAssigné->locataire->adresse : $contrat->locataire->adresse }}</strong>,
+                                ci-après désigné “Le
                                 Locataire”,
                                 D’AUTRE PART,
                             </p>
@@ -517,8 +523,9 @@
                                             <p>Aucune signature trouvée.</p>
                                             <strong>
                                                 <u>
-                                                    <p>{{ $locataireAssigné->locataire->nom }}
-                                                        {{ $locataireAssigné->locataire->prenom }}</p>
+                                                    <p>{{ $locataireAssigné ? $locataireAssigné->locataire->nom : $contrat->locataire->nom }}
+                                                        {{ $locataireAssigné ? $locataireAssigné->locataire->prenom : $contrat->locataire->prenom }}
+                                                    </p>
                                                 </u>
                                             </strong>
                                             @if (Auth::user()->id_role == 2)
@@ -561,21 +568,40 @@
             <div class="col-lg-4 col-md-12">
                 <!-- Première carte : Locataire Assigné -->
                 <div class="card shadow-sm mb-3">
-                    <div class="body text-center">
-                        @if ($locataireAssigné)
-                            <a href="#"><img src="{{ asset($locataireAssigné->locataire->photo_profil) }}"
-                                    alt="Photo de {{ $locataireAssigné->locataire->nom }}"
-                                    class=" only rounded-circle mb-3"
-                                    style="width: 100px; height: 100px; object-fit: cover;"></a>
-                            <h4 class="text-primary">{{ $locataireAssigné->locataire->nom }}
-                                {{ $locataireAssigné->locataire->prenom }}</h4>
-                            <p class="text-muted mb-3">{{ $locataireAssigné->locataire->user->email }}</p>
-                            <span class="badge bg-success">Locataire Assigné</span>
-                        @else
-                            <h4 class="text-danger">Aucun locataire assigné</h4>
-                            <p class="text-muted">Assignez un locataire pour voir ses informations ici.</p>
-                        @endif
-                    </div>
+                    @if (Auth::user()->id_role != 1)
+                        <div class="body text-center">
+                            @if ($locataireAssigné)
+                                <a href="#"><img src="{{ asset($locataireAssigné->locataire->photo_profil) }}"
+                                        alt="Photo de {{ $locataireAssigné->locataire->nom }}"
+                                        class=" only rounded-circle mb-3"
+                                        style="width: 100px; height: 100px; object-fit: cover;"></a>
+                                <h4 class="text-primary">{{ $locataireAssigné->locataire->nom }}
+                                    {{ $locataireAssigné->locataire->prenom }}</h4>
+                                <p class="text-muted mb-3">{{ $locataireAssigné->locataire->user->email }}</p>
+                                <span class="badge bg-success">Locataire Assigné</span>
+                            @else
+                                <h4 class="text-danger">Aucun locataire assigné</h4>
+                                <p class="text-muted">Assignez un locataire pour voir ses informations ici.</p>
+                            @endif
+                        </div>
+                    @else
+                        <div class="body text-center">
+                            @if ($contrat)
+                                <a href="#"><img src="{{ asset($contrat->locataire->photo_profil) }}"
+                                        alt="Photo de {{ $contrat->locataire->nom }}" class=" only rounded-circle mb-3"
+                                        style="width: 100px; height: 100px; object-fit: cover;"></a>
+                                <h4 class="text-primary">{{ $contrat->locataire->nom }}
+                                    {{ $contrat->locataire->prenom }}</h4>
+                                <p class="text-muted mb-3">{{ $contrat->locataire->user->email }}</p>
+                                <span class="badge bg-success">
+                                    {{ $contrat->statut_contrat == 'Actif' ? 'Locataire Assigné' : ($contrat->statut_contrat == 'Terminé' ? 'Ancien Locataire Assigné' : 'Ancien Locataire Assigné') }}
+                                </span>
+                            @else
+                                <h4 class="text-danger">Aucun locataire assigné</h4>
+                                <p class="text-muted">Assignez un locataire pour voir ses informations ici.</p>
+                            @endif
+                        </div>
+                    @endif
                 </div>
 
                 <!-- Deuxième carte : Informations du Bien -->

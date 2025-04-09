@@ -123,29 +123,27 @@ class BienController extends Controller
     // }
     public function show(string $bien_id, ?string $agent_id = null)
     {
-        // if (Auth::user()->id_role == 2) {
-        //     // Récupérer les articles liés à l'agent immobilier dans la table pivot
-        //     $articles = ArticleContratBail::where('agent_immobilier_id', $agent_id)->get();
-        // }
-        // if (Auth::user()->id_role == 3) {
-        //     // Récupérer l'ID de l'agent connecté
-        //     $agent_connecter = Auth::user()->agent_immobiliers->first()->id;
-        //     // Récupérer les articles par défaut associés à cet agent immobilier
-        //     $articles = ArticleContratBail::where('agent_immobilier_id', $agent_connecter)->get();
-        // }
-
         // Récupérer le bien
         $bien = Bien::findOrFail($bien_id);
 
         // Vérifier si un locataire est assigné à ce bien
         $locataireAssigné = LocataireBien::where('bien_id', $bien_id)->with('locataire')->first();
 
-        // Sélectionner les contrats de bail liés à ce bien et locataire
-        $contrat = ContratsDeBail::where('bien_id', $bien->id)
-            ->where('locataire_id', $locataireAssigné?->locataire->id)
-            ->where('statut_contrat', 'actif')
-            ->with(['articles', 'articlesSpecifiques']) // Charge les articles liés au contrat
-            ->first();
+
+        if (!Auth::user()->id_role === 1) {
+            // Sélectionner les contrats de bail liés à ce bien et locataire
+            $contrat = ContratsDeBail::where('bien_id', $bien->id)
+                ->where('locataire_id', $locataireAssigné?->locataire->id)
+                ->where('statut_contrat', 'Actif')
+                ->with(['articles', 'articlesSpecifiques']) // Charge les articles liés au contrat
+                ->first();
+        } else {
+            $contrat = ContratsDeBail::where('bien_id', $bien->id)
+                ->with(['articles', 'articlesSpecifiques']) // Charge les articles liés au contrat
+                ->first();
+        }
+
+
 
         // Récupérer les articles associés à ce contrat de bail à travers la table pivot
         if ($contrat) {
@@ -163,8 +161,8 @@ class BienController extends Controller
         ];
 
         // Par défaut, la valeur brute est utilisée si la clé n'est pas reconnue
-            $delai_retard =
-                $frequences[$contrat?->frequence_paiement] ?? $contrat?->frequence_paiement;
+        $delai_retard =
+            $frequences[$contrat?->frequence_paiement] ?? $contrat?->frequence_paiement;
 
 
 
