@@ -23,7 +23,7 @@ class ContratDeBailController extends Controller
     public function index()
     {
         $contrats = ContratsDeBail::with(['bien', 'locataire'])->get();
-        return view('layouts.list_all_contrat_by_admin', compact('contrats'));
+        return view('admin.contrats_de_bail.list_all_contrat_by_admin', compact('contrats'));
     }
 
 

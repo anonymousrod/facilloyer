@@ -155,6 +155,7 @@
                         @if (
                             $contrat?->signature_locataire &&
                                 $contrat?->signature_agent_immobilier &&
+                                Auth::user()->id_role !=1 &&
                                 !$contrat?->modificationRequests->where('statut', 'en_attente')->count())
                             <div class="d-flex gap-3 flex-wrap">
                                 <button type="button" class="btn p-0 border-0 d-flex align-items-center text-info"
@@ -211,7 +212,7 @@
                     <div class="card-body">
 
                         @if (
-                            ($contrat?->signature_agent_immobilier && Auth::user()->id_role != 1 )||
+                            ($contrat?->signature_agent_immobilier && Auth::user()->id_role != 1) ||
                                 (Auth::user()->id_role === 3 && $contrat) ||
                                 (Auth::user()->id_role === 1 && $contrat->signature_agent_immobilier && $contrat->signature_locataire))
                             <h6 class="card-subtitle mb-2 text-muted">Contrat de Location entre l’Agent Immobilier et le
