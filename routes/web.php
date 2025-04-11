@@ -236,6 +236,10 @@ Route::delete('/biens/{bien}/unassign-locataire', [LocataireBienController::clas
 
 //route contrat de bail
 Route::resource('/Contrat_de_bail', ContratDeBailController::class)->names('contrat');
+Route::put('/contrats/{id}/resilier', [ContratDeBailController::class, 'resilier'])
+    ->name('contrats.resilier')
+    ->middleware('auth');
+
 //route article
 Route::resource('/Article_contrat_bail', ArticleContratBailController::class)->names('article');
 Route::delete('/contrats/{contratId}/articles/{articleId}', [ContratDeBailController::class, 'detachArticle'])

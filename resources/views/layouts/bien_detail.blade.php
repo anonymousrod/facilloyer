@@ -155,7 +155,7 @@
                         @if (
                             $contrat?->signature_locataire &&
                                 $contrat?->signature_agent_immobilier &&
-                                Auth::user()->id_role !=1 &&
+                                Auth::user()->id_role != 1 &&
                                 !$contrat?->modificationRequests->where('statut', 'en_attente')->count())
                             <div class="d-flex gap-3 flex-wrap">
                                 <button type="button" class="btn p-0 border-0 d-flex align-items-center text-info"
@@ -172,6 +172,24 @@
                                     <i class="fas fa-clock text-warning me-1"></i>Demande de modification en attente
                                 </a>
                             </div>
+                        @endif
+
+                        @if (
+                            $contrat?->signature_locataire &&
+                                $contrat?->signature_agent_immobilier &&
+                                Auth::user()->id_role === 3 &&
+                                !$contrat?->modificationRequests->where('statut', 'en_attente')->count())
+                                <div class="d-flex ms-auto gap-3 flex-wrap">
+                                    <form action="{{ route('contrats.resilier', $contrat->id) }}" method="POST"
+                                        onsubmit="return confirm('Êtes-vous sûr de vouloir résilier ce contrat ?');"
+                                        style="display: inline-block;">
+                                        @csrf
+                                        @method('PUT')
+                                        <button type="submit" class="btn text-danger text-end text-decoration-none">
+                                            <i class="fas fa-ban text-danger me-1"></i> Résilier le contrat
+                                        </button>
+                                    </form>
+                                </div>
                         @endif
 
 
@@ -215,7 +233,7 @@
                             ($contrat?->signature_agent_immobilier && Auth::user()->id_role != 1) ||
                                 (Auth::user()->id_role === 3 && $contrat) ||
                                 (Auth::user()->id_role === 1 && $contrat->signature_agent_immobilier && $contrat->signature_locataire))
-                            <h6 class="card-subtitle mb-2 text-muted">Contrat de Location entre l’Agent Immobilier et le
+                            <h6 class="card-subtitle mb-2 mt-0 text-muted">Contrat de Location entre l’Agent Immobilier et le
                                 Locataire</h6>
                             <p>ENTRE LES SOUSSIGNÉS :</p>
 
@@ -516,8 +534,8 @@
                                                 alt="Signature Locataire" width="150">
                                             <strong>
                                                 <u>
-                                                    <p>{{ $locataireAssigné->locataire->nom }}
-                                                        {{ $locataireAssigné->locataire->prenom }}</p>
+                                                    <p>{{ $locataireAssigné ? $locataireAssigné->locataire->nom : $contrat->locataire->nom}}
+                                                        {{ $locataireAssigné ? $locataireAssigné->locataire->prenom : $contrat->locataire->prenom}}</p>
                                                 </u>
                                             </strong>
                                         @else
@@ -546,7 +564,7 @@
                             </div>
                             <button id="see-more-btn" class="btn btn-primary ">Voir plus</button>
                             @if ($contrat->signature_agent_immobilier && $contrat->signature_locataire)
-                                <a href="{{ route('contrat.export', ['bien_id' => $bien->id, 'agent_id' => $locataireAssigné->locataire->agent_immobilier->id]) }}"
+                                <a href="{{ route('contrat.export', ['bien_id' => $bien->id, 'agent_id' => $locataireAssigné ? $locataireAssigné->locataire->agent_immobilier->id : $contrat->locataire->agent_immobilier->id]) }}"
                                     class="btn btn-success">
                                     Exporter en PDF
                                 </a>

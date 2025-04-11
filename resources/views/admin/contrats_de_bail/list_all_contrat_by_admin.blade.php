@@ -48,7 +48,8 @@
                                             </td>
                                             {{-- Action --}}
                                             <td class="text-center align-middle">
-                                                <a href="{{ route('biens.show', ['bien_id' => $contrat->bien->id]) }}"
+                                                {{-- on vas envoyer l'id du contrat et non l'id du bien --}}
+                                                <a href="{{ route('biens.show', ['bien_id' => $contrat->id]) }}"
                                                     class="btn btn-outline-primary">
                                                     <span class="bi bi-info-circle-fill"></span>
                                                 </a>

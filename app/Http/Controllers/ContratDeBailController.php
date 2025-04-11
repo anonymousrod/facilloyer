@@ -269,4 +269,30 @@ class ContratDeBailController extends Controller
 
         return redirect()->back()->with('success', 'Article spécifique mis à jour.');
     }
+
+    //resiliation
+    public function resilier($id)
+    {
+        $contrat = ContratsDeBail::findOrFail($id);
+
+        // dd($contrat->bien);
+        // Vérifie que l'agent connecté est bien le propriétaire du bien lié au contrat
+        if (auth::user()->agent_immobiliers->first()?->id !== $contrat->bien->agent_immobilier_id) {
+            abort(403, 'Action non autorisée.');
+        }
+        // Mise à jour du statut du contrat
+        $contrat->statut_contrat = 'resilie';
+        $contrat->save();
+
+        // Suppression du lien dans locataire_bien
+        $locataireBien = LocataireBien::where('bien_id', $contrat->bien->id)->first();
+        if ($locataireBien) {
+            $locataireBien->delete();
+        }
+
+        return redirect()->route('biens.show', ['bien_id' => $contrat->bien->id])
+            ->with('success', 'Contrat résilié avec succès.');
+
+    }
+
 }

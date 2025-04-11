@@ -121,24 +121,34 @@ class BienController extends Controller
     //         'articles' => $articles,
     //     ]);
     // }
-    public function show(string $bien_id, ?string $agent_id = null)
+    public function show(string $bien_id)
     {
         // Récupérer le bien
-        $bien = Bien::findOrFail($bien_id);
+        if (Auth::user()->id_role === 1) {
+            # code...
+            $contratdebail = ContratsDeBail::findOrFail($bien_id);
+            $bien = Bien::where('id', $contratdebail->bien_id)->first();
+        } else {
+            # code...
+            $bien = Bien::findOrFail($bien_id);
+        }
+
 
         // Vérifier si un locataire est assigné à ce bien
         $locataireAssigné = LocataireBien::where('bien_id', $bien_id)->with('locataire')->first();
 
 
-        if (!Auth::user()->id_role === 1) {
+        if (Auth::user()->id_role === 1) {
+
+            //ici c'est l'id du contrat on vas recuperer et il sera noté $bien_id
+            $contrat = ContratsDeBail::where('id', $bien_id)
+                ->with(['articles', 'articlesSpecifiques']) // Charge les articles liés au contrat
+                ->first();
+        } else {
             // Sélectionner les contrats de bail liés à ce bien et locataire
             $contrat = ContratsDeBail::where('bien_id', $bien->id)
                 ->where('locataire_id', $locataireAssigné?->locataire->id)
                 ->where('statut_contrat', 'Actif')
-                ->with(['articles', 'articlesSpecifiques']) // Charge les articles liés au contrat
-                ->first();
-        } else {
-            $contrat = ContratsDeBail::where('bien_id', $bien->id)
                 ->with(['articles', 'articlesSpecifiques']) // Charge les articles liés au contrat
                 ->first();
         }
