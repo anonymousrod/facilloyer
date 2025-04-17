@@ -62,13 +62,4 @@ class Kernel extends HttpKernel
     ];
 
     //je n'ai rien fait au dessus
-    //c'est maintenant que j'ecris dans ce ficher
-    protected function schedule(Schedule $schedule)
-    {
-        // Exécuter la commande toutes les minutes
-        $schedule->command('payments:check-new')->everyMinute();
-        $schedule->command('rappel:loyer')->daily();
-
-    }
-
 }
