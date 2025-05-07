@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Hash;
 class LocataireController extends Controller
 {
 
-// Affiche les informations détaillées du locataire
+    // Affiche les informations détaillées du locataire
 
 
     public function showInformations($id)
@@ -33,13 +33,20 @@ class LocataireController extends Controller
             abort(404, "Locataire non trouvé avec l'ID $id");
         }
 
-    // Filtrer les paiements du mois en cours
-    $paiementsDuMois = Paiement::where('locataire_id', $locataire->id)
-        ->whereMonth('date_paiement', now()->month)
-        ->whereYear('date_paiement', now()->year)
-        ->get();
+        // Filtrer les paiements du mois en cours
+        $paiementsDuMois = Paiement::where('locataire_id', $locataire->id)
+            ->whereMonth('date_paiement', now()->month)
+            ->whereYear('date_paiement', now()->year)
+            ->get();
 
-        return view('locataire.locashow', compact('locataire', 'paiementsDuMois'));
+        $user = Auth::user();
+        $message = null;
+
+        if (!$user->statut) {
+            $message = "Votre compte est en attente d'activation par l'administrateur. Vous aurez accès aux autres fonctionnalités une fois activé.";
+        }
+
+        return view('locataire.locashow', compact('locataire', 'paiementsDuMois', 'message'));
     }
 
     public function showlocatairebien($id)
@@ -189,11 +196,11 @@ class LocataireController extends Controller
             'garant' => 'nullable|string|max:255',
             'photo_profil' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Max 2 MB pour la photo
         ]);
-    
+
         try {
             // Récupération du locataire
             $locataire = Locataire::findOrFail($id);
-    
+
             // Mise à jour des champs simples
             $locataire->nom = $request->nom;
             $locataire->prenom = $request->prenom;
@@ -205,17 +212,17 @@ class LocataireController extends Controller
             $locataire->nombre_personne_foyer = $request->nombre_personne_foyer;
             $locataire->statut_matrimoniale = $request->statut_matrimoniale;
             $locataire->garant = $request->garant;
-    
+
             // Gestion de la photo de profil
             if ($request->hasFile('photo_profil')) {
                 $photoProfilPath = $request->file('photo_profil')->store('photos_profil', 'public');
                 $storage = '/storage/';
                 $locataire->photo_profil = $storage . $photoProfilPath; // Met à jour la base de données
             }
-    
+
             // Sauvegarder les modifications
             $locataire->save();
-    
+
             // Retourner une réponse ou redirection
             return redirect()->route('locataire.locashow')->with('success', 'Vos informations ont été mises à jour avec succès.');
         } catch (\Exception $e) {
@@ -223,7 +230,7 @@ class LocataireController extends Controller
             return back()->with('error', 'Une erreur s\'est produite lors de la mise à jour. Veuillez réessayer.');
         }
     }
-    
+
 
 
     /**
