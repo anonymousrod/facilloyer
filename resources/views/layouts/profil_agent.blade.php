@@ -7,78 +7,77 @@
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
     @endif
-    <div class="container-xxl">
-
-        <div class="row justify-content-center">
+    <div class="container-xxl py-4">
+        {{-- Section Profil --}}
+        <div class="row justify-content-center mb-4">
             <div class="col-12">
-                <div class="card">
+                <div class="card shadow-sm border-0">
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col-lg-4 align-self-center mb-3 mb-lg-0">
-                                <div class="d-flex align-items-center flex-row flex-wrap">
-                                    <div class="position-relative me-3">
-                                        <img src="{{ asset($agent->photo_profil) }}" alt="Photo de profil" height="120"
-                                            class="rounded-circle">
+                        <div class="row align-items-center">
+                            {{-- Photo de profil et informations principales --}}
+                            <div class="col-lg-4 text-center text-lg-start mb-3 mb-lg-0">
+                                <div class="position-relative d-inline-block">
+                                    <img src="{{ asset($agent->photo_profil) }}" alt="Photo de profil" height="120"
+                                        class="rounded-circle shadow-sm">
+                                </div>
+                                <div class="mt-3">
+                                    <h5 class="fw-bold fs-4 mb-1 text-primary">
+                                        {{ \Illuminate\Support\Str::words($agent->nom_agence, 2, '...') }}
+                                    </h5>
+                                    <p class="mb-0 text-muted">{{ $agent->nom_admin }} {{ $agent->prenom_admin }}</p>
+                                    <p class="text-muted mb-0">{{ $agent->telephone_agence }}</p>
+                                </div>
+                            </div>
+                            {{-- Statistiques principales --}}
+                            <div class="col-lg-8">
+                                <div class="d-flex justify-content-around text-center">
+                                    <div class="p-3">
+                                        <h5 class="fw-bold fs-3 text-success">{{ $agent->annee_experience }}</h5>
+                                        <p class="text-muted mb-0">Années d'expérience</p>
                                     </div>
-                                    <div class="">
-                                        <h5 class="fw-semibold fs-22 mb-1">
-                                            {{ \Illuminate\Support\Str::words($agent->nom_agence, 2, '...') }}</h5>
-                                        <p class="mb-0 text-muted fw-medium">{{ $agent->nom_admin }}
-                                            {{ $agent->prenom_admin }}</p>
-                                        <p class="text-muted mb-0 fw-medium">{{ $agent->telephone_agence }}</p>
+                                    <div class="p-3">
+                                        <h5 class="fw-bold fs-3 text-info">{{ $agent->nombre_bien_disponible }}</h5>
+                                        <p class="text-muted mb-0">Biens disponibles</p>
+                                    </div>
+                                    <div class="p-3">
+                                        <h5 class="fw-bold fs-3 text-warning">{{ $Nlocataire }}</h5>
+                                        <p class="text-muted mb-0">Locataires</p>
                                     </div>
                                 </div>
-                            </div><!--end col-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-                            <div class="col-lg-4 ms-auto align-self-center">
-                                <div class="d-flex justify-content-center">
-                                    <div class="border-dashed rounded border-theme-color p-2 me-2 flex-grow-1 flex-basis-0">
-                                        <h5 class="fw-semibold fs-22 mb-1">{{ $agent->annee_experience }}</h5>
-                                        <p class="text-muted mb-0 fw-medium">Années d'expérience</p>
-                                    </div>
-                                    <div class="border-dashed rounded border-theme-color p-2 me-2 flex-grow-1 flex-basis-0">
-                                        <h5 class="fw-semibold fs-22 mb-1">{{ $agent->nombre_bien_disponible }}</h5>
-                                        <p class="text-muted mb-0 fw-medium">Biens disponibles</p>
-                                    </div>
-                                    <div class="border-dashed rounded border-theme-color p-2 me-2 flex-grow-1 flex-basis-0">
-                                        <h5 class="fw-semibold fs-22 mb-1">{{ $Nlocataire }}</h5>
-                                        <p class="text-muted mb-0 fw-medium">locataires</p>
-                                    </div>
-                                </div>
-                            </div><!--end col-->
-                        </div><!--end row-->
-                    </div><!--end card-body-->
-                </div><!--end card-->
-            </div> <!--end col-->
-        </div><!--end row-->
-
+        {{-- Section Informations personnelles --}}
         <div class="row justify-content-center">
             <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="row align-items-center">
-                            <div class="col">
-                                <h4 class="card-title">Informations personnelles</h4>
-                            </div><!--end col-->
-                            <div class="col-auto">
-                                <a href="{{ route('agent_immobilier.create') }}"
-                                    class="float-end text-muted d-inline-flex text-decoration-underline"><i
-                                        class="iconoir-edit-pencil fs-18 me-1"></i>Modifier</a>
-                            </div><!--end col-->
-                        </div> <!--end row-->
-                    </div><!--end card-header-->
-                    <div class="card-body pt-0">
-                        <p><strong>Nom de l'agence:</strong> {{ $agent->nom_agence }}</p>
-                        <p><strong>Nom de l'administrateur:</strong> {{ $agent->nom_admin }} {{ $agent->prenom_admin }}
-                        </p>
-                        <p><strong>Adresse de l'agence:</strong> {{ $agent->adresse_agence }}</p>
-                        <p><strong>Territoire couvert:</strong> {{ $agent->territoire_couvert }}</p>
-                        <p><strong>Nombre de biens disponibles:</strong> {{ $agent->nombre_bien_disponible }}</p>
-                        <p><strong>Numéro de téléphone:</strong> {{ $agent->telephone_agence }}</p>
-                        <p><strong>Années d'expérience:</strong> {{ $agent->annee_experience }}</p>
-                    </div><!--end card-body-->
-                </div><!--end card-->
-            </div> <!--end col-->
-        </div><!--end row-->
-    </div><!-- container -->
+                <div class="card shadow-sm border-0">
+                    <div class="card-header d-flex justify-content-between align-items-center" style="background: linear-gradient(135deg, #28a745, #85e085);">
+                        <h4 class="card-title mb-0 text-white">Informations personnelles</h4>
+                        <a href="http://127.0.0.1:8000/agent-immobilier/create" class="btn btn-light btn-sm shadow-sm">
+                            <i class="iconoir-edit-pencil me-1"></i> Modifier
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <p><strong class="fs-5" style="color: #212121;">Nom de l'agence:</strong> {{ $agent->nom_agence }}</p>
+                                <p><strong class="fs-5" style="color: #212121;">Nom de l'administrateur:</strong> {{ $agent->nom_admin }} {{ $agent->prenom_admin }}</p>
+                                <p><strong class="fs-5" style="color: #212121;">Adresse de l'agence:</strong> {{ $agent->adresse_agence }}</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <p><strong class="fs-5" style="color: #212121;">Territoire couvert:</strong> {{ $agent->territoire_couvert }}</p>
+                                <p><strong class="fs-5" style="color: #212121;">Nombre de biens disponibles:</strong> {{ $agent->nombre_bien_disponible }}</p>
+                                <p><strong class="fs-5" style="color: #212121;">Numéro de téléphone:</strong> {{ $agent->telephone_agence }}</p>
+                                <p><strong class="fs-5" style="color: #212121;">Années d'expérience:</strong> {{ $agent->annee_experience }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
