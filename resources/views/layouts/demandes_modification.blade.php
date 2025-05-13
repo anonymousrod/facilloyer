@@ -1,175 +1,121 @@
 @extends('layouts.master_dash')
+
 @section('title', 'Gestion Agent Immobilier')
+
 @section('content')
-    <div class="container">
-        <h2 class="mb-4">Demandes de modification de contrat</h2>
+    <div class="container-fluid py-5" style="background-color: #F0F2F5; min-height: 100vh;">
+        {{-- <div class="text-center mb-5">
+            <h2 class="fw-bold" style="color: #212121;">Demandes de modification de contrat</h2>
+        </div> --}}
 
-        {{-- Messages Flash --}}
+        {{-- Flash message --}}
         @if (session('success'))
-            <div class="alert alert-success">{{ session('success') }}</div>
-        @endif
-
-        {{-- DEMANDES REÇUES --}}
-        <h4>Demandes reçues</h4>
-        @if ($demandesRecues->isEmpty())
-            <p>Aucune demande reçue.</p>
-        @else
-            <div class="table-responsive mb-5">
-                <table class="table table-bordered">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Réference du Contrat</th>
-                            <th>Motif</th>
-                            {{-- <th>Envoyé par</th> --}}
-                            <th>Date</th>
-                            <th>Statut</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($demandesRecues as $demande)
-                            <tr>
-                                <td style="white-space: normal; word-break: break-word;">#{{ $demande->contrat->reference }}
-                                </td>
-                                <td style="white-space: normal; word-break: break-word;">{{ $demande->motif }}</td>
-                                {{-- <td>{{ ucfirst($demande->demande_par) }}</td> --}}
-                                <td>{{ $demande->created_at->format('d/m/Y H:i') }}</td>
-                                <td>
-                                    @if ($demande->statut === 'en_attente')
-                                        <span class="badge bg-warning text-dark">En attente</span>
-                                    @elseif($demande->statut === 'acceptee')
-                                        <span class="badge bg-success">Acceptée</span>
-                                    @else
-                                        <span class="badge bg-danger">Refusée</span>
-                                    @endif
-                                </td>
-                                {{-- <td>
-                                    @if ($demande->statut === 'en_attente')
-                                        <form action="{{ route('modification.accepter', $demande->id) }}" method="POST"
-                                            style="display:inline-block;">
-                                            @csrf
-                                            @method('PUT')
-                                            <button class="btn btn-sm btn-success">Accepter</button>
-                                        </form>
-                                        <form action="{{ route('modification.refuser', $demande->id) }}" method="POST"
-                                            style="display:inline-block;">
-                                            @csrf
-                                            @method('PUT')
-                                            <button class="btn btn-sm btn-danger">Refuser</button>
-                                        </form>
-                                        <a href="{{ route('biens.show', ['bien_id' => $demande->contrat->bien->id]) }}"
-                                            class="">
-                                            <span class="badge bg-success">Voir le contrat</span>
-                                        </a>
-                                    @else
-                                        <a href="{{ route('biens.show', ['bien_id' => $demande->contrat->bien->id]) }}"
-                                            class="">
-                                            <span class="badge bg-success">Voir le contrat</span>
-                                        </a>
-                                    @endif
-                                </td> --}}
-                                <td>
-                                    @if ($demande->statut === 'en_attente')
-                                        <div class="d-flex gap-3 flex-wrap align-items-center">
-
-                                            {{-- Bouton stylisé "Accepter" --}}
-                                            <a href="#"
-                                                onclick="event.preventDefault(); document.getElementById('form-accepter-{{ $demande->id }}').submit();"
-                                                class="btn p-0 border-0 d-flex align-items-center text-success text-decoration-none">
-                                                <i class="fas fa-check-circle me-1"></i>Accepter
-                                            </a>
-
-                                            {{-- Bouton stylisé "Refuser" --}}
-                                            <a href="#"
-                                                onclick="event.preventDefault(); document.getElementById('form-refuser-{{ $demande->id }}').submit();"
-                                                class="btn p-0 border-0 d-flex align-items-center text-danger text-decoration-none">
-                                                <i class="fas fa-times-circle me-1"></i>Refuser
-                                            </a>
-
-                                            {{-- Bouton voir contrat --}}
-                                            <a href="{{ route('biens.show', ['bien_id' => $demande->contrat->bien->id]) }}"
-                                                class="btn p-0 border-0 d-flex align-items-center text-success text-decoration-none">
-                                                <i class="fas fa-file-contract me-1"></i>Voir le contrat
-                                            </a>
-
-                                            {{-- Formulaires cachés --}}
-                                            <form id="form-accepter-{{ $demande->id }}"
-                                                action="{{ route('modification.accepter', $demande->id) }}" method="POST"
-                                                style="display: none;">
-                                                @csrf
-                                                @method('PUT')
-                                            </form>
-
-                                            <form id="form-refuser-{{ $demande->id }}"
-                                                action="{{ route('modification.refuser', $demande->id) }}" method="POST"
-                                                style="display: none;">
-                                                @csrf
-                                                @method('PUT')
-                                            </form>
-
-                                        </div>
-                                    @else
-                                        <a href="{{ route('biens.show', ['bien_id' => $demande->contrat->bien->id]) }}"
-                                            class="btn p-0 border-0 d-flex align-items-center text-success text-decoration-none">
-                                            <i class="fas fa-file-contract me-1"></i>Voir le contrat
-                                        </a>
-                                    @endif
-                                </td>
-
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+            <div class="alert alert-success alert-dismissible fade show mx-auto w-75" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
 
-        {{-- DEMANDES ENVOYÉES --}}
-        <h4>Vos demandes envoyées</h4>
-        @if ($demandesEnvoyees->isEmpty())
-            <p>Vous n’avez envoyé aucune demande.</p>
-        @else
-            <div class="table-responsive">
-                <table class="table table-bordered">
-                    <thead class="table-light">
-                        <tr>
-                            <th>Réference du Contrat</th>
-                            <th>Motif</th>
-                            {{-- <th>Envoyée à</th> --}}
-                            <th>Date</th>
-                            <th>Statut</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($demandesEnvoyees as $demande)
-                            <tr>
-                                <td style="white-space: normal; word-break: break-word;">
-                                    #{{ $demande->contrat->reference }}</td>
-                                <td style="white-space: normal; word-break: break-word;">{{ $demande->motif }}</td>
-                                {{-- <td>
-                                    {{ $demande->demande_par === 'locataire' ? 'Agent immobilier' : 'Locataire' }}
-                                </td> --}}
-                                <td>{{ $demande->created_at->format('d/m/Y H:i') }}</td>
-                                <td>
-                                    @if ($demande->statut === 'en_attente')
-                                        <span class="badge bg-warning text-dark">En attente</span>
-                                    @elseif($demande->statut === 'acceptee')
-                                        <span class="badge bg-success">Acceptée</span>
-                                    @else
-                                        <span class="badge bg-danger">Refusée</span>
-                                    @endif
-                                </td>
-                                <td>
-                                    <a href="{{ route('biens.show', ['bien_id' => $demande->contrat->bien->id]) }}"
-                                        class="">
-                                        <span class="badge bg-success">Voir le contrat</span>
-                                    </a>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+        <div class="row justify-content-center gap-4">
+            {{-- DEMANDES REÇUES --}}
+            <div class="col-lg-5 col-md-6">
+                <div class="card shadow border-0 rounded-4">
+                    <div class="card-header text-center rounded-top-4" style="background-color: #2E7D32;">
+                        <h4 class="text-white fw-semibold m-0 py-2">Demandes reçues</h4>
+                    </div>
+                    <div class="card-body bg-white">
+                        @if ($demandesRecues->isEmpty())
+                            <p class="text-center text-muted fst-italic">Aucune demande reçue.</p>
+                        @else
+                            @foreach ($demandesRecues as $demande)
+                                <div class="bg-light p-3 mb-3 rounded-4 shadow-sm border border-light-subtle">
+                                    <h5 class="fw-bold mb-2">Référence : #{{ $demande->contrat->reference }}</h5>
+                                    <p class="mb-1">Motif : {{ $demande->motif }}</p>
+                                    <p class="mb-1">Date : {{ $demande->created_at->format('d/m/Y H:i') }}</p>
+                                    <p class="mb-1">
+                                        Statut :
+                                        @if ($demande->statut === 'en_attente')
+                                            <span class="badge bg-warning text-dark">En attente</span>
+                                        @elseif($demande->statut === 'acceptee')
+                                            <span class="badge bg-success">Acceptée</span>
+                                        @else
+                                            <span class="badge bg-danger">Refusée</span>
+                                        @endif
+                                    </p>
+                                    <div class="d-flex flex-wrap gap-2 mt-3">
+                                        @if ($demande->statut === 'en_attente')
+                                            <a href="#"
+                                               onclick="event.preventDefault(); document.getElementById('form-accepter-{{ $demande->id }}').submit();"
+                                               class="btn btn-outline-success btn-sm rounded-pill">
+                                                <i class="fas fa-check-circle"></i> Accepter
+                                            </a>
+                                            <a href="#"
+                                               onclick="event.preventDefault(); document.getElementById('form-refuser-{{ $demande->id }}').submit();"
+                                               class="btn btn-outline-danger btn-sm rounded-pill">
+                                                <i class="fas fa-times-circle"></i> Refuser
+                                            </a>
+                                        @endif
+                                        <a href="{{ route('biens.show', ['bien_id' => $demande->contrat->bien->id]) }}"
+                                           class="btn btn-outline-primary btn-sm rounded-pill">
+                                            <i class="fas fa-file-contract"></i> Voir contrat
+                                        </a>
+                                        <form id="form-accepter-{{ $demande->id }}"
+                                              action="{{ route('modification.accepter', $demande->id) }}"
+                                              method="POST" style="display: none;">
+                                            @csrf
+                                            @method('PUT')
+                                        </form>
+                                        <form id="form-refuser-{{ $demande->id }}"
+                                              action="{{ route('modification.refuser', $demande->id) }}"
+                                              method="POST" style="display: none;">
+                                            @csrf
+                                            @method('PUT')
+                                        </form>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @endif
+                    </div>
+                </div>
             </div>
-        @endif
+
+            {{-- DEMANDES ENVOYÉES --}}
+            <div class="col-lg-5 col-md-6">
+                <div class="card shadow border-0 rounded-4">
+                    <div class="card-header text-center rounded-top-4" style="background-color: #2E7D32;">
+                        <h4 class="text-white fw-semibold m-0 py-2">Vos demandes envoyées</h4>
+                    </div>
+                    <div class="card-body bg-white">
+                        @if ($demandesEnvoyees->isEmpty())
+                            <p class="text-center text-muted fst-italic">Vous n’avez envoyé aucune demande.</p>
+                        @else
+                            @foreach ($demandesEnvoyees as $demande)
+                                <div class="bg-light p-3 mb-3 rounded-4 shadow-sm border border-light-subtle">
+                                    <h5 class="fw-bold mb-2">Référence : #{{ $demande->contrat->reference }}</h5>
+                                    <p class="mb-1">Motif : {{ $demande->motif }}</p>
+                                    <p class="mb-1">Date : {{ $demande->created_at->format('d/m/Y H:i') }}</p>
+                                    <p class="mb-1">
+                                        Statut :
+                                        @if ($demande->statut === 'en_attente')
+                                            <span class="badge bg-warning text-dark">En attente</span>
+                                        @elseif($demande->statut === 'acceptee')
+                                            <span class="badge bg-success">Acceptée</span>
+                                        @else
+                                            <span class="badge bg-danger">Refusée</span>
+                                        @endif
+                                    </p>
+                                    <div class="d-flex gap-2 mt-3">
+                                        <a href="{{ route('biens.show', ['bien_id' => $demande->contrat->bien->id]) }}"
+                                           class="btn btn-outline-primary btn-sm rounded-pill">
+                                            <i class="fas fa-file-contract"></i> Voir contrat
+                                        </a>
+                                    </div>
+                                </div>
+                            @endforeach
+                        @endif
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection

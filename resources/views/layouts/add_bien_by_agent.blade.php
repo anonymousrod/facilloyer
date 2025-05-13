@@ -5,7 +5,7 @@
         <div class="row justify-content-center">
             <div class="col-12 col-lg-10">
                 <div class="card shadow-lg border-0">
-                    <div class="card-header bg-dark text-white">
+                    <div class="card-header" style="background-color: #4CAF50; color: #FFFFFF;">
                         @if (session('success'))
                             <div class="alert alert-success text-center">
                                 <h5 class="text-success">{{ session('success') }}</h5>
@@ -139,7 +139,9 @@
 
                             <!-- Bouton de soumission -->
                             <div class="mt-4 text-center">
-                                <button type="submit" class="btn btn-success px-5 py-2">{{ isset($bien) ? 'Mettre à jour le Bien' : 'Soumettre le Bien' }}</button>
+                                <button type="submit" class="btn btn-success px-5 py-2" style="background-color: #4CAF50; border-color: #4CAF50;">
+                                    {{ isset($bien) ? 'Mettre à jour le Bien' : 'Soumettre le Bien' }}
+                                </button>
                             </div>
                         </form>
                     </div>

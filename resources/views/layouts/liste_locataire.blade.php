@@ -5,7 +5,7 @@
         <div class="row justify-content-center">
             <div class="col-12">
                 <div class="card">
-                    <div class="mb-3 card-header d-flex justify-content-between align-items-center" style="background-color: #2E8B57; color: #F5F5F5; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); border-radius: 5px;">
+                    <div class="mb-3 card-header d-flex justify-content-between align-items-center" style="background-color: #212121; color: #F5F5F5; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); border-radius: 5px;">
                         <h4 class="card-title mb-0">Liste des Locataires</h4>
                         <a href="{{ route('export.pdf') }}" class="btn btn-light btn-sm" style="font-weight: bold;">
                             <i class="fas fa-file-pdf"></i> Exporter en PDF
