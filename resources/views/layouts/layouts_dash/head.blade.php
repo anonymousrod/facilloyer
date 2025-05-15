@@ -1,5 +1,50 @@
 <head>
     {{-- head register --}}
+    <!-- Autres balises head... -->
+    {{-- <script>
+        // À placer ABSOLUMENT en premier dans le <head>
+        (function() {
+            // 1. Vérifie le thème stocké
+            const savedTheme = localStorage.getItem('data-bs-theme');
+
+            // 2. Applique IMMÉDIATEMENT le thème avant tout rendu
+            if (savedTheme === 'dark') {
+                document.documentElement.setAttribute("data-bs-theme", "dark");
+                document.head.insertAdjacentHTML('beforeend',
+                    '<style>html:not([data-bs-theme="dark"]){visibility:hidden}</style>');
+            }
+        })();
+    </script> --}}
+    <script>
+        // =============================================
+        // SOLUTION COMPLÈTE POUR LE THÈME SOMBRE/CLAIR
+        // =============================================
+
+        // 1. APPLICATION IMMÉDIATE DU THÈME (ANTI-FLASH)
+        (function() {
+            'use strict';
+
+            // Récupère le thème stocké ou utilise 'light' par défaut
+            const savedTheme = localStorage.getItem('data-bs-theme') || 'light';
+
+            // Applique immédiatement le thème au document
+            document.documentElement.setAttribute('data-bs-theme', savedTheme);
+
+            // Cache brièvement le contenu si mode sombre pour éviter le flash
+            if (savedTheme === 'dark') {
+                const antiFlashStyle = document.createElement('style');
+                antiFlashStyle.textContent = 'html:not([data-bs-theme="dark"]){visibility:hidden}';
+                document.head.appendChild(antiFlashStyle);
+
+                // Supprime le style une fois le DOM chargé
+                document.addEventListener('DOMContentLoaded', () => {
+                    antiFlashStyle.remove();
+                }, {
+                    once: true
+                });
+            }
+        })();
+    </script>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <meta content="{{ config('app.name') }}" name="description" />
@@ -71,11 +116,11 @@
     {{-- <link rel="shortcut icon" href="assets/images/favicon.ico"> --}}
 
 
-    <link href=" {{ asset('assets/libs/simple-datatables/style.css')}} " rel="stylesheet" type="text/css" />
+    <link href=" {{ asset('assets/libs/simple-datatables/style.css') }} " rel="stylesheet" type="text/css" />
     <!-- App css -->
-    <link href=" {{ asset('assets/css/bootstrap.min.css')}} " rel="stylesheet" type="text/css" />
-    <link href=" {{ asset('assets/css/icons.min.css')}} " rel="stylesheet" type="text/css" />
-    <link href=" {{ asset('assets/css/app.min.css')}} " rel="stylesheet" type="text/css" />
+    <link href=" {{ asset('assets/css/bootstrap.min.css') }} " rel="stylesheet" type="text/css" />
+    <link href=" {{ asset('assets/css/icons.min.css') }} " rel="stylesheet" type="text/css" />
+    <link href=" {{ asset('assets/css/app.min.css') }} " rel="stylesheet" type="text/css" />
 
     {{-- autre template css --}}
     <!-- Custom Css -->
