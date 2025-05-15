@@ -3,12 +3,12 @@
 @section('title', 'Profil')
 
 @section('content')
-    @if ($message)
+    {{-- @if ($message)
         <div class="alert alert-warning text-center fade show" role="alert">
             <h5 class="text-warning mb-0">{{ $message }}</h5>
             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-    @endif
+    @endif --}}
     <div class="container mt-4">
         @if (Auth::user()->id_role === 2)
             <div class="d-flex justify-content-between align-items-center mb-4">

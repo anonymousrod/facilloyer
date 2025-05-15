@@ -54,200 +54,283 @@
 {{-- <html lang="en" dir="ltr" data-startbar="light" data-bs-theme="light"> --}}
 <!-- Mirrored from mannatthemes.com/rizz/default/auth-register.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 26 Nov 2024 21:52:10 GMT -->
 
+
+
+
+
 <head>
     @include('layouts.layouts_dash.head')
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            /* background-color: #f5f7fa; */
+            margin: 0;
+        }
+
+        html,
+        body {
+            overflow-x: hidden;
+            /* Empêche la barre de scroll horizontale temporaire */
+        }
+
+        .auth-wrapper {
+            display: flex;
+            min-height: 100vh;
+            flex-wrap: wrap;
+            /* background: #f5f7fa; */
+        }
+
+        .auth-left {
+            flex: 1;
+            background: linear-gradient(135deg, rgba(30, 30, 60, 0.8), rgba(15, 15, 35, 0.8)),
+                url('{{ asset('assets/images/bg-auth.jpg') }}') center/cover no-repeat;
+            color: #fff;
+            padding: 4rem 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .auth-left img {
+            max-height: 70px;
+            margin-bottom: 2rem;
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.4));
+        }
+
+        .auth-left h4 {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1.2rem;
+            color: #ffffff;
+        }
+
+        .auth-left p {
+            font-size: 1.1rem;
+            max-width: 420px;
+            opacity: 0.95;
+            color: #e0e0e0;
+        }
+
+        .auth-form {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 2.5rem;
+        }
+
+        .form-container {
+            background: #ffffff;
+            border-radius: 18px;
+            padding: 3rem 2.5rem;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: block;
+            /* color: #333; */
+        }
+
+        .form-control {
+            border-radius: 10px;
+            border: 1px solid #dcdfe6;
+            padding: 0.75rem 1rem;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #4c8bf5;
+            box-shadow: 0 0 0 3px rgba(76, 139, 245, 0.15);
+            outline: none;
+        }
+
+        .btn-primary {
+            background-color: #4c8bf5;
+            border: none;
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+            font-size: 1rem;
+            border-radius: 10px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #356ad8;
+        }
+
+        .form-check-label {
+            font-size: 0.875rem;
+            color: #555;
+        }
+
+        .form-check-label a {
+            color: #4c8bf5;
+            text-decoration: underline;
+            font-weight: 500;
+        }
+
+        .alert {
+            font-size: 0.95rem;
+            border-radius: 8px;
+        }
+
+        .text-info.small {
+            color: #4c8bf5 !important;
+            font-size: 0.9rem;
+            margin-top: -0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .text-muted {
+            color: #6c757d !important;
+        }
+
+        .text-primary {
+            color: #4c8bf5 !important;
+        }
+
+        .d-grid button {
+            height: 50px;
+        }
+
+        @media screen and (max-width: 768px) {
+            .auth-wrapper {
+                flex-direction: column;
+            }
+
+            .auth-left,
+            .auth-form {
+                flex: unset;
+                width: 100%;
+                padding: 2rem;
+            }
+
+            .auth-left h4 {
+                font-size: 1.8rem;
+            }
+
+            .auth-left p {
+                font-size: 1rem;
+            }
+
+            .form-container {
+                padding: 2rem;
+            }
+        }
+
+    </style>
 </head>
 
-<!-- Top Bar Start -->
 @php
     $agent = Auth::user()?->id_role == 3;
 @endphp
 
 <body>
-    <div class="container-xxl">
-        <div class="row vh-100 d-flex justify-content-center">
-            <div class="col-12 align-self-center">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-lg-4 mx-auto">
-                            <div class="card">
-                                <div class="card-body p-0 bg-black auth-header-box rounded-top">
-                                    <div class="text-center p-3">
-                                        <a href="#" class="logo logo-admin">
-                                            <img src=" {{ asset('assets/images/logo-sm.png') }} " height="50"
-                                                alt="logo" class="auth-logo" />
-                                        </a>
-                                        <h4 class="mt-3 mb-1 fw-semibold text-white fs-18">
-                                            {{ $agent ? 'Enregistrer un locataire' : 'Inscription à' . env('APP_NAME') }}
-                                        </h4>
-                                        <p class="text-muted fw-medium mb-0">
-                                            {{ $agent
-                                                ? 'Remplissez les informations pour enregistrer un locataire'
-                                                : 'Remplissez les informations pour créer votre compte.' }}
-                                        </p>
-                                    </div>
-                                </div>
+    <div class="auth-wrapper">
+        {{-- Partie gauche --}}
+        @unless ($agent)
+            <div class="auth-left" data-aos="fade-right">
+                <img src="{{ asset('assets/images/logo-sm.png') }}" alt="Logo">
+                <h4>{{ $agent ? 'Enregistrer un locataire' : 'Inscription à ' . env('APP_NAME') }}</h4>
+                <p>
+                    {{ $agent ? 'Remplissez les informations pour enregistrer un locataire.' : 'Créez votre compte gratuitement en quelques clics.' }}
+                </p>
+            </div>
+        @endunless
 
-                                <div class="card-body pt-0">
-                                    @if (session('success'))
-                                        <div class="alert alert-success text-center">
-                                            <h5 class="text-success"> {{ session('success') }}</h5>
-                                        </div>
-                                    @endif
+        {{-- Partie droite (formulaire) --}}
+        <div class="card auth-form" data-aos="fade-left">
+            <div class="form-container">
+                @if (session('success'))
+                    <div class="alert alert-success text-center">{{ session('success') }}</div>
+                @endif
 
-                                    @error('errors')
-                                        <div class="alert alert-danger text-center">
-                                            <h5 class="text-primary">Erreur</h5>
-                                        </div>
-                                    @enderror
+                @error('errors')
+                    <div class="alert alert-danger text-center">Erreur</div>
+                @enderror
 
-                                    <!-- Erreur email -->
-                                    @error('email')
-                                        <div class="col-12">
-                                            <div class="alert alert-danger text-center" role="alert">
-                                                {{ $message }}
-                                            </div>
-                                        </div>
-                                    @enderror
+                @foreach (['email', 'password', 'password_confirmation', 'id_role'] as $field)
+                    @error($field)
+                        <div class="alert alert-danger text-center">{{ $message }}</div>
+                    @enderror
+                @endforeach
 
-                                    <!-- Erreur mot de passe -->
-                                    @error('password')
-                                        <div class="col-12">
-                                            <div class="alert alert-danger text-center" role="alert">
-                                                {{ $message }}
-                                            </div>
-                                        </div>
-                                    @enderror
+                <form method="POST" action="{{ $agent ? route('locataire.store') : route('register') }}">
+                    @csrf
 
-                                    <!-- Erreur confirmation de mot de passe -->
-                                    @error('password_confirmation')
-                                        <div class="col-12">
-                                            <div class="alert alert-danger text-center" role="alert">
-                                                {{ $message }}
-                                            </div>
-                                        </div>
-                                    @enderror
-
-                                    @error('id_role')
-                                        <div class="alert alert-danger text-center">{{ $message }}</div>
-                                    @enderror
-
-                                    <form class="my-4" method="POST" action=" {{ ($agent) ? route('locataire.store') : route('register')   }}">
-                                        @csrf
-
-                                        <!-- Email -->
-                                        <div class="form-group mb-2">
-                                            <label class="form-label" for="email">Email</label>
-                                            <input type="email" class="form-control" id="email" name="email"
-                                                placeholder="Entrez votre adresse email" value="{{ old('email') }}"
-                                                required />
-                                        </div>
-                                        @if ($agent)
-                                            <div>
-                                                <p class=" text-info fw-medium mb-0">
-                                                    Un mot de passe sécurisé sera envoyé au locataire via l'adresse
-                                                    e-mail renseignée. </p>
-                                            </div>
-                                        @endif
-
-                                        @if (!$agent)
-                                            <!-- Mot de passe -->
-                                            <div class="form-group mb-2">
-                                                <label class="form-label" for="password">Mot de passe</label>
-                                                <input type="password" class="form-control" id="password"
-                                                    name="password" placeholder="Entrez votre mot de passe" required />
-                                            </div>
-
-                                            <!-- Confirmation du mot de passe -->
-                                            <div class="form-group mb-2">
-                                                <label class="form-label" for="password_confirmation">Confirmez le mot
-                                                    de
-                                                    passe</label>
-                                                <input type="password" class="form-control" id="password_confirmation"
-                                                    name="password_confirmation"
-                                                    placeholder="Confirmez votre mot de passe" required />
-                                            </div>
-                                            <!-- Type d'utilisateur -->
-
-                                            {{-- code a ameliorer pour l'enregistrement des locataire par l'admin --}}
-
-                                            {{-- <div class="form-group mb-2">
-                                                <label class="form-label" for="role">Type d'utilisateur</label>
-                                                <select class="form-control" id="role" name="id_role" required>
-                                                    <option value="" disabled selected>-- Sélectionnez un rôle --</option>
-                                                    @foreach (getRoles() as $role)
-                                                        <option value="{{ $role->id }}"
-                                                            {{ old('id_role') == $role->id ? 'selected' : '' }}>
-                                                            {{ $role->libelle }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div> --}}
-
-                                            {{-- suite du code pour register agent immobilier --}}
-
-                                            @foreach (getRoles() as $role)
-                                                @if ($role->libelle == 'Agent immobilier')
-                                                    <input type="number" name="id_role" value="{{ $role->id }}"
-                                                        hidden>
-                                                @endif
-                                            @endforeach
-                                            <!-- Checkbox pour accepter les conditions -->
-                                            <div class="form-group row mt-3">
-                                                <div class="col-12">
-                                                    <div class="form-check form-switch form-switch-success">
-                                                        <input class="form-check-input" type="checkbox"
-                                                            id="terms_conditions" required />
-                                                        <label class="form-check-label" for="terms_conditions">
-                                                            En m'inscrivant, j'accepte les <a href="#"
-                                                                class="text-primary">Conditions d'utilisation</a>.
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endif
-
-
-
-
-
-
-                                        <!-- Bouton soumettre -->
-                                        <div class="form-group mb-0 row">
-                                            <div class="col-12">
-                                                <div class="d-grid mt-3">
-                                                    <button class="btn btn-primary" type="submit">
-                                                        {{ $agent ? 'Enregistrer' : 'Créer mon compte' }}
-                                                    </button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-
-                                    @if (!$agent)
-                                        <!-- Lien pour se connecter -->
-                                        <div class="text-center">
-                                            <p class="text-muted">
-                                                Vous avez déjà un compte ?
-                                                <a href="{{ route('login') }}" class="text-primary ms-2">Se
-                                                    connecter</a>
-                                            </p>
-                                        </div>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
+                    <div class="form-group mb-3">
+                        <label for="email">Adresse Email</label>
+                        <input type="email" class="form-control" id="email" name="email"
+                            value="{{ old('email') }}" placeholder="ex: utilisateur@email.com" required>
                     </div>
-                </div>
+
+                    @if ($agent)
+                        <p class="text-info small">
+                            Un mot de passe sécurisé sera généré et envoyé automatiquement au locataire.
+                        </p>
+                    @endif
+
+                    @unless ($agent)
+                        <div class="form-group mb-3">
+                            <label for="password">Mot de passe</label>
+                            <input type="password" class="form-control" id="password" name="password"
+                                placeholder="Mot de passe sécurisé" required>
+                        </div>
+
+                        <div class="form-group mb-3">
+                            <label for="password_confirmation">Confirmation du mot de passe</label>
+                            <input type="password" class="form-control" id="password_confirmation"
+                                name="password_confirmation" placeholder="Confirmez le mot de passe" required>
+                        </div>
+
+                        @foreach (getRoles() as $role)
+                            @if ($role->libelle === 'Agent immobilier')
+                                <input type="hidden" name="id_role" value="{{ $role->id }}">
+                            @endif
+                        @endforeach
+
+                        <div class="form-check form-switch form-switch-success mb-3">
+                            <input class="form-check-input" type="checkbox" id="terms_conditions" required>
+                            <label class="form-check-label" for="terms_conditions">
+                                En m'inscrivant, j'accepte les
+                                <a href="#" class="text-primary">Conditions d'utilisation</a>.
+                            </label>
+                        </div>
+                    @endunless
+
+                    <div class="d-grid mt-4">
+                        <button class="btn btn-success" type="submit">
+                            {{ $agent ? 'Enregistrer' : 'Créer mon compte' }}
+                        </button>
+                    </div>
+                </form>
+
+                @unless ($agent)
+                    <div class="text-center mt-3">
+                        <p class="text-muted">
+                            Vous avez déjà un compte ?
+                            <a href="{{ route('login') }}" class="text-primary">Se connecter</a>
+                        </p>
+                    </div>
+                @endunless
             </div>
         </div>
     </div>
+
+    {{-- Script AOS --}}
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            once: true,
+            duration: 800,
+        });
+    </script>
 </body>
-
-
-
-<!--end body-->
-
-<!-- Mirrored from mannatthemes.com/rizz/default/auth-register.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 26 Nov 2024 21:52:10 GMT -->
-
-{{-- </html> --}}

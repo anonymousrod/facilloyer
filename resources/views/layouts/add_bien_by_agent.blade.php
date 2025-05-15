@@ -1,7 +1,7 @@
 @extends('layouts.master_dash')
 @section('title', isset($bien) ? 'Modifier un Bien' : 'Enregistrer un Bien')
 @section('content')
-    <div class="container-xxl py-5" style="background-color: #F5F5F5;">
+    <div class="card container-xxl py-5" >
         <div class="row justify-content-center">
             <div class="col-12 col-lg-10">
                 <div class="card shadow-lg border-0">

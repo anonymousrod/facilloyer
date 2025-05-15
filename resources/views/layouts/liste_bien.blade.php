@@ -1,7 +1,7 @@
 @extends('layouts.master_dash')
 @section('title', 'Liste des Biens')
 @section('content')
-    <div class="container-xxl py-5" style="background-color: #F5F5F5;">
+    <div class="container-xxl py-5" >
         <div class="row justify-content-center">
             <div class="col-12">
                 <div class="card shadow-lg border-0">

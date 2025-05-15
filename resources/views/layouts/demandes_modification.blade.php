@@ -3,7 +3,7 @@
 @section('title', 'Gestion Agent Immobilier')
 
 @section('content')
-    <div class="container-fluid py-5" style="background-color: #F0F2F5; min-height: 100vh;">
+    <div class="card container-fluid py-5" style=" min-height: 100vh;">
         {{-- <div class="text-center mb-5">
             <h2 class="fw-bold" style="color: #212121;">Demandes de modification de contrat</h2>
         </div> --}}
@@ -16,14 +16,14 @@
             </div>
         @endif
 
-        <div class="row justify-content-center gap-4">
+        <div class=" row justify-content-center gap-4">
             {{-- DEMANDES REÇUES --}}
             <div class="col-lg-5 col-md-6">
                 <div class="card shadow border-0 rounded-4">
                     <div class="card-header text-center rounded-top-4" style="background-color: #2E7D32;">
                         <h4 class="text-white fw-semibold m-0 py-2">Demandes reçues</h4>
                     </div>
-                    <div class="card-body bg-white">
+                    <div class="card-body ">
                         @if ($demandesRecues->isEmpty())
                             <p class="text-center text-muted fst-italic">Aucune demande reçue.</p>
                         @else
@@ -85,7 +85,7 @@
                     <div class="card-header text-center rounded-top-4" style="background-color: #2E7D32;">
                         <h4 class="text-white fw-semibold m-0 py-2">Vos demandes envoyées</h4>
                     </div>
-                    <div class="card-body bg-white">
+                    <div class="card-body ">
                         @if ($demandesEnvoyees->isEmpty())
                             <p class="text-center text-muted fst-italic">Vous n’avez envoyé aucune demande.</p>
                         @else
