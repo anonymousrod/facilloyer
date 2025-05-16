@@ -172,12 +172,12 @@
                             <p class="auth-footer-text">Pas encore de compte ?
                                 <a href="{{ route('register') }}" class="text-primary fw-semibold">Créer un compte</a>
                             </p>
-                            <p class="text-muted">Ou connectez-vous avec</p>
-                            <div class="d-flex justify-content-center mt-2">
+                            {{-- <p class="text-muted">Ou connectez-vous avec</p> --}}
+                            {{-- <div class="d-flex justify-content-center mt-2">
                                 <a href="#" class="social-btn bg-primary text-white"><i class="fab fa-facebook-f"></i></a>
                                 <a href="#" class="social-btn bg-info text-white"><i class="fab fa-twitter"></i></a>
                                 <a href="#" class="social-btn bg-danger text-white"><i class="fab fa-google"></i></a>
-                            </div>
+                            </div> --}}
                         </div>
                     </div><!-- end card-body -->
                 </div><!-- end card -->
