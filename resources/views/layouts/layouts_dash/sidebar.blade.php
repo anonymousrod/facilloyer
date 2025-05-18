@@ -186,11 +186,17 @@
 
                 {{-- AGENT IMMOBILIER --}}
                 @if (Auth::user()->id_role == 3 && Auth::user()->statut)
-                    <li class="nav-item"><a class="nav-link" href="{{ route('dashboard') }}"><i class="iconoir-view-grid"></i><span>Dashboard</span></a></li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('dashboard') }}">
+                            <i class="iconoir-view-grid menu-icon"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
 
                     <li class="nav-item">
                         <a class="nav-link" href="#sidebarGerer_locataires" data-bs-toggle="collapse">
-                            <i class="iconoir-user"></i><span>Gérer les locataires</span>
+                            <i class="iconoir-user menu-icon"></i><span>Gérer les locataires</span>
                         </a>
                         <div class="collapse" id="sidebarGerer_locataires">
                             <ul class="nav flex-column">
@@ -202,7 +208,7 @@
 
                     <li class="nav-item">
                         <a class="nav-link" href="#sidebarGerer_bien" data-bs-toggle="collapse">
-                            <i class="iconoir-home"></i><span>Gestion des biens</span>
+                            <i class="iconoir-home menu-icon"></i><span>Gestion des biens</span>
                         </a>
                         <div class="collapse" id="sidebarGerer_bien">
                             <ul class="nav flex-column">
@@ -214,7 +220,7 @@
 
                     <li class="nav-item">
                         <a class="nav-link" href="#sidebarGerer_contrat_bail" data-bs-toggle="collapse">
-                            <i class="fas fa-indent"></i><span>Gestion des Articles</span>
+                            <i class="fas fa-indent menu-icon"></i><span>Gestion des Articles</span>
                         </a>
                         <div class="collapse" id="sidebarGerer_contrat_bail">
                             <ul class="nav flex-column">
@@ -224,8 +230,56 @@
                         </div>
                     </li>
 
-                    <li class="nav-item"><a class="nav-link" href="{{ route('demandes.modification') }}"><i class="iconoir-stats-up-square"></i><span>Demandes de modification</span></a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('demandes.modification') }}">
+                            <i class="iconoir-stats-up-square menu-icon"></i>
+                            <span>Demande de modification</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('agent_immo_historique') }}">
+                            <i class="far fa-eye menu-icon"></i>
+                            <span>Suivi des paiements</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('information_gestion') }}">
+                            <i class="iconoir-stats-up-square menu-icon"></i>
+                            <span>Auditer Loyer</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('agent.demandes') }}">
+                            <i class="iconoir-tools menu-icon"></i>
+                            <span>Voir les demandes de maintenances</span>
+                        </a>
+                    </li>
+
+                    @php
+                        $user = App\Models\User::where('id_role', 1)->first();
+                    @endphp
+
+                    @if ($user)
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('user', $user->id) }}">
+                                <i class="iconoir-chat-bubble menu-icon"></i>
+                                <span>Assistance en ligne</span>
+                            </a>
+                        </li>
+                    @endif
+
+                @elseif (Auth::user()->id_role == 3 && !Auth::user()->statut)
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('agent_immobilier.create') }}">
+                            <i class="iconoir-view-grid menu-icon"></i>
+                            <span>Informations de l'agence</span>
+                        </a>
+                    </li>
                 @endif
+
 
             </ul>
         </div>
