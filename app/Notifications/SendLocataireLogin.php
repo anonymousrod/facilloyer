@@ -38,7 +38,7 @@ class SendLocataireLogin extends Notification
         return (new MailMessage)
             ->subject('Vos informations de connexion')
             ->greeting('Bonjour ' . $notifiable->name . ' !')
-            ->line('Bienvenue sur Faciloyer ! Voici vos informations de connexion :')
+            ->line('Bienvenue sur' . config('app.name') . '! Voici vos informations de connexion :')
             ->line('**Email :** ' . $notifiable->email)
             ->line('**Mot de passe temporaire :** ' . $this->password)
             ->line('Nous vous recommandons de changer ce mot de passe dès votre première connexion.')

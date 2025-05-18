@@ -236,7 +236,14 @@ class AgentImmobilierController extends Controller
         $agent = AgentImmobilier::with('user')->where('user_id', Auth::id())->firstOrFail();
         $locataire = Locataire::where('agent_id', $agent->id);
         $Nlocataire = $locataire->count();
+        $message = null;
+
+        $user = Auth::user();
+        if (!$user->statut) {
+            $message = "Votre compte est en attente d'activation par l'administrateur. Vous aurez accès aux autres fonctionnalités une fois activé.";
+        }
+
         // Retourner la vue avec les données de l'agent
-        return view('layouts.profil_agent', compact('agent', 'Nlocataire'));
+        return view('layouts.profil_agent', compact('agent', 'Nlocataire', 'message'));
     }
 }

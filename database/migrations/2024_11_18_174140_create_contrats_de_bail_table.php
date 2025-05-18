@@ -28,13 +28,13 @@ return new class extends Migration
             $table->date('date_fin')->nullable();//du contrat
             // $table->float('montant_restant')->nullable();  Montant restant pour la période en cours
             $table->float('montant_total_frequence')->nullable(); // Montant total attendu pour une période mensuel
-            $table->string('frequence_paiement'); // Exemple : mensuel, trimestriel
+            $table->string('frequence_paiement')->default('mensuel'); // Exemple : mensuel, trimestriel
             $table->string('penalite_retard')->nullable();
             $table->string('mode_paiement'); // Exemple : virement, espèces
             $table->boolean('renouvellement_automatique')->default(false); // Renouvellement automatique
             //ajouter article ou pas
             $table->boolean('ajouter_articles_par_defaut')->default(false);
-            $table->string('statut_contrat')->default('actif'); // Statut du contrat : actif, terminé, etc.
+            $table->string('statut_contrat')->default('Actif'); // Statut du contrat : actif, terminé, etc.
             // Signatures
             $table->string('lieu_signature');
             $table->date('date_signature');

@@ -31,7 +31,7 @@
                                     <form id="eventForm">
                                         <div class="mb-3">
                                             <label for="eventTitle" class="form-label fw-bold">Titre de l'événement</label>
-                                            <input type="text" class="form-control form-control-lg" id="eventTitle" 
+                                            <input type="text" class="form-control form-control-lg" id="eventTitle"
                                                    placeholder="Ex: Réunion importante" required>
                                         </div>
                                         <div class="mb-3">
@@ -40,7 +40,7 @@
                                         </div>
                                         <div class="mb-3">
                                             <label for="eventDescription" class="form-label fw-bold">Description</label>
-                                            <textarea class="form-control" id="eventDescription" rows="4" 
+                                            <textarea class="form-control" id="eventDescription" rows="4"
                                                       placeholder="Détails de l'événement..." required></textarea>
                                         </div>
                                         <button type="submit" class="btn btn-primary btn-lg w-100">

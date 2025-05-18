@@ -236,6 +236,10 @@ Route::delete('/biens/{bien}/unassign-locataire', [LocataireBienController::clas
 
 //route contrat de bail
 Route::resource('/Contrat_de_bail', ContratDeBailController::class)->names('contrat');
+Route::put('/contrats/{id}/resilier', [ContratDeBailController::class, 'resilier'])
+    ->name('contrats.resilier')
+    ->middleware('auth');
+
 //route article
 Route::resource('/Article_contrat_bail', ArticleContratBailController::class)->names('article');
 Route::delete('/contrats/{contratId}/articles/{articleId}', [ContratDeBailController::class, 'detachArticle'])
@@ -258,9 +262,11 @@ Route::put('/contrats/articles-specifiques/{article}', [ContratDeBailController:
 
 //route de demande de modification contrat de bail
 
-Route::post('/modification/demander', [ContratModificationRequestController::class, 'demander'])->name('modification.demander');
-Route::put('/modification/accepter/{id}', [ContratModificationRequestController::class, 'accepter'])->name('modification.accepter');
-Route::put('/modification/refuser/{id}', [ContratModificationRequestController::class, 'refuser'])->name('modification.refuser');
+Route::middleware('auth')->group(function () {
+    Route::post('/modification/demander', [ContratModificationRequestController::class, 'demander'])->name('modification.demander');
+    Route::put('/modification/accepter/{id}', [ContratModificationRequestController::class, 'accepter'])->name('modification.accepter');
+    Route::put('/modification/refuser/{id}', [ContratModificationRequestController::class, 'refuser'])->name('modification.refuser');
+});
 
 Route::get('/demandes-modification', [ContratModificationRequestController::class, 'showDemandesModification'])
     ->name('demandes.modification')

@@ -45,138 +45,144 @@
         </div>
     </form>
 </x-guest-layout> --}}
-<!DOCTYPE html>
-<html lang="en" dir="ltr" data-startbar="light" data-bs-theme="light">
-
-
-<!-- Mirrored from mannatthemes.com/rizz/default/auth-login.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 26 Nov 2024 21:51:15 GMT -->
-
 <head>
-
-
     @include('layouts.layouts_dash.head')
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f9f9f9;
+        }
 
+        .auth-card {
+            border-radius: 2rem;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        }
+
+        .auth-header-box {
+            background-color: #2c3e50;
+            color: white;
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+
+        .auth-header-box img {
+            height: 60px;
+        }
+
+        .auth-logo-text {
+            margin-top: 1rem;
+            font-weight: 600;
+            font-size: 1.25rem;
+        }
+
+        .form-control {
+            border-radius: 1rem;
+        }
+
+        .btn-primary {
+            border-radius: 1rem;
+            font-weight: 600;
+        }
+
+        .social-btn {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin: 0 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .auth-footer-text {
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
-
-
-<!-- Top Bar Start -->
 
 <body>
     <div class="container-xxl">
-        <div class="row vh-100 d-flex justify-content-center">
-            <div class="col-12 align-self-center">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-lg-4 mx-auto">
-                            <div class="card">
-                                <div class="card-body p-0 bg-black auth-header-box rounded-top">
-                                    <div class="text-center p-3">
-                                        <a href="index.html" class="logo logo-admin">
-                                            <img src="assets/images/logo-sm.png" height="50" alt="logo"
-                                                class="auth-logo">
-                                        </a>
-                                        <h4 class="mt-3 mb-1 fw-semibold text-white fs-18">Bienvenue sur
-                                            {{ env('APP_NAME') }}</h4>
-                                        <p class="text-muted fw-medium mb-0">Connectez-vous pour continuer.</p>
+        <div class="row vh-100 d-flex justify-content-center align-items-center">
+            <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
+                <div class="card auth-card">
+                    <!-- Header -->
+                    <div class="auth-header-box">
+                        <img src="assets/images/logo-sm.png" alt="logo">
+                        <h4 class="auth-logo-text">Bienvenue sur {{ env('APP_NAME') }}</h4>
+                        <p class="text-light">Connectez-vous pour continuer</p>
+                    </div>
+
+                    <!-- Form -->
+                    <div class="card-body p-4">
+                        {{-- statut non valide --}}
+                        @if ($errors->has('status'))
+                            <div class="alert alert-danger">{{ $errors->first('status') }}</div>
+                        @endif
+
+                        <!-- erreur email -->
+                        @error('email')
+                            <div class="alert alert-danger text-center">{{ $message }}</div>
+                        @enderror
+
+                        <!-- erreur password -->
+                        @error('password')
+                            <div class="alert alert-danger text-center">{{ $message }}</div>
+                        @enderror
+
+                        <form action="{{ route('login') }}" method="POST" class="mt-2">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Adresse e-mail</label>
+                                <input type="email" name="email" id="email"
+                                    class="form-control @error('email') is-invalid @enderror"
+                                    placeholder="Entrez votre adresse e-mail" value="{{ old('email') }}" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Mot de passe</label>
+                                <input type="password" name="password" id="password"
+                                    class="form-control @error('password') is-invalid @enderror"
+                                    placeholder="Entrez votre mot de passe" required>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="remember" name="remember">
+                                        <label class="form-check-label" for="remember">Se souvenir de moi</label>
                                     </div>
                                 </div>
-                                <div class="card-body pt-0">
-                                    {{-- statut non valide --}}
-                                    @if ($errors->has('status'))
-                                        <div class="alert alert-danger">
-                                            {{ $errors->first('status') }}
-                                        </div>
+                                <div class="col-6 text-end">
+                                    @if (Route::has('password.request'))
+                                        <a href="{{ route('password.request') }}" class="text-muted">
+                                            Mot de passe oublié ?
+                                        </a>
                                     @endif
+                                </div>
+                            </div>
 
-                                    <!-- erreur email -->
-                                    @error('email')
-                                        <div class="alert alert-danger text-center" role="alert">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary">Se connecter <i class="fas fa-sign-in-alt ms-2"></i></button>
+                            </div>
+                        </form>
 
-                                    <!-- erreur password -->
-                                    @error('password')
-                                        <div class="alert alert-danger text-center" role="alert">
-                                            {{ $message }}
-                                        </div>
-                                    @enderror
-
-                                    <form class="my-4" action="{{ route('login') }}" method="POST">
-                                        @csrf
-                                        <div class="form-group mb-2">
-                                            <label class="form-label" for="email">Adresse e-mail</label>
-                                            <input type="email"
-                                                class="form-control @error('email') is-invalid @enderror"
-                                                value="{{ old('email') }}" id="email" name="email"
-                                                placeholder="Entrez votre adresse e-mail" required>
-                                        </div><!--end form-group-->
-
-                                        <div class="form-group">
-                                            <label class="form-label @error('password') is-invalid @enderror"
-                                                for="password">Mot de passe</label>
-                                            <input type="password" class="form-control " name="password" id="password"
-                                                placeholder="Entrez votre mot de passe" required>
-                                        </div><!--end form-group-->
-                                        <!-- Se souvenir de moi et Mot de passe oublié -->
-
-                                        <div class="form-group row mt-3">
-                                            <div class="col-sm-6">
-                                                <div class="form-check form-switch form-switch-success">
-                                                    <input class="form-check-input" type="checkbox" id="remember">
-                                                    <label class="form-check-label"
-                                                        for="remember">{{ __('Se souvenir de moi') }}</label>
-                                                </div>
-                                            </div><!--end col-->
-                                            <div class="col-sm-6 text-end">
-                                                @if (Route::has('password.request'))
-                                                    <a href="{{ route('password.request') }}"
-                                                        class="text-muted font-13"><i class="dripicons-lock"></i>
-                                                        {{ __('Mot de passe oublié?') }} </a>
-                                                @endif
-                                            </div><!--end col-->
-                                        </div><!--end form-group-->
-
-                                        <div class="form-group mb-0 row">
-                                            <div class="col-12">
-                                                <div class="d-grid mt-3">
-                                                    <button class="btn btn-primary" type="submit">Se connecter <i
-                                                            class="fas fa-sign-in-alt ms-1"></i></button>
-                                                </div>
-                                            </div><!--end col-->
-                                        </div> <!--end form-group-->
-                                    </form><!--end form-->
-                                    <div class="text-center  mb-2">
-                                        <p class="text-muted">Pas encore de compte ? <a href="{{ route('register') }}"
-                                                class="text-primary ms-2">Créer un compte</a></p>
-                                        <h6 class="px-3 d-inline-block">Ou connectez-vous avec</h6>
-                                    </div>
-                                    <div class="d-flex justify-content-center">
-                                        <a href="#"
-                                            class="d-flex justify-content-center align-items-center thumb-md bg-blue-subtle text-blue rounded-circle me-2">
-                                            <i class="fab fa-facebook align-self-center"></i>
-                                        </a>
-                                        <a href="#"
-                                            class="d-flex justify-content-center align-items-center thumb-md bg-info-subtle text-info rounded-circle me-2">
-                                            <i class="fab fa-twitter align-self-center"></i>
-                                        </a>
-                                        <a href="#"
-                                            class="d-flex justify-content-center align-items-center thumb-md bg-danger-subtle text-danger rounded-circle">
-                                            <i class="fab fa-google align-self-center"></i>
-                                        </a>
-                                    </div>
-                                </div><!--end card-body-->
-                            </div><!--end card-->
-                        </div><!--end col-->
-                    </div><!--end row-->
-                </div><!--end card-body-->
-            </div><!--end col-->
-        </div><!--end row-->
-    </div><!-- container -->
+                        <div class="text-center mt-4">
+                            <p class="auth-footer-text">Pas encore de compte ?
+                                <a href="{{ route('register') }}" class="text-primary fw-semibold">Créer un compte</a>
+                            </p>
+                            {{-- <p class="text-muted">Ou connectez-vous avec</p> --}}
+                            {{-- <div class="d-flex justify-content-center mt-2">
+                                <a href="#" class="social-btn bg-primary text-white"><i class="fab fa-facebook-f"></i></a>
+                                <a href="#" class="social-btn bg-info text-white"><i class="fab fa-twitter"></i></a>
+                                <a href="#" class="social-btn bg-danger text-white"><i class="fab fa-google"></i></a>
+                            </div> --}}
+                        </div>
+                    </div><!-- end card-body -->
+                </div><!-- end card -->
+            </div><!-- end col -->
+        </div><!-- end row -->
+    </div><!-- end container -->
 </body>
 
-<!--end body-->
-
-<!-- Mirrored from mannatthemes.com/rizz/default/auth-login.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 26 Nov 2024 21:51:15 GMT -->
-
-</html>

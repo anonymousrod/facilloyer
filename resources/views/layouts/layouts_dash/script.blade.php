@@ -72,8 +72,7 @@
 <script src=" {{ asset('assets/js/pages/calendar.init.js') }} "></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-{{-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> --}}
-{{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"> --}}
+
 
 
 
@@ -103,61 +102,7 @@
 </script>
 
 {{-- script pour js signature_pad --}}
-{{-- <script src=" {{ asset('node_modules/signature_pad/dist/signature_pad.umd.min.js')}} "></script> --}}
 <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
-{{-- <script src="https://cdn.jsdelivr.net/npm/signature_pad"></script> --}}
-
-
-{{--
-<script>
-    // Fonction d'initialisation pour SignaturePad Agent Immobilier
-    var signatureAgentCanvas = document.getElementById('signature-pad');
-
-    if (signatureAgentCanvas) {
-        var signatureAgentPad = new SignaturePad(signatureAgentCanvas, {
-            backgroundColor: 'rgba(255, 255, 255, 0)', // Fond transparent
-            penColor: 'black'
-        });
-
-        document.getElementById('clearAgent').addEventListener('click', function() {
-            signatureAgentPad.clear();
-        });
-    }
-
-    // Fonction d'initialisation pour SignaturePad Locataire
-    var signatureLocataireCanvas = document.getElementById('signatureLocataire');
-    if (signatureLocataireCanvas) {
-        var signatureLocatairePad = new SignaturePad(signatureLocataireCanvas, {
-            backgroundColor: 'rgba(255, 255, 255, 0)',
-            penColor: 'black'
-        });
-
-        document.getElementById('clearLocataire').addEventListener('click', function() {
-            signatureLocatairePad.clear();
-        });
-    }
-</script>
-<script>
-    document.querySelector('form').addEventListener('submit', function(event) {
-        // Capture la signature de l'agent immobilier
-        if (signatureAgentPad && !signatureAgentPad.isEmpty()) {
-            document.getElementById('signatureAgentInput').value = signatureAgentPad.toDataURL('image/png');
-        }
-
-        // Capture la signature du locataire
-        if (signatureLocatairePad && !signatureLocatairePad.isEmpty()) {
-            document.getElementById('signatureLocataireInput').value = signatureLocatairePad.toDataURL(
-                'image/png');
-        }
-
-        // Vérification dans la console des valeurs des champs cachés
-        console.log(document.getElementById('signatureAgentInput').value);
-        console.log(document.getElementById('signatureLocataireInput').value);
-    });
-</script> --}}
-
-
-
 
 
 <!-- Scripts pour les notifications en temps réel -->
@@ -167,62 +112,6 @@
 </script>
 @vite(['resources/js/app.js'])
 <script>
-    // document.addEventListener("DOMContentLoaded", function() {
-    //     if (!window.userID) {
-    //         window.userID = "{{ auth()->id() }}";
-    //     }
-
-    //     if (window.userID) {
-    //         window.Echo.private(`App.Models.User.${window.userID}`)
-    //             .notification((notification) => {
-    //                 console.log("🔔 Nouvelle notification reçue :", notification);
-
-    //                 // Jouer le son de notification
-    //                 let audio = new Audio('/notification.mp3');
-    //                 audio.play().catch(error => console.log("🎵 Erreur de lecture audio :", error));
-
-    //                 // Mettre à jour le badge de notification
-    //                 let badge = document.getElementById("notif-badge");
-    //                 if (badge) {
-    //                     let count = parseInt(badge.innerText) || 0;
-    //                     badge.innerText = count + 1;
-    //                     badge.classList.remove('hidden');
-    //                 }
-
-    //                 // Ajouter la notification dans la liste dynamiquement
-    //                 let notifList = document.getElementById("notif-list");
-    //                 if (notifList) {
-    //                     // Supprimer le message "Aucune nouvelle notification" s'il existe
-    //                     let emptyNotif = document.getElementById("empty-notif");
-    //                     if (emptyNotif) {
-    //                         emptyNotif.remove();
-    //                     }
-
-    //                     let notifItem = document.createElement("a");
-    //                     notifItem.href = notification.url + `?notification_id=${notification.id}`;
-    //                     notifItem.classList.add("dropdown-item");
-
-    //                     notifItem.innerHTML = `
-    //                     <div class="d-flex align-items-center">
-    //                         <div class="flex-shrink-0">
-    //                             <div class="notify-icon bg-light-${notification.type ?? 'primary'} text-${notification.type ?? 'primary'}">
-    //                                 <i class="${notification.icon ?? 'iconoir-bell'}"></i>
-    //                             </div>
-    //                         </div>
-    //                         <div class="flex-grow-1 ms-3">
-    //                             <p class="msg-info mb-0">${notification.message}</p>
-    //                             <small class="text-muted">À l'instant</small>
-    //                         </div>
-    //                     </div>
-    //                     <div class="dropdown-divider"></div>
-    //                 `;
-
-    //                     // Ajouter la notification en haut de la liste
-    //                     notifList.prepend(notifItem);
-    //                 }
-    //             });
-    //     }
-    // });
     document.addEventListener("DOMContentLoaded", function() {
         if (!window.userID) {
             window.userID = "{{ auth()->id() }}";
@@ -289,61 +178,4 @@
     });
 </script>
 
-{{-- <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        if (!window.userID) {
-            window.userID = "{{ auth()->id() }}";
-        }
 
-        if (window.userID) {
-            console.log("📡 Connexion à Pusher pour l'utilisateur :", window.userID);
-
-            // Écoute les notifications en temps réel
-            window.Echo.private(`App.Models.User.${window.userID}`)
-                .notification((notification) => {
-                    console.log("🔔 Nouvelle notification reçue :", notification);
-
-                    // Jouer le son de notification
-                    let audio = new Audio('/notification.mp3');
-                    audio.play().catch(error => console.log("🎵 Erreur de lecture audio :", error));
-
-                    // Mettre à jour le badge de notification
-                    let badge = document.getElementById("notif-badge");
-                    if (badge) {
-                        let count = parseInt(badge.innerText) || 0;
-                        badge.innerText = count + 1;
-                        badge.classList.remove('hidden');
-                    }
-
-                    // Ajouter la notification dans la liste
-                    let notifList = document.getElementById("notif-list");
-                    if (notifList) {
-                        let notifItem = document.createElement("a");
-                        notifItem.href = notification.data.url;
-                        notifItem.classList.add("dropdown-item");
-
-                        notifItem.innerHTML = `
-                            <div class="d-flex align-items-center">
-                                <div class="flex-shrink-0">
-                                    <div class="notify-icon bg-light-${notification.data.type ?? 'primary'} text-${notification.data.type ?? 'primary'}">
-                                        <i class="${notification.data.icon ?? 'iconoir-bell'}"></i>
-                                    </div>
-                                </div>
-                                <div class="flex-grow-1 ms-3">
-                                    <p class="msg-info mb-0">${notification.data.message}</p>
-                                    <small class="text-muted">${new Date(notification.created_at).toLocaleString()}</small>
-                                </div>
-                            </div>
-                        `;
-
-                        notifList.prepend(notifItem);
-
-                        // Ajouter une ligne de séparation après chaque notification
-                        let divider = document.createElement("div");
-                        divider.classList.add("dropdown-divider");
-                        notifList.prepend(divider);
-                    }
-                });
-        }
-    });
-</script> --}}

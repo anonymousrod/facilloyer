@@ -7,7 +7,6 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
-
         .signature-section {
             display: flex;
             /* Active Flexbox */
@@ -127,7 +126,7 @@
 
 
 
-                    <h6><strong><u>ARTICLE 3</u> : DURÉE DU CONTRAT</strong> </h6>
+                    <h6 class="mt-3"><strong><u>ARTICLE 3</u> : DURÉE DU CONTRAT</strong> </h6>
 
                     <p>
                         Le présent contrat est consenti et accepté pour une durée de
@@ -151,7 +150,7 @@
 
                     <h6><strong><u>ARTICLE 4</u> : LOYER ET MODALITÉS DE PAIEMENT</strong> </h6>
 
-                    @php
+                    {{-- @php
                         // Convertir la fréquence en jours si c'est une période (mois, bimestre, trimestre)
                         $frequences = [
                             'mois' => 30,
@@ -162,16 +161,16 @@
                         ];
 
                         // Par défaut, la valeur brute est utilisée si la clé n'est pas reconnue
-                        $delai_retard = $frequences[$contrat->frequence_paiement] ?? $contrat->frequence_paiement;
+                                                $delai_retard = $frequences[$contrat->frequence_paiement] ?? $contrat->frequence_paiement;
 
-                    @endphp
+                    @endphp --}}
 
 
                     <p>
                         1. Le présent contrat est consenti et accepté pour un loyer mensuel de
                         <strong>{{ number_format($bien->loyer_mensuel, 2) }} Francs CFA</strong> Payable par
-                        <strong>{{ $contrat->frequence_paiement }}</strong> et d'avance
-                        soit <strong>{{ $contrat->montant_total_frequence }}</strong> Francs CFA.
+                        {{-- <strong>{{ $contrat->frequence_paiement }}</strong> --}} <strong>mois</strong>  et d'avance
+                        {{-- soit <strong>{{ $contrat->montant_total_frequence }}</strong> Francs CFA--}}.
                         Ce loyer est payable au plus tard le
                         <strong>{{ $contrat->date_debut->addMonth(1)->day }}ème
                             jour</strong> de chaque mois.
@@ -201,7 +200,7 @@
                         $articleCounter = 4;
                     @endphp
 
-                    <!-- Affichage des articles de la table Article -->
+                    <!-- 🎯 Articles par défaut via la table pivot -->
                     @if ($articles->count() > 0)
                         @foreach ($articles as $article)
                             @php $articleCounter++; @endphp
@@ -209,6 +208,17 @@
                                     {{ $article->pivot->titre_article }}</strong> </h6>
 
                             <p> {{ $article->pivot->contenu_article }} </p>
+                        @endforeach
+                    @endif
+
+                    <!-- 🎯 Articles spécifiques (uniquement liés au contrat dans contrat_de_bail_article) -->
+                    @if ($contrat && $contrat->articlesSpecifiques->count() > 0)
+                        @foreach ($contrat->articlesSpecifiques as $article)
+                            @php $articleCounter++; @endphp
+                            <h6><strong><u>ARTICLE {{ $articleCounter }}</u> :
+                                    {{ $article->titre_article }}</strong></h6>
+                            <p>{{ $article->contenu_article }}</p>
+
                         @endforeach
                     @endif
 
@@ -225,7 +235,9 @@
                     <p>En foi de quoi les parties contractantes ont opposé leurs noms, cachets et signatures
                     </p>
                     <p>
-                        Fait en trois (03) exemplaires originaux, remis à chaque partie.
+                        Ce contrat numérique tient lieu d’original pour les deux parties et peut être exporté à
+                        tout moment par chacune d’elles depuis leur espace personnel sur la plateforme
+                        {{ config('app.name') }}.
                     </p>
 
                     <p class="text-end m-5 mt-1 mb-1">À <strong>{{ $contrat->lieu_signature }}</strong>, le
@@ -233,56 +245,7 @@
 
                     <p class="text-center">( Signatures suivies de la mention manuscrite lue et approuvées)</p>
 
-                    {{-- <div class="row align-items-center mt-3">
-                        <!-- Colonne de gauche (Agent Immobilier) -->
-                        <div class="col-6 text-start px-3">
-                            <p class="font-weight-bold">Agent Immobilier</p>
-                            @if ($contrat->signature_agent_immobilier)
-                                <div class="d-flex flex-column align-items-start">
-                                    <img class="img-fluid mb-2" src="{{ public_path($contrat->signature_agent_immobilier) }}"
-                                         alt="Signature Agent Immobilier" width="150">
-                                    <strong>
-                                        <u>
-                                            <p>{{ $bien->agent_immobilier->nom_admin }} {{ $bien->agent_immobilier->prenom_admin }}</p>
-                                        </u>
-                                    </strong>
-                                </div>
-                            @endif
-                        </div>
 
-                        <!-- Colonne de droite (Le Preneur) -->
-                        <div class="col-6 text-end px-3">
-                            <p class="font-weight-bold">Le Preneur</p>
-                            @if ($contrat->signature_locataire)
-                                <div class="d-flex flex-column align-items-end">
-                                    <img class="img-fluid mb-2" src="{{ public_path($contrat->signature_locataire) }}"
-                                         alt="Signature Locataire" width="150">
-                                    <strong>
-                                        <u>
-                                            <p>{{ $locataireAssigné->locataire->nom }} {{ $locataireAssigné->locataire->prenom }}</p>
-                                        </u>
-                                    </strong>
-                                </div>
-                            @endif
-                        </div>
-                    </div> --}}
-                    {{-- <div class="signature-section">
-                        <div class="signature-box">
-                            <p class="font-weight-bold">Agent Immobilier</p>
-                            @if ($contrat->signature_agent_immobilier)
-                                <img src="{{asset($contrat->signature_agent_immobilier) }}" alt="Signature Agent Immobilier">
-                            @endif
-                            <strong>{{ $bien->agent_immobilier->nom_admin }} {{ $bien->agent_immobilier->prenom_admin }}</strong>
-                        </div>
-
-                        <div class="signature-box">
-                            <p class="font-weight-bold">Locataire</p>
-                            @if ($contrat->signature_locataire)
-                                <img src="{{asset($contrat->signature_locataire) }}" alt="Signature Locataire">
-                            @endif
-                            <strong>{{ $locataireAssigné->locataire->nom }} {{ $locataireAssigné->locataire->prenom }}</strong>
-                        </div>
-                    </div> --}}
 
                     <div class="signature-section">
                         <table style="width: 100%; border-collapse: collapse;">
@@ -290,24 +253,26 @@
                                 <td style="width: 50%; text-align: center; padding: 15px; ">
                                     <p class="font-weight-bold">Agent Immobilier</p>
                                     @if ($contrat->signature_agent_immobilier)
-                                        <img src="{{ public_path($contrat->signature_agent_immobilier) }}" alt="Signature Agent Immobilier" style="max-width: 100%; max-height: 120px;">
+                                        <img src="{{ public_path($contrat->signature_agent_immobilier) }}"
+                                            alt="Signature Agent Immobilier"
+                                            style="max-width: 100%; max-height: 120px;">
                                     @endif
-                                    <p><strong>{{ $bien->agent_immobilier->nom_admin }} {{ $bien->agent_immobilier->prenom_admin }}</strong></p>
+                                    <p><strong>{{ $bien->agent_immobilier->nom_admin }}
+                                            {{ $bien->agent_immobilier->prenom_admin }}</strong></p>
                                 </td>
                                 {{-- border: 1px dashed #007bff; --}}
                                 <td style="width: 50%; text-align: center;  padding: 15px; ">
                                     <p class="font-weight-bold">Locataire</p>
                                     @if ($contrat->signature_locataire)
-                                        <img src="{{ public_path($contrat->signature_locataire) }}" alt="Signature Locataire" style="max-width: 100%; max-height: 120px;">
+                                        <img src="{{ public_path($contrat->signature_locataire) }}"
+                                            alt="Signature Locataire" style="max-width: 100%; max-height: 120px;">
                                     @endif
-                                    <p><strong>{{ $locataireAssigné->locataire->nom }} {{ $locataireAssigné->locataire->prenom }}</strong></p>
+                                    <p><strong>{{ $locataireAssigné->locataire->nom }}
+                                            {{ $locataireAssigné->locataire->prenom }}</strong></p>
                                 </td>
                             </tr>
                         </table>
                     </div>
-
-
-
                 @else
                     <p class="text-center">Aucun contrat trouvé.</p>
             @endif

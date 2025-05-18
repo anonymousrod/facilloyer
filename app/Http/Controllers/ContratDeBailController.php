@@ -22,8 +22,10 @@ class ContratDeBailController extends Controller
      */
     public function index()
     {
-        //
+        $contrats = ContratsDeBail::with(['bien', 'locataire'])->get();
+        return view('admin.contrats_de_bail.list_all_contrat_by_admin', compact('contrats'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -60,7 +62,7 @@ class ContratDeBailController extends Controller
             'frequence_paiement' => 'required|string',
             'penalite_retard' => 'nullable|numeric',
             'mode_paiement' => 'required|string',
-            'statut_contrat' => 'required|string',
+            // 'statut_contrat' => 'required|string',
         ]);
 
         // Création du contrat de bail
@@ -82,7 +84,7 @@ class ContratDeBailController extends Controller
             'mode_paiement' => $request->mode_paiement,
             'renouvellement_automatique' => $request->has('renouvellement_automatique'),
             'ajouter_articles_par_defaut' => $request->has('ajouter_articles_par_defaut'),
-            'statut_contrat' => $request->statut_contrat,
+            // 'statut_contrat' => $request->statut_contrat,
         ]);
         // Si l'option est activée, on ajoute les articles par défaut
         $contratDeBail->ajouterArticlesParDefaut();
@@ -176,26 +178,33 @@ class ContratDeBailController extends Controller
         $locataireAssigné = LocataireBien::where('bien_id', $bien_id)->with('locataire')->first();
         $contrat = ContratsDeBail::where('bien_id', $bien->id)
             ->where('locataire_id', $locataireAssigné?->locataire->id)
-            ->with('articles') // Charge les articles liés au contrat
+            ->with(['articles', 'articlesSpecifiques']) // Charge les articles liés au contrat
             ->first();
 
         // Récupérer les articles associés à ce contrat de bail à travers la table pivot
         if ($contrat) {
             $articles = $contrat->articles; // Relation définie dans le modèle ContratsDeBail
         }
+        //$frequence utiliser dans l'afficharge de contrat de bail
+        // Convertir la fréquence en jours si c'est une période (mois, bimestre, trimestre)
+        $frequences = [
+            'mois' => 30,
+            'bimestre' => 60,
+            'trimestre' => 90,
+            'semestriel' => 180, // Virgule ajoutée ici
+            'annuel' => 360,
+        ];
 
-        // return view('exports.contrat_pdf', [
-        //     'bien' => $bien,
-        //     'locataireAssigné' => $locataireAssigné,
-        //     'contrat' => $contrat,
-        //     'articles' => $articles,
-        // ]);
+        // Par défaut, la valeur brute est utilisée si la clé n'est pas reconnue
+        $delai_retard =
+            $frequences[$contrat?->frequence_paiement] ?? $contrat?->frequence_paiement;
 
         // Générer le PDF
         $pdf = PDF::loadView('exports.contrat_pdf', [
             'bien' => $bien,
             'locataireAssigné' => $locataireAssigné,
             'contrat' => $contrat,
+            'delai_retard' => $delai_retard,
             'articles' => $contrat?->articles ?? [],
         ]);
 
@@ -260,4 +269,30 @@ class ContratDeBailController extends Controller
 
         return redirect()->back()->with('success', 'Article spécifique mis à jour.');
     }
+
+    //resiliation
+    public function resilier($id)
+    {
+        $contrat = ContratsDeBail::findOrFail($id);
+
+        // dd($contrat->bien);
+        // Vérifie que l'agent connecté est bien le propriétaire du bien lié au contrat
+        if (auth::user()->agent_immobiliers->first()?->id !== $contrat->bien->agent_immobilier_id) {
+            abort(403, 'Action non autorisée.');
+        }
+        // Mise à jour du statut du contrat
+        $contrat->statut_contrat = 'resilie';
+        $contrat->save();
+
+        // Suppression du lien dans locataire_bien
+        $locataireBien = LocataireBien::where('bien_id', $contrat->bien->id)->first();
+        if ($locataireBien) {
+            $locataireBien->delete();
+        }
+
+        return redirect()->route('biens.show', ['bien_id' => $contrat->bien->id])
+            ->with('success', 'Contrat résilié avec succès.');
+
+    }
+
 }

@@ -78,11 +78,11 @@
 
                             <!-- Actions -->
                             <div class="d-flex flex-wrap justify-content-center gap-2 mt-4">
-                                <a href="{{ route('biens.edit', $bien->id) }}" class="btn btn-link text-primary"
-                                    title="Modifier">
-                                    <i class="bi bi-pencil-square" style="font-size: 1.5rem;"></i>
-                                </a>
                                 @if (!$contrat)
+                                    <a href="{{ route('biens.edit', $bien->id) }}" class="btn btn-link text-primary"
+                                        title="Modifier">
+                                        <i class="bi bi-pencil-square" style="font-size: 1.5rem;"></i>
+                                    </a>
                                     <form action="{{ route('biens.destroy', $bien->id) }}" method="POST"
                                         onsubmit="return confirm('Voulez-vous vraiment supprimer ce bien ?');">
                                         @csrf
@@ -93,20 +93,18 @@
                                     </form>
                                 @endif
                                 @if ($locataireAssigné)
-                                    <!-- Si un locataire est déjà assigné -->
-                                    <form action="{{ route('unassign.locataire', $bien->id) }}" method="POST"
-                                        onsubmit="return confirm('Voulez-vous vraiment désassigner ce locataire ?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-link text-warning"
-                                            title="Désassigner le locataire">
-                                            <i class="bi bi-person-dash" style="font-size: 1.5rem;"></i>
-                                        </button>
-                                    </form>
+
                                     @if (!$contrat)
-                                        {{-- <a href="{{ route('contrat.edit', $contrat->id) }}" class="btn btn-link text-warning" title="Modifier le contrat de bail">
-                                        <i class="bi bi-pencil-square" style="font-size: 1.5rem;"></i> Modifier le contrat de bail
-                                    </a> --}}
+                                        <!-- Si un locataire est déjà assigné -->
+                                        <form action="{{ route('unassign.locataire', $bien->id) }}" method="POST"
+                                            onsubmit="return confirm('Voulez-vous vraiment désassigner ce locataire ?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-link text-warning"
+                                                title="Désassigner le locataire">
+                                                <i class="bi bi-person-dash" style="font-size: 1.5rem;"></i>
+                                            </button>
+                                        </form>
                                         <a href="{{ route('contrat.create', ['bien_id' => $bien->id, 'locataire_id' => $locataireAssigné->locataire->id ?? null]) }}"
                                             class="btn btn-link text-info" title="Créer un contrat de bail">
                                             <i class="bi bi-file-earmark-text" style="font-size: 1.5rem;"></i> Créer un
@@ -123,7 +121,7 @@
                                 @endif
                             </div>
                         @endif
-                        
+
                     </div>
                 </div>
 
@@ -132,7 +130,9 @@
                 <div class="card mb-4">
 
                     <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
-                        <h5 class="card-title m-0">Contrat de Location et gestion de ses articles</h5>
+                        <h5 class="card-title m-0">
+                            {{ Auth::user()->id_role == 3 ? 'Contrat de Location et gestion de ses articles' : 'Contrat de Location' }}
+                        </h5>
 
                         @if ($contrat && Auth::user()->id_role === 3 && !$contrat->signature_locataire)
                             <div class="d-flex gap-3 flex-wrap">
@@ -151,12 +151,12 @@
                                 </form>
                             </div>
                         @endif
+                        {{-- if pour modificationrequest --}}
                         @if (
-                                $contrat?->signature_locataire &&
+                            $contrat?->signature_locataire &&
                                 $contrat?->signature_agent_immobilier &&
-                                !$contrat?->modificationRequests->where('statut', 'en_attente')->count()
-                            )
-
+                                Auth::user()->id_role != 1 &&
+                                !$contrat?->modificationRequests->where('statut', 'en_attente')->count())
                             <div class="d-flex gap-3 flex-wrap">
                                 <button type="button" class="btn p-0 border-0 d-flex align-items-center text-info"
                                     data-bs-toggle="modal" data-bs-target="#modificationModal">
@@ -164,13 +164,34 @@
                                 </button>
                             </div>
                         @endif
-                        @if ($contrat && $contrat->modificationRequests->where('statut', 'en_attente')->count())
-                        <div class="d-flex gap-3 flex-wrap">
-                                <button type="button" class="btn p-0 border-0 d-flex align-items-center text-info">
-                                    <i class="fas fa-edit me-1"></i>Demande de modification en attente
-                                </button>
+
+                        @if ($contrat?->modificationRequests?->where('statut', 'en_attente')->count())
+                            <div class="d-flex gap-3 flex-wrap">
+                                <a href="{{ route('demandes.modification') }}"
+                                    class="btn p-0 border-0 d-flex align-items-center text-info text-decoration-none">
+                                    <i class="fas fa-clock text-warning me-1"></i>Demande de modification en attente
+                                </a>
                             </div>
                         @endif
+
+                        @if (
+                            $contrat?->signature_locataire &&
+                                $contrat?->signature_agent_immobilier &&
+                                Auth::user()->id_role === 3 &&
+                                !$contrat?->modificationRequests->where('statut', 'en_attente')->count())
+                                <div class="d-flex ms-auto gap-3 flex-wrap">
+                                    <form action="{{ route('contrats.resilier', $contrat->id) }}" method="POST"
+                                        onsubmit="return confirm('Êtes-vous sûr de vouloir résilier ce contrat ?');"
+                                        style="display: inline-block;">
+                                        @csrf
+                                        @method('PUT')
+                                        <button type="submit" class="btn text-danger text-end text-decoration-none">
+                                            <i class="fas fa-ban text-danger me-1"></i> Résilier le contrat
+                                        </button>
+                                    </form>
+                                </div>
+                        @endif
+
 
                         {{-- Modal de demande de modification --}}
                         <div class="modal fade" id="modificationModal" tabindex="-1"
@@ -208,8 +229,11 @@
 
                     <div class="card-body">
 
-                        @if ($contrat?->signature_agent_immobilier || (Auth::user()->id_role === 3 && $contrat))
-                            <h6 class="card-subtitle mb-2 text-muted">Contrat de Location entre l’Agent Immobilier et le
+                        @if (
+                            ($contrat?->signature_agent_immobilier && Auth::user()->id_role != 1) ||
+                                (Auth::user()->id_role === 3 && $contrat) ||
+                                (Auth::user()->id_role === 1 && $contrat->signature_agent_immobilier && $contrat->signature_locataire))
+                            <h6 class="card-subtitle mb-2 mt-0 text-muted">Contrat de Location entre l’Agent Immobilier et le
                                 Locataire</h6>
                             <p>ENTRE LES SOUSSIGNÉS :</p>
 
@@ -227,11 +251,13 @@
                             </p>
 
                             <p>
-                                <strong>{{ $locataireAssigné->locataire->nom }} {{ $locataireAssigné->locataire->prenom }}
+                                <strong>{{ $locataireAssigné ? $locataireAssigné->locataire->nom : $contrat->locataire->nom }}
+                                    {{ $locataireAssigné ? $locataireAssigné->locataire->prenom : $contrat->locataire->prenom }}
                                     ,</strong> né(e) le
-                                <strong>{{ $locataireAssigné->locataire->date_naissance->format('d/m/Y') }}</strong>,
+                                <strong>{{ $locataireAssigné ? $locataireAssigné->locataire->date_naissance->format('d/m/Y') : $contrat->locataire->date_naissance->format('d/m/Y') }}</strong>,
                                 </strong>, domicilié(e) à
-                                <strong>{{ $locataireAssigné->locataire->adresse }}</strong>, ci-après désigné “Le
+                                <strong>{{ $locataireAssigné ? $locataireAssigné->locataire->adresse : $contrat->locataire->adresse }}</strong>,
+                                ci-après désigné “Le
                                 Locataire”,
                                 D’AUTRE PART,
                             </p>
@@ -305,28 +331,13 @@
 
                                 <h6><strong><u>ARTICLE 4</u> : LOYER ET MODALITÉS DE PAIEMENT</strong> </h6>
 
-                                @php
-                                    // Convertir la fréquence en jours si c'est une période (mois, bimestre, trimestre)
-$frequences = [
-    'mois' => 30,
-    'bimestre' => 60,
-    'trimestre' => 90,
-    'semestriel' => 180, // Virgule ajoutée ici
-    'annuel' => 360,
-];
-
-// Par défaut, la valeur brute est utilisée si la clé n'est pas reconnue
-                                    $delai_retard =
-                                        $frequences[$contrat->frequence_paiement] ?? $contrat->frequence_paiement;
-
-                                @endphp
 
 
                                 <p>
                                     1. Le présent contrat est consenti et accepté pour un loyer mensuel de
                                     <strong>{{ number_format($bien->loyer_mensuel, 2) }} Francs CFA</strong> Payable par
-                                    <strong>{{ $contrat->frequence_paiement }}</strong> et d'avance
-                                    soit <strong>{{ $contrat->montant_total_frequence }}</strong> Francs CFA.
+                                    {{-- <strong>{{ $contrat->frequence_paiement }}</strong> --}} <strong>mois</strong> et d'avance
+                                    {{-- soit <strong>{{ $contrat->montant_total_frequence }}</strong> Francs CFA --}}.
                                     Ce loyer est payable au plus tard le
                                     <strong>{{ $contrat->date_debut->addMonth(1)->day }}ème
                                         jour</strong> de chaque mois.
@@ -365,16 +376,6 @@ $frequences = [
                                                 {{ $article->pivot->titre_article }}</strong></h6>
                                         <p>{{ $article->pivot->contenu_article }}</p>
 
-                                        {{-- @if (Auth::user()->id_role === 3 && !$contrat->signature_locataire)
-                                            <form
-                                                action="{{ route('contrats.detachArticle', ['contratId' => $contrat->id, 'articleId' => $article->id]) }}"
-                                                method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger">Retirer</button>
-
-                                            </form>
-                                        @endif --}}
                                         @if (Auth::user()->id_role === 3 && !$contrat->signature_locataire)
                                             <form
                                                 action="{{ route('contrats.detachArticle', ['contratId' => $contrat->id, 'articleId' => $article->id]) }}"
@@ -479,7 +480,9 @@ $frequences = [
                                 <p>En fois de quoi les parties contractantes ont opposé leurs noms, cachets et signatures
                                 </p>
                                 <p>
-                                    Fait en trois (03) exemlaires originaux, remis à chaque partie.
+                                    Ce contrat numérique tient lieu d’original pour les deux parties et peut être exporté à
+                                    tout moment par chacune d’elles depuis leur espace personnel sur la plateforme
+                                    {{ config('app.name') }}.
                                 </p>
 
                                 <p class="text-end m-5 mt-1 mb-1">A <strong>{{ $contrat->lieu_signature }}</strong>, le
@@ -531,16 +534,17 @@ $frequences = [
                                                 alt="Signature Locataire" width="150">
                                             <strong>
                                                 <u>
-                                                    <p>{{ $locataireAssigné->locataire->nom }}
-                                                        {{ $locataireAssigné->locataire->prenom }}</p>
+                                                    <p>{{ $locataireAssigné ? $locataireAssigné->locataire->nom : $contrat->locataire->nom}}
+                                                        {{ $locataireAssigné ? $locataireAssigné->locataire->prenom : $contrat->locataire->prenom}}</p>
                                                 </u>
                                             </strong>
                                         @else
                                             <p>Aucune signature trouvée.</p>
                                             <strong>
                                                 <u>
-                                                    <p>{{ $locataireAssigné->locataire->nom }}
-                                                        {{ $locataireAssigné->locataire->prenom }}</p>
+                                                    <p>{{ $locataireAssigné ? $locataireAssigné->locataire->nom : $contrat->locataire->nom }}
+                                                        {{ $locataireAssigné ? $locataireAssigné->locataire->prenom : $contrat->locataire->prenom }}
+                                                    </p>
                                                 </u>
                                             </strong>
                                             @if (Auth::user()->id_role == 2)
@@ -560,7 +564,7 @@ $frequences = [
                             </div>
                             <button id="see-more-btn" class="btn btn-primary ">Voir plus</button>
                             @if ($contrat->signature_agent_immobilier && $contrat->signature_locataire)
-                                <a href="{{ route('contrat.export', ['bien_id' => $bien->id, 'agent_id' => $locataireAssigné->locataire->agent_immobilier->id]) }}"
+                                <a href="{{ route('contrat.export', ['bien_id' => $bien->id, 'agent_id' => $locataireAssigné ? $locataireAssigné->locataire->agent_immobilier->id : $contrat->locataire->agent_immobilier->id]) }}"
                                     class="btn btn-success">
                                     Exporter en PDF
                                 </a>
@@ -583,21 +587,40 @@ $frequences = [
             <div class="col-lg-4 col-md-12">
                 <!-- Première carte : Locataire Assigné -->
                 <div class="card shadow-sm mb-3">
-                    <div class="body text-center">
-                        @if ($locataireAssigné)
-                            <a href="#"><img src="{{ asset($locataireAssigné->locataire->photo_profil) }}"
-                                    alt="Photo de {{ $locataireAssigné->locataire->nom }}"
-                                    class=" only rounded-circle mb-3"
-                                    style="width: 100px; height: 100px; object-fit: cover;"></a>
-                            <h4 class="text-primary">{{ $locataireAssigné->locataire->nom }}
-                                {{ $locataireAssigné->locataire->prenom }}</h4>
-                            <p class="text-muted mb-3">{{ $locataireAssigné->locataire->user->email }}</p>
-                            <span class="badge bg-success">Locataire Assigné</span>
-                        @else
-                            <h4 class="text-danger">Aucun locataire assigné</h4>
-                            <p class="text-muted">Assignez un locataire pour voir ses informations ici.</p>
-                        @endif
-                    </div>
+                    @if (Auth::user()->id_role != 1)
+                        <div class="body text-center">
+                            @if ($locataireAssigné)
+                                <a href="#"><img src="{{ asset($locataireAssigné->locataire->photo_profil) }}"
+                                        alt="Photo de {{ $locataireAssigné->locataire->nom }}"
+                                        class=" only rounded-circle mb-3"
+                                        style="width: 100px; height: 100px; object-fit: cover;"></a>
+                                <h4 class="text-primary">{{ $locataireAssigné->locataire->nom }}
+                                    {{ $locataireAssigné->locataire->prenom }}</h4>
+                                <p class="text-muted mb-3">{{ $locataireAssigné->locataire->user->email }}</p>
+                                <span class="badge bg-success">Locataire Assigné</span>
+                            @else
+                                <h4 class="text-danger">Aucun locataire assigné</h4>
+                                <p class="text-muted">Assignez un locataire pour voir ses informations ici.</p>
+                            @endif
+                        </div>
+                    @else
+                        <div class="body text-center">
+                            @if ($contrat)
+                                <a href="#"><img src="{{ asset($contrat->locataire->photo_profil) }}"
+                                        alt="Photo de {{ $contrat->locataire->nom }}" class=" only rounded-circle mb-3"
+                                        style="width: 100px; height: 100px; object-fit: cover;"></a>
+                                <h4 class="text-primary">{{ $contrat->locataire->nom }}
+                                    {{ $contrat->locataire->prenom }}</h4>
+                                <p class="text-muted mb-3">{{ $contrat->locataire->user->email }}</p>
+                                <span class="badge bg-success">
+                                    {{ $contrat->statut_contrat == 'Actif' ? 'Locataire Assigné' : ($contrat->statut_contrat == 'Terminé' ? 'Ancien Locataire Assigné' : 'Ancien Locataire Assigné') }}
+                                </span>
+                            @else
+                                <h4 class="text-danger">Aucun locataire assigné</h4>
+                                <p class="text-muted">Assignez un locataire pour voir ses informations ici.</p>
+                            @endif
+                        </div>
+                    @endif
                 </div>
 
                 <!-- Deuxième carte : Informations du Bien -->

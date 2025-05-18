@@ -58,7 +58,7 @@ class ContratsDeBailSeeder extends Seeder
                 'penalite_retard' => $faker->numberBetween(1, 50),
                 'mode_paiement' => $faker->randomElement(['virement', 'espèces', 'chèque']),
                 'renouvellement_automatique' => $faker->boolean(),
-                'statut_contrat' => $faker->randomElement(['actif', 'terminé', 'suspendu']),
+                'statut_contrat' => $faker->randomElement(['Actif', 'Terminé', 'Suspendu']),
                 'lieu_signature' => $faker->city,
                 'date_signature' => $faker->date(),
             ])

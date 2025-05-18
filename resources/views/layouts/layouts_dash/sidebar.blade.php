@@ -2,14 +2,14 @@
 <div class="startbar d-print-none">
     <!--start brand-->
     <div class="brand">
-        <a href="index.html" class="logo">
-            <span>
-                <img src="{{ asset('assets/images/logo-sm.png') }} " alt="logo-small" class="logo-sm">
+        <a href="#" class="logo">
+            <span style="display: flex; align-items: center; justify-content: center; height: 70px; width: 100%; background: transparent;">
+                <img src="{{ asset('assets/images/gbsolux-remouve.png') }}" alt="logo-small" style="max-height: 60px; max-width: 60px; object-fit: cover; display: block; margin: 0 auto; border-radius: 50%; box-shadow: 0 2px 8px rgba(0,0,0,0.08); background: #fff; padding: 4px;" />
             </span>
-            <span class="">
+            {{-- <span class="">
                 <img src="{{ asset('assets/images/logo-light.png') }} " alt="logo-large" class="logo-lg logo-light">
                 <img src="{{ asset('assets/images/logo-dark.png') }} " alt="logo-large" class="logo-lg logo-dark">
-            </span>
+            </span> --}}
         </a>
     </div>
     <!--end brand-->
@@ -88,6 +88,14 @@
                             </a>
                         </li><!--end nav-item-->
 
+                        <!-- Tous les contrats de bail -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('contrat.index') }}">
+                                <i class="fas fa-book menu-icon"></i> <!-- Icône pour audit contrats -->
+                                <span>Voir tous les contrats de bail</span>
+                            </a>
+                        </li><!--end nav-item-->
+
                         <!-- Nouveau menu 1 : Gestion de la maintenance -->
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('admin.demandes.grouped') }} ">
@@ -114,98 +122,108 @@
 
                     <!-- ITEMS POUR LE LOCATAIRE -->
                     @if (Auth::user()->id_role == 2)
+                        @if (Auth::user()->statut)
+                            <!-- Dashboard -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('dashboard') }}">
+                                    <i class="iconoir-view-grid menu-icon"></i> <!-- Icône du Dashboard -->
+                                    <span>Dashboard</span>
+                                </a>
+                            </li><!--end nav-item-->
 
-                        <!-- Dashboard -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('dashboard') }}">
-                                <i class="iconoir-view-grid menu-icon"></i> <!-- Icône du Dashboard -->
-                                <span>Dashboard</span>
-                            </a>
-                        </li><!--end nav-item-->
+                            <!-- Consulter son contrat de bail -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('locataire_bien', Auth::user()->id) }}">
+                                    <i class="iconoir-book menu-icon"></i> <!-- Icône pour contrat de bail -->
+                                    <span>Bien loué / Contrat</span>
+                                </a>
+                            </li><!--end nav-item-->
 
-                        <!-- Consulter son contrat de bail -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('locataire_bien', Auth::user()->id) }}">
-                                <i class="iconoir-book menu-icon"></i> <!-- Icône pour contrat de bail -->
-                                <span>Bien loué / Contrat</span>
-                            </a>
-                        </li><!--end nav-item-->
+                            <!-- Demande de maintenance/réparations -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('locataire.demandes.index') }}">
+                                    <i class="iconoir-wrench menu-icon"></i> <!-- Icône pour demande de maintenance -->
+                                    <span>Demande de maintenance/réparations</span>
+                                </a>
+                            </li><!--end nav-item-->
+                            <!-- Demande de modification -->
+                            <li class="nav-item">
+                                <a class="nav-link" href=" {{ route('demandes.modification') }} ">
+                                    <i class="iconoir-stats-up-square menu-icon"></i>
+                                    <span>Demande de modification</span>
+                                </a>
 
-                        <!-- Demande de maintenance/réparations -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('locataire.demandes.index') }}">
-                                <i class="iconoir-wrench menu-icon"></i> <!-- Icône pour demande de maintenance -->
-                                <span>Demande de maintenance/réparations</span>
-                            </a>
-                        </li><!--end nav-item-->
-                        <!-- Demande de modification -->
-                        <li class="nav-item">
-                            <a class="nav-link" href=" {{ route('demandes.modification') }} ">
-                                <i class="iconoir-stats-up-square menu-icon"></i>
-                                <span>Demande de modification</span>
-                            </a>
+                            </li><!--end nav-item-->
 
-                        </li><!--end nav-item-->
+                            <!-- Effectuer un paiement -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('periodes.show') }}">
+                                    <i class="iconoir-credit-card menu-icon"></i> <!-- Icône pour paiement -->
+                                    <span>Processus de paiement</span>
+                                </a>
 
-                        <!-- Effectuer un paiement -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('periodes.show') }}">
-                                <i class="iconoir-credit-card menu-icon"></i> <!-- Icône pour paiement -->
-                                <span>Processus de paiement</span>
-                            </a>
-
-                        </li>
+                            </li>
 
 
 
-                        <!-- Historique des paiements -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('locataire.paiements.historique') }}">
-                                <i class="iconoir-list menu-icon"></i> <!-- Icône pour historique des paiements -->
-                                <span>Historique des paiements</span>
-                            </a>
-                        </li><!--end nav-item-->
+                            <!-- Historique des paiements -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('locataire.paiements.historique') }}">
+                                    <i class="iconoir-list menu-icon"></i> <!-- Icône pour historique des paiements -->
+                                    <span>Historique des paiements</span>
+                                </a>
+                            </li><!--end nav-item-->
 
-                        <!-- <li class="nav-item">
+                            <!-- <li class="nav-item">
                             <a class="nav-link" href="{{ route('user', Auth::user()->locataires->first()->agent_immobilier->user->id) }}">
                                 <i class="iconoir-chat-bubble menu-icon"></i>
                                 <span>Assistance en ligne</span>
                             </a>
-                        </li> -->
+                           </li> -->
 
-                        <!-- Informations de l’agence ou de l’agent -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('locataire.agentinfo', Auth::user()->id) }}">
-                                <i class="iconoir-phone menu-icon"></i>
-                                <span>Informations de l’agence ou de l’agent</span>
-                            </a>
-                        </li>
+                            <!-- Informations de l’agence ou de l’agent -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('locataire.agentinfo', Auth::user()->id) }}">
+                                    <i class="iconoir-phone menu-icon"></i>
+                                    <span>Informations de l’agence ou de l’agent</span>
+                                </a>
+                            </li>
 
 
-                        <!-- Profil -->
+                            <!-- Profil -->
 
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('locataire.locashow', Auth::user()->id) }}">
-                                <i class="iconoir-user menu-icon"></i> <!-- Icône pour modification de profil -->
-                                <span>Profil</span>
-                            </a>
-                        </li><!--end nav-item-->
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('locataire.locashow', Auth::user()->id) }}">
+                                    <i class="iconoir-user menu-icon"></i> <!-- Icône pour modification de profil -->
+                                    <span>Profil</span>
+                                </a>
+                            </li><!--end nav-item-->
 
-                        <!-- Paramètres -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('profile.edit', Auth::user()->id) }}">
-                                <i class="iconoir-settings menu-icon"></i> <!-- Icône pour paramètres -->
-                                <span>Paramètres</span>
-                            </a>
-                        </li><!--end nav-item-->
+                            <!-- Paramètres -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('profile.edit', Auth::user()->id) }}">
+                                    <i class="iconoir-settings menu-icon"></i> <!-- Icône pour paramètres -->
+                                    <span>Paramètres</span>
+                                </a>
+                            </li><!--end nav-item-->
 
-                        <li class="nav-item">
-                            <a class="nav-link"
-                                href="{{ route('user', Auth::user()->locataires->first()->agent_immobilier->user->id) }}">
-                                <i class="iconoir-chat-bubble menu-icon"></i> <!-- Icône pour messagerie -->
-                                <span>Assistance en ligne</span>
-                            </a>
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link"
+                                    href="{{ route('user', Auth::user()->locataires->first()->agent_immobilier->user->id) }}">
+                                    <i class="iconoir-chat-bubble menu-icon"></i> <!-- Icône pour messagerie -->
+                                    <span>Assistance en ligne</span>
+                                </a>
+                            </li>
+                            @else
+                            <!-- Profil -->
+
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('locataire.locashow', Auth::user()->id) }}">
+                                    <i class="iconoir-user menu-icon"></i> <!-- Icône pour modification de profil -->
+                                    <span>Profil</span>
+                                </a>
+                            </li><!--end nav-item-->
+                        @endif
 
 
 
