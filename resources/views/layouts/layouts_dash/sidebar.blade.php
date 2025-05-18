@@ -1,387 +1,233 @@
-<!-- leftbar-tab-menu -->
+<!-- Sidebar avec style professionnel -->
+
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .startbar {
+        background: linear-gradient(180deg, #012417, #015f3b); /* Vert Foncé Profond */
+        color: white;
+        width: 270px;
+        height: 100vh;
+        border-top-right-radius: 25px;
+        border-bottom-right-radius: 25px;
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.4);
+        overflow: hidden;
+        position: fixed;
+        top: 0;
+        left: 0;
+        display: flex;
+        flex-direction: column;
+        z-index: 1000;
+    }
+
+    .startbar .brand {
+        padding: 25px;
+        text-align: center;
+        flex-shrink: 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .startbar .brand img {
+        max-width: 65px;
+        border-radius: 50%;
+        background: #fff;
+        padding: 6px;
+    }
+
+    .startbar-menu {
+        flex-grow: 1;
+        overflow-y: auto;
+        padding: 20px 0;
+    }
+
+    .startbar-menu::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .startbar-menu::-webkit-scrollbar-thumb {
+        background-color: rgba(255, 255, 255, 0.3);
+        border-radius: 5px;
+    }
+
+    .startbar .nav-link {
+        color: white;
+        padding: 14px 22px;
+        margin: 6px 18px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        font-size: 16px;
+        text-decoration: none;
+        font-weight: 500;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        transition: all 0.3s ease;
+    }
+
+    .startbar .nav-link:hover {
+        background-color: rgba(255, 255, 255, 0.15);
+        transform: translateX(6px);
+    }
+
+    .startbar .nav-link i {
+        font-size: 20px;
+        color: #d0d0d0; /* Icône blanc atténué */
+        min-width: 24px;
+        text-align: center;
+        transition: color 0.3s ease;
+    }
+
+    .startbar .nav-link:hover i {
+        color: white; /* Icône devient blanche au survol */
+    }
+
+    .startbar .collapse .nav-link {
+        padding-left: 44px;
+        font-size: 15px;
+    }
+
+    .startbar .nav-item {
+        margin-bottom: 6px;
+    }
+
+    .startbar a.nav-link span {
+        flex: 1;
+        color: white;
+    }
+
+    /* DARK MODE */
+    body.dark-mode .startbar {
+        background: linear-gradient(180deg, #0c0f0e, #1c2e27);
+    }
+
+    body.dark-mode .startbar .nav-link {
+        color: #e0e0e0;
+    }
+
+    body.dark-mode .startbar .nav-link:hover {
+        background-color: rgba(255, 255, 255, 0.08);
+    }
+
+    body.dark-mode .startbar .nav-link i {
+        color: #bbbbbb;
+    }
+
+    body.dark-mode .startbar .nav-link:hover i {
+        color: #ffffff;
+    }
+
+    body.dark-mode .startbar .brand {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+</style>
+
+<!-- HTML complet de la sidebar -->
 <div class="startbar d-print-none">
-    <!--start brand-->
+    <!-- Start brand -->
     <div class="brand">
         <a href="#" class="logo">
-            <span style="display: flex; align-items: center; justify-content: center; height: 70px; width: 100%; background: transparent;">
-                <img src="{{ asset('assets/images/gbsolux-remouve.png') }}" alt="logo-small" style="max-height: 60px; max-width: 60px; object-fit: cover; display: block; margin: 0 auto; border-radius: 50%; box-shadow: 0 2px 8px rgba(0,0,0,0.08); background: #fff; padding: 4px;" />
+            <span style="display: flex; align-items: center; justify-content: center;">
+                <img src="{{ asset('assets/images/gbsolux-remouve.png') }}" alt="logo-small" />
             </span>
-            {{-- <span class="">
-                <img src="{{ asset('assets/images/logo-light.png') }} " alt="logo-large" class="logo-lg logo-light">
-                <img src="{{ asset('assets/images/logo-dark.png') }} " alt="logo-large" class="logo-lg logo-dark">
-            </span> --}}
         </a>
     </div>
-    <!--end brand-->
-    <!--start startbar-menu-->
-    <div class="startbar-menu">
-        <div class="startbar-collapse" id="startbarCollapse" data-simplebar>
-            <div class="d-flex align-items-start flex-column w-100">
-                <!-- Navigation -->
-                <ul class="navbar-nav mb-auto w-100">
 
-                    {{-- Administrateur --}}
-                    <!-- ITEMS POUR LE SUPER ADMINISTRATEUR -->
-                    @if (Auth::user()->id_role == 1)
-                        <!-- Dashboard -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('dashboard') }}">
-                                <i class="fas fa-tachometer-alt menu-icon"></i> <!-- Icône de tableau de bord -->
-                                <span>Dashboard</span>
-                            </a>
-                        </li><!--end nav-item-->
+    <!-- Start startbar-menu -->
+    <div class="startbar-menu" data-simplebar>
+        <div class="d-flex align-items-start flex-column w-100">
+            <ul class="navbar-nav mb-auto w-100">
 
-                        <!-- Gérer les utilisateurs -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="#sidebarGerer_user" data-bs-toggle="collapse" role="button"
-                                aria-expanded="false" aria-controls="sidebarGerer_user">
-                                <i class="fas fa-users-cog menu-icon"></i> <!-- Icône pour gestion des utilisateurs -->
-                                <span>Gérer les utilisateurs</span>
-                            </a>
-                            <div class="collapse" id="sidebarGerer_user">
-                                <ul class="nav flex-column">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{ route('admin.agents.index') }}">
-                                            <i class="fas fa-user-plus menu-icon"></i>
-                                            <!-- Icône pour ajouter utilisateur -->
-                                            <span>Valider les agences</span>
-                                        </a>
-                                    </li><!--end nav-item-->
-                                    <!-- <li class="nav-item">
-                                        <a class="nav-link" href="t.t">
-                                        <i class="fas fa-user-tie menu-icon"></i>
-                                            <span>Liste agents immobiliers</span>
-                                        </a>
-                                    </li> -->
-                                    <li class="nav-item">
-                                        <a class="nav-link"
-                                            href="{{ route('admin.locataires_par_agence', Auth::user()->id) }}">
-                                            <i class="fas fa-users menu-icon"></i>
-                                            <!-- Icône pour liste des locataires -->
-                                            <span>Liste des locataire </spam>
-                                        </a>
-                                    </li><!--end nav-item-->
-                                </ul><!--end nav-->
-                            </div><!--end sidebarGerer_user-->
-                        </li><!--end nav-item-->
+                {{-- SUPER ADMIN --}}
+                @if (Auth::user()->id_role == 1)
+                    <li class="nav-item"><a class="nav-link" href="{{ route('dashboard') }}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#sidebarGerer_user" data-bs-toggle="collapse">
+                            <i class="fas fa-users-cog"></i><span>Gérer les utilisateurs</span>
+                        </a>
+                        <div class="collapse" id="sidebarGerer_user">
+                            <ul class="nav flex-column">
+                                <li class="nav-item"><a class="nav-link" href="{{ route('admin.agents.index') }}"><i class="fas fa-user-plus"></i><span>Valider les agences</span></a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ route('admin.locataires_par_agence', Auth::user()->id) }}"><i class="fas fa-users"></i><span>Liste des locataire</span></a></li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="rapports-financiers.html"><i class="fas fa-file-invoice-dollar"></i><span>Consulter les rapports financiers</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('admin.paiements.index') }}"><i class="fas fa-file-invoice-dollar"></i><span>Historiques des Paiements</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('admin.contrats_de_bail.index') }}"><i class="fas fa-book"></i><span>Auditer les contrats de bail</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('contrat.index') }}"><i class="fas fa-book"></i><span>Voir tous les contrats de bail</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('admin.demandes.grouped') }}"><i class="fas fa-tools"></i><span>Gérer la maintenance</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="statistiques.html"><i class="fas fa-chart-bar"></i><span>Voir les statistiques</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('user', Auth::user()->id) }}"><i class="iconoir-chat-bubble"></i><span>Assistance en ligne</span></a></li>
+                @endif
 
-                        <!-- Consulter les rapports financiers -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="rapports-financiers.html">
-                                <i class="fas fa-file-invoice-dollar menu-icon"></i>
-                                <!-- Icône pour rapports financiers -->
-                                <span>Consulter les rapports financiers</span>
-                            </a>
-                        </li><!--end nav-item-->
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.paiements.index') }}">
-                                <i class="fas fa-file-invoice-dollar menu-icon"></i> <!-- Historique des paiements -->
-                                <span>Historiques des Paiements</span>
-                            </a>
-                        </li><!--end nav-item-->
-
-                        <!-- Auditer les contrats de bail -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.contrats_de_bail.index') }}">
-                                <i class="fas fa-book menu-icon"></i> <!-- Icône pour audit contrats -->
-                                <span>Auditer les contrats de bail</span>
-                            </a>
-                        </li><!--end nav-item-->
-
-                        <!-- Tous les contrats de bail -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('contrat.index') }}">
-                                <i class="fas fa-book menu-icon"></i> <!-- Icône pour audit contrats -->
-                                <span>Voir tous les contrats de bail</span>
-                            </a>
-                        </li><!--end nav-item-->
-
-                        <!-- Nouveau menu 1 : Gestion de la maintenance -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('admin.demandes.grouped') }} ">
-                                <i class="fas fa-tools menu-icon"></i> <!-- Icône pour gestion de la maintenance -->
-                                <span>Gérer la maintenance</span>
-                            </a>
-                        </li><!--end nav-item-->
-
-                        <!-- Nouveau menu 2 : Statistiques -->
-                        <li class="nav-item">
-                            <a class="nav-link" href="statistiques.html">
-                                <i class="fas fa-chart-bar menu-icon"></i> <!-- Icône pour statistiques -->
-                                <span>Voir les statistiques</span>
-                            </a>
-                        </li><!--end nav-item-->
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('user', Auth::user()->id) }}">
-                                <i class="iconoir-chat-bubble menu-icon"></i> <!-- Remplacé par une icône de chat -->
-                                <span>Assistance en ligne</span>
-                            </a>
-                        </li><!--end nav-item-->
+                {{-- LOCATAIRE --}}
+                @if (Auth::user()->id_role == 2)
+                    @if (Auth::user()->statut)
+                        <li class="nav-item"><a class="nav-link" href="{{ route('dashboard') }}"><i class="iconoir-view-grid"></i><span>Dashboard</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('locataire_bien', Auth::user()->id) }}"><i class="iconoir-book"></i><span>Bien loué / Contrat</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('locataire.demandes.index') }}"><i class="iconoir-wrench"></i><span>Demande maintenance</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('demandes.modification') }}"><i class="iconoir-stats-up-square"></i><span>Demande de modification</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('periodes.show') }}"><i class="iconoir-credit-card"></i><span>Processus de paiement</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('locataire.paiements.historique') }}"><i class="iconoir-list"></i><span>Historique des paiements</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('locataire.agentinfo', Auth::user()->id) }}"><i class="iconoir-phone"></i><span>Infos de l’agence</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('locataire.locashow', Auth::user()->id) }}"><i class="iconoir-user"></i><span>Profil</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('profile.edit', Auth::user()->id) }}"><i class="iconoir-settings"></i><span>Paramètres</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('user', Auth::user()->locataires->first()->agent_immobilier->user->id) }}"><i class="iconoir-chat-bubble"></i><span>Assistance en ligne</span></a></li>
+                    @else
+                        <li class="nav-item"><a class="nav-link" href="{{ route('locataire.locashow', Auth::user()->id) }}"><i class="iconoir-user"></i><span>Profil</span></a></li>
                     @endif
+                @endif
 
+                {{-- AGENT IMMOBILIER --}}
+                @if (Auth::user()->id_role == 3 && Auth::user()->statut)
+                    <li class="nav-item"><a class="nav-link" href="{{ route('dashboard') }}"><i class="iconoir-view-grid"></i><span>Dashboard</span></a></li>
 
-                    <!-- ITEMS POUR LE LOCATAIRE -->
-                    @if (Auth::user()->id_role == 2)
-                        @if (Auth::user()->statut)
-                            <!-- Dashboard -->
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('dashboard') }}">
-                                    <i class="iconoir-view-grid menu-icon"></i> <!-- Icône du Dashboard -->
-                                    <span>Dashboard</span>
-                                </a>
-                            </li><!--end nav-item-->
+                    <li class="nav-item">
+                        <a class="nav-link" href="#sidebarGerer_locataires" data-bs-toggle="collapse">
+                            <i class="iconoir-user"></i><span>Gérer les locataires</span>
+                        </a>
+                        <div class="collapse" id="sidebarGerer_locataires">
+                            <ul class="nav flex-column">
+                                <li class="nav-item"><a class="nav-link" href="{{ route('locataire.create') }}">Enregistrer</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ route('locataire.index') }}">Liste</a></li>
+                            </ul>
+                        </div>
+                    </li>
 
-                            <!-- Consulter son contrat de bail -->
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('locataire_bien', Auth::user()->id) }}">
-                                    <i class="iconoir-book menu-icon"></i> <!-- Icône pour contrat de bail -->
-                                    <span>Bien loué / Contrat</span>
-                                </a>
-                            </li><!--end nav-item-->
+                    <li class="nav-item">
+                        <a class="nav-link" href="#sidebarGerer_bien" data-bs-toggle="collapse">
+                            <i class="iconoir-home"></i><span>Gestion des biens</span>
+                        </a>
+                        <div class="collapse" id="sidebarGerer_bien">
+                            <ul class="nav flex-column">
+                                <li class="nav-item"><a class="nav-link" href="{{ route('biens.create') }}">Enregistrer</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ route('biens.index') }}">Liste</a></li>
+                            </ul>
+                        </div>
+                    </li>
 
-                            <!-- Demande de maintenance/réparations -->
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('locataire.demandes.index') }}">
-                                    <i class="iconoir-wrench menu-icon"></i> <!-- Icône pour demande de maintenance -->
-                                    <span>Demande de maintenance/réparations</span>
-                                </a>
-                            </li><!--end nav-item-->
-                            <!-- Demande de modification -->
-                            <li class="nav-item">
-                                <a class="nav-link" href=" {{ route('demandes.modification') }} ">
-                                    <i class="iconoir-stats-up-square menu-icon"></i>
-                                    <span>Demande de modification</span>
-                                </a>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#sidebarGerer_contrat_bail" data-bs-toggle="collapse">
+                            <i class="fas fa-indent"></i><span>Gestion des Articles</span>
+                        </a>
+                        <div class="collapse" id="sidebarGerer_contrat_bail">
+                            <ul class="nav flex-column">
+                                <li class="nav-item"><a class="nav-link" href="{{ route('article.create') }}">Enregistrer</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ route('article.index') }}">Liste</a></li>
+                            </ul>
+                        </div>
+                    </li>
 
-                            </li><!--end nav-item-->
+                    <li class="nav-item"><a class="nav-link" href="{{ route('demandes.modification') }}"><i class="iconoir-stats-up-square"></i><span>Demandes de modification</span></a></li>
+                @endif
 
-                            <!-- Effectuer un paiement -->
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('periodes.show') }}">
-                                    <i class="iconoir-credit-card menu-icon"></i> <!-- Icône pour paiement -->
-                                    <span>Processus de paiement</span>
-                                </a>
-
-                            </li>
-
-
-
-                            <!-- Historique des paiements -->
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('locataire.paiements.historique') }}">
-                                    <i class="iconoir-list menu-icon"></i> <!-- Icône pour historique des paiements -->
-                                    <span>Historique des paiements</span>
-                                </a>
-                            </li><!--end nav-item-->
-
-                            <!-- <li class="nav-item">
-                            <a class="nav-link" href="{{ route('user', Auth::user()->locataires->first()->agent_immobilier->user->id) }}">
-                                <i class="iconoir-chat-bubble menu-icon"></i>
-                                <span>Assistance en ligne</span>
-                            </a>
-                           </li> -->
-
-                            <!-- Informations de l’agence ou de l’agent -->
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('locataire.agentinfo', Auth::user()->id) }}">
-                                    <i class="iconoir-phone menu-icon"></i>
-                                    <span>Informations de l’agence ou de l’agent</span>
-                                </a>
-                            </li>
-
-
-                            <!-- Profil -->
-
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('locataire.locashow', Auth::user()->id) }}">
-                                    <i class="iconoir-user menu-icon"></i> <!-- Icône pour modification de profil -->
-                                    <span>Profil</span>
-                                </a>
-                            </li><!--end nav-item-->
-
-                            <!-- Paramètres -->
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('profile.edit', Auth::user()->id) }}">
-                                    <i class="iconoir-settings menu-icon"></i> <!-- Icône pour paramètres -->
-                                    <span>Paramètres</span>
-                                </a>
-                            </li><!--end nav-item-->
-
-                            <li class="nav-item">
-                                <a class="nav-link"
-                                    href="{{ route('user', Auth::user()->locataires->first()->agent_immobilier->user->id) }}">
-                                    <i class="iconoir-chat-bubble menu-icon"></i> <!-- Icône pour messagerie -->
-                                    <span>Assistance en ligne</span>
-                                </a>
-                            </li>
-                            @else
-                            <!-- Profil -->
-
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('locataire.locashow', Auth::user()->id) }}">
-                                    <i class="iconoir-user menu-icon"></i> <!-- Icône pour modification de profil -->
-                                    <span>Profil</span>
-                                </a>
-                            </li><!--end nav-item-->
-                        @endif
-
-
-
-
-                    @endif
-
-                    <!-- ITEMS POUR L'AGENT IMMOBILIER -->
-
-                    @if (Auth::user()->id_role == 3)
-                        @if (Auth::user()->statut)
-                            <!-- Si l'agent est validé -->
-
-
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('dashboard') }}">
-                                    <i class="iconoir-view-grid menu-icon"></i>
-                                    <span>Dashboard</span>
-                                </a>
-
-                            </li><!--end nav-item-->
-
-                            <li class="nav-item">
-                                <a class="nav-link" href="#sidebarGerer_locataires" data-bs-toggle="collapse"
-                                    role="button" aria-expanded="false" aria-controls="sidebarGerer_locataires">
-                                    <i class="iconoir-user menu-icon"></i>
-                                    <span>Gérer les locataires</span>
-                                </a>
-                                <div class="collapse " id="sidebarGerer_locataires">
-                                    <ul class="nav flex-column">
-
-
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="{{ route('locataire.create') }}">Enregistrer
-                                            </a>
-                                        </li><!--end nav-item-->
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="{{ route('locataire.index') }}">Liste </a>
-                                        </li><!--end nav-item-->
-
-
-                                    </ul><!--end nav-->
-                                </div><!--end startbarGerer_bien-->
-                            </li><!--end nav-item-->
-
-                            <li class="nav-item">
-                                <a class="nav-link" href="#sidebarGerer_bien" data-bs-toggle="collapse"
-                                    role="button" aria-expanded="false" aria-controls="sidebarGerer_bien">
-                                    <i class="iconoir-home menu-icon"></i>
-                                    <span>Gestion des biens</span>
-                                </a>
-                                <div class="collapse " id="sidebarGerer_bien">
-                                    <ul class="nav flex-column">
-
-
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="{{ route('biens.create') }}">Enregistrer </a>
-                                        </li><!--end nav-item-->
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="{{ route('biens.index') }}">Liste </a>
-                                        </li><!--end nav-item-->
-
-
-                                    </ul><!--end nav-->
-                                </div><!--end startbarGerer_bien-->
-                            </li><!--end nav-item-->
-
-                            <li class="nav-item">
-                                <a class="nav-link" href="#sidebarGerer_contrat_bail" data-bs-toggle="collapse"
-                                    role="button" aria-expanded="false" aria-controls="sidebarGerer_contrat_bail">
-                                    <i class="fas fa-indent menu-icon"></i>
-                                    <span>Gestion des Articles</span>
-                                </a>
-                                <div class="collapse " id="sidebarGerer_contrat_bail">
-                                    <ul class="nav flex-column">
-
-
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="{{ route('article.create') }}">Enregistrer</a>
-                                        </li><!--end nav-item-->
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="{{ route('article.index') }}">Liste</a>
-                                        </li><!--end nav-item-->
-
-
-                                    </ul><!--end nav-->
-                                </div><!--end startbarGerer_bien-->
-                            </li><!--end nav-item-->
-                            <li class="nav-item">
-                                <a class="nav-link" href=" {{ route('demandes.modification') }} ">
-                                    <i class="iconoir-stats-up-square menu-icon"></i>
-                                    <span>Demande de modification</span>
-                                </a>
-
-                            </li><!--end nav-item-->
-
-
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('agent_immo_historique') }}">
-                                    <i class="far fa-eye menu-icon"></i>
-                                    <span>Suivi des paiements</span>
-                                </a>
-
-                            </li><!--end nav-item-->
-
-                            <li class="nav-item">
-                                <a class="nav-link" href=" {{ route('information_gestion') }} ">
-                                    <i class="iconoir-stats-up-square menu-icon"></i>
-                                    <span>Auditer Loyer</span>
-                                </a>
-
-                            </li><!--end nav-item-->
-
-
-
-                            {{-- <li class="nav-item">
-                                <a class="nav-link" href="lol.html">
-                                    <i class="iconoir-view-grid menu-icon"></i>
-                                    <span>Consulter les rapports financiers</span>
-                                </a>
-
-                            </li><!--end nav-item--> --}}
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('agent.demandes') }}">
-                                    <i class="iconoir-tools menu-icon"></i>
-                                    <span>Voir les demande de maintenances</span>
-                                </a>
-
-                            </li><!--end nav-item-->
-                            @php
-                                $user = App\Models\User::where('id_role', 1)->get();
-                            @endphp
-
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('user', $user->first()->id) }}">
-                                    <i class="iconoir-chat-bubble menu-icon"></i>
-                                    <!-- Remplacé par une icône de chat -->
-                                    <span>Assistance en ligne</span>
-                                </a>
-                            </li><!--end nav-item-->
-                        @else
-                            <!-- Si l'agent n'est pas validé -->
-
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ route('agent_immobilier.create') }}">
-                                    <i class="iconoir-view-grid menu-icon"></i>
-                                    <span>Informations de l'agence</span>
-                                </a>
-
-                            </li><!--end nav-item-->
-                        @endif
-                    @endif
-
-
-                </ul><!--end navbar-nav--->
-
-            </div>
-        </div><!--end startbar-collapse-->
-    </div><!--end startbar-menu-->
-</div><!--end startbar-->
-<div class="startbar-overlay d-print-none"></div>
-<!-- end leftbar-tab-menu-->
+            </ul>
+        </div>
+    </div>
+</div>
