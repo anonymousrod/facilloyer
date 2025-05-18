@@ -2,14 +2,14 @@
 <div class="startbar d-print-none">
     <!--start brand-->
     <div class="brand">
-        <a href="index.html" class="logo">
-            <span>
-                <img src="{{ asset('assets/images/logo-sm.png') }} " alt="logo-small" class="logo-sm">
+        <a href="#" class="logo">
+            <span style="display: flex; align-items: center; justify-content: center; height: 70px; width: 100%; background: transparent;">
+                <img src="{{ asset('assets/images/gbsolux-remouve.png') }}" alt="logo-small" style="max-height: 60px; max-width: 60px; object-fit: cover; display: block; margin: 0 auto; border-radius: 50%; box-shadow: 0 2px 8px rgba(0,0,0,0.08); background: #fff; padding: 4px;" />
             </span>
-            <span class="">
+            {{-- <span class="">
                 <img src="{{ asset('assets/images/logo-light.png') }} " alt="logo-large" class="logo-lg logo-light">
                 <img src="{{ asset('assets/images/logo-dark.png') }} " alt="logo-large" class="logo-lg logo-dark">
-            </span>
+            </span> --}}
         </a>
     </div>
     <!--end brand-->
