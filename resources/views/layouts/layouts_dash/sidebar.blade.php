@@ -32,7 +32,7 @@
     }
 
     .startbar .brand img {
-        max-width: 65px;
+        max-width: 48px;
         border-radius: 50%;
         background: #fff;
         padding: 6px;

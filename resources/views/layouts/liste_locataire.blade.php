@@ -5,66 +5,68 @@
         <div class="row justify-content-center">
             <div class="col-12">
                 <div class="card">
-                    <div class="mb-3 card-header d-flex justify-content-between align-items-center" style="background-color: #212121; color: #F5F5F5; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); border-radius: 5px;">
-                        <h4 class="card-title mb-0">Liste des Locataires</h4>
-                        <a href="{{ route('export.pdf') }}" class="btn btn-light btn-sm" style="font-weight: bold;">
-                            <i class="fas fa-file-pdf"></i> Exporter en PDF
+                    <div class="mb-3 card-header d-flex justify-content-between align-items-center animate__animated animate__fadeInDown"
+                        style="background: linear-gradient(90deg, #28a745 60%, #43e97b 100%); color: #fff; box-shadow: 0 4px 16px rgba(40,167,69,0.15); border-radius: 18px 18px 0 0; border: none;">
+                        <h4 class="card-title mb-0 d-flex align-items-center gap-2">
+                            <i class="fas fa-users"></i>
+                            <span>Liste des Locataires</span>
+                        </h4>
+                        <a href="{{ route('export.pdf') }}" class="btn btn-light btn-sm shadow-sm animate__animated animate__pulse animate__infinite" style="font-weight: bold; border-radius: 20px;">
+                            <i class="fas fa-file-pdf text-danger"></i> Exporter en PDF
                         </a>
                     </div>
-                    <div class="card-body pt-0">
+                    <div class="card-body pt-0 animate__animated animate__fadeInUp" style=" border-radius: 0 0 18px 18px;">
                         <div class="table-responsive">
-                            <table class="table datatable" id="datatable_2">
-                                <thead class="">
+                            <table class="table table-hover align-middle datatable" id="datatable_2" style="border-radius: 12px; overflow: hidden;">
+                                <thead >
                                     <tr>
-                                        <th>Photo</th>
-                                        <th>Nom complet</th>
-                                        <th>Téléphone</th>
-                                        <th>Adresse</th>
-                                        <th>Revenus mensuels</th>
-                                        <th>Statut</th>
-                                        <th>Actions</th>
+                                        <th><i class="fas fa-image"></i> Photo</th>
+                                        <th><i class="fas fa-user"></i> Nom complet</th>
+                                        <th><i class="fas fa-phone"></i> Téléphone</th>
+                                        <th><i class="fas fa-map-marker-alt"></i> Adresse</th>
+                                        <th><i class="fas fa-money-bill-wave"></i> Revenus mensuels</th>
+                                        <th><i class="fas fa-toggle-on"></i> Statut</th>
+                                        <th><i class="fas fa-cogs"></i> Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach ($locataires as $locataire)
-                                        <tr>
+                                        <tr class="animate__animated animate__fadeIn animate__faster" style="transition: box-shadow 0.2s;">
                                             <td>
                                                 <img src="{{ asset($locataire->photo_profil) }}"
                                                     alt="profil de {{ $locataire->nom . ' ' . $locataire->prenom }}"
-                                                    style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%;">
-
-
+                                                    style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; border: 2px solid #28a745; box-shadow: 0 2px 8px rgba(40,167,69,0.08); transition: transform 0.2s;"
+                                                    onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
                                             </td>
-                                            <td>{{ $locataire->nom . ' ' . $locataire->prenom }}</td>
-                                            <td>{{ $locataire->telephone }}</td>
-                                            <td>{{ \Illuminate\Support\Str::words($locataire->adresse, 2, '...') }}</td>
-                                            <td>{{ $locataire->revenu_mensuel }} FCFA</td>
+                                            <td><span class="fw-bold text-dark">{{ $locataire->nom . ' ' . $locataire->prenom }}</span></td>
+                                            <td><span class="badge bg-light text-success shadow-sm"><i class="fas fa-phone-alt"></i> {{ $locataire->telephone }}</span></td>
+                                            <td><span class="text-muted">{{ \Illuminate\Support\Str::words($locataire->adresse, 2, '...') }}</span></td>
+                                            <td><span class="badge bg-success bg-opacity-10 text-success fw-semibold">{{ $locataire->revenu_mensuel }} FCFA</span></td>
                                             <td>
-                                                <div class="form-check form-switch">
-                                                    <input class="form-check-input toggle-status" type="checkbox"
-                                                        id="status_{{ $locataire->id }}" data-id="{{ $locataire->id }}"
-                                                        {{ $locataire->user->statut ? 'checked' : '' }}>
-                                                    <label class="form-check-label" for="status_{{ $locataire->id }}">
-                                                        {{ $locataire->user->statut ? 'Activé' : 'Désactivé' }}
+                                                <div class="d-flex align-items-center justify-content-center gap-2">
+                                                    <label class="switch-custom mb-0">
+                                                        <input class="toggle-status" type="checkbox"
+                                                            id="status_{{ $locataire->id }}" data-id="{{ $locataire->id }}"
+                                                            {{ $locataire->user->statut ? 'checked' : '' }}>
+                                                        <span class="slider-custom"></span>
                                                     </label>
+                                                    <span class="status-indicator ms-2" id="status_label_{{ $locataire->id }}">
+                                                        @if($locataire->user->statut)
+                                                            <i class="fas fa-check-circle text-success"></i>
+                                                        @else
+                                                            <i class="fas fa-times-circle text-danger"></i>
+                                                        @endif
+                                                    </span>
                                                 </div>
                                             </td>
-                                            {{-- <td>
-                                                {{ route('locataire.show', $locataire->id) }}
-                                                <a href=""
-                                                    class="btn btn-sm btn-info">
-                                                    <i class="fas fa-eye"></i> Voir Détails
-                                                </a>
-                                            </td> --}}
                                             <td class="text-center align-middle">
-                                                <a href="{{ route('locataire.locashow', $locataire->user->id) }}" class="btn btn-outline-primary">
-                                                    <span class="bi bi-info-circle-fill"></span>
+                                                <a href="{{ route('locataire.locashow', $locataire->user->id) }}" class="btn btn-link p-0 me-2 btn-circle-eye" title="Voir détails">
+                                                    <i class="fas fa-eye icon-voir-details-custom"></i>
                                                 </a>
-                                                <a href="{{ route('user', $locataire->user->id) }}" class="btn btn-outline-primary">
-                                                    <span class="bi bi-chat-dots-fill"></span> <!-- Icône de chat -->
+                                                <a href="{{ route('user', $locataire->user->id) }}" class="btn btn-outline-success btn-circle" title="Chat" style="border-radius: 50%; width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center; font-size: 1.2rem; box-shadow: 0 2px 8px rgba(40,167,69,0.08);">
+                                                    <i class="fas fa-comments"></i>
                                                 </a>
                                             </td>
-
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -106,7 +108,13 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            statusLabel.textContent = isChecked ? 'Activé' : 'Désactivé';
+                            // Mise à jour de l'icône et de la couleur
+                            const indicator = document.getElementById('status_label_' + locataireId);
+                            if (isChecked) {
+                                indicator.innerHTML = '<i class="fas fa-check-circle text-success"></i>';
+                            } else {
+                                indicator.innerHTML = '<i class="fas fa-times-circle text-danger"></i>';
+                            }
                         } else {
                             alert('Une erreur s\'est produite. Veuillez réessayer.');
                             this.checked = !isChecked; // Rétablir l'ancien état
@@ -124,5 +132,126 @@
         });
     });
 </script>
+
+<!-- Animation CSS (Animate.css CDN) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+<!-- FontAwesome CDN (si pas déjà inclus) -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+<style>
+    .table thead th {
+        border: none;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+    .table-hover tbody tr:hover {
+        background: #374151; /* gris foncé neutre, lisible en dark mode */
+        color: #fff;
+        box-shadow: 0 2px 12px rgba(55,65,81,0.10);
+        transition: background 0.2s, box-shadow 0.2s, color 0.2s;
+    }
+    .btn-circle {
+        border-radius: 50% !important;
+        width: 38px;
+        height: 38px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+    }
+    .btn-circle-eye {
+        border-radius: 50% !important;
+        width: 38px;
+        height: 38px;
+        padding: 0;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent; /* cercle transparent */
+        border: 2px solid #28a745;
+        box-shadow: 0 2px 8px rgba(40,167,69,0.08);
+        transition: background 0.2s, border 0.2s;
+    }
+    .btn-circle-eye:hover {
+        background: #28a745;
+        border-color: #43e97b;
+    }
+    .badge {
+        font-size: 1em;
+        padding: 0.5em 0.8em;
+        border-radius: 12px;
+    }
+
+    /* Nouveau switch custom */
+    .switch-custom {
+        position: relative;
+        display: inline-block;
+        width: 44px;
+        height: 24px;
+    }
+    .switch-custom input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+    .slider-custom {
+        position: absolute;
+        cursor: pointer;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: #e4e4e4;
+        border-radius: 24px;
+        transition: background 0.3s;
+    }
+    .switch-custom input:checked + .slider-custom {
+        background: linear-gradient(90deg, #28a745 60%, #43e97b 100%);
+    }
+    .slider-custom:before {
+        position: absolute;
+        content: "";
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background: #fff;
+        border-radius: 50%;
+        box-shadow: 0 2px 6px rgba(40,167,69,0.10);
+        transition: transform 0.3s;
+    }
+    .switch-custom input:checked + .slider-custom:before {
+        transform: translateX(20px);
+    }
+    .status-indicator {
+        font-size: 1.3em;
+        display: flex;
+        align-items: center;
+        min-width: 28px;
+        justify-content: center;
+    }
+    .icon-voir-details-custom {
+        color: #28a745;
+        font-size: 1.2rem;
+        transition: color 0.2s;
+        font-weight: bold;
+    }
+    .btn-circle-eye:hover .icon-voir-details-custom {
+        color: #fff;
+    }
+    @media (prefers-color-scheme: dark) {
+        .btn-circle-eye {
+            background: transparent; /* reste transparent même en dark mode */
+            border: 2px solid #43e97b;
+        }
+        .icon-voir-details-custom {
+            color: #43e97b !important;
+        }
+        .btn-circle-eye:hover {
+            background: #43e97b;
+            border-color: #28a745;
+        }
+        .btn-circle-eye:hover .icon-voir-details-custom {
+            color: #212529 !important;
+        }
+    }
+</style>
 
 @endsection
