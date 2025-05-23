@@ -54,10 +54,6 @@
 {{-- <html lang="en" dir="ltr" data-startbar="light" data-bs-theme="light"> --}}
 <!-- Mirrored from mannatthemes.com/rizz/default/auth-register.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 26 Nov 2024 21:52:10 GMT -->
 
-
-
-
-
 <head>
     @include('layouts.layouts_dash.head')
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
@@ -225,7 +221,6 @@
                 padding: 2rem;
             }
         }
-
     </style>
 </head>
 
@@ -247,82 +242,162 @@
         @endunless
 
         {{-- Partie droite (formulaire) --}}
-        <div class="card auth-form" data-aos="fade-left">
-            <div class="form-container">
-                @if (session('success'))
-                    <div class="alert alert-success text-center">{{ session('success') }}</div>
-                @endif
-
-                @error('errors')
-                    <div class="alert alert-danger text-center">Erreur</div>
-                @enderror
-
-                @foreach (['email', 'password', 'password_confirmation', 'id_role'] as $field)
-                    @error($field)
-                        <div class="alert alert-danger text-center">{{ $message }}</div>
-                    @enderror
-                @endforeach
-
-                <form method="POST" action="{{ $agent ? route('locataire.store') : route('register') }}">
-                    @csrf
-
-                    <div class="form-group mb-3">
-                        <label for="email">Adresse Email</label>
-                        <input type="email" class="form-control" id="email" name="email"
-                            value="{{ old('email') }}" placeholder="ex: utilisateur@email.com" required>
+        @if($agent)
+            <div class="container-xxl py-5">
+                <div class="row justify-content-center">
+                    <div class="col-12 col-lg-8">
+                        <div class="card shadow-lg border-0 rounded-4">
+                            <div class="card-header py-4 d-flex flex-column flex-md-row align-items-center justify-content-between" style="background: linear-gradient(90deg, #43cea2 0%, #185a9d 100%); color: #fff; border-top-left-radius: 1.5rem; border-top-right-radius: 1.5rem;">
+                                <div>
+                                    <h3 class="mb-0 fw-bold"><i class="fas fa-user-tie me-2 animate__animated animate__fadeInLeft"></i>Enregistrement d'un locataire</h3>
+                                    <p class="mb-0 small opacity-75">Veuillez saisir l'email du locataire à enregistrer. Un mot de passe sécurisé sera généré et envoyé automatiquement.</p>
+                                </div>
+                                @if (session('success'))
+                                    <div class="alert alert-success text-center mb-0 ms-md-4 mt-3 mt-md-0 px-4 py-2 rounded-pill shadow-sm">
+                                        <span class="fw-semibold">{{ session('success') }}</span>
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="card-body p-4 p-md-5 bg-light rounded-bottom-4">
+                                @if ($errors->any())
+                                    <div class="alert alert-danger mb-4">
+                                        <ul class="mb-0">
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
+                                <form method="POST" action="{{ route('locataire.store') }}" class="needs-validation">
+                                    @csrf
+                                    <div class="row g-4">
+                                        <div class="col-12 animate__animated animate__fadeInUp" style="animation-delay:0.1s;">
+                                            <label for="email" class="form-label fw-semibold">
+                                                <i class="fas fa-envelope me-2 text-primary animate__animated animate__fadeInLeft"></i>Adresse Email
+                                            </label>
+                                            <input type="email" class="form-control form-control-lg rounded-3 animate__animated animate__fadeIn" id="email" name="email" value="{{ old('email') }}" placeholder="ex: locataire@email.com" required>
+                                        </div>
+                                        @foreach (getRoles() as $role)
+                                            @if ($role->libelle === 'Agent immobilier')
+                                                <input type="hidden" name="id_role" value="{{ $role->id }}">
+                                            @endif
+                                        @endforeach
+                                    </div>
+                                    <div class="mt-5 text-center animate__animated animate__fadeInUp" style="animation-delay:0.3s;">
+                                        <button class="btn btn-success btn-lg px-5 py-2 rounded-pill shadow" type="submit" style="background: linear-gradient(90deg, #43cea2 0%, #185a9d 100%); border: none; font-weight: 600; letter-spacing: 1px;">
+                                            <i class="fas fa-user-plus me-2"></i>Enregistrer
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
-
-                    @if ($agent)
-                        <p class="text-info small">
-                            Un mot de passe sécurisé sera généré et envoyé automatiquement au locataire.
-                        </p>
+                </div>
+            </div>
+            <style>
+                @import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css');
+                @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css');
+                .form-label {
+                    color: #185a9d;
+                    font-size: 1.05rem;
+                    display: flex;
+                    align-items: center;
+                    gap: 0.5rem;
+                }
+                .form-control:focus, .form-select:focus {
+                    border-color: #43cea2;
+                    box-shadow: 0 0 0 0.2rem rgba(67, 206, 162, 0.15);
+                    transition: box-shadow 0.3s;
+                }
+                .card {
+                    border-radius: 1.5rem;
+                    transition: box-shadow 0.4s cubic-bezier(.4,2,.6,1);
+                }
+                .card:hover {
+                    box-shadow: 0 8px 32px 0 rgba(24,90,157,0.18);
+                }
+                .btn-lg {
+                    transition: transform 0.2s, box-shadow 0.2s;
+                }
+                .btn-lg:hover {
+                    transform: translateY(-2px) scale(1.03);
+                    box-shadow: 0 4px 16px 0 rgba(67,206,162,0.18);
+                }
+                @media (max-width: 767.98px) {
+                    .card-header, .card-body {
+                        padding: 1.5rem !important;
+                    }
+                    .btn-lg {
+                        font-size: 1rem;
+                        padding: 0.75rem 2rem;
+                    }
+                }
+            </style>
+        @else
+            <div class="card auth-form align-self-center my-auto w-100" data-aos="fade-left" style="min-height:unset;">
+                <div class="form-container">
+                    @if (session('success'))
+                        <div class="alert alert-success text-center">{{ session('success') }}</div>
                     @endif
-
-                    @unless ($agent)
+                    @error('errors')
+                        <div class="alert alert-danger text-center">Erreur</div>
+                    @enderror
+                    @foreach (['email', 'password', 'password_confirmation', 'id_role'] as $field)
+                        @error($field)
+                            <div class="alert alert-danger text-center">{{ $message }}</div>
+                        @enderror
+                    @endforeach
+                    <form method="POST" action="{{ route('register') }}">
+                        @csrf
                         <div class="form-group mb-3">
-                            <label for="password">Mot de passe</label>
+                            <label for="email" class="form-label fw-semibold">
+                                <i class="fas fa-envelope me-2 text-primary animate__animated animate__fadeInLeft"></i>Adresse Email
+                            </label>
+                            <input type="email" class="form-control" id="email" name="email"
+                                value="{{ old('email') }}" placeholder="ex: utilisateur@email.com" required>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="password" class="form-label fw-semibold">
+                                <i class="fas fa-lock me-2 text-success animate__animated animate__fadeInLeft"></i>Mot de passe
+                            </label>
                             <input type="password" class="form-control" id="password" name="password"
                                 placeholder="Mot de passe sécurisé" required>
                         </div>
-
                         <div class="form-group mb-3">
-                            <label for="password_confirmation">Confirmation du mot de passe</label>
+                            <label for="password_confirmation" class="form-label fw-semibold">
+                                <i class="fas fa-lock me-2 text-info animate__animated animate__fadeInLeft"></i>Confirmation du mot de passe
+                            </label>
                             <input type="password" class="form-control" id="password_confirmation"
                                 name="password_confirmation" placeholder="Confirmez le mot de passe" required>
                         </div>
-
                         @foreach (getRoles() as $role)
                             @if ($role->libelle === 'Agent immobilier')
                                 <input type="hidden" name="id_role" value="{{ $role->id }}">
                             @endif
                         @endforeach
-
                         <div class="form-check form-switch form-switch-success mb-3">
                             <input class="form-check-input" type="checkbox" id="terms_conditions" required>
                             <label class="form-check-label" for="terms_conditions">
+                                <i class="fas fa-check-circle me-2 text-success animate__animated animate__fadeInLeft"></i>
                                 En m'inscrivant, j'accepte les
                                 <a href="#" class="text-primary">Conditions d'utilisation</a>.
                             </label>
                         </div>
-                    @endunless
-
-                    <div class="d-grid mt-4">
-                        <button class="btn btn-success" type="submit">
-                            {{ $agent ? 'Enregistrer' : 'Créer mon compte' }}
-                        </button>
-                    </div>
-                </form>
-
-                @unless ($agent)
+                        <div class="d-grid mt-4">
+                            <button class="btn btn-success" type="submit">
+                                <i class="fas fa-user-plus me-2"></i>Créer mon compte
+                            </button>
+                        </div>
+                    </form>
                     <div class="text-center mt-3">
                         <p class="text-muted">
                             Vous avez déjà un compte ?
                             <a href="{{ route('login') }}" class="text-primary">Se connecter</a>
                         </p>
                     </div>
-                @endunless
+                </div>
             </div>
-        </div>
+        @endif
     </div>
 
     {{-- Script AOS --}}
