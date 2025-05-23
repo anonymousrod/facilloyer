@@ -1,18 +1,19 @@
 @extends('layouts.master_dash')
 
 @section('content')
-<div class="container mt-5">
+<div class="container py-5 animate-slide-in">
     <div class="row justify-content-center">
         <div class="col-lg-8 col-md-10">
-            <div class="card shadow-lg border-0 rounded-lg">
-                <div class="card-header bg-primary text-white text-center py-4 rounded-top">
-                    <h3 class="card-title mb-0">Créer une demande de maintenance</h3>
+            <div class="card custom-card border-0">
+                <div class="card-header text-white text-center py-4 custom-header">
+                    <h3 class="mb-0">🛠 Créer une demande de maintenance</h3>
                 </div>
                 <div class="card-body p-4">
-                    <!-- Afficher les erreurs de validation -->
+
+                    {{-- Erreurs de validation --}}
                     @if ($errors->any())
-                        <div class="alert alert-danger">
-                            <ul>
+                        <div class="alert alert-danger shadow-sm">
+                            <ul class="mb-0">
                                 @foreach ($errors->all() as $error)
                                     <li>{{ $error }}</li>
                                 @endforeach
@@ -20,13 +21,14 @@
                         </div>
                     @endif
 
-                    <!-- Formulaire de demande de maintenance -->
+                    {{-- Formulaire --}}
                     <form action="{{ route('locataire.demandes.store') }}" method="POST">
                         @csrf
+
                         <div class="form-group mb-4">
-                            <label for="bien_id" class="form-label fw-bold">Sélectionner un bien actuellement occupé</label>
-                            <select name="bien_id" id="bien_id" class="form-control shadow-sm rounded" required>
-                                <option value="">Choisir un bien</option>
+                            <label for="bien_id" class="form-label fw-semibold">🏠 Bien occupé</label>
+                            <select name="bien_id" id="bien_id" class="form-control custom-input" required>
+                                <option value="">-- Choisir un bien --</option>
                                 @foreach ($biens as $bien)
                                     <option value="{{ $bien->id }}" {{ old('bien_id') == $bien->id ? 'selected' : '' }}>
                                         {{ $bien->name_bien }} / {{ $bien->adresse_bien }}
@@ -36,74 +38,115 @@
                         </div>
 
                         <div class="form-group mb-4">
-                            <label for="description" class="form-label fw-bold">Description de la demande</label>
+                            <label for="description" class="form-label fw-semibold">📝 Description</label>
                             <textarea 
                                 name="description" 
                                 id="description" 
-                                class="form-control shadow-sm rounded" 
                                 rows="4" 
-                                placeholder="Décrivez la demande de maintenance ici..." 
+                                class="form-control custom-input" 
+                                placeholder="Décrivez la demande ici..." 
                                 required>{{ old('description') }}</textarea>
                         </div>
 
                         <div class="form-group mb-4">
-                            <label for="statut" class="form-label fw-bold">Statut</label>
-                            <select name="statut" id="statut" class="form-control shadow-sm rounded" required>
+                            <label for="statut" class="form-label fw-semibold">📌 Statut initial</label>
+                            <select name="statut" id="statut" class="form-control custom-input" required>
                                 <option value="en attente" {{ old('statut') == 'en attente' ? 'selected' : '' }}>En attente</option>
-                                <!-- <option value="en cours" {{ old('statut') == 'en cours' ? 'selected' : '' }}>En cours</option> -->
-                                <!-- <option value="terminée" {{ old('statut') == 'terminée' ? 'selected' : '' }}>Terminé</option> -->
                             </select>
                         </div>
 
                         <div class="text-center">
-                            <button type="submit" class="btn btn-primary px-5 py-2 shadow">
-                                Envoyer la demande
+                            <button type="submit" class="btn custom-btn px-5 py-2">
+                                📤 Envoyer
                             </button>
                         </div>
                     </form>
+                    
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+{{-- Styles --}}
 <style>
+    :root {
+        --green-main: #012B1B;
+        --green-accent: #01875f;
+        --gray-light: #f3f6f9;
+        --gray-dark: #222;
+        --white: #ffffff;
+    }
+
     body {
-        background-color: #f5f5f5;
+        background: var(--gray-light);
     }
 
-    .card {
-        background: linear-gradient(145deg, #ffffff, #e6e6e6);
-        border-radius: 15px;
-        box-shadow: 10px 10px 20px #d9d9d9, -10px -10px 20px #ffffff;
+    .animate-slide-in {
+        animation: slideIn 0.6s ease forwards;
     }
 
-    .card-header {
-        box-shadow: inset 5px 5px 10px #c8c8c8, inset -5px -5px 10px #ffffff;
+    @keyframes slideIn {
+        from {
+            transform: translateX(-60px);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
     }
 
-    .form-control {
+    .custom-card {
+        background: linear-gradient(135deg, #ffffff, #e7f1ed);
+        border-radius: 20px;
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    .custom-header {
+        background: linear-gradient(135deg, var(--green-main), var(--green-accent));
+        border-radius: 20px 20px 0 0;
+        box-shadow: inset 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .custom-input {
         border: none;
-        box-shadow: inset 5px 5px 10px #d1d1d1, inset -5px -5px 10px #ffffff;
-        transition: all 0.3s ease-in-out;
+        border-radius: 12px;
+        padding: 0.75rem 1rem;
+        background-color: #f9f9f9;
+        box-shadow: inset 2px 2px 6px rgba(0,0,0,0.05), inset -2px -2px 6px rgba(255,255,255,0.8);
+        transition: all 0.2s ease-in-out;
     }
 
-    .form-control:focus {
-        border: none;
+    .custom-input:focus {
+        background-color: #ffffff;
+        box-shadow: 0 0 0 2px var(--green-accent), inset 1px 1px 5px rgba(0,0,0,0.1);
         outline: none;
-        box-shadow: inset 1px 1px 5px #d1d1d1, inset -1px -1px 5px #ffffff, 0 0 5px #1e88e5;
     }
 
-    button {
-        border: none;
-        border-radius: 25px;
-        box-shadow: 5px 5px 15px #d1d1d1, -5px -5px 15px #ffffff;
-        transition: all 0.3s ease-in-out;
+    .custom-btn {
+        background-color: var(--green-main);
+        color: var(--white);
+        border-radius: 30px;
+        font-weight: bold;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s ease;
     }
 
-    button:hover {
-        box-shadow: 5px 5px 15px #b0b0b0, -5px -5px 15px #ffffff;
-        background-color: #1565c0;
+    .custom-btn:hover {
+        background-color: var(--green-accent);
+        transform: scale(1.03);
     }
+
+    .alert ul {
+        padding-left: 20px;
+    }
+
+    @media screen and (max-width: 576px) {
+        .custom-card {
+            padding: 1rem;
+        }
+    }
+    
 </style>
 @endsection

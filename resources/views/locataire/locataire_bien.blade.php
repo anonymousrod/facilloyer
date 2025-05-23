@@ -11,32 +11,37 @@
     <style>
         :root {
             --gradient-green: linear-gradient(90deg, #0f9b0f, #a8e063);
-            --light-green: #b9fbc0;
-            --dark-color: #1b1b1b;
-            --light-color: #ffffff;
+            --dark-color: #000000;
+            --text-light: #f5f5f5;
+            --text-muted: #b0b0b0;
+            --success-green: #0f9b0f;
         }
 
-        body.light-mode {
-            background-color: #f5f5f5;
-            color: #2f2f2f;
+        body {
+            transition: background-color 0.5s, color 0.5s;
         }
 
         body.dark-mode {
-            background-color: var(--dark-color);
-            color: #e0e0e0;
+            background-color: var(--dark-color) !important;
+            color: var(--text-light);
         }
 
-        body.dark-mode .card {
-            background-color: #2a2a2a;
-            border-color: #3a3a3a;
+        body.dark-mode .card,
+        body.dark-mode .responsive-card,
+        body.dark-mode .glass-effect,
+        body.dark-mode .bg-glass {
+            background-color: var(--dark-color) !important;
+            color: var(--text-light);
+            border-color: #333;
         }
 
-        body.dark-mode .table {
-            color: #e0e0e0;
-        }
-
-        body.dark-mode .table thead {
-            background-color: #3a3a3a;
+        body.dark-mode .table,
+        body.dark-mode .table thead,
+        body.dark-mode .table td,
+        body.dark-mode .table th {
+            background-color: transparent !important;
+            color: var(--text-light);
+            border-color: #333;
         }
 
         .gradient-title {
@@ -48,7 +53,10 @@
         .custom-btn {
             border-radius: 30px;
             border: 2px solid #0f9b0f;
-            transition: 0.3s ease-in-out;
+            transition: 0.3s ease;
+            font-weight: 500;
+            color: #0f9b0f;
+            background-color: transparent;
         }
 
         .custom-btn:hover {
@@ -57,11 +65,18 @@
             border-color: transparent;
         }
 
-        .mode-toggle {
-            position: absolute;
-            top: 20px;
-            right: 30px;
-            z-index: 999;
+        .bg-glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+        }
+
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 1rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border-left: 5px solid #0f9b0f;
         }
 
         @media (max-width: 768px) {
@@ -73,11 +88,6 @@
                 margin-bottom: 1rem;
                 padding: 1rem;
                 border-left: 5px solid #0f9b0f;
-            }
-
-            body.dark-mode .responsive-card {
-                background-color: #2a2a2a;
-                border-left: 5px solid #a8e063;
             }
 
             .responsive-card .card-line {
@@ -96,48 +106,43 @@
         }
     </style>
 
-    {{-- Mode toggle button --}}
-    <div class="mode-toggle">
-        <button id="toggleMode" class="btn btn-sm btn-outline-success">🌞 / 🌙</button>
-    </div>
-
-    <div class="card shadow-sm mb-4 rounded-4 border-0" data-aos="fade-up">
+    <div class="card shadow-lg mb-5 rounded-4 border-0 bg-glass" data-aos="fade-up">
         <div class="card-header bg-white py-4 border-bottom d-flex justify-content-between align-items-center">
-            <h4 class="mb-0 fw-bold gradient-title">
-                <i class="bi bi-house-door-fill me-2 text-success"></i> Biens Loués
-            </h4>
+            <h2 class="mb-0 fw-bold gradient-title fs-3">
+                <i class="bi bi-house-door-fill me-2 text-success"></i> Vos biens loués
+            </h2>
         </div>
 
         <div class="card-body">
             @if ($biensLoues->isEmpty())
-                <div class="text-center py-5" data-aos="fade-up">
-                    <i class="bi bi-exclamation-circle display-4 text-muted mb-3"></i>
-                    <p class="text-muted fs-5">Aucun bien loué n'a été assigné.</p>
+                <div class="text-center py-5" data-aos="zoom-in">
+                    <i class="bi bi-exclamation-circle display-3 text-muted mb-3"></i>
+                    <p class="text-muted fs-5">Aucun bien loué n'a encore été assigné.</p>
                 </div>
             @else
-                {{-- TABLE VERSION --}}
-                <div class="table-responsive" data-aos="fade-up">
-                    <table class="table table-hover align-middle mb-0">
-                        <thead class="table-light">
-                            <tr class="text-uppercase small text-muted">
-                                <th scope="col">Bien</th>
-                                <th scope="col">Adresse</th>
-                                <th scope="col">Loyer mensuel</th>
-                                <th scope="col" class="text-center">Détails</th>
+                {{-- Table Desktop --}}
+                <div class="table-responsive d-none d-md-block" data-aos="fade-up">
+                    <table class="table align-middle table-hover shadow-sm">
+                        <thead class="table-success text-muted small text-uppercase">
+                            <tr>
+                                <th>Bien</th>
+                                <th>Adresse</th>
+                                <th>Loyer mensuel</th>
+                                <th class="text-center">Détails</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($biensLoues as $bien)
-                                <tr class="border-bottom">
+                                <tr>
                                     <td class="fw-semibold">{{ $bien->name_bien }}</td>
-                                    <td class="text-muted">{{ \Illuminate\Support\Str::words($bien->adresse_bien, 1, '...') }}</td>
-                                    <td class="text-success fw-semibold">
+                                    <td>{{ \Illuminate\Support\Str::words($bien->adresse_bien, 3, '...') }}</td>
+                                    <td class="text-success fw-bold">
                                         {{ number_format($bien->loyer_mensuel, 2, ',', ' ') }} €
                                     </td>
                                     <td class="text-center">
                                         <a href="{{ route('biens.show', ['bien_id' => $bien->id, 'agent_id' => $locataire->agent_immobilier->id ?? null]) }}"
-                                           class="btn btn-sm custom-btn">
-                                            <i class="bi bi-info-circle-fill me-1"></i> Voir
+                                           class="btn custom-btn btn-sm px-3 py-1">
+                                            <i class="bi bi-eye-fill me-1"></i> Détails
                                         </a>
                                     </td>
                                 </tr>
@@ -146,21 +151,19 @@
                     </table>
                 </div>
 
-                {{-- MOBILE VERSION --}}
+                {{-- Mobile Version --}}
                 <div class="d-md-none">
                     @foreach ($biensLoues as $bien)
-                        <div class="responsive-card" data-aos="fade-up">
-                            <div class="card-line"><strong>Bien :</strong> {{ $bien->name_bien }}</div>
-                            <div class="card-line"><strong>Adresse :</strong> {{ \Illuminate\Support\Str::words($bien->adresse_bien, 1, '...') }}</div>
-                            <div class="card-line"><strong>Loyer :</strong>
-                                <span class="text-success fw-semibold">
-                                    {{ number_format($bien->loyer_mensuel, 2, ',', ' ') }} €
-                                </span>
-                            </div>
-                            <div class="text-end mt-2">
+                        <div class="responsive-card glass-effect" data-aos="fade-up">
+                            <p><strong>Bien :</strong> {{ $bien->name_bien }}</p>
+                            <p><strong>Adresse :</strong> {{ \Illuminate\Support\Str::words($bien->adresse_bien, 3, '...') }}</p>
+                            <p><strong>Loyer :</strong>
+                                <span class="text-success fw-bold">{{ number_format($bien->loyer_mensuel, 2, ',', ' ') }} €</span>
+                            </p>
+                            <div class="text-end">
                                 <a href="{{ route('biens.show', ['bien_id' => $bien->id, 'agent_id' => $locataire->agent_immobilier->id ?? null]) }}"
-                                   class="btn btn-sm custom-btn">
-                                    <i class="bi bi-info-circle-fill me-1"></i> Voir
+                                   class="btn custom-btn btn-sm">
+                                    <i class="bi bi-eye-fill me-1"></i> Voir
                                 </a>
                             </div>
                         </div>
@@ -170,26 +173,6 @@
         </div>
     </div>
 
-    {{-- Dark mode script --}}
-    <script>
-        const toggleBtn = document.getElementById('toggleMode');
-        const currentMode = localStorage.getItem('theme');
-
-        if (currentMode === 'dark') {
-            document.body.classList.add('dark-mode');
-        } else {
-            document.body.classList.add('light-mode');
-        }
-
-        toggleBtn.addEventListener('click', () => {
-            document.body.classList.toggle('dark-mode');
-            document.body.classList.toggle('light-mode');
-
-            if (document.body.classList.contains('dark-mode')) {
-                localStorage.setItem('theme', 'dark');
-            } else {
-                localStorage.setItem('theme', 'light');
-            }
-        });
-    </script>
+    {{-- Mode sombre toggle --}}
+   
 @endsection

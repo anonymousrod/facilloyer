@@ -172,7 +172,7 @@
                         <li class="nav-item"><a class="nav-link" href="{{ route('dashboard') }}"><i class="iconoir-view-grid"></i><span>Dashboard</span></a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('locataire_bien', Auth::user()->id) }}"><i class="iconoir-book"></i><span>Bien loué / Contrat</span></a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('locataire.demandes.index') }}"><i class="iconoir-wrench"></i><span>Demande maintenance</span></a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('demandes.modification') }}"><i class="iconoir-stats-up-square"></i><span>Demande de modification</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('demandes.modification') }}"><i class="iconoir-stats-up-square"></i><span>Révision de Contract</span></a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('periodes.show') }}"><i class="iconoir-credit-card"></i><span>Processus de paiement</span></a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('locataire.paiements.historique') }}"><i class="iconoir-list"></i><span>Historique des paiements</span></a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('locataire.agentinfo', Auth::user()->id) }}"><i class="iconoir-phone"></i><span>Infos de l’agence</span></a></li>
@@ -233,7 +233,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('demandes.modification') }}">
                             <i class="iconoir-stats-up-square menu-icon"></i>
-                            <span>Demande de modification</span>
+                            <span>Révision de Contract</span>
                         </a>
                     </li>
 
@@ -254,7 +254,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('agent.demandes') }}">
                             <i class="iconoir-tools menu-icon"></i>
-                            <span>Voir les demandes de maintenances</span>
+                            <span>Liste maintenances</span>
                         </a>
                     </li>
 
