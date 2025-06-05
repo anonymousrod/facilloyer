@@ -90,6 +90,10 @@ Route::post('/password_change_save', [LocataireController::class, 'changePasswor
 
 Route::get('/export/pdf', [ExportListePDF::class, 'exportPdf'])->name('export.pdf');
 
+
+//Route pour l'exportation de la liste des biens en pdf
+Route::get('/export_biens/pdf', [ExportListePDF::class, 'exportPdf_biens'])->name('export_biens.pdf');
+
 // Routes pour les paiements (uniquement avec auth)
 Route::middleware(['auth'])->group(function () {
     // Historique des paiements

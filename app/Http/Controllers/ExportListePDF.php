@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bien;
 use App\Models\Locataire;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -33,6 +34,32 @@ class ExportListePDF extends Controller
             ->loadView('exports.locataires_pdf', compact('locataires'));
 
         return $pdf->download('locataires.pdf');
+    }
+
+    //
+    public function exportPdf_biens()
+    {
+        $agent_id = FacadesAuth::user()->agent_immobiliers->first()->id;
+        //pour l'affichage des locataires
+        $biens = Bien::where('agent_immobilier_id', $agent_id)->get();
+        // return view('layouts.liste_locataire', compact('locataires'));
+        // $locataires = Locataire::with('user')->get();
+
+        $options = [
+            'isRemoteEnabled' => true,
+            'isPhpEnabled' => true,
+            'defaultFont' => 'sans-serif',
+            'chroot' => [
+                public_path(),
+                storage_path('app/public')
+            ]
+        ];
+
+        // Configurer PDF avec les options
+        $pdf = PDF::setOptions($options)
+            ->loadView('exports.biens_pdf', compact('biens'));
+
+        return $pdf->download('Biens.pdf');
     }
 
 
