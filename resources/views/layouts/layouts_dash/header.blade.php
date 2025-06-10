@@ -71,7 +71,7 @@
                     </button>
                 </li>
                 <li class="mx-3 welcome-text">
-                    <h3 class="mb-0 fw-bold text-truncate">Mon Tableaux de Bord!</h3>
+                    <h3 class="mb-0 fw-bold text-truncate">Mon Tableau de Bord!</h3>
                 </li>
             </ul>
 

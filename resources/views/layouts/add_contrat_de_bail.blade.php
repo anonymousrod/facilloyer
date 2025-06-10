@@ -38,10 +38,10 @@
                             <h5 class="fw-bold text-primary">Informations Générales</h5>
                         </div>
                         <div class="row g-3">
-                            <div class="col-md-6">
+                            {{-- <div class="col-md-6">
                                 <label for="reference" class="form-label fw-bold">Référence du Contrat</label>
                                 <input type="text" name="reference" class="form-control" id="reference" placeholder="Référence du contrat" required>
-                            </div>
+                            </div> --}}
                             <div class="col-md-6">
                                 <label for="bien_id" class="form-label fw-bold">Bien</label>
                                 <input type="text" class="form-control" value="{{ $bien->name_bien }}" readonly required>

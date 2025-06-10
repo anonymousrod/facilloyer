@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+
 
 class ContratDeBailController extends Controller
 {
@@ -46,10 +48,31 @@ class ContratDeBailController extends Controller
      */
     public function store(Request $request)
     {
+        // // Générer une référence unique de contrat
+        // $prefix = 'CB'; // Contrat de Bail
+        // $date = now()->format('YmdHis');
+        // $random = strtoupper(Str::random(4)); // ex : 4 lettres aléatoires
+        // $reference = "{$prefix}-{$date}-{$random}";
+
+        // // S'assurer qu'elle est unique dans la table
+        // while (ContratsDeBail::where('reference', $reference)->exists()) {
+        //     $reference = "{$prefix}-" . now()->format('YmdHis') . '-' . strtoupper(Str::random(4));
+        // }
+        $prefix = 'CB'; // Contrat de Bail
+        $date = now()->format('ym'); // année sur 2 chiffres + mois
+        $random = strtoupper(Str::random(3));
+        $reference = "{$prefix}-{$date}-{$random}";
+
+        while (ContratsDeBail::where('reference', $reference)->exists()) {
+            $random = strtoupper(Str::random(3));
+            $reference = "{$prefix}-{$date}-{$random}";
+        }
+
+
         // Validation des données
         $request->validate([
             'bien_id' => 'required|exists:biens,id',
-            'reference' => 'required|unique:contrats_de_bail,reference',
+            // 'reference' => 'required|unique:contrats_de_bail,reference',
             'caution' => 'required|numeric',
             'caution_eau' => 'nullable|numeric',
             'caution_electricite' => 'nullable|numeric',
@@ -68,11 +91,11 @@ class ContratDeBailController extends Controller
         // Création du contrat de bail
         $contratDeBail = ContratsDeBail::create([
             'bien_id' => $request->bien_id,
-            'reference' => $request->reference,
+            // 'reference' => $request->reference,
+            'reference' => $reference,
             'caution' => $request->caution,
             'caution_eau' => $request->caution_eau,
             'caution_electricite' => $request->caution_electricite,
-
             'lieu_signature' => $request->lieu_signature,
             'date_signature' => $request->date_signature,
             'locataire_id' => $request->locataire_id,
@@ -292,7 +315,5 @@ class ContratDeBailController extends Controller
 
         return redirect()->route('biens.show', ['bien_id' => $contrat->bien->id])
             ->with('success', 'Contrat résilié avec succès.');
-
     }
-
 }
