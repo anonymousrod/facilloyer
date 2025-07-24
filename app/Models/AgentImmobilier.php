@@ -92,4 +92,18 @@ class AgentImmobilier extends Model
     {
         return $this->user->email; // On récupère l'email de l'utilisateur associé
     }
+    //abonnement
+    public function abonnement()
+    {
+        return $this->hasOne(Abonnement::class, 'agent_id');
+    }
+
+    public function abonnementActif()
+    {
+        return Abonnement::where('agent_id', $this->id)
+            ->where('status', 'actif')
+            ->where('date_fin', '>', Carbon::now())
+            ->latest('date_fin')
+            ->first();
+    }
 }
