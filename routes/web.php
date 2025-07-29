@@ -149,128 +149,127 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 
 
 //--------------------------------------- Routes pour les agents immobiliers-------------------------------------------------------
+
 // pour les agent immobilier avec abonnement actif
-// Route::middleware(['auth', 'check.abonnement'])->group(function () {
-//     // Ajoute ici toutes les routes réservées aux agents actifs
+Route::middleware(['auth', 'check_abonnement'])->group(function () {
+    // Ajoute ici toutes les routes réservées aux agents actifs
+    Route::resource('/agent-immobilier', AgentImmobilierController::class)->names('agent_immobilier');
 
-// });
+    Route::resource('/biens', BienController::class)->names('biens');
+    //route pour le changement de mot de passe pour new locataire
+    Route::get('/password_change', [LocataireController::class, 'showChangePasswordForm'])->name('passwordChangeForm');
+    Route::post('/password_change_save', [LocataireController::class, 'changePassword'])->name('passwordChangeFormSave');
+    //route pour changer le statut du locataire par l'agent immobilier
 
+    //Route pour l'exportation de la liste des locataire en pdf
 
-Route::resource('/agent-immobilier', AgentImmobilierController::class)->names('agent_immobilier');
-
-Route::resource('/biens', BienController::class)->names('biens');
-//route pour le changement de mot de passe pour new locataire
-Route::get('/password_change', [LocataireController::class, 'showChangePasswordForm'])->name('passwordChangeForm');
-Route::post('/password_change_save', [LocataireController::class, 'changePassword'])->name('passwordChangeFormSave');
-//route pour changer le statut du locataire par l'agent immobilier
-
-//Route pour l'exportation de la liste des locataire en pdf
-
-Route::get('/export/pdf', [ExportListePDF::class, 'exportPdf'])->name('export.pdf');
+    Route::get('/export/pdf', [ExportListePDF::class, 'exportPdf'])->name('export.pdf');
 
 
-//Route pour l'exportation de la liste des biens en pdf
-Route::get('/export_biens/pdf', [ExportListePDF::class, 'exportPdf_biens'])->name('export_biens.pdf');
+    //Route pour l'exportation de la liste des biens en pdf
+    Route::get('/export_biens/pdf', [ExportListePDF::class, 'exportPdf_biens'])->name('export_biens.pdf');
 
-Route::post('/admin/agents/toggle-status/{id}', [AgentImmobilierController::class, 'toggleStatus'])->name('admin.agents.toggleStatus');
+    Route::post('/admin/agents/toggle-status/{id}', [AgentImmobilierController::class, 'toggleStatus'])->name('admin.agents.toggleStatus');
 
-// Afficher la page d'assignation pour l'agent immobilier
-Route::get('/bien/{id}/assign-locataire', [LocataireBienController::class, 'showAssignPage'])->name('assign.locataire');
+    // Afficher la page d'assignation pour l'agent immobilier
+    Route::get('/bien/{id}/assign-locataire', [LocataireBienController::class, 'showAssignPage'])->name('assign.locataire');
 
-// Assigner le locataire par l'agent immobilier
-Route::post('/bien/{id}/assign-locataire', [LocataireBienController::class, 'assignLocataire']);
+    // Assigner le locataire par l'agent immobilier
+    Route::post('/bien/{id}/assign-locataire', [LocataireBienController::class, 'assignLocataire']);
 
-//route pour recherche dynaique assignement par l'agence
-Route::get('/locataires/search', [LocataireController::class, 'search'])->name('locataires.search');
-//route pour desassigner locataire par l'agence
-Route::delete('/biens/{bien}/unassign-locataire', [LocataireBienController::class, 'unassignLocataire'])->name('unassign.locataire');
+    //route pour recherche dynaique assignement par l'agence
+    Route::get('/locataires/search', [LocataireController::class, 'search'])->name('locataires.search');
+    //route pour desassigner locataire par l'agence
+    Route::delete('/biens/{bien}/unassign-locataire', [LocataireBienController::class, 'unassignLocataire'])->name('unassign.locataire');
 
-//route pour afficher les info des bien par agence
-Route::get('/biens/{bien_id}/{agent_id?}', [BienController::class, 'show'])->name('biens.show');
+    //route pour afficher les info des bien par agence
+    Route::get('/biens/{bien_id}/{agent_id?}', [BienController::class, 'show'])->name('biens.show');
 
 
-//NOTIFICATION ROUTE
-Route::middleware(['auth'])->group(function () {
-    Route::get('/notifications', [NotificationController::class, 'index'])->name('all_notification');
-    Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
-    Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
+    //NOTIFICATION ROUTE
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/notifications', [NotificationController::class, 'index'])->name('all_notification');
+        Route::post('/notifications/{id}/read', [NotificationController::class, 'markAsRead'])->name('notifications.read');
+        Route::post('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])->name('notifications.read-all');
+    });
+
+
+    Route::get('/notifications/fetch', [NotificationController::class, 'fetch'])->name('notifications.fetch');
+    Route::delete('/notifications/delete-all', [NotificationController::class, 'deleteAll'])->name('notifications.delete-all');
+    Route::delete('/notifications/{id}', [NotificationController::class, 'deleteNotification'])->name('notifications.delete');
+
+
+
+    //route contrat de bail
+    Route::resource('/Contrat_de_bail', ContratDeBailController::class)->names('contrat');
+    Route::put('/contrats/{id}/resilier', [ContratDeBailController::class, 'resilier'])
+        ->name('contrats.resilier')
+        ->middleware('auth');
+
+    //route article pour l'agence
+    Route::resource('/Article_contrat_bail', ArticleContratBailController::class)->names('article');
+    Route::delete('/contrats/{contratId}/articles/{articleId}', [ContratDeBailController::class, 'detachArticle'])
+        ->name('contrats.detachArticle');
+
+    // route article specifique
+
+    // Route pour ajouter un article spécifique à un contrat par l'agence
+    Route::get('/contrats/{contratId}/article-specifique', [ArticleContratBailController::class, 'create_specifique'])
+        ->name('article.create_specifique');
+    //pour enregistrer par l'agence
+    Route::post('/contrats/{contratId}/ajouter-article', [ArticleContratBailController::class, 'ajouterArticleSpecifique'])
+        ->name('article.ajouterArticleSpecifique');
+    // pour supprimer article specifique par l'agence
+    Route::delete('/contrats/articles-specifiques/{article}', [ContratDeBailController::class, 'supprimerArticleSpecifique'])
+        ->name('contrats.articlesSpecifiques.supprimer');
+    // mettre a jour article specifique par l'agence
+    Route::put('/contrats/articles-specifiques/{article}', [ContratDeBailController::class, 'updateArticleSpecifique'])
+        ->name('contrats.articlesSpecifiques.update');
+
+    //route de demande de modification contrat de bail
+
+    Route::middleware('auth')->group(function () {
+        Route::post('/modification/demander', [ContratModificationRequestController::class, 'demander'])->name('modification.demander');
+        Route::put('/modification/accepter/{id}', [ContratModificationRequestController::class, 'accepter'])->name('modification.accepter');
+        Route::put('/modification/refuser/{id}', [ContratModificationRequestController::class, 'refuser'])->name('modification.refuser');
+    });
+
+    Route::get('/demandes-modification', [ContratModificationRequestController::class, 'showDemandesModification'])
+        ->name('demandes.modification')
+        ->middleware('auth');
+
+
+    //route pour update contrat de bail par agence
+    // Route::put('/contrats-de-bail/{id}/update-photo', [ContratDeBailController::class, 'updatePhoto'])->name('contrats_de_bail.update_photo');
+    Route::post('/save-signature', [ContratDeBailController::class, 'saveSignature'])->name('save.signature');
+
+    //
+
+    //export contrat bail
+    Route::get('/export/contrat-de-bail/{bien_id}/{agent_id?}', [ContratDeBailController::class, 'export'])->name('contrat.export');
+
+    Route::get('/payments/form', [PaiementController::class, 'showForm'])->name('payments.form');
+    Route::get('/paiements/callback', [PaiementController::class, 'handleCallback'])->name('payments.callback');
+
+    //gestion_periode par agence
+    Route::get('/information_montant', [AgentImmobilierController::class, 'info_gestion'])->name('information_gestion');
+
+    // Historique des paiements
+    Route::get('/agent/paiements/historique', [PaiementController::class, 'historiqueTousLocataires'])
+        ->name('agent_immo_historique');
+
+    // Route::get('profil_agent', function () {
+    //     return view('layouts.profil_agent');
+    // })->name('profil_agent');
+    Route::get('/profil_agent', [AgentImmobilierController::class, 'showProfiles'])->name('profil_agent');
 });
-
-
-Route::get('/notifications/fetch', [NotificationController::class, 'fetch'])->name('notifications.fetch');
-Route::delete('/notifications/delete-all', [NotificationController::class, 'deleteAll'])->name('notifications.delete-all');
-Route::delete('/notifications/{id}', [NotificationController::class, 'deleteNotification'])->name('notifications.delete');
-
-//ABONNEMENT AGENCE IMMOBILIERE
-Route::get('/plans', [PlanController::class, 'index'])->name('plans_abonnement');
-Route::post('/plans/subscribe/{id}', [PlanController::class, 'subscribe'])->name('plans.subscribe');
-
-
-//route contrat de bail
-Route::resource('/Contrat_de_bail', ContratDeBailController::class)->names('contrat');
-Route::put('/contrats/{id}/resilier', [ContratDeBailController::class, 'resilier'])
-    ->name('contrats.resilier')
-    ->middleware('auth');
-
-//route article pour l'agence
-Route::resource('/Article_contrat_bail', ArticleContratBailController::class)->names('article');
-Route::delete('/contrats/{contratId}/articles/{articleId}', [ContratDeBailController::class, 'detachArticle'])
-    ->name('contrats.detachArticle');
-
-// route article specifique
-
-// Route pour ajouter un article spécifique à un contrat par l'agence
-Route::get('/contrats/{contratId}/article-specifique', [ArticleContratBailController::class, 'create_specifique'])
-    ->name('article.create_specifique');
-//pour enregistrer par l'agence
-Route::post('/contrats/{contratId}/ajouter-article', [ArticleContratBailController::class, 'ajouterArticleSpecifique'])
-    ->name('article.ajouterArticleSpecifique');
-// pour supprimer article specifique par l'agence
-Route::delete('/contrats/articles-specifiques/{article}', [ContratDeBailController::class, 'supprimerArticleSpecifique'])
-    ->name('contrats.articlesSpecifiques.supprimer');
-// mettre a jour article specifique par l'agence
-Route::put('/contrats/articles-specifiques/{article}', [ContratDeBailController::class, 'updateArticleSpecifique'])
-    ->name('contrats.articlesSpecifiques.update');
-
-//route de demande de modification contrat de bail
-
-Route::middleware('auth')->group(function () {
-    Route::post('/modification/demander', [ContratModificationRequestController::class, 'demander'])->name('modification.demander');
-    Route::put('/modification/accepter/{id}', [ContratModificationRequestController::class, 'accepter'])->name('modification.accepter');
-    Route::put('/modification/refuser/{id}', [ContratModificationRequestController::class, 'refuser'])->name('modification.refuser');
-});
-
-Route::get('/demandes-modification', [ContratModificationRequestController::class, 'showDemandesModification'])
-    ->name('demandes.modification')
-    ->middleware('auth');
-
-
-//route pour update contrat de bail par agence
-// Route::put('/contrats-de-bail/{id}/update-photo', [ContratDeBailController::class, 'updatePhoto'])->name('contrats_de_bail.update_photo');
-Route::post('/save-signature', [ContratDeBailController::class, 'saveSignature'])->name('save.signature');
-
-//
-
-//export contrat bail
-Route::get('/export/contrat-de-bail/{bien_id}/{agent_id?}', [ContratDeBailController::class, 'export'])->name('contrat.export');
-
-Route::get('/payments/form', [PaiementController::class, 'showForm'])->name('payments.form');
-Route::get('/paiements/callback', [PaiementController::class, 'handleCallback'])->name('payments.callback');
-
-//gestion_periode par agence
-Route::get('/information_montant', [AgentImmobilierController::class, 'info_gestion'])->name('information_gestion');
-
-// Historique des paiements
-Route::get('/agent/paiements/historique', [PaiementController::class, 'historiqueTousLocataires'])
-    ->name('agent_immo_historique');
-
-// Route::get('profil_agent', function () {
-//     return view('layouts.profil_agent');
-// })->name('profil_agent');
-Route::get('/profil_agent', [AgentImmobilierController::class, 'showProfiles'])->name('profil_agent');
-
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//ABONNEMENT AGENCE IMMOBILIERE
+Route::get('/plans', [PlanController::class, 'index'])->middleware('auth')->name('plans_abonnement');
+Route::post('/plans/subscribe/{id}', [PlanController::class, 'subscribe'])->middleware('auth')->name('plans.subscribe');
+//------------------------------------------------------------------------------------------------------------------------
 
 // Routes pour les locataires
 Route::prefix('locataires')->group(function () {
