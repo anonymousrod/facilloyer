@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('abonnements', function (Blueprint $table) {
             $table->id();
             $table->foreignId('agent_id')->constrained('agent_immobilier')->onDelete('cascade');
+            $table->string('transaction_id')->nullable();
             $table->foreignId('plan_id')->constrained('plans')->onDelete('cascade');
             $table->dateTime('date_debut');
             $table->dateTime('date_fin');

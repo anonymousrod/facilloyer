@@ -15,6 +15,7 @@ class Abonnement extends Model
     protected $fillable = [
         'agent_id',
         'plan_id',
+        'transaction_id',
         'date_debut',
         'date_fin',
         'status'

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AbonnementController;
 use App\Http\Controllers\DemandeMaintenanceController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -153,7 +154,6 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 // pour les agent immobilier avec abonnement actif
 Route::middleware(['auth', 'check_abonnement'])->group(function () {
     // Ajoute ici toutes les routes réservées aux agents actifs
-    Route::resource('/agent-immobilier', AgentImmobilierController::class)->names('agent_immobilier');
 
     Route::resource('/biens', BienController::class)->names('biens');
     //route pour le changement de mot de passe pour new locataire
@@ -265,10 +265,21 @@ Route::middleware(['auth', 'check_abonnement'])->group(function () {
 });
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//roue pour agent non actif
+    Route::resource('/agent-immobilier', AgentImmobilierController::class)->names('agent_immobilier');
 
 //ABONNEMENT AGENCE IMMOBILIERE
 Route::get('/plans', [PlanController::class, 'index'])->middleware('auth')->name('plans_abonnement');
 Route::post('/plans/subscribe/{id}', [PlanController::class, 'subscribe'])->middleware('auth')->name('plans.subscribe');
+//try abonnement
+// Route::get('/plans_abonnement', [AbonnementController::class, 'index'])->name('plans.index');
+
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/plans-abonnement', [AbonnementController::class, 'index'])->name('plans.index');
+    // Route::get('/abonnement/success', [AbonnementController::class, 'success'])->name('abonnement.success');
+});
+
 //------------------------------------------------------------------------------------------------------------------------
 
 // Routes pour les locataires

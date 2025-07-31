@@ -218,11 +218,12 @@
                 @endif
 
                 {{-- AGENT IMMOBILIER --}}
+
                 @php
                     $agent = Auth::user()->id_role == 3 ? Auth::user()->agent_immobiliers->first() : null;
+                    $dernierAbonnement = $agent ? $agent->abonnement()->latest()->first() : null;
                 @endphp
-                @if (Auth::user()->id_role == 3 && Auth::user()->statut && $agent && $agent->abonnement?->status === 'actif')
-
+                @if (Auth::user()->id_role == 3 && Auth::user()->statut && $agent && $dernierAbonnement?->status === 'actif')
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('dashboard') }}">
                             <i class="iconoir-view-grid menu-icon"></i>
@@ -312,7 +313,7 @@
                             </a>
                         </li>
                     @endif
-                @elseif ((Auth::user()->id_role == 3 && !Auth::user()->statut) || ($agent && $agent->abonnement?->status === 'expiré'))
+                @elseif ((Auth::user()->id_role == 3 && !Auth::user()->statut) || ($agent && $dernierAbonnement?->status === 'expiré'))
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('dashboard') }}">
                             <i class="iconoir-view-grid menu-icon"></i>
