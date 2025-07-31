@@ -117,31 +117,3 @@
 
 
 @endsection
-
-{{-- Script Kkiapay --}}
-{{-- <script src="https://cdn.kkiapay.me/k.js"></script>
-
-<script>
-    const agentId = "{{ $agent->id }}";
-    const agentPhone = "{{ $agent->telephone_agence ?? '97000000' }}";
-    const agentEmail = "{{ auth()->user()->email }}";
-
-    function launchKkiapay(planId, planName, planPrice) {
-        openKkiapayWidget({
-            amount: planPrice,
-            api_key: "{{ env('KKIAPAY_PUBLIC_KEY') }}",
-            sandbox: true,
-            name: planName,
-            email: agentEmail,
-            phone: agentPhone,
-            reason: "Abonnement au plan " + planName
-        });
-
-        // Écouteur d'événement succès
-        document.addEventListener("kkiapay.success", function(event) {
-            const transactionId = event.detail.transactionId;
-            window.location.href =
-                `/abonnement/success?agent_id=${agentId}&plan_id=${planId}&transaction_id=${transactionId}`;
-        });
-    }
-</script> --}}

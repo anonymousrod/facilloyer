@@ -11,6 +11,7 @@ class Abonnement extends Model
     use HasFactory, SoftDeletes;
 
     protected $table = 'abonnements';
+    protected $dates = ['date_debut', 'date_fin'];
 
     protected $fillable = [
         'agent_id',

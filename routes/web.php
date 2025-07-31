@@ -271,8 +271,10 @@ Route::middleware(['auth', 'check_abonnement'])->group(function () {
 //ABONNEMENT AGENCE IMMOBILIERE
 Route::get('/plans', [PlanController::class, 'index'])->middleware('auth')->name('plans_abonnement');
 Route::post('/plans/subscribe/{id}', [PlanController::class, 'subscribe'])->middleware('auth')->name('plans.subscribe');
-//try abonnement
-// Route::get('/plans_abonnement', [AbonnementController::class, 'index'])->name('plans.index');
+Route::middleware(['auth'])->group(function () {
+    Route::get('/mon-abonnement', [AbonnementController::class, 'current'])->name('abonnement.current');
+    Route::get('/historique-abonnement', [AbonnementController::class, 'historique'])->name('abonnement.historique');
+});
 
 
 Route::middleware(['auth'])->group(function () {

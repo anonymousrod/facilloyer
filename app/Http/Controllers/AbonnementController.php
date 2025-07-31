@@ -7,6 +7,7 @@ use App\Models\Abonnement;
 use App\Models\AgentImmobilier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class AbonnementController extends Controller
 {
@@ -20,65 +21,47 @@ class AbonnementController extends Controller
     // Enregistre l'abonnement après paiement Kkiapay
     // public function success(Request $request)
     // {
+    //     try {
+    //         $request->validate([
+    //             'agent_id' => 'required|exists:agent_immobilier,id',
+    //             'plan_id' => 'required|exists:plans,id',
+    //             'transaction_id' => 'required|string',
+    //         ]);
 
-    //     $request->validate([
-    //         'agent_id' => 'required|exists:agent_immobilier,id',
-    //         'plan_id' => 'required|exists:plans,id',
-    //         'transaction_id' => 'required|string',
-    //     ]);
-    //     // Vérification (optionnelle) si l'agent a déjà un abonnement actif
-    //     $existe = Abonnement::where('agent_id', $request->agent_id)
-    //         ->where('status', 'actif')
-    //         ->where('date_fin', '>', now())
-    //         ->exists();
+    //         $existe = Abonnement::where('agent_id', $request->agent_id)
+    //             ->where('status', 'actif')
+    //             ->where('date_fin', '>', now())
+    //             ->exists();
 
-    //     if ($existe) {
-    //         return redirect()->route('plans.index')->with('success', 'Vous avez déjà un abonnement actif.');
-    //     }
+    //         if ($existe) {
+    //             return response()->json([
+    //                 'message' => 'Vous avez déjà un abonnement actif.'
+    //             ], 409);
+    //         }
 
-    //     // Création de l'abonnement
-    //     $plan = Plan::find($request->plan_id);
-    //     $abonnement = Abonnement::create([
-    //         'agent_id' => $request->agent_id,
-    //         'plan_id' => $request->plan_id,
-    //         'date_debut' => now(),
-    //         'date_fin' => now()->addDays($plan->duree),
-    //         'status' => 'actif',
-    //     ]);
-    //     return redirect()->route('plans.index')->with('success', 'Abonnement activé avec succès.');
-    // }
-    // public function success(Request $request)
-    // {
-    //     $request->validate([
-    //         'agent_id' => 'required|exists:agent_immobilier,id',
-    //         'plan_id' => 'required|exists:plans,id',
-    //         'transaction_id' => 'required|string',
-    //     ]);
+    //         $plan = Plan::findOrFail($request->plan_id);
+    //         Abonnement::create([
+    //             'agent_id' => $request->agent_id,
+    //             'plan_id' => $request->plan_id,
+    //             'transaction_id' => $request->transaction_id,
 
-    //     $existe = Abonnement::where('agent_id', $request->agent_id)
-    //         ->where('status', 'actif')
-    //         ->where('date_fin', '>', now())
-    //         ->exists();
+    //             'date_debut' => now(),
+    //             'date_fin' => now()->addDays($plan->duree),
+    //             'status' => 'actif',
+    //         ]);
 
-    //     if ($existe) {
     //         return response()->json([
-    //             'message' => 'Vous avez déjà un abonnement actif.'
-    //         ], 409); // 409 = Conflict
+    //             'message' => 'Abonnement activé avec succès.'
+    //         ]);
+    //     } catch (\Exception $e) {
+    //         return response()->json([
+    //             'error' => 'Erreur serveur',
+    //             'details' => $e->getMessage()
+    //         ], 500);
     //     }
-
-    //     $plan = Plan::find($request->plan_id);
-    //     Abonnement::create([
-    //         'agent_id' => $request->agent_id,
-    //         'plan_id' => $request->plan_id,
-    //         'date_debut' => now(),
-    //         'date_fin' => now()->addDays($plan->duree),
-    //         'status' => 'actif',
-    //     ]);
-
-    //     return response()->json([
-    //         'message' => 'Abonnement activé avec succès.'
-    //     ]);
     // }
+
+    //new
     public function success(Request $request)
     {
         try {
@@ -88,23 +71,35 @@ class AbonnementController extends Controller
                 'transaction_id' => 'required|string',
             ]);
 
-            $existe = Abonnement::where('agent_id', $request->agent_id)
+            $plan = Plan::findOrFail($request->plan_id);
+
+            $ancien = Abonnement::where('agent_id', $request->agent_id)
                 ->where('status', 'actif')
                 ->where('date_fin', '>', now())
-                ->exists();
+                ->latest('date_fin')
+                ->first();
 
-            if ($existe) {
-                return response()->json([
-                    'message' => 'Vous avez déjà un abonnement actif.'
-                ], 409);
+            if ($ancien) {
+                // Ancien encore actif : renouvellement
+
+                $date_debut = Carbon::parse($ancien->date_fin);
+                $date_fin = Carbon::parse($ancien->date_fin)->addDays($plan->duree);
+
+
+                // Marquer l’ancien abonnement comme expiré
+                $ancien->update(['status' => 'expiré']);
+            } else {
+                // Nouvel abonnement (pas d’abonnement actif)
+                $date_debut = now();
+                $date_fin = now()->copy()->addDays($plan->duree);
             }
 
-            $plan = Plan::findOrFail($request->plan_id);
             Abonnement::create([
                 'agent_id' => $request->agent_id,
                 'plan_id' => $request->plan_id,
-                'date_debut' => now(),
-                'date_fin' => now()->addDays($plan->duree),
+                'transaction_id' => $request->transaction_id,
+                'date_debut' => $date_debut,
+                'date_fin' => $date_fin,
                 'status' => 'actif',
             ]);
 
@@ -112,10 +107,27 @@ class AbonnementController extends Controller
                 'message' => 'Abonnement activé avec succès.'
             ]);
         } catch (\Exception $e) {
+
             return response()->json([
                 'error' => 'Erreur serveur',
                 'details' => $e->getMessage()
             ], 500);
         }
+    }
+
+    public function current()
+    {
+        $agent = Auth::user()->agent_immobiliers->first();
+        $abonnement = Abonnement::where('agent_id', $agent->id)->latest()->first();
+
+        return view('layouts.abonnement_current', compact('abonnement'));
+    }
+
+    public function historique()
+    {
+        $agent = auth::user()->agent_immobiliers->first();
+        $abonnements = Abonnement::where('agent_id', $agent->id)->latest()->get();
+
+        return view('layouts.abonnement_historique', compact('abonnements'));
     }
 }

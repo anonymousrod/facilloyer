@@ -294,6 +294,27 @@
                         </a>
                     </li>
 
+                    {{-- s'abonner temporaire --}}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('plans_abonnement') }}">
+                            <i class="iconoir-view-grid menu-icon"></i>
+                            <span>Plan d'abonnement</span>
+                        </a>
+                    </li>
+                    {{-- abonnement menu --}}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('abonnement.current') }}">
+                            <i class="bi bi-star-fill"></i> <span>Mon abonnement</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('abonnement.historique') }}">
+                            <i class="bi bi-clock-history"></i> <span>Historique des abonnements</span>
+                        </a>
+                    </li>
+
+
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('agent.demandes') }}">
                             <i class="iconoir-tools menu-icon"></i>
@@ -331,7 +352,18 @@
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('plans_abonnement') }}">
                                 <i class="iconoir-view-grid menu-icon"></i>
-                                <span>Plan abonnement</span>
+                                <span>Plan d'abonnement</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('abonnement.current') }}">
+                                <i class="bi bi-star-fill"></i> <span>Mon abonnement</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('abonnement.historique') }}">
+                                <i class="bi bi-clock-history"></i> <span>Historique des abonnements</span>
                             </a>
                         </li>
                     @endif
