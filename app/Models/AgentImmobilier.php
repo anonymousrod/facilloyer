@@ -102,7 +102,7 @@ class AgentImmobilier extends Model
     {
         return Abonnement::where('agent_id', $this->id)
             ->where('status', 'actif')
-            ->where('date_fin', '>', Carbon::now())
+            // ->where('date_fin', '>', Carbon::now())
             ->latest('date_fin')
             ->first();
     }
