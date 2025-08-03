@@ -35,7 +35,7 @@
                                 <td class="fw-semibold">{{ $bien->name_bien }}</td>
                                 <td>{{ \Illuminate\Support\Str::words($bien->adresse_bien, 3, '...') }}</td>
                                 <td class="text-success fw-bold">
-                                    {{ number_format($bien->loyer_mensuel, 2, ',', ' ') }} €
+                                    {{ number_format($bien->loyer_mensuel, 2, ',', ' ') }} FCFA
                                 </td>
                                 <td class="text-center">
                                     <a href="{{ route('biens.show', ['bien_id' => $bien->id, 'agent_id' => $locataire->agent_immobilier->id ?? null]) }}"
