@@ -1,4 +1,4 @@
-<!-- Sidebar avec style professionnel -->
+<!-- Sidebar avec style update by fhb patcher lol "rod" je blague , j'etait un peu ennuyé aujourd'hui -->
 
 <style>
     body {
