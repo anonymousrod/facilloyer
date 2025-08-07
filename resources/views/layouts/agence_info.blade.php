@@ -137,6 +137,9 @@
                                         <div class="col-sm-9">
                                             <input class="form-control" type="file" id="rccm_pdf" name="rccm_pdf"
                                                 accept="application/pdf" {{ isset($agentImmobilier) ? '' : 'required' }}>
+                                                <small class="form-text text-muted mt-1">
+                                                    <strong>Info&nbsp;:</strong> L'IFU est requis pour les agents immobiliers, tandis que le titre de propriété est requis pour les propriétaires.
+                                                </small>
                                         </div>
                                     </div>
 
