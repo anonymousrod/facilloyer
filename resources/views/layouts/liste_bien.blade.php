@@ -11,7 +11,7 @@
                             <i class="fas fa-home"></i>
                             <span>Liste des Biens</span>
                         </h4>
-                        <a href="#" class="btn btn-light btn-sm shadow-sm animate__animated animate__pulse animate__infinite" style="font-weight: bold; border-radius: 20px;">
+                        <a href="{{ route('export_biens.pdf')}}" class="btn btn-light btn-sm shadow-sm animate__animated animate__pulse animate__infinite" style="font-weight: bold; border-radius: 20px;">
                             <i class="fas fa-file-pdf text-danger"></i> Exporter en PDF
                         </a>
                     </div>

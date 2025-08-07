@@ -3,6 +3,17 @@
 @section('title', 'Gestion Agent Immobilier')
 
 @section('content')
+    <style>
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.7s cubic-bezier(0.4,0,0.2,1), transform 0.7s cubic-bezier(0.4,0,0.2,1);
+        }
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
     <div class="card container-fluid py-5" style=" min-height: 100vh;">
         {{-- <div class="text-center mb-5">
             <h2 class="fw-bold" style="color: #212121;">Demandes de modification de contrat</h2>
@@ -28,7 +39,7 @@
                             <p class="text-center text-muted fst-italic">Aucune demande reçue.</p>
                         @else
                             @foreach ($demandesRecues as $demande)
-                                <div class="bg-light p-3 mb-3 rounded-4 shadow-sm border border-light-subtle">
+                                <div class="bg-light p-3 mb-3 rounded-4 shadow-sm border border-light-subtle fade-in-up">
                                     <h5 class="fw-bold mb-2">Référence : #{{ $demande->contrat->reference }}</h5>
                                     <p class="mb-1">Motif : {{ $demande->motif }}</p>
                                     <p class="mb-1">Date : {{ $demande->created_at->format('d/m/Y H:i') }}</p>
@@ -90,7 +101,7 @@
                             <p class="text-center text-muted fst-italic">Vous n’avez envoyé aucune demande.</p>
                         @else
                             @foreach ($demandesEnvoyees as $demande)
-                                <div class="bg-light p-3 mb-3 rounded-4 shadow-sm border border-light-subtle">
+                                <div class="bg-light p-3 mb-3 rounded-4 shadow-sm border border-light-subtle fade-in-up">
                                     <h5 class="fw-bold mb-2">Référence : #{{ $demande->contrat->reference }}</h5>
                                     <p class="mb-1">Motif : {{ $demande->motif }}</p>
                                     <p class="mb-1">Date : {{ $demande->created_at->format('d/m/Y H:i') }}</p>
@@ -118,4 +129,14 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.fade-in-up');
+            cards.forEach((card, i) => {
+                setTimeout(() => {
+                    card.classList.add('visible');
+                }, 120 * i);
+            });
+        });
+    </script>
 @endsection

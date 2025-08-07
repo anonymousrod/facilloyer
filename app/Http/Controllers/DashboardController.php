@@ -18,12 +18,24 @@ class DashboardController extends Controller
             ]);
         }
 
+        // Si c'est un agent immobilier
+        if ($user->id_role == 3 && $user->agent_immobiliers->first()) {
+            $abonnement = $user->agent_immobiliers->first()->abonnementActif(); // méthode qu'on va créer
+
+            if (!$abonnement) {
+                return view('layouts.dashboard', [
+                    'message' => "Aucun abonnement actif. Veuillez choisir un plan pour continuer.",
+                    'abonnement_invalide' => true,
+                ]);
+
+            }
+        }
+
         // Charger les éléments du tableau de bord si le compte est activé
         return view('layouts.dashboard', [
             'message' => null,
             'statut' => " statu valide "
         ]);
-
         // $user = Auth::user();
         // if (Auth::user()->id_role == 2) {
         //     return redirect()->route('locataire.locashow', Auth::user()->id);

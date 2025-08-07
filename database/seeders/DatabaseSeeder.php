@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
         $this->call(LocataireSeeder::class);
         // $this->call(PaiementSeeder::class);
         $this->call(ArticleContratBailSeeder::class);
-
+        $this->call(PlanSeeder::class);
+        $this->call(AbonnementSeeder::class);
     }
 }

@@ -8,7 +8,8 @@
     }
 
     .startbar {
-        background: linear-gradient(180deg, #012417, #015f3b); /* Vert Foncé Profond */
+        background: linear-gradient(180deg, #012417, #015f3b);
+        /* Vert Foncé Profond */
         color: white;
         width: 270px;
         height: 100vh;
@@ -77,14 +78,16 @@
 
     .startbar .nav-link i {
         font-size: 20px;
-        color: #d0d0d0; /* Icône blanc atténué */
+        color: #d0d0d0;
+        /* Icône blanc atténué */
         min-width: 24px;
         text-align: center;
         transition: color 0.3s ease;
     }
 
     .startbar .nav-link:hover i {
-        color: white; /* Icône devient blanche au survol */
+        color: white;
+        /* Icône devient blanche au survol */
     }
 
     .startbar .collapse .nav-link {
@@ -145,25 +148,37 @@
 
                 {{-- SUPER ADMIN --}}
                 @if (Auth::user()->id_role == 1)
-                    <li class="nav-item"><a class="nav-link" href="{{ route('dashboard') }}"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('dashboard') }}"><i
+                                class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
                     <li class="nav-item">
                         <a class="nav-link" href="#sidebarGerer_user" data-bs-toggle="collapse">
                             <i class="fas fa-users-cog"></i><span>Gérer les utilisateurs</span>
                         </a>
                         <div class="collapse" id="sidebarGerer_user">
                             <ul class="nav flex-column">
-                                <li class="nav-item"><a class="nav-link" href="{{ route('admin.agents.index') }}"><i class="fas fa-user-plus"></i><span>Valider les agences</span></a></li>
-                                <li class="nav-item"><a class="nav-link" href="{{ route('admin.locataires_par_agence', Auth::user()->id) }}"><i class="fas fa-users"></i><span>Liste des locataire</span></a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ route('admin.agents.index') }}"><i
+                                            class="fas fa-user-plus"></i><span>Valider les agences</span></a></li>
+                                <li class="nav-item"><a class="nav-link"
+                                        href="{{ route('admin.locataires_par_agence', Auth::user()->id) }}"><i
+                                            class="fas fa-users"></i><span>Liste des locataire</span></a></li>
                             </ul>
                         </div>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="rapports-financiers.html"><i class="fas fa-file-invoice-dollar"></i><span>Consulter les rapports financiers</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('admin.paiements.index') }}"><i class="fas fa-file-invoice-dollar"></i><span>Historiques des Paiements</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('admin.contrats_de_bail.index') }}"><i class="fas fa-book"></i><span>Auditer les contrats de bail</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('contrat.index') }}"><i class="fas fa-book"></i><span>Voir tous les contrats de bail</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('admin.demandes.grouped') }}"><i class="fas fa-tools"></i><span>Gérer la maintenance</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="statistiques.html"><i class="fas fa-chart-bar"></i><span>Voir les statistiques</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('user', Auth::user()->id) }}"><i class="iconoir-chat-bubble"></i><span>Assistance en ligne</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="rapports-financiers.html"><i
+                                class="fas fa-file-invoice-dollar"></i><span>Consulter les rapports
+                                financiers</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('admin.paiements.index') }}"><i
+                                class="fas fa-file-invoice-dollar"></i><span>Historiques des Paiements</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('admin.contrats_de_bail.index') }}"><i
+                                class="fas fa-book"></i><span>Auditer les contrats de bail</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('contrat.index') }}"><i
+                                class="fas fa-book"></i><span>Voir tous les contrats de bail</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('admin.demandes.grouped') }}"><i
+                                class="fas fa-tools"></i><span>Gérer la maintenance</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="statistiques.html"><i
+                                class="fas fa-chart-bar"></i><span>Voir les statistiques</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="{{ route('user', Auth::user()->id) }}"><i
+                                class="iconoir-chat-bubble"></i><span>Assistance en ligne</span></a></li>
                 @endif
 
                 {{-- LOCATAIRE --}}
@@ -180,13 +195,19 @@
                         <li class="nav-item"><a class="nav-link" href="{{ route('profile.edit', Auth::user()->id) }}"><i class="iconoir-settings"></i><span>Paramètres</span></a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('user', Auth::user()->locataires->first()->agent_immobilier->user->id) }}"><i class="iconoir-chat-bubble"></i><span>Assistance en ligne</span></a></li>
                     @else
-                        <li class="nav-item"><a class="nav-link" href="{{ route('locataire.locashow', Auth::user()->id) }}"><i class="iconoir-user"></i><span>Profil</span></a></li>
+                        <li class="nav-item"><a class="nav-link"
+                                href="{{ route('locataire.locashow', Auth::user()->id) }}"><i
+                                    class="iconoir-user"></i><span>Profil</span></a></li>
                     @endif
                 @endif
 
                 {{-- AGENT IMMOBILIER --}}
-                @if (Auth::user()->id_role == 3 && Auth::user()->statut)
 
+                @php
+                    $agent = Auth::user()->id_role == 3 ? Auth::user()->agent_immobiliers->first() : null;
+                    $dernierAbonnement = $agent ? $agent->abonnement()->latest()->first() : null;
+                @endphp
+                @if (Auth::user()->id_role == 3 && Auth::user()->statut && $agent && $dernierAbonnement?->status === 'actif')
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('dashboard') }}">
                             <i class="iconoir-view-grid menu-icon"></i>
@@ -200,8 +221,10 @@
                         </a>
                         <div class="collapse" id="sidebarGerer_locataires">
                             <ul class="nav flex-column">
-                                <li class="nav-item"><a class="nav-link" href="{{ route('locataire.create') }}">Enregistrer</a></li>
-                                <li class="nav-item"><a class="nav-link" href="{{ route('locataire.index') }}">Liste</a></li>
+                                <li class="nav-item"><a class="nav-link"
+                                        href="{{ route('locataire.create') }}">Enregistrer</a></li>
+                                <li class="nav-item"><a class="nav-link"
+                                        href="{{ route('locataire.index') }}">Liste</a></li>
                             </ul>
                         </div>
                     </li>
@@ -212,8 +235,10 @@
                         </a>
                         <div class="collapse" id="sidebarGerer_bien">
                             <ul class="nav flex-column">
-                                <li class="nav-item"><a class="nav-link" href="{{ route('biens.create') }}">Enregistrer</a></li>
-                                <li class="nav-item"><a class="nav-link" href="{{ route('biens.index') }}">Liste</a></li>
+                                <li class="nav-item"><a class="nav-link"
+                                        href="{{ route('biens.create') }}">Enregistrer</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ route('biens.index') }}">Liste</a>
+                                </li>
                             </ul>
                         </div>
                     </li>
@@ -224,8 +249,10 @@
                         </a>
                         <div class="collapse" id="sidebarGerer_contrat_bail">
                             <ul class="nav flex-column">
-                                <li class="nav-item"><a class="nav-link" href="{{ route('article.create') }}">Enregistrer</a></li>
-                                <li class="nav-item"><a class="nav-link" href="{{ route('article.index') }}">Liste</a></li>
+                                <li class="nav-item"><a class="nav-link"
+                                        href="{{ route('article.create') }}">Enregistrer</a></li>
+                                <li class="nav-item"><a class="nav-link"
+                                        href="{{ route('article.index') }}">Liste</a></li>
                             </ul>
                         </div>
                     </li>
@@ -251,6 +278,27 @@
                         </a>
                     </li>
 
+                    {{-- s'abonner temporaire --}}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('plans_abonnement') }}">
+                            <i class="iconoir-view-grid menu-icon"></i>
+                            <span>Plan d'abonnement</span>
+                        </a>
+                    </li>
+                    {{-- abonnement menu --}}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('abonnement.current') }}">
+                            <i class="bi bi-star-fill"></i> <span>Mon abonnement</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('abonnement.historique') }}">
+                            <i class="bi bi-clock-history"></i> <span>Historique des abonnements</span>
+                        </a>
+                    </li>
+
+
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('agent.demandes') }}">
                             <i class="iconoir-tools menu-icon"></i>
@@ -270,14 +318,40 @@
                             </a>
                         </li>
                     @endif
-
-                @elseif (Auth::user()->id_role == 3 && !Auth::user()->statut)
+                @elseif ((Auth::user()->id_role == 3 && !Auth::user()->statut) || ($agent && $dernierAbonnement?->status === 'expiré'))
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('dashboard') }}">
+                            <i class="iconoir-view-grid menu-icon"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('agent_immobilier.create') }}">
                             <i class="iconoir-view-grid menu-icon"></i>
                             <span>Informations de l'agence</span>
                         </a>
                     </li>
+
+                    @if ($agent && $agent->abonnement?->status === 'expiré')
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('plans_abonnement') }}">
+                                <i class="iconoir-view-grid menu-icon"></i>
+                                <span>Plan d'abonnement</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('abonnement.current') }}">
+                                <i class="bi bi-star-fill"></i> <span>Mon abonnement</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('abonnement.historique') }}">
+                                <i class="bi bi-clock-history"></i> <span>Historique des abonnements</span>
+                            </a>
+                        </li>
+                    @endif
+
                 @endif
 
 

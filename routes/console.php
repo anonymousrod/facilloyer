@@ -1,5 +1,6 @@
 <?php
 
+use App\Console\Commands\UpdateAbonnements;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
@@ -16,3 +17,5 @@ Artisan::command('log:clear', function () {
 Schedule::command('contrat:update-statut')->everyMinute(); // ou ->everyMinute() pour test rapide
 Schedule::command('rappel:loyer')->everyMinute();
 Schedule::command('payments:check-new')->everyMinute();
+Schedule::command('abonnements:update')->everySecond();
+

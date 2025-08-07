@@ -33,15 +33,41 @@
                                     @foreach ($locataires as $locataire)
                                         <tr class="animate__animated animate__fadeIn animate__faster" style="transition: box-shadow 0.2s;">
                                             <td>
-                                                <img src="{{ asset($locataire->photo_profil) }}"
-                                                    alt="profil de {{ $locataire->nom . ' ' . $locataire->prenom }}"
-                                                    style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; border: 2px solid #28a745; box-shadow: 0 2px 8px rgba(40,167,69,0.08); transition: transform 0.2s;"
-                                                    onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
+                                                @if ($locataire->photo_profil == null)
+                                                    <img src="{{ asset('assets/images/users/image.png') }}"
+                                                        alt="profil de {{ $locataire->nom . ' ' . $locataire->prenom }}"
+                                                        style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; border: 2px solid #28a745; box-shadow: 0 2px 8px rgba(40,167,69,0.08); transition: transform 0.2s;"
+                                                        onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
+                                                @else
+                                                    <img src="{{ asset($locataire->photo_profil) }}"
+                                                        alt="profil de {{ $locataire->nom . ' ' . $locataire->prenom }}"
+                                                        style="width: 50px; height: 50px; object-fit: cover; border-radius: 50%; border: 2px solid #28a745; box-shadow: 0 2px 8px rgba(40,167,69,0.08); transition: transform 0.2s;"
+                                                        onmouseover="this.style.transform='scale(1.08)'" onmouseout="this.style.transform='scale(1)'">
+
+                                                @endif
                                             </td>
-                                            <td><span class="fw-bold text-dark">{{ $locataire->nom . ' ' . $locataire->prenom }}</span></td>
-                                            <td><span class="badge bg-light text-success shadow-sm"><i class="fas fa-phone-alt"></i> {{ $locataire->telephone }}</span></td>
-                                            <td><span class="text-muted">{{ \Illuminate\Support\Str::words($locataire->adresse, 2, '...') }}</span></td>
-                                            <td><span class="badge bg-success bg-opacity-10 text-success fw-semibold">{{ $locataire->revenu_mensuel }} FCFA</span></td>
+                                            <td><span class="fw-bold text-dark">{{ ($locataire->nom ?? '') . ' ' . ($locataire->prenom ?? '') }}</span></td>
+                                            <td>
+                                                @if (!empty($locataire->telephone))
+                                                    <span class="badge bg-light text-success shadow-sm"><i class="fas fa-phone-alt"></i> {{ $locataire->telephone }}</span>
+                                                @else
+                                                    <span class="badge bg-light text-danger shadow-sm"><i class="fas fa-phone-slash"></i> Non renseigné</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if (!empty($locataire->adresse))
+                                                    <span class="text-muted">{{ \Illuminate\Support\Str::words($locataire->adresse, 2, '...') }}</span>
+                                                @else
+                                                    <span class="text-danger">Non renseignée</span>
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if (!empty($locataire->revenu_mensuel))
+                                                    <span class="badge bg-success bg-opacity-10 text-success fw-semibold">{{ $locataire->revenu_mensuel }} FCFA</span>
+                                                @else
+                                                    <span class="badge bg-danger bg-opacity-10 text-danger fw-semibold">Non renseigné</span>
+                                                @endif
+                                            </td>
                                             <td>
                                                 <div class="d-flex align-items-center justify-content-center gap-2">
                                                     <label class="switch-custom mb-0">

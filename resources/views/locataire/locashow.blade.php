@@ -4,31 +4,30 @@
 
 @section('content')
 
-
-<div class="container py-4">
-  <!-- HEADER PROFIL COMPACT -->
+<div class="container py-3">
+  <!-- EN-TÊTE -->
   <div class="d-flex flex-column flex-md-row align-items-center justify-content-between mb-3 gap-3">
-    <div class="d-flex align-items-center">
+    <div class="d-flex align-items-center gap-3">
       <img 
         src="{{ $locataire->photo_profil ? asset($locataire->photo_profil) : asset('images/default-avatar.png') }}"
         alt="Photo de profil"
         class="rounded-circle border shadow-sm"
-        style="width: 80px; height: 80px; object-fit: cover;">
-      <h3 class="ms-3 mb-0 fw-bold">{{ $locataire->prenom }} {{ $locataire->nom }}</h3>
+        style="width: 70px; height: 70px; object-fit: cover;">
+      <h4 class="mb-0 fw-semibold">{{ $locataire->prenom }} {{ $locataire->nom }}</h4>
     </div>
     @if (Auth::user()->id_role === 2)
-      <a href="{{ route('locataire.edit', $locataire->user_id) }}" class="btn btn-primary px-3 py-1">
+      <a href="{{ route('locataire.edit', $locataire->user_id) }}" class="btn btn-success px-3 py-1 rounded-pill">
         <i class="fas fa-edit me-1"></i> Modifier
       </a>
     @endif
   </div>
 
-  <!-- INFOS + AGENT -->
+  <!-- INFOS -->
   <div class="row g-3">
     <div class="col-lg-8">
       <div class="card border-0 shadow-sm">
         <div class="card-body p-3">
-          <h6 class="fw-bold mb-3 text-primary"><i class="fas fa-user-circle me-1"></i> Infos générales</h6>
+          <h6 class="fw-bold mb-3 text-success"><i class="fas fa-user-circle me-1"></i> Infos générales</h6>
           <div class="row g-2">
             @php
               $infos = [
@@ -46,11 +45,11 @@
             @endphp
 
             @foreach ($infos as $info)
-              <div class="col-12 col-md-6">
+              <div class="col-12 col-sm-6">
                 <div class="d-flex align-items-center small mb-1">
-                  <i class="fas {{ $info['icon'] }} text-primary me-2"></i>
-                  <span class="fw-semibold">{{ $info['label'] }} :</span>
-                  <span class="ms-1">{{ $info['value'] ?? 'Non rempli' }}</span>
+                  <i class="fas {{ $info['icon'] }} text-muted me-2"></i>
+                  <span class="fw-semibold text-dark">{{ $info['label'] }} :</span>
+                  <span class="ms-1 text-muted">{{ $info['value'] ?? 'Non rempli' }}</span>
                 </div>
               </div>
             @endforeach
@@ -63,13 +62,15 @@
       <div class="col-lg-4">
         <div class="card border-0 shadow-sm h-100">
           <div class="card-body p-3">
-            <h6 class="fw-bold mb-3 text-primary"><i class="fas fa-building me-1"></i> Agent Associé</h6>
+            <h6 class="fw-bold mb-3 text-success"><i class="fas fa-building me-1"></i> Agent Associé</h6>
             @if ($locataire->agent_immobilier)
-              <p class="mb-1 small"><strong>Agence :</strong> {{ $locataire->agent_immobilier->nom_agence ?? 'Non rempli' }}</p>
-              <p class="mb-1 small"><strong>Nom :</strong> {{ $locataire->agent_immobilier->nom_admin ?? 'Non rempli' }}</p>
-              <p class="mb-0 small"><strong>Prénom :</strong> {{ $locataire->agent_immobilier->prenom_admin ?? 'Non rempli' }}</p>
+              <ul class="list-unstyled small mb-0">
+                <li><strong>Agence :</strong> {{ $locataire->agent_immobilier->nom_agence ?? 'Non rempli' }}</li>
+                <li><strong>Nom :</strong> {{ $locataire->agent_immobilier->nom_admin ?? 'Non rempli' }}</li>
+                <li><strong>Prénom :</strong> {{ $locataire->agent_immobilier->prenom_admin ?? 'Non rempli' }}</li>
+              </ul>
             @else
-              <p class="text-muted small">Aucun agent immobilier associé.</p>
+              <p class="text-muted small mb-0">Aucun agent immobilier associé.</p>
             @endif
           </div>
         </div>
@@ -77,6 +78,5 @@
     @endif
   </div>
 </div>
-
 
 @endsection

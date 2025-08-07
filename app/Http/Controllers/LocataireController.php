@@ -223,6 +223,12 @@ class LocataireController extends Controller
             // Sauvegarder les modifications
             $locataire->save();
 
+            // Mettre à jour le champ `name` de l'utilisateur
+            $user = $locataire->user; // Si `le locataire` a une relation avec `User`
+            $user->name = $request->nom . ' ' . $request->prenom; // Mettre à jour le nom complet
+            $user->save(); // Sauvegarder les modifications de l'utilisateur
+
+
             // Retourner une réponse ou redirection
             return redirect()->route('locataire.locashow')->with('success', 'Vos informations ont été mises à jour avec succès.');
         } catch (\Exception $e) {
