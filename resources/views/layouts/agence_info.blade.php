@@ -83,7 +83,7 @@
                                     <!-- Fichier PDF Carte d'identité ou IFU -->
                                     <div class="mb-3 row">
                                         <label for="carte_identite_pdf" class="col-sm-3 col-form-label text-end">Carte
-                                            d'identité / IFU</label>
+                                            d'identité </label>
                                         <div class="col-sm-9">
                                             <input class="form-control" type="file" id="carte_identite_pdf"
                                                 name="carte_identite_pdf" accept="application/pdf" {{ isset($agentImmobilier) ? '' : 'required' }}>
@@ -133,7 +133,7 @@
                                     </div>
                                     <!-- Fichier PDF RCCM -->
                                     <div class="mb-3 row">
-                                        <label for="rccm_pdf" class="col-sm-3 col-form-label text-end">RCCM</label>
+                                        <label for="rccm_pdf" class="col-sm-3 col-form-label text-end">IFU / Titre de propriété</label>
                                         <div class="col-sm-9">
                                             <input class="form-control" type="file" id="rccm_pdf" name="rccm_pdf"
                                                 accept="application/pdf" {{ isset($agentImmobilier) ? '' : 'required' }}>
