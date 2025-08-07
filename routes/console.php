@@ -18,4 +18,7 @@ Schedule::command('contrat:update-statut')->everyMinute(); // ou ->everyMinute()
 Schedule::command('rappel:loyer')->everyMinute();
 Schedule::command('payments:check-new')->everyMinute();
 Schedule::command('abonnements:update')->everySecond();
+// Schedule::command('rappel:abonnement')->dailyAt('09:00');
+Schedule::command('rappel:abonnement')->everySecond();
+
 

@@ -13,6 +13,12 @@ class PlanController extends Controller
     public function index()
     {
         $plans = Plan::where('nom', '!=', 'Essai')->get();
+        // Gérer les notifications
+        if (request()->has('notification_id')) {
+            auth()->user()->notifications()
+                ->where('id', request('notification_id'))
+                ->update(['read_at' => now()]);
+        }
         return view('layouts.plans_index', compact('plans'));
     }
 

@@ -23,7 +23,7 @@
                     </p>
                     <p class="mb-1">
                         📌 Statut :
-                        @if ($abonnement->status === 'Actif')
+                        @if ($abonnement->status === 'actif')
                             <span class="badge bg-success">Actif</span>
                         @else
                             <span class="badge bg-danger">Expiré</span>

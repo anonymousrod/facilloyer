@@ -12,11 +12,11 @@ use Illuminate\Support\Facades\Auth;
 class AbonnementController extends Controller
 {
     // Affiche les plans disponibles
-    public function index()
-    {
-        $plans = Plan::all();
-        return view('plans_index', compact('plans'));
-    }
+    // public function index()
+    // {
+    //     $plans = Plan::all();
+    //     return view('plans_index', compact('plans'));
+    // }
 
     // Enregistre l'abonnement après paiement Kkiapay
     // public function success(Request $request)
