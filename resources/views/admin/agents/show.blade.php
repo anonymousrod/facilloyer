@@ -1,122 +1,81 @@
 @extends('layouts.master_dash')
 
 @section('content')
-<div class="container-xxl mt-5">
-    <div class="row justify-content-center">
+<div class="container-xxl pt-3">
+    <div class="row justify-content-center g-3">
         <div class="col-lg-10">
-            <!-- Header Section (Banner + Avatar) -->
-            <div class="card shadow-lg border-0 rounded-3 mb-4">
-                <div class="card-body p-0">
-                    <!-- Banner Image -->
-                    <div class="position-relative">
-                        <img src="{{ asset('images/profile-banner.jpeg') }}" alt="Banner" class="img-fluid w-100" style="height: 250px; object-fit: cover;">
-                    </div>
-
-                    <div class="position-absolute top-50 start-50 translate-middle">
-                        <!-- Profile Avatar -->
-                        <div class="rounded-circle overflow-hidden shadow" style="width: 150px; height: 150px;">
-                            @if ($agent->photo_profil)
-                                <img src="{{ asset($agent->photo_profil) }}" 
-                                     alt="Photo de profil" 
-                                     class="img-fluid" 
-                                     style="width: 100%; height: 100%; object-fit: cover;">
-                            @else
-                                <img src="{{ asset('images/default-avatar.png') }}" 
-                                     alt="Avatar par défaut" 
-                                     class="img-fluid" 
-                                     style="width: 100%; height: 100%; object-fit: cover;">
-                            @endif
+            <!-- Bannière + Avatar -->
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-3">
+                <div class="position-relative" style="height: 220px;">
+                    <img src="{{ asset('images/profile-banner.jpeg') }}" class="w-100 h-100 object-fit-cover" alt="Bannière">
+                    <div class="position-absolute bottom-0 start-50 translate-middle-x" style="transform: translateY(50%);">
+                        <div class="rounded-circle overflow-hidden shadow" style="width: 130px; height: 130px;">
+                            <img src="{{ $agent->photo_profil ? asset($agent->photo_profil) : asset('images/default-avatar.png') }}" class="w-100 h-100 object-fit-cover" alt="Avatar">
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Profile Info Section -->
-            <div class="card shadow-lg border-0 rounded-3 mb-4">
-                <div class="card-body">
-                    <h3 class="text-primary">{{ $agent->nom_admin }} {{ $agent->prenom_admin }}</h3>
-                    <p class="text-muted">Agence : <strong>{{ $agent->nom_agence }}</strong></p>
-                    <p class="text-muted">Téléphone : <strong>{{ $agent->telephone_agence }}</strong></p>
-                    <p class="text-muted">Évaluation : <strong>{{ $agent->evaluation }} ★</strong></p>
+            <!-- Infos principales -->
+            <div class="card border-0 shadow-sm rounded-4 text-center pt-5 pb-3 mb-3">
+                <h4 class="fw-bold text-primary">{{ $agent->nom_admin }} {{ $agent->prenom_admin }}</h4>
+                <p class="text-muted mb-1"><i class="bi bi-building me-1 text-primary"></i><strong>{{ $agent->nom_agence }}</strong></p>
+                <p class="text-muted mb-1"><i class="bi bi-telephone me-1 text-success"></i>{{ $agent->telephone_agence }}</p>
+                <p class="text-muted"><i class="bi bi-star-fill me-1 text-warning"></i><strong>{{ $agent->evaluation }} ★</strong></p>
+            </div>
 
-                    <!-- Button to toggle activation status -->
-                    <!-- <form action="{{ route('agents.updateStatus', $agent->id) }}" method="POST">
-                        @csrf
-                        @method('PATCH')
-                        @if ($agent->deleted_at)
-                            <button type="submit" class="btn btn-outline-success w-100">
-                                <i class="fas fa-check-circle"></i> Activer
-                            </button>
+            <!-- À propos -->
+            <div class="card border-0 shadow-sm rounded-4 mb-3">
+                <div class="card-header bg-light fw-semibold text-dark">
+                    <i class="bi bi-person-lines-fill me-2 text-secondary"></i>À propos
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item"><strong>Adresse :</strong> {{ $agent->adresse_agence }}</li>
+                    <li class="list-group-item"><strong>Expérience :</strong> {{ $agent->annee_experience }} ans</li>
+                    <li class="list-group-item"><strong>Territoire :</strong> {{ $agent->territoire_couvert }}</li>
+                    <li class="list-group-item"><strong>Biens disponibles :</strong> {{ $agent->nombre_bien_disponible }}</li>
+                </ul>
+            </div>
+
+            <!-- Documents -->
+            <div class="card border-0 shadow-sm rounded-4 mb-3">
+                <div class="card-header bg-success text-white fw-semibold">
+                    <i class="bi bi-file-earmark-text me-2"></i>Documents
+                </div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <strong>Carte d'identité :</strong>
+                        @if ($agent->carte_identite_pdf)
+                            <a href="{{ asset($agent->carte_identite_pdf) }}" target="_blank" class="btn btn-sm btn-outline-primary ms-2">Voir</a>
                         @else
-                            <button type="submit" class="btn btn-outline-danger w-100">
-                                <i class="fas fa-ban"></i> Désactiver
-                            </button>
+                            <span class="text-danger">Non disponible</span>
                         @endif
-                    </form> -->
-                </div>
+                    </li>
+                    <li class="list-group-item">
+                        <strong>RCCM :</strong>
+                        @if ($agent->rccm_pdf)
+                            <a href="{{ asset($agent->rccm_pdf) }}" target="_blank" class="btn btn-sm btn-outline-primary ms-2">Voir</a>
+                        @else
+                            <span class="text-danger">Non disponible</span>
+                        @endif
+                    </li>
+                </ul>
             </div>
 
-            <!-- About Agent (General Info Section) -->
-            <div class="card shadow-lg border-0 rounded-3 mb-4">
-                <div class="card-header bg-light text-dark">
-                    <h5 class="mb-0">À propos de l'Agent</h5>
+            <!-- Biens associés -->
+            <div class="card border-0 shadow-sm rounded-4 mb-3">
+                <div class="card-header bg-info text-white fw-semibold">
+                    <i class="bi bi-house-door me-2"></i>Biens Associés
                 </div>
-                <div class="card-body">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item"><strong>Nom de l'agence :</strong> {{ $agent->nom_agence }}</li>
-                        <li class="list-group-item"><strong>Adresse :</strong> {{ $agent->adresse_agence }}</li>
-                        <li class="list-group-item"><strong>Années d'expérience :</strong> {{ $agent->annee_experience }} ans</li>
-                        <li class="list-group-item"><strong>Territoire couvert :</strong> {{ $agent->territoire_couvert }}</li>
-                        <li class="list-group-item"><strong>Biens disponibles :</strong> {{ $agent->nombre_bien_disponible }}</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Documents Section (Similar to a Facebook "About" section) -->
-            <div class="card shadow-lg border-0 rounded-3 mb-4">
-                <div class="card-header bg-secondary text-white">
-                    <h5 class="mb-0">Documents</h5>
-                </div>
-                <div class="card-body">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">
-                            <strong>Carte d'identité :</strong>
-                            @if ($agent->carte_identite_pdf)
-                                <a href="{{ asset($agent->carte_identite_pdf) }}" 
-                                   target="_blank" 
-                                   class="btn btn-sm btn-outline-primary ms-2">Voir</a>
-                            @else
-                                <span class="text-danger">Non disponible</span>
-                            @endif
-                        </li>
-                        <li class="list-group-item">
-                            <strong>RCCM :</strong>
-                            @if ($agent->rccm_pdf)
-                                <a href="{{ asset($agent->rccm_pdf) }}" 
-                                   target="_blank" 
-                                   class="btn btn-sm btn-outline-primary ms-2">Voir</a>
-                            @else
-                                <span class="text-danger">Non disponible</span>
-                            @endif
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Associated Properties Section (like Facebook posts section) -->
-            <div class="card shadow-lg border-0 rounded-3 mb-4">
-                <div class="card-header bg-info text-white">
-                    <h5 class="mb-0">Biens Associés</h5>
-                </div>
-                <div class="card-body">
+                <div class="card-body p-0">
                     @if ($agent->biens->count() > 0)
                         <div class="table-responsive">
-                            <table class="table table-striped table-hover">
+                            <table class="table table-hover table-striped table-bordered align-middle mb-0">
                                 <thead class="table-dark">
                                     <tr>
                                         <th>Adresse</th>
                                         <th>Type</th>
-                                        <th>Loyer Mensuel</th>
+                                        <th>Loyer</th>
                                         <th>Statut</th>
                                     </tr>
                                 </thead>
@@ -125,11 +84,11 @@
                                         <tr>
                                             <td>{{ $bien->adresse_bien }}</td>
                                             <td>{{ $bien->type_bien }}</td>
-                                            <td>{{ number_format($bien->loyer_mensuel, 2) }} FCFA</td>
+                                            <td>{{ number_format($bien->loyer_mensuel, 0, ',', ' ') }} FCFA</td>
                                             <td>
                                                 <span class="badge 
-                                                    @if ($bien->statut_bien == 'Disponible') bg-success 
-                                                    @elseif ($bien->statut_bien == 'Réservé') bg-warning 
+                                                    @if ($bien->statut_bien == 'Disponible') bg-success
+                                                    @elseif ($bien->statut_bien == 'Réservé') bg-warning
                                                     @else bg-danger @endif">
                                                     {{ $bien->statut_bien }}
                                                 </span>
@@ -140,11 +99,16 @@
                             </table>
                         </div>
                     @else
-                        <p class="text-muted">Aucun bien associé.</p>
+                        <p class="text-muted p-3">Aucun bien associé.</p>
                     @endif
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Bouton d’appel rapide (mobile uniquement) -->
+<a href="tel:{{ $agent->telephone_agence }}" class="btn btn-success btn-lg rounded-circle shadow d-md-none position-fixed bottom-0 end-0 m-4">
+    <i class="bi bi-telephone-fill"></i>
+</a>
 @endsection

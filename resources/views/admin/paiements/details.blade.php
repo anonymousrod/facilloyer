@@ -1,39 +1,91 @@
 @extends('layouts.master_dash')
 
-@section('content')
-<div class="container mt-4">
-    <h2 class="text-center mb-4">Détails du Paiement</h2>
-    <div class="card shadow-sm">
-        <div class="card-header bg-primary text-white">
-            <strong>Paiement ID : {{ $paiement->id }}</strong>
-        </div>
-        <div class="card-body">
-            <div class="mb-3">
-                <h5 class="text-secondary"><i class="fas fa-user"></i> Locataire : {{ $paiement->locataire->nom ?? 'Inconnu' }} {{ $paiement->locataire->prenom ?? '' }}</h5>
-            </div>
-            <div class="mb-3">
-                <h5 class="text-secondary"><i class="fas fa-building"></i> Bien : {{ $paiement->bien->name_bien ?? 'Bien inconnu' }}</h5>
-            </div>
-            <div class="mb-3">
-                <h5 class="text-secondary"><i class="fas fa-money-bill-wave"></i> Montant payé : {{ number_format($paiement->montant_paye, 2) }} FCFA</h5>
-            </div>
-            <div class="mb-3">
-                <h5 class="text-secondary"><i class="fas fa-calendar-day"></i> Date du paiement : {{ $paiement->created_at->format('d/m/Y') }}</h5>
-            </div>
-            <div class="mb-3">
-                <h5 class="text-secondary"><i class="fas fa-sync-alt"></i> Fréquence de paiement : {{ $paiement->frequence_paiement }}</h5>
-            </div>
-            <div class="mb-3">
-                <h5 class="text-secondary"><i class="fas fa-align-left"></i> Description : {{ $paiement->description ?? 'Aucune description' }}</h5>
-            </div>
+@section('title', 'Détails du paiement')
 
-            <!-- Icône de téléchargement de la quittance -->
-            <div class="mb-3">
-                <a href="{{ route('locataire.paiements.quittance', $paiement->id) }}" class="btn btn-success btn-sm">
-                    <i class="fas fa-download"></i> Télécharger la quittance
-                </a>
-            </div>
-        </div>
+@section('content')
+
+<div class="container py-4">
+  <!-- TITRE + BOUTON -->
+  <div class="row mb-4">
+    <div class="col-12 d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <h4 class="mb-0 fw-bold">
+        <i class="fas fa-receipt me-2 text-primary"></i>
+        Détails du paiement #{{ str_pad($paiement->id, 6, '0', STR_PAD_LEFT) }}
+      </h4>
+      <a href="{{ route('locataire.paiements.quittance', $paiement->id) }}" class="btn btn-success">
+        <i class="fas fa-download me-1"></i> Télécharger quittance
+      </a>
     </div>
+  </div>
+
+  <!-- CONTENU -->
+  <div class="row g-4">
+    <!-- INFOS PAIEMENT -->
+    <div class="col-lg-8">
+      <div class="card border-0 shadow-sm rounded-4">
+        <div class="card-body">
+          <h5 class="fw-bold text-primary mb-3">
+            <i class="fas fa-money-check-alt me-1"></i> Informations du paiement
+          </h5>
+
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between">
+              <span class="text-muted">Montant payé</span>
+              <span class="fw-bold text-success">{{ number_format($paiement->montant_paye, 2, ',', ' ') }} FCFA</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <span class="text-muted">Locataire</span>
+              <span>{{ $paiement->locataire->nom }} {{ $paiement->locataire->prenom }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <span class="text-muted">Date de paiement</span>
+              <span>{{ $paiement->date_paiement ? \Carbon\Carbon::parse($paiement->date_paiement)->format('d/m/Y') : 'Non disponible' }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between">
+              <span class="text-muted">Statut</span>
+              <span class="badge bg-success">Paiement réussi</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- INFOS LOGEMENT -->
+    <div class="col-lg-4">
+      <div class="card border-0 shadow-sm rounded-4 h-100">
+        <div class="card-body">
+          <h5 class="fw-bold text-primary mb-3">
+            <i class="fas fa-home me-1"></i> Informations logement
+          </h5>
+
+          <ul class="list-group list-group-flush mb-3">
+            <li class="list-group-item px-0 d-flex justify-content-between">
+              <span class="text-muted">Adresse</span>
+              <span>{{ $paiement->bien->adresse_bien ?? 'Non défini' }}</span>
+            </li>
+            <li class="list-group-item px-0 d-flex justify-content-between">
+              <span class="text-muted">Type</span>
+              <span>{{ $paiement->bien->type_bien ?? 'Non défini' }}</span>
+            </li>
+            <li class="list-group-item px-0 d-flex justify-content-between">
+              <span class="text-muted">Superficie</span>
+              <span>{{ $paiement->bien->superficie ?? 'Non défini' }} m²</span>
+            </li>
+          </ul>
+
+          <p class="small text-muted mb-1">
+            Quittance générée le {{ now()->format('d/m/Y') }}.
+          </p>
+          <p class="small text-muted mb-3">Merci pour votre confiance !</p>
+
+          <a href="{{ route('locataire.paiements.quittance', $paiement->id) }}" class="btn btn-outline-primary w-100">
+            <i class="fas fa-download me-1"></i> Télécharger quittance
+          </a>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </div>
+
 @endsection

@@ -164,13 +164,9 @@
                             </ul>
                         </div>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="rapports-financiers.html"><i
-                                class="fas fa-file-invoice-dollar"></i><span>Consulter les rapports
-                                financiers</span></a></li>
+    
                     <li class="nav-item"><a class="nav-link" href="{{ route('admin.paiements.index') }}"><i
                                 class="fas fa-file-invoice-dollar"></i><span>Historiques des Paiements</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('admin.contrats_de_bail.index') }}"><i
-                                class="fas fa-book"></i><span>Auditer les contrats de bail</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('contrat.index') }}"><i
                                 class="fas fa-book"></i><span>Voir tous les contrats de bail</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('admin.demandes.grouped') }}"><i
