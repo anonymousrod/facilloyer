@@ -79,15 +79,28 @@
 
         .auth-left {
             flex: 1;
-            background: linear-gradient(135deg, rgba(30, 30, 60, 0.8), rgba(15, 15, 35, 0.8)),
-                url('{{ asset('assets/images/bg-auth.jpg') }}') center/cover no-repeat;
-            color: #fff;
+            background: #198754 !important;
+            color: #fff !important;
             padding: 4rem 3rem;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
+        }
+        .auth-left * {
+            color: #fff !important;
+        }
+        /* Correction : forcer le blanc sur tous les textes à gauche */
+        .auth-left h4,
+        .auth-left p,
+        .auth-left span,
+        .auth-left label,
+        .auth-left a,
+        .auth-left strong,
+        .auth-left div,
+        .auth-left {
+            color: #fff !important;
         }
 
         .auth-left img {
@@ -116,6 +129,34 @@
             justify-content: center;
             align-items: center;
             padding: 2.5rem;
+        }
+        /* Style vert pour tout sauf agent */
+        .auth-form:not(.agent-style) * {
+            color: #198754 !important;
+        }
+        .auth-form:not(.agent-style) .form-control,
+        .auth-form:not(.agent-style) .form-label,
+        .auth-form:not(.agent-style) .btn,
+        .auth-form:not(.agent-style) .alert,
+        .auth-form:not(.agent-style) a,
+        .auth-form:not(.agent-style) p,
+        .auth-form:not(.agent-style) label {
+            color: #198754 !important;
+            border-color: #198754 !important;
+        }
+        .auth-form:not(.agent-style) .btn-success,
+        .auth-form:not(.agent-style) .btn {
+            background: #198754 !important;
+            border-color: #198754 !important;
+        }
+        .auth-form:not(.agent-style) .btn-success:hover,
+        .auth-form:not(.agent-style) .btn:hover {
+            background: #157347 !important;
+            border-color: #157347 !important;
+        }
+        .auth-form:not(.agent-style) .form-check-input:checked {
+            background-color: #198754 !important;
+            border-color: #198754 !important;
         }
 
         .form-container {
@@ -243,7 +284,7 @@
 
         {{-- Partie droite (formulaire) --}}
         @if($agent)
-            <div class="container-xxl py-5">
+            <div class="container-xxl py-5 agent-style">
                 <div class="row justify-content-center">
                     <div class="col-12 col-lg-8">
                         <div class="card shadow-lg border-0 rounded-4">
@@ -384,8 +425,8 @@
                             </label>
                         </div>
                         <div class="d-grid mt-4">
-                            <button class="btn btn-success" type="submit">
-                                <i class="fas fa-user-plus me-2"></i>Créer mon compte
+                            <button class="btn btn-success" type="submit" style="color:#fff !important;">
+                                <i class="fas fa-user-plus me-2" style="color:#fff !important;"></i>Créer mon compte
                             </button>
                         </div>
                     </form>
