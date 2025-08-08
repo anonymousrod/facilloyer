@@ -1,111 +1,106 @@
 @extends('layouts.master_dash')
-@section('content')
-    <div class="container-xxl">
-        <div class="row justify-content-center">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="card-title">Liste des Agents Immobiliers</h4>
-                    </div>
-                    <div class="card-body pt-0">
-                        <div class="table-responsive">
-                            <table class="table datatable" id="datatable_agents">
-                                <thead>
-                                    <tr>
-                                        <th>Nom de l'agence</th>
-                                        <th>Nom Admin</th>
-                                        <th>Téléphone</th>
-                                        <th>Adresse</th>
-                                        <th>Statut</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($agents as $agent)
-                                        <tr>
-                                            <td>{{ $agent->nom_agence }}</td>
-                                            <td>{{ $agent->nom_admin }} {{ $agent->prenom_admin }}</td>
-                                            <td>{{ $agent->telephone_agence }}</td>
-                                            <td>{{ $agent->adresse_agence }}</td>
-                                            <td>
-                                                <div class="form-check form-switch">
-                                                    <input 
-                                                        class="form-check-input toggle-status" 
-                                                        type="checkbox" 
-                                                        id="status_{{ $agent->user->id }}" 
-                                                        data-id="{{ $agent->user->id }}"
-                                                        {{ $agent->user->statut ? 'checked' : '' }}
-                                                    >
-                                                    <label class="form-check-label" for="status_{{ $agent->user->id }}">
-                                                        {{ $agent->user->statut ? 'Activé' : 'Désactivé' }}
-                                                    </label>
-                                                </div>
-                                            </td>
-                                            <td>
-                                            <a href="{{ route('admin.agents.show', $agent->id) }}" class="btn btn-sm btn-info">
-                                                <i class="fas fa-eye"></i> Voir plus
-                                            </a>
 
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+@section('content')
+<div class="container-xxl">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <div class="card shadow-sm border-0 rounded">
+                <div class="card-header border-bottom d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">Liste des Agents Immobiliers</h4>
                 </div>
-            </div>
+                <div class="card-body pt-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle" id="datatable_agents">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Agence</th>
+                                    <th>Admin</th>
+                                    <th>Téléphone</th>
+                                    <th>Adresse</th>
+                                    <th>Statut</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($agents as $agent)
+                                    <tr>
+                                        <td>{{ $agent->nom_agence }}</td>
+                                        <td>{{ $agent->nom_admin }} {{ $agent->prenom_admin }}</td>
+                                        <td>{{ $agent->telephone_agence }}</td>
+                                        <td>{{ $agent->adresse_agence }}</td>
+                                        <td>
+                                            <div class="form-check form-switch d-flex align-items-center">
+                                                <input 
+                                                    class="form-check-input toggle-status me-2" 
+                                                    type="checkbox" 
+                                                    id="status_{{ $agent->user->id }}" 
+                                                    data-id="{{ $agent->user->id }}"
+                                                    {{ $agent->user->statut ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="status_{{ $agent->user->id }}">
+                                                    <span class="badge {{ $agent->user->statut ? 'bg-success' : 'bg-secondary' }}">
+                                                        {{ $agent->user->statut ? 'Activé' : 'Désactivé' }}
+                                                    </span>
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('admin.agents.show', $agent->id) }}" class="btn btn-sm btn-outline-info">
+                                                <i class="fas fa-eye me-1"></i> Détails
+                                            </a>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div> <!-- table-responsive -->
+                </div> <!-- card-body -->
+            </div> <!-- card -->
         </div>
     </div>
+</div>
 
-    {{-- Ajout du jeton CSRF dans une balise meta --}}
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+<!-- CSRF Token -->
+<meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <script>
-        // Lorsque la page est chargée
-        document.addEventListener('DOMContentLoaded', () => {
-            const toggleStatusButtons = document.querySelectorAll('.toggle-status');
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').content; // Récupération du jeton CSRF
+<!-- Script de mise à jour du statut -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
 
-            toggleStatusButtons.forEach(button => {
-                button.addEventListener('change', function () {
-                    const agentId = this.dataset.id; // ID de l'agent
-                    const isChecked = this.checked; // Statut activé/désactivé
-                    const statusLabel = this.nextElementSibling;
+        document.querySelectorAll('.toggle-status').forEach(button => {
+            button.addEventListener('change', function () {
+                const agentId = this.dataset.id;
+                const isChecked = this.checked;
+                const label = this.closest('td').querySelector('.form-check-label .badge');
 
-                    // Demander confirmation
-                    const confirmation = confirm(`Êtes-vous sûr de vouloir ${isChecked ? 'activer' : 'désactiver'} cet agent ?`);
-
-                    if (confirmation) {
-                        // Envoyer la requête au backend pour mettre à jour le statut
-                        fetch(`/admin/agents/toggle-status/${agentId}`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': csrfToken // Inclure le token CSRF
-                            },
-                            body: JSON.stringify({ statut: isChecked })
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.success) {
-                                    // Mise à jour du label de statut
-                                    statusLabel.textContent = isChecked ? 'Activé' : 'Désactivé';
-                                } else {
-                                    alert('Une erreur s\'est produite. Veuillez réessayer.');
-                                    this.checked = !isChecked; // Rétablir l'ancien état
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Erreur :', error);
-                                alert('Une erreur s\'est produite. Veuillez réessayer.');
-                                this.checked = !isChecked; // Rétablir l'ancien état
-                            });
-                    } else {
-                        this.checked = !isChecked; // Rétablir l'ancien état si annulation
-                    }
-                });
+                if (confirm(`Êtes-vous sûr de vouloir ${isChecked ? 'activer' : 'désactiver'} cet agent ?`)) {
+                    fetch(`/admin/agents/toggle-status/${agentId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': csrfToken
+                        },
+                        body: JSON.stringify({ statut: isChecked })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            label.textContent = isChecked ? 'Activé' : 'Désactivé';
+                            label.className = `badge ${isChecked ? 'bg-success' : 'bg-secondary'}`;
+                        } else {
+                            alert('Erreur lors de la mise à jour. Veuillez réessayer.');
+                            this.checked = !isChecked;
+                        }
+                    })
+                    .catch(() => {
+                        alert('Erreur réseau. Veuillez réessayer.');
+                        this.checked = !isChecked;
+                    });
+                } else {
+                    this.checked = !isChecked;
+                }
             });
         });
-    </script>
+    });
+</script>
 @endsection

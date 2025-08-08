@@ -163,7 +163,7 @@
             <p><span class="badge badge-success">Paiement réussi</span></p>
             <p><span class="bold">Locataire :</span> {{ $paiement->locataire->nom }} {{ $paiement->locataire->prenom }}</p>
             <p><span class="bold">Montant payé :</span> {{ number_format($paiement->montant_paye, 2, ',', ' ') }} FCFA</p>
-            <p><span class="bold">Date de paiement :</span> {{ $paiement->created_at->format('d/m/Y') }}</p>
+            <p><span class="bold">Date de paiement :</span> {{ $paiement->date_paiement ? \Carbon\Carbon::parse($paiement->date_paiement)->format('d/m/Y') : 'Date non disponible' }}</p>
         </div>
 
         <div class="line"></div>
