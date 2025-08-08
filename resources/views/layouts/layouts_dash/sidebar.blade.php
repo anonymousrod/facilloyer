@@ -164,7 +164,7 @@
                             </ul>
                         </div>
                     </li>
-    
+
                     <li class="nav-item"><a class="nav-link" href="{{ route('admin.paiements.index') }}"><i
                                 class="fas fa-file-invoice-dollar"></i><span>Historiques des Paiements</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('contrat.index') }}"><i
@@ -180,16 +180,32 @@
                 {{-- LOCATAIRE --}}
                 @if (Auth::user()->id_role == 2)
                     @if (Auth::user()->statut)
-                        <li class="nav-item"><a class="nav-link" href="{{ route('dashboard') }}"><i class="iconoir-view-grid"></i><span>Dashboard</span></a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('locataire_bien', Auth::user()->id) }}"><i class="iconoir-book"></i><span>Bien loué / Contrat</span></a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('locataire.demandes.index') }}"><i class="iconoir-wrench"></i><span>Demande maintenance</span></a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('demandes.modification') }}"><i class="iconoir-stats-up-square"></i><span>Révision de Contract</span></a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('periodes.show') }}"><i class="iconoir-credit-card"></i><span>Processus de paiement</span></a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('locataire.paiements.historique') }}"><i class="iconoir-list"></i><span>Historique des paiements</span></a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('locataire.agentinfo', Auth::user()->id) }}"><i class="iconoir-phone"></i><span>Infos de l’agence</span></a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('locataire.locashow', Auth::user()->id) }}"><i class="iconoir-user"></i><span>Profil</span></a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('profile.edit', Auth::user()->id) }}"><i class="iconoir-settings"></i><span>Paramètres</span></a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('user', Auth::user()->locataires->first()->agent_immobilier->user->id) }}"><i class="iconoir-chat-bubble"></i><span>Assistance en ligne</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('dashboard') }}"><i
+                                    class="iconoir-view-grid"></i><span>Dashboard</span></a></li>
+                        <li class="nav-item"><a class="nav-link"
+                                href="{{ route('locataire_bien', Auth::user()->id) }}"><i
+                                    class="iconoir-book"></i><span>Bien loué / Contrat</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('locataire.demandes.index') }}"><i
+                                    class="iconoir-wrench"></i><span>Demande maintenance</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('demandes.modification') }}"><i
+                                    class="iconoir-stats-up-square"></i><span>Révision de Contract</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('periodes.show') }}"><i
+                                    class="iconoir-credit-card"></i><span>Processus de paiement</span></a></li>
+                        <li class="nav-item"><a class="nav-link"
+                                href="{{ route('locataire.paiements.historique') }}"><i
+                                    class="iconoir-list"></i><span>Historique des paiements</span></a></li>
+                        <li class="nav-item"><a class="nav-link"
+                                href="{{ route('locataire.agentinfo', Auth::user()->id) }}"><i
+                                    class="iconoir-phone"></i><span>Infos de l’agence</span></a></li>
+                        <li class="nav-item"><a class="nav-link"
+                                href="{{ route('locataire.locashow', Auth::user()->id) }}"><i
+                                    class="iconoir-user"></i><span>Profil</span></a></li>
+                        <li class="nav-item"><a class="nav-link"
+                                href="{{ route('profile.edit', Auth::user()->id) }}"><i
+                                    class="iconoir-settings"></i><span>Paramètres</span></a></li>
+                        <li class="nav-item"><a class="nav-link"
+                                href="{{ route('user', Auth::user()->locataires->first()->agent_immobilier->user->id) }}"><i
+                                    class="iconoir-chat-bubble"></i><span>Assistance en ligne</span></a></li>
                     @else
                         <li class="nav-item"><a class="nav-link"
                                 href="{{ route('locataire.locashow', Auth::user()->id) }}"><i
@@ -204,16 +220,31 @@
                     $dernierAbonnement = $agent ? $agent->abonnement()->latest()->first() : null;
                 @endphp
                 @if (Auth::user()->id_role == 3 && Auth::user()->statut && $agent && $dernierAbonnement?->status === 'actif')
+
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('dashboard') }}">
-                            <i class="iconoir-view-grid menu-icon"></i>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                                viewBox="0 0 16 16" style="border-radius:5px;">
+                                <rect x="2" y="2" width="12" height="12" rx="3" fill="#f8f9fa"
+                                    stroke="#ffc107" stroke-width="1.5" />
+                                <rect x="5" y="5" width="2.5" height="2.5" rx="1" fill="#ffc107" />
+                                <rect x="8.5" y="5" width="2.5" height="2.5" rx="1" fill="#ffc107" />
+                                <rect x="5" y="8.5" width="2.5" height="2.5" rx="1" fill="#ffc107" />
+                                <rect x="8.5" y="8.5" width="2.5" height="2.5" rx="1" fill="#ffc107" />
+                            </svg>
                             <span>Dashboard</span>
                         </a>
                     </li>
 
                     <li class="nav-item">
                         <a class="nav-link" href="#sidebarGerer_locataires" data-bs-toggle="collapse">
-                            <i class="iconoir-user menu-icon"></i><span>Gérer les locataires</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                fill="currentColor" viewBox="0 0 16 16" style="border-radius:5px;">
+                                <circle cx="8" cy="6" r="3" fill="#f8f9fa" stroke="#0d6efd"
+                                    stroke-width="1.5" />
+                                <rect x="3" y="10" width="10" height="4" rx="2" fill="#0d6efd" />
+                            </svg>
+                            <span>Gérer les locataires</span>
                         </a>
                         <div class="collapse" id="sidebarGerer_locataires">
                             <ul class="nav flex-column">
@@ -227,7 +258,13 @@
 
                     <li class="nav-item">
                         <a class="nav-link" href="#sidebarGerer_bien" data-bs-toggle="collapse">
-                            <i class="iconoir-home menu-icon"></i><span>Gestion des biens</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                fill="currentColor" viewBox="0 0 16 16" style="border-radius:5px;">
+                                <rect x="2" y="7" width="12" height="7" rx="2" fill="#f8f9fa"
+                                    stroke="#198754" stroke-width="1.5" />
+                                <polygon points="8,2 2,7 14,7" fill="#198754" />
+                            </svg>
+                            <span>Gestion des biens</span>
                         </a>
                         <div class="collapse" id="sidebarGerer_bien">
                             <ul class="nav flex-column">
@@ -241,7 +278,14 @@
 
                     <li class="nav-item">
                         <a class="nav-link" href="#sidebarGerer_contrat_bail" data-bs-toggle="collapse">
-                            <i class="fas fa-indent menu-icon"></i><span>Gestion des Articles</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                fill="currentColor" viewBox="0 0 16 16" style="border-radius:5px;">
+                                <rect x="3" y="2" width="10" height="12" rx="2" fill="#f8f9fa"
+                                    stroke="#6f42c1" stroke-width="1.5" />
+                                <rect x="5" y="5" width="6" height="1.2" rx="0.6" fill="#6f42c1" />
+                                <rect x="5" y="8" width="6" height="1.2" rx="0.6" fill="#6f42c1" />
+                            </svg>
+                            <span>Gestion des Articles</span>
                         </a>
                         <div class="collapse" id="sidebarGerer_contrat_bail">
                             <ul class="nav flex-column">
@@ -255,21 +299,37 @@
 
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('demandes.modification') }}">
-                            <i class="iconoir-stats-up-square menu-icon"></i>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                fill="currentColor" viewBox="0 0 16 16" style="border-radius:5px;">
+                                <rect x="2" y="2" width="12" height="12" rx="3" fill="#f8f9fa"
+                                    stroke="#fd7e14" stroke-width="1.5" />
+                                <path d="M5 8h6M8 5v6" stroke="#fd7e14" stroke-width="1.2" stroke-linecap="round" />
+                            </svg>
                             <span>Révision de Contract</span>
                         </a>
                     </li>
 
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('agent_immo_historique') }}">
-                            <i class="far fa-eye menu-icon"></i>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                fill="currentColor" viewBox="0 0 16 16" style="border-radius:5px;">
+                                <ellipse cx="8" cy="8" rx="6" ry="4.5" fill="#f8f9fa"
+                                    stroke="#20c997" stroke-width="1.5" />
+                                <circle cx="8" cy="8" r="2" fill="#20c997" />
+                            </svg>
                             <span>Suivi des paiements</span>
                         </a>
                     </li>
 
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('information_gestion') }}">
-                            <i class="iconoir-stats-up-square menu-icon"></i>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                fill="currentColor" viewBox="0 0 16 16" style="border-radius:5px;">
+                                <rect x="2" y="2" width="12" height="12" rx="3" fill="#f8f9fa"
+                                    stroke="#0dcaf0" stroke-width="1.5" />
+                                <path d="M5 11V8M8 11V5M11 11V6.5" stroke="#0dcaf0" stroke-width="1.2"
+                                    stroke-linecap="round" />
+                            </svg>
                             <span>Auditer Loyer</span>
                         </a>
                     </li>
@@ -277,7 +337,13 @@
                     {{-- s'abonner temporaire --}}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('plans_abonnement') }}">
-                            <i class="iconoir-view-grid menu-icon"></i>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                                fill="currentColor" viewBox="0 0 16 16" style="border-radius:5px;">
+                                <polygon points="8,2 10,6.5 15,6.5 11,10 12.5,15 8,12.5 3.5,15 5,10 1,6.5 6,6.5"
+                                    fill="#f8f9fa" stroke="#ffc107" stroke-width="1.5" />
+                                <polygon points="8,3.5 9,6 12,6 9.5,8 10.5,11 8,9.5 5.5,11 6.5,8 4,6 7,6"
+                                    fill="#ffc107" />
+                            </svg>
                             <span>Plan d'abonnement</span>
                         </a>
                     </li>
@@ -290,14 +356,29 @@
 
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('abonnement.historique') }}">
-                            <i class="bi bi-clock-history"></i> <span>Historique des abonnements</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none"
+                                viewBox="0 0 20 20"
+                                style="border-radius:5px; min-width:20px; min-height:20px; display:inline-block; vertical-align:middle;">
+                                <circle cx="10" cy="10" r="8" fill="#f8f9fa" stroke="#6c757d"
+                                    stroke-width="1.5" />
+                                <path d="M10 5.5v4l3 2" stroke="#6c757d" stroke-width="1.3" stroke-linecap="round"
+                                    stroke-linejoin="round" />
+                            </svg>
+                            <span>Historique des abonnements</span>
                         </a>
                     </li>
 
 
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('agent.demandes') }}">
-                            <i class="iconoir-tools menu-icon"></i>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"
+                                fill="currentColor" viewBox="0 0 16 16"
+                                style="border-radius:5px; min-width:22px; min-height:22px; display:inline-block; vertical-align:middle;">
+                                <rect x="3" y="3" width="10" height="10" rx="2" fill="#f8f9fa"
+                                    stroke="#dc3545" stroke-width="1.5" />
+                                <path d="M6 10l4-4M10 10l-4-4" stroke="#dc3545" stroke-width="1.2"
+                                    stroke-linecap="round" />
+                            </svg>
                             <span>Liste maintenances</span>
                         </a>
                     </li>
@@ -309,7 +390,16 @@
                     @if ($user)
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('user', $user->id) }}">
-                                <i class="iconoir-chat-bubble menu-icon"></i>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none"
+                                    viewBox="0 0 20 20"
+                                    style="border-radius:5px; min-width:22px; min-height:22px; display:inline-block; vertical-align:middle;">
+                                    <rect x="2.5" y="3.5" width="15" height="13" rx="3"
+                                        fill="#f8f9fa" stroke="#0d6efd" stroke-width="1.5" />
+                                    <path d="M6 14.5l2.5-2h3L14 14.5" stroke="#0d6efd" stroke-width="1.1"
+                                        stroke-linecap="round" />
+                                    <circle cx="7.5" cy="9" r="1" fill="#0d6efd" />
+                                    <circle cx="12.5" cy="9" r="1" fill="#0d6efd" />
+                                </svg>
                                 <span>Assistance en ligne</span>
                             </a>
                         </li>
