@@ -1,169 +1,81 @@
 @extends('layouts.master_dash')
-<style>
-            /* locataire-profile.css */
 
-        /* Styles généraux */
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #f8f9fa;
-        }
+@section('title', 'Profil du Locataire')
 
-        .card {
-            border: none;
-            border-radius: 12px;
-            overflow: hidden;
-        }
-
-        .card-header {
-            height: 200px;
-            background-size: cover;
-            background-position: center;
-            position: relative;
-        }
-
-        .profile-photo {
-            transform: translateY(-50%);
-            transition: transform 0.3s ease-in-out;
-        }
-
-        .profile-photo img {
-            width: 120px;
-            height: 120px;
-            object-fit: cover;
-            border: 4px solid white;
-            border-radius: 50%;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-
-        .profile-photo img:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
-        }
-
-        .info-box {
-            background: white;
-            border: 1px solid #e9ecef;
-            border-radius: 8px;
-            padding: 16px;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .info-box:hover {
-            transform: scale(1.02);
-            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
-        }
-
-        .btn {
-            border-radius: 30px;
-            padding: 10px 20px;
-            transition: all 0.3s;
-        }
-
-        .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
-        }
-
-        .btn-primary:hover {
-            background-color: #0056b3;
-            border-color: #0056b3;
-        }
-
-        .btn-outline-primary {
-            color: #007bff;
-            border-color: #007bff;
-        }
-
-        .btn-outline-primary:hover {
-            color: #ffffff;
-            background-color: #007bff;
-            border-color: #007bff;
-        }
-
-        .fade-in {
-            animation: fadeIn 1s ease-in-out;
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            0% {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-</style>
 @section('content')
-<link rel="stylesheet" href="{{ asset('css/locataire-profile.css') }}">
-
-<div class="container py-5 fade-in">
+<div class="container py-4">
     <div class="row justify-content-center">
-        <div class="col-lg-10">
-            <div class="card shadow-lg">
-                <!-- En-tête avec image de fond -->
-                <div class="card-header" style="background-image: url('{{ asset('images/header-bg.jpg') }}');">
-                    <div class="profile-photo text-center">
+        <div class="col-lg-10 col-md-12">
+            <div class="card shadow rounded-4 overflow-hidden">
+
+                {{-- Header avec bannière et avatar --}}
+                <div class="card-header p-0 position-relative" style="height: 180px; background-image: url('{{ asset('images/header-bg.jpg') }}'); background-size: cover; background-position: center;">
+                    <div class="position-absolute start-50 translate-middle-x" style="bottom: -60px;">
                         @if($locataire->photo_profil)
-                            <img src="{{ asset($locataire->photo_profil) }}" alt="Photo de Profil">
+                            <img src="{{ asset($locataire->photo_profil) }}" alt="Photo de Profil" class="rounded-circle border border-white shadow" style="width: 120px; height: 120px; object-fit: cover;">
                         @else
-                            <img src="https://via.placeholder.com/120" alt="Photo de Profil">
+                            <img src="https://via.placeholder.com/120" alt="Photo de Profil" class="rounded-circle border border-white shadow" style="width: 120px; height: 120px; object-fit: cover;">
                         @endif
                     </div>
                 </div>
 
-                <!-- Corps de la carte -->
                 <div class="card-body pt-5">
+                    {{-- Nom et date --}}
                     <div class="text-center mb-4">
-                        <h4 class="fw-bold">{{ $locataire->prenom }} {{ $locataire->nom }}</h4>
+                        <h4 class="fw-bold mb-1">{{ $locataire->prenom }} {{ $locataire->nom }}</h4>
                         <p class="text-muted mb-0">
                             <i class="bi bi-calendar3"></i> Locataire depuis {{ $locataire->created_at->format('d/m/Y') }}
                         </p>
                     </div>
 
-                    <!-- Section Informations -->
-                    <div class="row mb-4">
+                    {{-- Informations personnelles & pro --}}
+                    <div class="row g-3">
                         <div class="col-md-6">
-                            <div class="info-box">
-                                <h6 class="fw-bold text-primary"><i class="bi bi-info-circle"></i> Informations Personnelles</h6>
-                                <p><i class="bi bi-person"></i> <strong>Nom :</strong> {{ $locataire->prenom }} {{ $locataire->nom }}</p>
-                                <p><i class="bi bi-calendar"></i> <strong>Date de naissance :</strong> {{ $locataire->date_naissance->format('d/m/Y') }}</p>
-                                <p><i class="bi bi-gender-ambiguous"></i> <strong>Genre :</strong> {{ ucfirst($locataire->genre) }}</p>
-                                <p><i class="bi bi-geo-alt"></i> <strong>Adresse :</strong> {{ $locataire->adresse }}</p>
-                                <p><i class="bi bi-telephone"></i> <strong>Téléphone :</strong> {{ $locataire->telephone }}</p>
+                            <div class="border rounded-3 p-3">
+                                <h6 class="text-success fw-bold mb-3">
+                                    <i class="bi bi-info-circle me-1"></i> Informations Personnelles
+                                </h6>
+                                <ul class="list-unstyled mb-0">
+                                    <li><i class="bi bi-person me-1"></i><strong>Nom :</strong> {{ $locataire->prenom }} {{ $locataire->nom }}</li>
+                                    <li><i class="bi bi-calendar me-1"></i><strong>Naissance :</strong> {{ $locataire->date_naissance->format('d/m/Y') }}</li>
+                                    <li><i class="bi bi-gender-ambiguous me-1"></i><strong>Genre :</strong> {{ ucfirst($locataire->genre) }}</li>
+                                    <li><i class="bi bi-geo-alt me-1"></i><strong>Adresse :</strong> {{ $locataire->adresse }}</li>
+                                    <li><i class="bi bi-telephone me-1"></i><strong>Téléphone :</strong> {{ $locataire->telephone }}</li>
+                                </ul>
                             </div>
                         </div>
+
                         <div class="col-md-6">
-                            <div class="info-box">
-                                <h6 class="fw-bold text-primary"><i class="bi bi-briefcase"></i> Informations Professionnelles</h6>
-                                <p><i class="bi bi-cash-coin"></i> <strong>Revenu Mensuel :</strong> {{ number_format($locataire->revenu_mensuel, 2, ',', ' ') }} FCFA</p>
-                                <p><i class="bi bi-person-workspace"></i> <strong>Statut :</strong> {{ $locataire->statut_professionnel }}</p>
-                                <p><i class="bi bi-people"></i> <strong>Matrimonial :</strong> {{ $locataire->statut_matrimoniale }}</p>
-                                <p><i class="bi bi-person-check"></i> <strong>Garant :</strong> {{ $locataire->garant ?? 'Non renseigné' }}</p>
+                            <div class="border rounded-3 p-3">
+                                <h6 class="text-success fw-bold mb-3">
+                                    <i class="bi bi-briefcase me-1"></i> Informations Professionnelles
+                                </h6>
+                                <ul class="list-unstyled mb-0">
+                                    <li><i class="bi bi-cash-coin me-1"></i><strong>Revenu :</strong> {{ number_format($locataire->revenu_mensuel, 0, ',', ' ') }} FCFA</li>
+                                    <li><i class="bi bi-person-workspace me-1"></i><strong>Statut :</strong> {{ $locataire->statut_professionnel }}</li>
+                                    <li><i class="bi bi-people me-1"></i><strong>Matrimonial :</strong> {{ $locataire->statut_matrimoniale }}</li>
+                                    <li><i class="bi bi-person-check me-1"></i><strong>Garant :</strong> {{ $locataire->garant ?? 'Non renseigné' }}</li>
+                                </ul>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Section Foyer -->
-                    <div class="info-box">
-                        <h6 class="fw-bold text-primary"><i class="bi bi-house-door"></i> Informations sur le Foyer</h6>
-                        <p><i class="bi bi-people"></i> <strong>Nombre de personnes dans le foyer :</strong> {{ $locataire->nombre_personne_foyer }}</p>
+                    {{-- Foyer --}}
+                    <div class="mt-3 border rounded-3 p-3">
+                        <h6 class="text-success fw-bold mb-3">
+                            <i class="bi bi-house-door me-1"></i> Informations sur le Foyer
+                        </h6>
+                        <p><i class="bi bi-people me-1"></i><strong>Personnes dans le foyer :</strong> {{ $locataire->nombre_personne_foyer }}</p>
                     </div>
 
-                    <!-- Boutons Actions -->
+                    {{-- Bouton retour --}}
                     <div class="text-center mt-4">
-                        <a href="{{ route('admin.locataires_par_agence') }}" class="btn btn-outline-primary me-2">
-                            <i class="bi bi-arrow-left"></i> Retour à la liste
+                        <a href="{{ route('admin.locataires_par_agence') }}" class="btn btn-outline-success rounded-pill px-4">
+                            <i class="bi bi-arrow-left me-1"></i> Retour à la liste
                         </a>
-                        <!-- <a href="#" class="btn btn-primary">
-                            <i class="bi bi-pencil-square"></i> Modifier le Profil
-                        </a> -->
                     </div>
                 </div>
+
             </div>
         </div>
     </div>

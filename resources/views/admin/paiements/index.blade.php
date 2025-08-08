@@ -1,124 +1,116 @@
-
 @extends('layouts.master_dash')
 
 @section('content')
-<div class="container mt-4">
-    <!-- Formulaire de recherche avec design amélioré -->
-    <div class="row justify-content-center mb-4">
-        <div class="col-md-8">
-            <form action="{{ route('admin.paiements.index') }}" method="GET" class="input-group input-group-lg">
-                <input type="text" name="search" class="form-control form-control-lg" placeholder="Rechercher par nom de locataire ou agence" value="{{ request('search') }}">
-                <div class="input-group-append">
-                    <button class="btn btn-warning btn-lg" type="submit">
-                        <i class="fas fa-search"></i> Rechercher
-                    </button>
-                </div>
+<div class="container mt-2">
+
+    <!-- Barre de recherche globale -->
+    <div class="row justify-content-center mb-3">
+        <div class="col-lg-9 col-md-10">
+            <form action="{{ route('admin.paiements.index') }}" method="GET" class="input-group shadow-sm">
+                <input type="text" name="search" class="form-control form-control-lg border-0" placeholder="🔍 Rechercher un locataire ou une agence" value="{{ request('search') }}">
+                <button class="btn text-white px-4" style="background-color: #22B65A;" type="submit">
+                    <i class="fas fa-search"></i>
+                </button>
             </form>
         </div>
     </div>
 
-    <h2 class="text-center mb-4">Historique des Paiements</h2>
+    <h3 class="text-center text-success fw-bold mb-4">📄 Historique des Paiements</h3>
 
+    <!-- Cartes par agence -->
     @foreach ($paiements as $agence => $paiementsAgence)
-        <div class="card shadow-sm mb-4">
-            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                <strong>{{ $agence }}</strong>
-                <span class="badge badge-light">{{ $paiementsAgence->count() }} Paiements</span>
+        <div class="card mb-4 shadow-sm">
+            <div class="card-header text-white d-flex justify-content-between align-items-center py-2 px-3" style="background-color: #22B65A;">
+                <span class="fw-semibold">{{ $agence }}</span>
+                <span class="badge bg-light text-dark">{{ $paiementsAgence->count() }} Paiement(s)</span>
             </div>
-            <div class="card-body">
-                @foreach ($paiementsAgence->take(5) as $paiement)
-                    <div class="mb-3">
-                        <h5 class="text-secondary">Locataire : {{ $paiement->locataire->nom ?? 'Inconnu' }} {{ $paiement->locataire->prenom ?? '' }}</h5>
-                        <p><strong>Bien : </strong>{{ $paiement->bien->name_bien ?? 'Bien inconnu' }}</p>
-                        <p><strong>Montant payé : </strong>{{ number_format($paiement->montant_paye, 2) }} FCFA</p>
-                        <p><strong>Statut : </strong>{{ $paiement->statut_paiement }}</p>
-                        <a href="{{ route('admin.paiements.details', $paiement->id) }}" class="btn btn-info btn-sm">Voir détails</a>
-                    </div>
-                    <hr>
-                @endforeach
+            <div class="card-body py-3 px-3">
 
-                <!-- Voir plus pour afficher tous les paiements de l'agence -->
-                @if ($paiementsAgence->count() > 5)
-                    <div class="text-center">
-                        <a href="#" class="btn btn-outline-primary voir-plus">Voir plus</a>
-                    </div>
-                @endif
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover table-sm table-striped datatable" style="width: 100%;">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Locataire</th>
+                                <th>Bien</th>
+                                <th>Montant</th>
+                                <th>Statut</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($paiementsAgence as $paiement)
+                                <tr>
+                                    <td>{{ $paiement->locataire->nom ?? 'Inconnu' }} {{ $paiement->locataire->prenom ?? '' }}</td>
+                                    <td>{{ $paiement->bien->name_bien ?? 'Bien inconnu' }}</td>
+                                    <td>{{ number_format($paiement->montant_paye, 2) }} FCFA</td>
+                                    <td>{{ $paiement->statut_paiement }}</td>
+                                    <td>
+                                        <a href="{{ route('admin.paiements.details', $paiement->id) }}" class="btn btn-outline-success btn-sm rounded-pill px-3">Voir</a>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+
             </div>
         </div>
     @endforeach
-</div>
 
-<!-- Script pour afficher plus de paiements -->
+</div>
+@endsection
+
+@section('scripts')
+<!-- DataTables JS + CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
+<script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
 <script>
-    document.querySelectorAll('.voir-plus').forEach(button => {
-        button.addEventListener('click', function() {
-            const agenceCard = button.closest('.card-body');
-            agenceCard.querySelectorAll('.mb-3').forEach((paiement, index) => {
-                if (index >= 5) {
-                    paiement.style.display = 'block';  // Afficher les paiements supplémentaires
-                }
-            });
-            button.style.display = 'none'; // Masquer le bouton "Voir plus"
+    $(document).ready(function () {
+        $('.datatable').DataTable({
+            language: {
+                url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/fr-FR.json'
+            },
+            pageLength: 5,
+            lengthMenu: [5, 10, 25, 50],
+            ordering: true,
+            responsive: true
         });
     });
 </script>
-
 @endsection
 
-
 <style>
-
-
-
+/* Styles harmonisés */
 .card {
-    border-radius: 12px;
-    border: 1px solid #e0e0e0;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease-in-out;
+    border-radius: 10px;
 }
 
-.card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
-}
-
-/* Header styling */
 .card-header {
-    border-radius: 12px 12px 0 0;
-    font-size: 1.2rem;
+    border-radius: 10px 10px 0 0;
 }
 
-/* Button styling */
-.btn-outline-primary {
-    transition: background-color 0.3s ease;
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 0.2em 0.8em;
+    margin: 0 2px;
+    border-radius: 30px;
+    background-color: #f2f2f2;
+    border: none;
 }
 
-.btn-outline-primary:hover {
-    background-color: #007bff;
-    color: white;
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    background-color: #22B65A !important;
+    color: white !important;
 }
 
-/* Search box */
-.input-group {
-    border-radius: 50px;
-    overflow: hidden;
+.dataTables_filter input {
+    border-radius: 30px;
+    padding-left: 10px;
 }
 
-.input-group input {
-    border-radius: 50px 0 0 50px;
-}
-
-.input-group .btn {
-    border-radius: 0 50px 50px 0;
-}
-
-/* Voir plus animation */
-.voir-plus {
-    transition: transform 0.3s ease, opacity 0.3s ease;
-}
-
-.voir-plus:hover {
-    transform: scale(1.05);
-    opacity: 0.9;
+.dataTables_length select {
+    border-radius: 30px;
 }
 </style>

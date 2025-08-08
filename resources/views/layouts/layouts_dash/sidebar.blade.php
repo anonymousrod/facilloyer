@@ -1,4 +1,4 @@
-<!-- Sidebar avec style professionnel -->
+<!-- Sidebar avec style update by fhb patcher lol "rod" je blague , j'etait un peu ennuyé aujourd'hui -->
 
 <style>
     body {
@@ -164,13 +164,9 @@
                             </ul>
                         </div>
                     </li>
-                    <li class="nav-item"><a class="nav-link" href="rapports-financiers.html"><i
-                                class="fas fa-file-invoice-dollar"></i><span>Consulter les rapports
-                                financiers</span></a></li>
+    
                     <li class="nav-item"><a class="nav-link" href="{{ route('admin.paiements.index') }}"><i
                                 class="fas fa-file-invoice-dollar"></i><span>Historiques des Paiements</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('admin.contrats_de_bail.index') }}"><i
-                                class="fas fa-book"></i><span>Auditer les contrats de bail</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('contrat.index') }}"><i
                                 class="fas fa-book"></i><span>Voir tous les contrats de bail</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('admin.demandes.grouped') }}"><i
@@ -184,32 +180,16 @@
                 {{-- LOCATAIRE --}}
                 @if (Auth::user()->id_role == 2)
                     @if (Auth::user()->statut)
-                        <li class="nav-item"><a class="nav-link" href="{{ route('dashboard') }}"><i
-                                    class="iconoir-view-grid"></i><span>Dashboard</span></a></li>
-                        <li class="nav-item"><a class="nav-link"
-                                href="{{ route('locataire_bien', Auth::user()->id) }}"><i
-                                    class="iconoir-book"></i><span>Bien loué / Contrat</span></a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('locataire.demandes.index') }}"><i
-                                    class="iconoir-wrench"></i><span>Demande maintenance</span></a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('demandes.modification') }}"><i
-                                    class="iconoir-stats-up-square"></i><span>Demande de modification</span></a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('periodes.show') }}"><i
-                                    class="iconoir-credit-card"></i><span>Processus de paiement</span></a></li>
-                        <li class="nav-item"><a class="nav-link"
-                                href="{{ route('locataire.paiements.historique') }}"><i
-                                    class="iconoir-list"></i><span>Historique des paiements</span></a></li>
-                        <li class="nav-item"><a class="nav-link"
-                                href="{{ route('locataire.agentinfo', Auth::user()->id) }}"><i
-                                    class="iconoir-phone"></i><span>Infos de l’agence</span></a></li>
-                        <li class="nav-item"><a class="nav-link"
-                                href="{{ route('locataire.locashow', Auth::user()->id) }}"><i
-                                    class="iconoir-user"></i><span>Profil</span></a></li>
-                        <li class="nav-item"><a class="nav-link"
-                                href="{{ route('profile.edit', Auth::user()->id) }}"><i
-                                    class="iconoir-settings"></i><span>Paramètres</span></a></li>
-                        <li class="nav-item"><a class="nav-link"
-                                href="{{ route('user', Auth::user()->locataires->first()->agent_immobilier->user->id) }}"><i
-                                    class="iconoir-chat-bubble"></i><span>Assistance en ligne</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('dashboard') }}"><i class="iconoir-view-grid"></i><span>Dashboard</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('locataire_bien', Auth::user()->id) }}"><i class="iconoir-book"></i><span>Bien loué / Contrat</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('locataire.demandes.index') }}"><i class="iconoir-wrench"></i><span>Demande maintenance</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('demandes.modification') }}"><i class="iconoir-stats-up-square"></i><span>Révision de Contract</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('periodes.show') }}"><i class="iconoir-credit-card"></i><span>Processus de paiement</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('locataire.paiements.historique') }}"><i class="iconoir-list"></i><span>Historique des paiements</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('locataire.agentinfo', Auth::user()->id) }}"><i class="iconoir-phone"></i><span>Infos de l’agence</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('locataire.locashow', Auth::user()->id) }}"><i class="iconoir-user"></i><span>Profil</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('profile.edit', Auth::user()->id) }}"><i class="iconoir-settings"></i><span>Paramètres</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="{{ route('user', Auth::user()->locataires->first()->agent_immobilier->user->id) }}"><i class="iconoir-chat-bubble"></i><span>Assistance en ligne</span></a></li>
                     @else
                         <li class="nav-item"><a class="nav-link"
                                 href="{{ route('locataire.locashow', Auth::user()->id) }}"><i
@@ -276,7 +256,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('demandes.modification') }}">
                             <i class="iconoir-stats-up-square menu-icon"></i>
-                            <span>Demande de modification</span>
+                            <span>Révision de Contract</span>
                         </a>
                     </li>
 
@@ -318,7 +298,7 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('agent.demandes') }}">
                             <i class="iconoir-tools menu-icon"></i>
-                            <span>Voir les demandes de maintenances</span>
+                            <span>Liste maintenances</span>
                         </a>
                     </li>
 
