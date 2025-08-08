@@ -1,16 +1,18 @@
 @extends('layouts.master_dash')
 
 @section('content')
-<div class="container-xxl">
+<div class="container-xxl mt-4">
     <div class="row justify-content-center">
         <div class="col-12">
-            <div class="card shadow-sm border-0 rounded">
-                <div class="card-header border-bottom d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0">Liste des Agents Immobiliers</h4>
+            <div class="card shadow border-0 rounded">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">
+                        <i class="fas fa-users me-2"></i> Liste des Agents Immobiliers
+                    </h4>
                 </div>
-                <div class="card-body pt-0">
+                <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-hover align-middle" id="datatable_agents">
+                        <table class="table table-striped table-hover align-middle" id="datatable_agents">
                             <thead class="table-dark">
                                 <tr>
                                     <th>Agence</th>
@@ -62,8 +64,31 @@
 <!-- CSRF Token -->
 <meta name="csrf-token" content="{{ csrf_token() }}">
 
-<!-- Script de mise à jour du statut -->
+<!-- JS pour DataTables + Bootstrap -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+
 <script>
+    $(document).ready(function() {
+        $('#datatable_agents').DataTable({
+            language: {
+                search: "🔍 Rechercher :",
+                lengthMenu: "Afficher _MENU_ entrées",
+                info: "Affichage de _START_ à _END_ sur _TOTAL_ entrées",
+                paginate: {
+                    first: "Premier",
+                    last: "Dernier",
+                    next: "Suivant",
+                    previous: "Précédent"
+                },
+                zeroRecords: "Aucun agent trouvé"
+            }
+        });
+    });
+
+    // Script pour changement de statut
     document.addEventListener('DOMContentLoaded', () => {
         const csrfToken = document.querySelector('meta[name="csrf-token"]').content;
 
@@ -88,12 +113,12 @@
                             label.textContent = isChecked ? 'Activé' : 'Désactivé';
                             label.className = `badge ${isChecked ? 'bg-success' : 'bg-secondary'}`;
                         } else {
-                            alert('Erreur lors de la mise à jour. Veuillez réessayer.');
+                            alert('Erreur lors de la mise à jour.');
                             this.checked = !isChecked;
                         }
                     })
                     .catch(() => {
-                        alert('Erreur réseau. Veuillez réessayer.');
+                        alert('Erreur réseau.');
                         this.checked = !isChecked;
                     });
                 } else {
