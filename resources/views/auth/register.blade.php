@@ -77,9 +77,10 @@
             /* background: #f5f7fa; */
         }
 
+
         .auth-left {
             flex: 1;
-            background: #198754 !important;
+            background: #166534 !important;
             color: #fff !important;
             padding: 4rem 3rem;
             display: flex;
@@ -91,36 +92,29 @@
         .auth-left * {
             color: #fff !important;
         }
-        /* Correction : forcer le blanc sur tous les textes à gauche */
-        .auth-left h4,
-        .auth-left p,
-        .auth-left span,
-        .auth-left label,
-        .auth-left a,
-        .auth-left strong,
-        .auth-left div,
-        .auth-left {
-            color: #fff !important;
-        }
-
-        .auth-left img {
-            max-height: 70px;
-            margin-bottom: 2rem;
-            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.4));
-        }
-
-        .auth-left h4 {
-            font-size: 2.2rem;
+        .auth-logo-text {
             font-weight: 700;
-            margin-bottom: 1.2rem;
-            color: #ffffff;
+            font-size: 1.5rem;
+            color: #fff;
+            margin-bottom: 0.2rem;
         }
-
+        .auth-left img {
+            height: 80px;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.18));
+            transition: transform 0.3s;
+            background: #fff;
+            border-radius: 50%;
+            padding: 16px;
+            box-shadow: 0 2px 8px 0 rgba(22, 101, 52, 0.08);
+            display: inline-block;
+        }
+        .auth-left img:hover {
+            transform: scale(1.08) rotate(-2deg);
+        }
         .auth-left p {
-            font-size: 1.1rem;
-            max-width: 420px;
-            opacity: 0.95;
-            color: #e0e0e0;
+            font-size: 1.05rem;
+            opacity: 0.92;
         }
 
         .auth-form {
@@ -130,33 +124,60 @@
             align-items: center;
             padding: 2.5rem;
         }
-        /* Style vert pour tout sauf agent */
-        .auth-form:not(.agent-style) * {
-            color: #198754 !important;
+        /* Style sobre pour l'intérieur du formulaire (hors agent) */
+        .auth-form:not(.agent-style) .form-container {
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
         }
-        .auth-form:not(.agent-style) .form-control,
         .auth-form:not(.agent-style) .form-label,
-        .auth-form:not(.agent-style) .btn,
-        .auth-form:not(.agent-style) .alert,
-        .auth-form:not(.agent-style) a,
-        .auth-form:not(.agent-style) p,
         .auth-form:not(.agent-style) label {
-            color: #198754 !important;
-            border-color: #198754 !important;
+            color: #222 !important;
+            font-weight: 600;
+        }
+        .auth-form:not(.agent-style) .form-label i {
+            color: #22c55e !important;
+        }
+        .auth-form:not(.agent-style) .form-control {
+            background: #fff;
+            color: #222;
+            border: 1px solid #bbf7d0;
+            border-radius: 10px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        .auth-form:not(.agent-style) .form-control:focus {
+            border-color: #22c55e;
+            box-shadow: 0 0 0 0.15rem rgba(34, 197, 94, 0.12);
+            background: #fff;
         }
         .auth-form:not(.agent-style) .btn-success,
         .auth-form:not(.agent-style) .btn {
-            background: #198754 !important;
-            border-color: #198754 !important;
+            background: linear-gradient(90deg, #22c55e 0%, #166534 100%) !important;
+            border: none;
+            color: #fff !important;
+            font-weight: 600;
+            transition: background 0.3s, color 0.3s;
         }
         .auth-form:not(.agent-style) .btn-success:hover,
         .auth-form:not(.agent-style) .btn:hover {
-            background: #157347 !important;
-            border-color: #157347 !important;
+            background: #166534 !important;
+            color: #fff !important;
         }
         .auth-form:not(.agent-style) .form-check-input:checked {
-            background-color: #198754 !important;
-            border-color: #198754 !important;
+            background-color: #22c55e !important;
+            border-color: #22c55e !important;
+        }
+        .auth-form:not(.agent-style) a {
+            color: #22c55e !important;
+            text-decoration: underline;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .auth-form:not(.agent-style) a:hover {
+            color: #166534 !important;
+        }
+        .auth-form:not(.agent-style) .text-muted {
+            color: #6c757d !important;
         }
 
         .form-container {
@@ -175,6 +196,7 @@
             /* color: #333; */
         }
 
+        /* Suppression du bleu, tout est géré par la section ci-dessus */
         .form-control {
             border-radius: 10px;
             border: 1px solid #dcdfe6;
@@ -182,56 +204,53 @@
             font-size: 0.95rem;
             transition: all 0.3s ease;
         }
-
         .form-control:focus {
-            border-color: #4c8bf5;
-            box-shadow: 0 0 0 3px rgba(76, 139, 245, 0.15);
+            border-color: #22c55e;
+            box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.15);
             outline: none;
         }
-
         .btn-primary {
-            background-color: #4c8bf5;
+            background: linear-gradient(90deg, #22c55e 0%, #166534 100%);
             border: none;
             padding: 0.75rem 1rem;
             font-weight: 600;
             font-size: 1rem;
             border-radius: 10px;
-            transition: background-color 0.3s ease;
+            color: #fff;
+            transition: background 0.3s, color 0.3s;
         }
-
         .btn-primary:hover {
-            background-color: #356ad8;
+            background: #166534;
+            color: #fff;
         }
-
         .form-check-label {
             font-size: 0.875rem;
-            color: #555;
+            color: #166534;
         }
-
         .form-check-label a {
-            color: #4c8bf5;
+            color: #22c55e;
             text-decoration: underline;
             font-weight: 500;
+            transition: color 0.2s;
         }
-
+        .form-check-label a:hover {
+            color: #166534;
+        }
         .alert {
             font-size: 0.95rem;
             border-radius: 8px;
         }
-
         .text-info.small {
-            color: #4c8bf5 !important;
+            color: #22c55e !important;
             font-size: 0.9rem;
             margin-top: -0.5rem;
             margin-bottom: 1rem;
         }
-
         .text-muted {
             color: #6c757d !important;
         }
-
         .text-primary {
-            color: #4c8bf5 !important;
+            color: #22c55e !important;
         }
 
         .d-grid button {
@@ -274,11 +293,9 @@
         {{-- Partie gauche --}}
         @unless ($agent)
             <div class="auth-left" data-aos="fade-right">
-                <img src="{{ asset('assets/images/logo-sm.png') }}" alt="Logo">
-                <h4>{{ $agent ? 'Enregistrer un locataire' : 'Inscription à ' . env('APP_NAME') }}</h4>
-                <p>
-                    {{ $agent ? 'Remplissez les informations pour enregistrer un locataire.' : 'Créez votre compte gratuitement en quelques clics.' }}
-                </p>
+                <img src="{{ asset('assets/images/gbsolux-remouve.png') }}" alt="logo">
+                <div class="auth-logo-text">Bienvenue sur {{ env('APP_NAME') }}</div>
+                <p>Créez votre compte gratuitement en quelques clics.</p>
             </div>
         @endunless
 

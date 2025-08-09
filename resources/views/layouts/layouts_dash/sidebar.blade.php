@@ -223,27 +223,14 @@
 
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('dashboard') }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
-                                viewBox="0 0 16 16" style="border-radius:5px;">
-                                <rect x="2" y="2" width="12" height="12" rx="3" fill="#f8f9fa"
-                                    stroke="#ffc107" stroke-width="1.5" />
-                                <rect x="5" y="5" width="2.5" height="2.5" rx="1" fill="#ffc107" />
-                                <rect x="8.5" y="5" width="2.5" height="2.5" rx="1" fill="#ffc107" />
-                                <rect x="5" y="8.5" width="2.5" height="2.5" rx="1" fill="#ffc107" />
-                                <rect x="8.5" y="8.5" width="2.5" height="2.5" rx="1" fill="#ffc107" />
-                            </svg>
+                            <i class="iconoir-view-grid" style="color:#ffc107;"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
 
                     <li class="nav-item">
                         <a class="nav-link" href="#sidebarGerer_locataires" data-bs-toggle="collapse">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                                fill="currentColor" viewBox="0 0 16 16" style="border-radius:5px;">
-                                <circle cx="8" cy="6" r="3" fill="#f8f9fa" stroke="#0d6efd"
-                                    stroke-width="1.5" />
-                                <rect x="3" y="10" width="10" height="4" rx="2" fill="#0d6efd" />
-                            </svg>
+                            <i class="iconoir-users-group"></i>
                             <span>Gérer les locataires</span>
                         </a>
                         <div class="collapse" id="sidebarGerer_locataires">
@@ -258,12 +245,7 @@
 
                     <li class="nav-item">
                         <a class="nav-link" href="#sidebarGerer_bien" data-bs-toggle="collapse">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                                fill="currentColor" viewBox="0 0 16 16" style="border-radius:5px;">
-                                <rect x="2" y="7" width="12" height="7" rx="2" fill="#f8f9fa"
-                                    stroke="#198754" stroke-width="1.5" />
-                                <polygon points="8,2 2,7 14,7" fill="#198754" />
-                            </svg>
+                            <i class="iconoir-home" style="color:#198754;"></i>
                             <span>Gestion des biens</span>
                         </a>
                         <div class="collapse" id="sidebarGerer_bien">
@@ -278,13 +260,7 @@
 
                     <li class="nav-item">
                         <a class="nav-link" href="#sidebarGerer_contrat_bail" data-bs-toggle="collapse">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                                fill="currentColor" viewBox="0 0 16 16" style="border-radius:5px;">
-                                <rect x="3" y="2" width="10" height="12" rx="2" fill="#f8f9fa"
-                                    stroke="#6f42c1" stroke-width="1.5" />
-                                <rect x="5" y="5" width="6" height="1.2" rx="0.6" fill="#6f42c1" />
-                                <rect x="5" y="8" width="6" height="1.2" rx="0.6" fill="#6f42c1" />
-                            </svg>
+                            <i class="iconoir-book" style="color:#6f42c1;"></i>
                             <span>Gestion des Articles</span>
                         </a>
                         <div class="collapse" id="sidebarGerer_contrat_bail">
@@ -299,37 +275,21 @@
 
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('demandes.modification') }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                                fill="currentColor" viewBox="0 0 16 16" style="border-radius:5px;">
-                                <rect x="2" y="2" width="12" height="12" rx="3" fill="#f8f9fa"
-                                    stroke="#fd7e14" stroke-width="1.5" />
-                                <path d="M5 8h6M8 5v6" stroke="#fd7e14" stroke-width="1.2" stroke-linecap="round" />
-                            </svg>
+                            <i class="iconoir-edit" style="color:#fd7e14;"></i>
                             <span>Révision de Contract</span>
                         </a>
                     </li>
 
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('agent_immo_historique') }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                                fill="currentColor" viewBox="0 0 16 16" style="border-radius:5px;">
-                                <ellipse cx="8" cy="8" rx="6" ry="4.5" fill="#f8f9fa"
-                                    stroke="#20c997" stroke-width="1.5" />
-                                <circle cx="8" cy="8" r="2" fill="#20c997" />
-                            </svg>
+                            <i class="iconoir-money-square" style="color:#20c997;"></i>
                             <span>Suivi des paiements</span>
                         </a>
                     </li>
 
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('information_gestion') }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                                fill="currentColor" viewBox="0 0 16 16" style="border-radius:5px;">
-                                <rect x="2" y="2" width="12" height="12" rx="3" fill="#f8f9fa"
-                                    stroke="#0dcaf0" stroke-width="1.5" />
-                                <path d="M5 11V8M8 11V5M11 11V6.5" stroke="#0dcaf0" stroke-width="1.2"
-                                    stroke-linecap="round" />
-                            </svg>
+                            <i class="iconoir-stats-up-square" style="color:#0dcaf0;"></i>
                             <span>Auditer Loyer</span>
                         </a>
                     </li>
@@ -337,13 +297,7 @@
                     {{-- s'abonner temporaire --}}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('plans_abonnement') }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-                                fill="currentColor" viewBox="0 0 16 16" style="border-radius:5px;">
-                                <polygon points="8,2 10,6.5 15,6.5 11,10 12.5,15 8,12.5 3.5,15 5,10 1,6.5 6,6.5"
-                                    fill="#f8f9fa" stroke="#ffc107" stroke-width="1.5" />
-                                <polygon points="8,3.5 9,6 12,6 9.5,8 10.5,11 8,9.5 5.5,11 6.5,8 4,6 7,6"
-                                    fill="#ffc107" />
-                            </svg>
+                            <i class="iconoir-star" style="color:#ffc107;"></i>
                             <span>Plan d'abonnement</span>
                         </a>
                     </li>
@@ -356,14 +310,7 @@
 
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('abonnement.historique') }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none"
-                                viewBox="0 0 20 20"
-                                style="border-radius:5px; min-width:20px; min-height:20px; display:inline-block; vertical-align:middle;">
-                                <circle cx="10" cy="10" r="8" fill="#f8f9fa" stroke="#6c757d"
-                                    stroke-width="1.5" />
-                                <path d="M10 5.5v4l3 2" stroke="#6c757d" stroke-width="1.3" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                            </svg>
+                            <i class="iconoir-clock" style="color:#6c757d;"></i>
                             <span>Historique des abonnements</span>
                         </a>
                     </li>
@@ -371,14 +318,7 @@
 
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('agent.demandes') }}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22"
-                                fill="currentColor" viewBox="0 0 16 16"
-                                style="border-radius:5px; min-width:22px; min-height:22px; display:inline-block; vertical-align:middle;">
-                                <rect x="3" y="3" width="10" height="10" rx="2" fill="#f8f9fa"
-                                    stroke="#dc3545" stroke-width="1.5" />
-                                <path d="M6 10l4-4M10 10l-4-4" stroke="#dc3545" stroke-width="1.2"
-                                    stroke-linecap="round" />
-                            </svg>
+                            <i class="iconoir-wrench" style="color:#dc3545;"></i>
                             <span>Liste maintenances</span>
                         </a>
                     </li>
@@ -390,16 +330,7 @@
                     @if ($user)
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('user', $user->id) }}">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="none"
-                                    viewBox="0 0 20 20"
-                                    style="border-radius:5px; min-width:22px; min-height:22px; display:inline-block; vertical-align:middle;">
-                                    <rect x="2.5" y="3.5" width="15" height="13" rx="3"
-                                        fill="#f8f9fa" stroke="#0d6efd" stroke-width="1.5" />
-                                    <path d="M6 14.5l2.5-2h3L14 14.5" stroke="#0d6efd" stroke-width="1.1"
-                                        stroke-linecap="round" />
-                                    <circle cx="7.5" cy="9" r="1" fill="#0d6efd" />
-                                    <circle cx="12.5" cy="9" r="1" fill="#0d6efd" />
-                                </svg>
+                                <i class="iconoir-chat-bubble" style="color:#0d6efd;"></i>
                                 <span>Assistance en ligne</span>
                             </a>
                         </li>

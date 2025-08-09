@@ -1,0 +1,135 @@
+/*
+ * Design professionnel pour la page des plans d'abonnement
+ * Ajoute un effet "glassmorphism" moderne, des animations et un style premium.
+ */
+
+.plans-glass-bg {
+    background: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    transition: transform 0.3s cubic-bezier(.4,2,.3,1), box-shadow 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+.plans-glass-bg:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 16px 40px 0 rgba(34,197,94,0.18), 0 1.5px 8px 0 rgba(0,0,0,0.08);
+    z-index: 2;
+}
+
+
+.plans-glass-bg .card-header {
+    background: linear-gradient(90deg, #012417 0%, #015f3b 70%, #22c55e 100%);
+    color: #fff;
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    box-shadow: 0 2px 8px 0 rgba(34,197,94,0.08);
+}
+
+.plans-glass-bg .card-header h5 {
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+    font-weight: 700;
+    margin-bottom: 0;
+    color: #fff;
+    text-shadow: 0 2px 8px rgba(34,197,94,0.12);
+}
+
+.plans-glass-bg .badge {
+    background: linear-gradient(90deg, #012417 0%, #015f3b 70%, #22c55e 100%);
+    color: #fff;
+    font-size: 1.25rem;
+    font-weight: 600;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px 0 rgba(34,197,94,0.12);
+}
+
+.plans-glass-bg .card-footer {
+    background: transparent;
+    border-bottom-left-radius: 24px;
+    border-bottom-right-radius: 24px;
+    border-top: none;
+}
+
+
+.plans-glass-bg .btn {
+    font-weight: 700;
+    font-size: 1.1rem;
+    border-radius: 12px;
+    padding: 0.75rem 1.5rem;
+    background: linear-gradient(90deg, #012417 0%, #015f3b 70%, #22c55e 100%);
+    color: #fff;
+    border: none;
+    box-shadow: 0 2px 8px 0 rgba(34,197,94,0.10);
+    transition: background 0.3s, color 0.3s, box-shadow 0.3s;
+}
+
+
+.plans-glass-bg .btn:hover {
+    background: linear-gradient(90deg, #015f3b 0%, #22c55e 80%, #0ea5e9 100%);
+    color: #fff;
+    box-shadow: 0 4px 16px 0 rgba(34,197,94,0.18);
+}
+
+.plans-glass-bg .card-body {
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.plans-glass-bg .card-body p {
+    color: #555;
+    font-size: 1.05rem;
+    font-weight: 500;
+}
+
+.plans-glass-bg .card-body .text-muted {
+    color: #7a82b1 !important;
+}
+
+@media (max-width: 767px) {
+    .plans-glass-bg {
+        border-radius: 16px;
+    }
+    .plans-glass-bg .card-header, .plans-glass-bg .card-footer {
+        border-radius: 16px 16px 0 0;
+    }
+}
+
+/* Animation d'entrée */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 40px, 0);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+.plans-glass-bg {
+    animation: fadeInUp 0.7s cubic-bezier(.4,2,.3,1);
+}
+
+/* Titre principal effet premium */
+
+.premium-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    background: linear-gradient(90deg, #012417 0%, #015f3b 70%, #22c55e 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 2px;
+    margin-bottom: 2.5rem;
+    text-align: center;
+    text-shadow: 0 2px 8px rgba(34,197,94,0.10);
+}
