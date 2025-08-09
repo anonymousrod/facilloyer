@@ -1,15 +1,15 @@
 @extends('layouts.master_dash')
 
 @section('content')
-<div class="container-xxl pt-3">
+<div class="container-xxl pt-2">
     <div class="row justify-content-center g-3">
         <div class="col-lg-10">
             <!-- Bannière + Avatar -->
             <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-3">
-                <div class="position-relative" style="height: 220px;">
+                <div class="position-relative" style="height: 200px;">
                     <img src="{{ asset('images/profile-banner.jpeg') }}" class="w-100 h-100 object-fit-cover" alt="Bannière">
                     <div class="position-absolute bottom-0 start-50 translate-middle-x" style="transform: translateY(50%);">
-                        <div class="rounded-circle overflow-hidden shadow" style="width: 130px; height: 130px;">
+                        <div class="rounded-circle overflow-hidden border border-3 border-white shadow" style="width: 120px; height: 120px;">
                             <img src="{{ $agent->photo_profil ? asset($agent->photo_profil) : asset('images/default-avatar.png') }}" class="w-100 h-100 object-fit-cover" alt="Avatar">
                         </div>
                     </div>
@@ -17,11 +17,11 @@
             </div>
 
             <!-- Infos principales -->
-            <div class="card border-0 shadow-sm rounded-4 text-center pt-5 pb-3 mb-3">
-                <h4 class="fw-bold text-primary">{{ $agent->nom_admin }} {{ $agent->prenom_admin }}</h4>
-                <p class="text-muted mb-1"><i class="bi bi-building me-1 text-primary"></i><strong>{{ $agent->nom_agence }}</strong></p>
+            <div class="card border-0 shadow-sm rounded-4 text-center pt-4 pb-3 mb-3">
+                <h4 class="fw-bold text-primary mb-1">{{ $agent->nom_admin }} {{ $agent->prenom_admin }}</h4>
+                <p class="text-muted mb-1"><i class="bi bi-building me-1 text-primary"></i>{{ $agent->nom_agence }}</p>
                 <p class="text-muted mb-1"><i class="bi bi-telephone me-1 text-success"></i>{{ $agent->telephone_agence }}</p>
-                <p class="text-muted"><i class="bi bi-star-fill me-1 text-warning"></i><strong>{{ $agent->evaluation }} ★</strong></p>
+                <p class="text-warning fw-semibold"><i class="bi bi-star-fill me-1"></i>{{ $agent->evaluation }} ★</p>
             </div>
 
             <!-- À propos -->
@@ -67,10 +67,10 @@
                 <div class="card-header bg-info text-white fw-semibold">
                     <i class="bi bi-house-door me-2"></i>Biens Associés
                 </div>
-                <div class="card-body p-0">
+                <div class="card-body p-3">
                     @if ($agent->biens->count() > 0)
                         <div class="table-responsive">
-                            <table class="table table-hover table-striped table-bordered align-middle mb-0">
+                            <table id="biensTable" class="table table-striped table-hover align-middle">
                                 <thead class="table-dark">
                                     <tr>
                                         <th>Adresse</th>
@@ -99,7 +99,7 @@
                             </table>
                         </div>
                     @else
-                        <p class="text-muted p-3">Aucun bien associé.</p>
+                        <p class="text-muted">Aucun bien associé.</p>
                     @endif
                 </div>
             </div>
@@ -107,8 +107,31 @@
     </div>
 </div>
 
-<!-- Bouton d’appel rapide (mobile uniquement) -->
+<!-- Bouton appel rapide (mobile uniquement) -->
 <a href="tel:{{ $agent->telephone_agence }}" class="btn btn-success btn-lg rounded-circle shadow d-md-none position-fixed bottom-0 end-0 m-4">
     <i class="bi bi-telephone-fill"></i>
 </a>
 @endsection
+
+@push('scripts')
+<!-- DataTables -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#biensTable').DataTable({
+            language: {
+                search: "🔍 Recherche :",
+                lengthMenu: "Afficher _MENU_ lignes",
+                zeroRecords: "Aucun résultat trouvé",
+                info: "Page _PAGE_ sur _PAGES_",
+                infoEmpty: "Aucun enregistrement disponible",
+                infoFiltered: "(filtré sur _MAX_ enregistrements)"
+            },
+            pageLength: 5,
+            order: []
+        });
+    });
+</script>
+@endpush
