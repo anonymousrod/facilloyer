@@ -7,7 +7,7 @@
     <style>
         .abonnement-card {
             position: relative;
-            background: #fff;
+            /* background: #fff; */
             border-radius: 18px;
             box-shadow: 0 8px 32px 0 rgba(40,167,69,0.10);
             border: none;
@@ -47,7 +47,6 @@
         }
         .abonnement-info {
             font-size: 1.08rem;
-            color: #475569;
             margin-bottom: 0.5rem;
             display: flex;
             align-items: center;
@@ -95,10 +94,10 @@
                                 <i class="fas fa-gem"></i>
                                 {{ $abonnement->plan->nom }}
                             </div>
-                            <div class="abonnement-info"><i class="fas fa-calendar-alt"></i> Début : {{ \Carbon\Carbon::parse($abonnement->date_debut)->format('d/m/Y') }}</div>
-                            <div class="abonnement-info"><i class="fas fa-calendar-check"></i> Fin : {{ \Carbon\Carbon::parse($abonnement->date_fin)->format('d/m/Y') }}</div>
-                            <div class="abonnement-info"><i class="fas fa-coins"></i> Montant : <span style="font-weight:600; color:#28a745;">{{ number_format($abonnement->plan->prix, 0, ',', ' ') }} FCFA</span></div>
-                            <div class="abonnement-info"><i class="fas fa-info-circle"></i> Statut :
+                            <div class="abonnement-info mb-0 text-truncate"><i class="fas fa-calendar-alt"></i> Début : {{ \Carbon\Carbon::parse($abonnement->date_debut)->format('d/m/Y') }}</div>
+                            <div class="abonnement-info mb-0 text-truncate"><i class="fas fa-calendar-check"></i> Fin : {{ \Carbon\Carbon::parse($abonnement->date_fin)->format('d/m/Y') }}</div>
+                            <div class="abonnement-info mb-0 text-truncate"><i class="fas fa-coins"></i> Montant : <span style="font-weight:600; color:#28a745;">{{ number_format($abonnement->plan->prix, 0, ',', ' ') }} FCFA</span></div>
+                            <div class="abonnement-info mb-0 text-truncate"><i class="fas fa-info-circle"></i> Statut :
                                 <span class="badge badge-abonnement {{ $abonnement->status === 'actif' ? 'bg-success' : 'bg-danger' }} ms-2">
                                     {{ $abonnement->status === 'actif' ? 'Actif' : 'Expiré' }}
                                 </span>
