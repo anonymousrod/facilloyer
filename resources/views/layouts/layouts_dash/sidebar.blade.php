@@ -149,67 +149,67 @@
                 {{-- SUPER ADMIN --}}
                 @if (Auth::user()->id_role == 1)
                     <li class="nav-item"><a class="nav-link" href="{{ route('dashboard') }}"><i
-                                class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                                class="fas fa-tachometer-alt" style="color:#0d6efd;"></i><span>Dashboard</span></a></li>
                     <li class="nav-item">
                         <a class="nav-link" href="#sidebarGerer_user" data-bs-toggle="collapse">
-                            <i class="fas fa-users-cog"></i><span>Gérer les utilisateurs</span>
+                            <i class="fas fa-users-cog" style="color:#20c997;"></i><span>Gérer les utilisateurs</span>
                         </a>
                         <div class="collapse" id="sidebarGerer_user">
                             <ul class="nav flex-column">
                                 <li class="nav-item"><a class="nav-link" href="{{ route('admin.agents.index') }}"><i
-                                            class="fas fa-user-plus"></i><span>Valider les agences</span></a></li>
+                                            class="fas fa-user-plus" style="color:#ffc107;"></i><span>Valider les agences</span></a></li>
                                 <li class="nav-item"><a class="nav-link"
                                         href="{{ route('admin.locataires_par_agence', Auth::user()->id) }}"><i
-                                            class="fas fa-users"></i><span>Liste des locataire</span></a></li>
+                                            class="fas fa-users" style="color:#198754;"></i><span>Liste des locataire</span></a></li>
                             </ul>
                         </div>
                     </li>
 
                     <li class="nav-item"><a class="nav-link" href="{{ route('admin.paiements.index') }}"><i
-                                class="fas fa-file-invoice-dollar"></i><span>Historiques des Paiements</span></a></li>
+                                class="fas fa-file-invoice-dollar" style="color:#fd7e14;"></i><span>Historiques des Paiements</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('contrat.index') }}"><i
-                                class="fas fa-book"></i><span>Voir tous les contrats de bail</span></a></li>
+                                class="fas fa-book" style="color:#6f42c1;"></i><span>Voir tous les contrats de bail</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('admin.demandes.grouped') }}"><i
-                                class="fas fa-tools"></i><span>Gérer la maintenance</span></a></li>
+                                class="fas fa-tools" style="color:#dc3545;"></i><span>Gérer la maintenance</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="statistiques.html"><i
-                                class="fas fa-chart-bar"></i><span>Voir les statistiques</span></a></li>
+                                class="fas fa-chart-bar" style="color:#0dcaf0;"></i><span>Voir les statistiques</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="{{ route('user', Auth::user()->id) }}"><i
-                                class="iconoir-chat-bubble"></i><span>Assistance en ligne</span></a></li>
+                                class="iconoir-chat-bubble" style="color:#0d6efd;"></i><span>Assistance en ligne</span></a></li>
                 @endif
 
                 {{-- LOCATAIRE --}}
                 @if (Auth::user()->id_role == 2)
                     @if (Auth::user()->statut)
                         <li class="nav-item"><a class="nav-link" href="{{ route('dashboard') }}"><i
-                                    class="iconoir-view-grid"></i><span>Dashboard</span></a></li>
+                                    class="iconoir-view-grid" style="color:#0d6efd;"></i><span>Dashboard</span></a></li>
                         <li class="nav-item"><a class="nav-link"
                                 href="{{ route('locataire_bien', Auth::user()->id) }}"><i
-                                    class="iconoir-book"></i><span>Bien loué / Contrat</span></a></li>
+                                    class="iconoir-book" style="color:#6f42c1;"></i><span>Bien loué / Contrat</span></a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('locataire.demandes.index') }}"><i
-                                    class="iconoir-wrench"></i><span>Demande maintenance</span></a></li>
+                                    class="iconoir-wrench" style="color:#dc3545;"></i><span>Demande maintenance</span></a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('demandes.modification') }}"><i
-                                    class="iconoir-stats-up-square"></i><span>Révision de Contract</span></a></li>
+                                    class="iconoir-stats-up-square" style="color:#0dcaf0;"></i><span>Révision de Contract</span></a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('periodes.show') }}"><i
-                                    class="iconoir-credit-card"></i><span>Processus de paiement</span></a></li>
+                                    class="iconoir-credit-card" style="color:#20c997;"></i><span>Processus de paiement</span></a></li>
                         <li class="nav-item"><a class="nav-link"
                                 href="{{ route('locataire.paiements.historique') }}"><i
-                                    class="iconoir-list"></i><span>Historique des paiements</span></a></li>
+                                    class="iconoir-list" style="color:#fd7e14;"></i><span>Historique des paiements</span></a></li>
                         <li class="nav-item"><a class="nav-link"
                                 href="{{ route('locataire.agentinfo', Auth::user()->id) }}"><i
-                                    class="iconoir-phone"></i><span>Infos de l’agence</span></a></li>
+                                    class="iconoir-phone" style="color:#198754;"></i><span>Infos de l’agence</span></a></li>
                         <li class="nav-item"><a class="nav-link"
                                 href="{{ route('locataire.locashow', Auth::user()->id) }}"><i
-                                    class="iconoir-user"></i><span>Profil</span></a></li>
+                                    class="iconoir-user" style="color:#ffc107;"></i><span>Profil</span></a></li>
                         <li class="nav-item"><a class="nav-link"
                                 href="{{ route('profile.edit', Auth::user()->id) }}"><i
-                                    class="iconoir-settings"></i><span>Paramètres</span></a></li>
+                                    class="iconoir-settings" style="color:#6c757d;"></i><span>Paramètres</span></a></li>
                         <li class="nav-item"><a class="nav-link"
                                 href="{{ route('user', Auth::user()->locataires->first()->agent_immobilier->user->id) }}"><i
-                                    class="iconoir-chat-bubble"></i><span>Assistance en ligne</span></a></li>
+                                    class="iconoir-chat-bubble" style="color:#0d6efd;"></i><span>Assistance en ligne</span></a></li>
                     @else
                         <li class="nav-item"><a class="nav-link"
                                 href="{{ route('locataire.locashow', Auth::user()->id) }}"><i
-                                    class="iconoir-user"></i><span>Profil</span></a></li>
+                                    class="iconoir-user" style="color:#ffc107;"></i><span>Profil</span></a></li>
                     @endif
                 @endif
 
