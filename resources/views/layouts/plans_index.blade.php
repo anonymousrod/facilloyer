@@ -289,10 +289,11 @@
     <script src="https://cdn.kkiapay.me/k.js"></script>
     <script>
         const agentId = "{{ $agent->id }}";
-        const agentPhone = "{{ $agent->telephone_agence ?? '97000000' }}";
+        //const agentPhone = "{{ $agent->telephone_agence ?? '97000000' }}";
         const agentEmail = "{{ auth()->user()->email }}";
-        const agentName = "{{ auth()->user()->nom }}";
-        const agentFirstName = "{{ auth()->user()->prenoms }}";
+        //const agentName = "{{ auth()->user()->nom }}";
+        //const agentFirstName = "{{ auth()->user()->prenoms }}";
+        const agenceName = "{{ auth()->user()->agent_immobiliers->first()->nom_agence ?? 'Mon Agence' }}";
 
         let selectedPlanId = null;
         let selectedPlanName = null;
@@ -307,13 +308,15 @@
                 amount: selectedPlanPrice,
                 key: "{{ env('KKIAPAY_PUBLIC_KEY') }}",
                 sandbox: true,
-                name: selectedPlanName,
+                //name: selectedPlanName,
                 email: agentEmail,
-                phone: agentPhone,
-                firstname: agentFirstName,
-                lastname: agentName,
+                //phone: agentPhone,
+                // firstname: "",
+                // lastname: "",
+                // Utilisation du nom de l'agence pour plus de clarté
+                name: agenceName,
                 data: "Abonnement " + selectedPlanName,
-                theme: "#E63C33"
+                theme: "#166534"
             });
 
             addSuccessListener(function(response) {
