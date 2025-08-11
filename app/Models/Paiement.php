@@ -23,7 +23,7 @@ class Paiement extends Model
     ];
 
     protected $casts = [
-        'montant' => 'float',
+        'montant_paye' => 'float',
     ];
     protected $dates = [
         'deleted_at'

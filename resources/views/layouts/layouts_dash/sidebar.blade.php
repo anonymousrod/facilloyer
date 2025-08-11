@@ -344,7 +344,7 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('agent_immobilier.create') }}">
-                            <i class="iconoir-view-grid menu-icon"></i>
+                            <i class="iconoir-home-alt menu-icon"></i>
                             <span>Informations de l'agence</span>
                         </a>
                     </li>
@@ -352,7 +352,7 @@
                     @if ($agent && $agent->abonnement?->status === 'expiré')
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('plans_abonnement') }}">
-                                <i class="iconoir-view-grid menu-icon"></i>
+                                <i class="iconoir-star" style="color:#ffc107;"></i>
                                 <span>Plan d'abonnement</span>
                             </a>
                         </li>
@@ -364,7 +364,8 @@
 
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('abonnement.historique') }}">
-                                <i class="bi bi-clock-history"></i> <span>Historique des abonnements</span>
+                                <i class="iconoir-clock" style="color:#6c757d;"></i>
+                                <span>Historique des abonnements</span>
                             </a>
                         </li>
                     @endif

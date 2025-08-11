@@ -189,6 +189,11 @@ class PaiementController extends Controller
 
         // Récupérer les informations du bien
         $bien = $paiement->bien;
+        $montant_restant_periode=$paiement->montant_restant_periode;
+
+
+
+        
 
         // Passer les données à la vue
         $pdf = PDF::loadView('locataire.paiements.quittance', compact('paiement', 'bien'));
@@ -480,86 +485,65 @@ class PaiementController extends Controller
         ]);
     }
 
-
-
-
-    // Afficher le formulaire de paiement
+  
     public function showForm()
     {
-        return view('payments.form');
+        $user = auth()->user(); // Utilisateur actuellement connecté
+
+        // Vérifier si l'utilisateur est bien associé à un locataire
+        $locataire = Locataire::where('user_id', $user->id)->first();
+
+        if (!$locataire) {
+            abort(404, "Locataire non trouvé, Reconecter vous svp");
+        }
+
+        // Exemple : récupérer un bien associé (tu peux adapter)
+        $bien = $locataire->biens()->first(); // ou une autre logique
+
+        if (!$bien) {
+            abort(404, "Bien non trouvé, Reconecter vous svp");
+        }
+
+        // Exemple montant à payer calculé
+        $montant_restant = 50000; // récupère ou calcule ce montant dynamiquement
+
+        return view('paiement.form', compact('locataire', 'bien', 'montant_restant'));
     }
 
 
-    public function handleCallback(Request $request)
+    public function enregistrerPaiement(Request $request)
     {
-        Log::info('Callback reçu : ', $request->all());
-        Log::info('Headers reçus : ', $request->headers->all());
-        Log::info('Données brutes reçues : ', ['body' => $request->getContent()]);
+        $request->validate([
+            'locataire_id' => 'required|exists:locataires,id',
+            'bien_id' => 'required|exists:biens,id',
+            'montant' => 'required|numeric|min:100',
+            'transaction_id' => 'required|string|unique:paiements,reference_paiement',
+        ]);
 
-        $secret = 'monsecretclef123456'; // Remplacez par votre clé secrète
-        $signature = $request->header('x-kkiapay-secret');
+        // Créer le paiement
+        $paiement = Paiement::create([
+            'locataire_id' => $request->locataire_id,
+            'bien_id' => $request->bien_id,
+            'montant_paye' => $request->montant,
+            'date_paiement' => now(),
+            'statut_paiement' => 'payé',
+            'mode_paiement' => 'kkiapay',
+            'reference_paiement' => $request->transaction_id,
+            'description' => 'Paiement via Kkiapay',
+            'notified' => true,
+        ]);
 
-        if (is_null($signature)) {
-            Log::error('En-tête x-kkiapay-secret manquant.');
-            return response()->json(['message' => 'Signature manquante.'], 400);
-        }
-
-        $rawBody = $request->getContent();
-        if (!$this->verifySignature($signature, $rawBody, $secret)) {
-            Log::error('Signature invalide.');
-            return response()->json(['message' => 'Signature invalide.'], 400);
-        }
-
-        try {
-            $data = json_decode($rawBody, true); // Utilisez json_decode si Kkiapay envoie un JSON
-
-            $validator = Validator::make($data, [
-                'amount' => 'required|numeric|min:0',
-                'status' => 'required|string',
-                'paymentMethod' => 'required|string',
-                'transaction_id' => 'required|string',
-                'reason' => 'nullable|string',
-            ]);
-
-            if ($validator->fails()) {
-                Log::error('Données invalides : ', $validator->errors()->all());
-                return response()->json(['message' => 'Données invalides.'], 422);
-            }
-
-            if (strtolower($data['status']) !== 'success') {
-                Log::warning('Paiement non validé.', $data);
-                return response()->json(['message' => 'Paiement non validé.'], 400);
-            }
-
-            $user = auth()->user();
-            if (!$user) {
-                Log::error('Utilisateur non authentifié.');
-                return response()->json(['message' => 'Utilisateur non authentifié.'], 401);
-            }
-
-            $locataire = Locataire::where('user_id', $user->id)->first();
-            if (!$locataire) {
-                Log::error('Locataire introuvable.');
-                return response()->json(['message' => 'Locataire introuvable.'], 404);
-            }
-
-            $bien = $locataire->biens()->first();
-            $paiement = Paiement::create([
-                'locataire_id' => $locataire->id,
-                'bien_id' => $bien->id ?? null,
-                'montant_paye' => $data['amount'],
-                'date_paiement' => now(),
-                'statut_paiement' => strtolower($data['status']),
-                'mode_paiement' => $data['paymentMethod'],
-                'reference_paiement' => $data['transaction_id'],
-                'description' => $data['reason'] ?? 'Paiement effectué via Kkiapay.',
-            ]);
-
-            Log::info('Paiement enregistré.', $paiement->toArray());
-            return response()->json(['message' => 'Paiement enregistré avec succès.'], 200);
-        } catch (\Exception $e) {
-            Log::error('Erreur interne : ' . $e->getMessage());
-            return response()->json(['message' => 'Erreur interne.'], 500);
-        }
+        return response()->json(['success' => true, 'paiement_id' => $paiement->id]);
     }
+
+
+
+
+
+    
 }
+
+
+
+
+

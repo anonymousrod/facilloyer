@@ -1,188 +1,128 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quittance de Paiement</title>
-    
-</head>
-<style>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Quittance de Paiement #{{ str_pad($paiement->id, 6, '0', STR_PAD_LEFT) }}</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 0;
+            background: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #212529;
+            padding: 20px;
         }
-
-        .container {
-            width: 100%;
+        .invoice {
             max-width: 800px;
-            margin: 30px auto;
-            background-color: #fff;
-            padding: 20px 25px;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin: auto;
+            background: white;
+            padding: 25px 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+            font-size: 0.9rem;
         }
-
-        h1, h2 {
-            text-align: center;
-            color: #2c3e50;
-            margin-bottom: 5px;
-        }
-
-        h1 {
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        h2 {
-            font-size: 20px;
-            color: #27ae60;
-            font-weight: bold;
-        }
-
-        .details, .agency-info {
+        .invoice-header {
+            border-bottom: 3px solid #0d6efd;
             margin-bottom: 20px;
+            padding-bottom: 8px;
         }
-
-        .details p, .agency-info p {
-            font-size: 14px;
-            line-height: 1.8;
-            color: #555;
+        .invoice-header h1 {
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: #0d6efd;
         }
-
-        .details span.bold, .agency-info span.bold {
-            font-weight: bold;
-            color: #2c3e50;
-        }
-
-        .footer {
-            text-align: center;
-            font-size: 12px;
-            color: #777;
-            margin-top: 30px;
-        }
-
-        .line {
-            border-top: 2px dashed #ddd;
-            margin: 25px 0;
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 12px;
-            color: white;
+        .section-title {
+            color: #0d6efd;
+            font-weight: 600;
+            font-size: 1.05rem;
             margin-bottom: 10px;
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 4px;
         }
-
-        .badge-success {
-            background-color: #27ae60;
-        }
-
-        .badge-warning {
-            background-color: #f39c12;
-        }
-
-        .badge-danger {
-            background-color: #c0392b;
-        }
-
-        .agency-header {
-            text-align: center;
-            font-size: 16px;
-            margin-bottom: 15px;
-            font-weight: bold;
-            color: #3498db;
-        }
-
-        .agency-name {
-            font-size: 18px;
-            font-weight: bold;
-            color: #2980b9;
-        }
-
-        .btn {
+        .info-label {
+            font-weight: 600;
+            color: #495057;
+            width: 130px;
             display: inline-block;
-            background-color: #3498db;
-            color: white;
-            text-decoration: none;
-            padding: 8px 15px;
+        }
+        .badge-paid {
+            background-color: #198754;
+            font-size: 0.95rem;
+            padding: 4px 10px;
             border-radius: 5px;
-            margin-top: 15px;
         }
-
-        .btn:hover {
-            background-color: #1f78b4;
+        .small-text {
+            color: #6c757d;
         }
-
-        .highlight {
-            background-color: #eafaf1;
-            border-left: 5px solid #27ae60;
-            padding: 10px 15px;
-            margin-bottom: 15px;
+        .mb-2-5 {
+            margin-bottom: 0.625rem;
         }
-
-        .info-group {
-            background-color: #f9f9f9;
-            padding: 10px 15px;
-            border-radius: 5px;
-            margin-bottom: 15px;
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
-        }
-
-        .text-center {
-            text-align: center;
-        }
-
-        .text-right {
-            text-align: right;
+        @media (max-width: 575.98px) {
+            .info-label {
+                width: auto;
+                display: block;
+                margin-bottom: 2px;
+            }
         }
     </style>
+</head>
 <body>
 
-    <div class="container">
-        <!-- Titre principal -->
+<div class="invoice">
+
+    <div class="invoice-header text-center mb-4">
         <h1>Quittance de Paiement</h1>
-        <h2>#{{ str_pad($paiement->id, 6, '0', STR_PAD_LEFT) }}</h2>
+        <div>#{{ str_pad($paiement->id, 6, '0', STR_PAD_LEFT) }}</div>
+    </div>
 
-        <!-- Informations de l'agence -->
-        <div class="agency-info highlight">
-            <p class="agency-name">Nom de l'agence : {{ $bien->agent_immobilier->nom_agence ?? 'Non défini' }}</p>
-            <p><span class="bold">Nom de l'administrateur :</span> {{ $bien->agent_immobilier->nom_admin ?? 'Non défini' }}</p>
-            <p><span class="bold">Adresse :</span> {{ $bien->agent_immobilier->adresse_agence ?? 'Non définie' }}</p>
-            <p><span class="bold">Téléphone :</span> {{ $bien->agent_immobilier->telephone_agence ?? 'Non défini' }}</p>
+    <div class="text-center mb-3">
+        <span class="badge badge-paid">Paiement réussi</span>
+    </div>
+
+    <div class="row gy-3">
+        <!-- Agence -->
+        <div class="col-md-6">
+            <div class="section-title">Agence</div>
+            <p class="mb-2-5"><span class="info-label">Nom :</span> {{ $bien->agent_immobilier->nom_agence ?? 'N/D' }}</p>
+            <p class="mb-2-5"><span class="info-label">Admin :</span> {{ $bien->agent_immobilier->nom_admin ?? 'N/D' }}</p>
+            <p class="mb-2-5"><span class="info-label">Adresse :</span> {{ $bien->agent_immobilier->adresse_agence ?? 'N/D' }}</p>
+            <p class="mb-2-5"><span class="info-label">Téléphone :</span> {{ $bien->agent_immobilier->telephone_agence ?? 'N/D' }}</p>
         </div>
 
-        <div class="line"></div>
-
-        <!-- Détails du paiement -->
-        <div class="details">
-            <p><span class="badge badge-success">Paiement réussi</span></p>
-            <p><span class="bold">Locataire :</span> {{ $paiement->locataire->nom }} {{ $paiement->locataire->prenom }}</p>
-            <p><span class="bold">Montant payé :</span> {{ number_format($paiement->montant_paye, 2, ',', ' ') }} FCFA</p>
-            <p><span class="bold">Date de paiement :</span> {{ $paiement->date_paiement ? \Carbon\Carbon::parse($paiement->date_paiement)->format('d/m/Y') : 'Date non disponible' }}</p>
+        <!-- Locataire -->
+        <div class="col-md-6">
+            <div class="section-title">Locataire</div>
+            <p class="mb-2-5"><span class="info-label">Nom :</span> {{ $paiement->locataire->nom ?? 'N/D' }}</p>
+            <p class="mb-2-5"><span class="info-label">Prénom :</span> {{ $paiement->locataire->prenom ?? 'N/D' }}</p>
+            <p class="mb-2-5"><span class="info-label">Email :</span> {{ $paiement->locataire->email ?? 'N/D' }}</p>
         </div>
 
-        <div class="line"></div>
-
-        <!-- Informations sur le logement -->
-        <div class="details">
-            <h3 class="text-center">Informations sur le Logement</h3>
-            <div class="info-group">
-                <p><span class="bold">Adresse :</span> {{ $bien->adresse_bien ?? 'Non défini' }}</p>
-                <p><span class="bold">Type :</span> {{ $bien->type_bien ?? 'Non défini' }}</p>
-                <p><span class="bold">Superficie :</span> {{ $bien->superficie ?? 'Non défini' }} m²</p>
-            </div>
+        <!-- Paiement -->
+        <div class="col-md-6">
+            <div class="section-title">Paiement</div>
+            <p class="mb-2-5"><span class="info-label">Montant payé :</span> {{ number_format($paiement->montant_paye, 0, ',', ' ') }} FCFA</p>
+            <p class="mb-2-5"><span class="info-label">Date :</span> {{ $paiement->date_paiement ? \Carbon\Carbon::parse($paiement->date_paiement)->format('d/m/Y') : 'N/D' }}</p>
+            <p class="mb-2-5"><span class="info-label">Montant total période :</span> {{ number_format($paiement->locataire->gestionPeriode->montant_total_periode ?? 0, 0, ',', ' ') }} FCFA</p>
+            <p class="mb-2-5"><span class="info-label">Montant restant :</span> {{ number_format($paiement->locataire->gestionPeriode->montant_restant_periode ?? 0, 0, ',', ' ') }} FCFA</p>
         </div>
 
-        <div class="footer">
-            <p>Quittance générée le {{ now()->format('d/m/Y') }}.</p>
-            <p>Merci pour votre confiance !</p>
+        <!-- Logement -->
+        <div class="col-md-6">
+            <div class="section-title">Logement</div>
+            <p class="mb-2-5"><span class="info-label">Adresse :</span> {{ $bien->adresse_bien ?? 'N/D' }}</p>
+            <p class="mb-2-5"><span class="info-label">Type :</span> {{ $bien->type_bien ?? 'N/D' }}</p>
+            <p class="mb-2-5"><span class="info-label">Superficie :</span> {{ $bien->superficie ?? 'N/D' }} m²</p>
         </div>
     </div>
+
+    <div class="text-center small-text mt-4">
+        <p>Quittance générée le {{ now()->format('d/m/Y') }}.</p>
+        <p>Merci pour votre confiance !</p>
+    </div>
+
+</div>
 
 </body>
 </html>

@@ -1,160 +1,80 @@
 @extends('layouts.master_dash')
 
 @section('content')
-    <style>
-        .card-header {
-            background: linear-gradient(90deg, #4E54C8, #8F94FB);
-            color: #fff;
-            font-family: 'Roboto', sans-serif;
-            font-size: 26px;
-            font-weight: bold;
-            padding: 20px;
-            border-radius: 12px 12px 0 0;
-            text-align: center;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-        }
+<div class="container my-5">
+    <div class="card shadow rounded-4 border-0">
+        <div class="card-header bg-gradient-primary text-center py-3 rounded-top-4">
+            <h3 class="mb-0 fw-bold">
+                Paiement - ETAPE 1/3
+            </h3>
+        </div>
+        <div class="card-body p-4">
+            {{-- Message absence contrat ou période --}}
+            @if(isset($message))
+                <div class="border border-danger rounded-3 p-4 text-center bg-light">
+                    <h4 class="text-danger fw-bold mb-3">
+                        <i class="fas fa-exclamation-circle me-2"></i> {{ $message }}
+                    </h4>
+                    <p class="mb-0 text-muted">
+                        Cette page est vide car aucun contrat de bail actif n’est associé à votre compte.<br>
+                        Veuillez contacter l’agence si besoin.
+                    </p>
+                </div>
+            @elseif($periode)
+                {{-- Infos locataire --}}
+                <section class="mb-4">
+                    <h5 class="fw-bold text-primary border-start border-4 border-primary ps-3 mb-3">
+                        <i class="fas fa-user-circle me-2"></i> Informations du locataire
+                    </h5>
+                    <p class="mb-1"><strong>Nom :</strong> {{ $periode->locataire->nom }} {{ $periode->locataire->prenom }}</p>
+                </section>
 
-        .card {
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
-            background: #ffffff;
-        }
+                {{-- Infos bien --}}
+                <section class="mb-4">
+                    <h5 class="fw-bold text-primary border-start border-4 border-primary ps-3 mb-3">
+                        <i class="fas fa-home me-2"></i> Détails du bien
+                    </h5>
+                    <p class="mb-1"><strong>Nom :</strong> {{ $periode->contratDeBail->bien->name_bien }}</p>
+                    <p class="mb-1"><strong>Type :</strong> {{ $periode->contratDeBail->bien->type_bien }}</p>
+                    <p><strong>Adresse :</strong> {{ $periode->contratDeBail->bien->adresse_bien }}</p>
+                </section>
 
-        h5 {
-            font-family: 'Roboto', sans-serif;
-            font-weight: bold;
-            color: #4E54C8;
-        }
+                {{-- Infos période --}}
+                <section class="mb-4">
+                    <h5 class="fw-bold text-primary border-start border-4 border-primary ps-3 mb-3">
+                        <i class="fas fa-calendar-alt me-2"></i> Période de facturation
+                    </h5>
+                    <p class="mb-1"><strong>Du :</strong> {{ \Carbon\Carbon::parse($periode->date_debut_periode)->format('d/m/Y') }}</p>
+                    <p><strong>Au :</strong> {{ \Carbon\Carbon::parse($periode->date_fin_periode)->format('d/m/Y') }}</p>
+                </section>
 
-        p {
-            font-family: 'Roboto', sans-serif;
-            font-size: 16px;
-            color: #555;
-            line-height: 1.8;
-        }
-
-        .btn-success {
-            background: linear-gradient(90deg, #FF9800, #FFC107);
-            color: #fff;
-            border: none;
-            border-radius: 30px;
-            font-size: 18px;
-            font-weight: bold;
-            padding: 12px 30px;
-            text-transform: uppercase;
-            transition: all 0.3s ease-in-out;
-            box-shadow: 0px 4px 10px rgba(255, 152, 0, 0.4);
-        }
-
-        .btn-success:hover {
-            background: linear-gradient(90deg, #F57C00, #FFA726);
-            transform: translateY(-3px);
-            box-shadow: 0px 6px 15px rgba(255, 152, 0, 0.6);
-        }
-
-        .important-warning {
-            background: #F44336;
-            color: #fff;
-            padding: 15px;
-            border-radius: 8px;
-            font-weight: bold;
-            animation: pulse 1.5s infinite;
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .info-empty {
-            background-color: #f9f9f9;
-            border: 2px dashed #ccc;
-            padding: 40px;
-            text-align: center;
-            border-radius: 12px;
-        }
-
-        .info-empty h4 {
-            color: #4E54C8;
-            font-weight: bold;
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                box-shadow: 0 0 10px rgba(255, 87, 34, 0.5);
-            }
-            50% {
-                box-shadow: 0 0 20px rgba(255, 87, 34, 1);
-            }
-        }
-
-        @media (max-width: 768px) {
-            h3, h5 {
-                font-size: 18px;
-            }
-
-            p {
-                font-size: 14px;
-            }
-
-            .btn-success {
-                font-size: 16px;
-                padding: 10px 25px;
-            }
-        }
-    </style>
-
-    <div class="container my-5">
-        <div class="card">
-            <div class="card-header">
-                Paiement - Mois En Cours
-            </div>
-            <div class="card-body p-4">
-                {{-- Message en cas d'absence de contrat ou période --}}
-                @if(isset($message))
-                    <div class="info-empty">
-                        <h4><i class="fas fa-exclamation-circle text-danger"></i> {{ $message }}</h4>
-                        <p>Cette page est actuellement vide car aucun contrat de bail actif n’est associé à votre compte. Veuillez contacter l’agence si besoin.</p>
+                {{-- Avertissement --}}
+                <div class="alert alert-warning d-flex align-items-center rounded-4" role="alert">
+                    <i class="fas fa-exclamation-triangle fa-2x me-3"></i>
+                    <div>
+                        Vérifiez qu'il s'agit du bien correspondant au mois actuel de la période de location et appuyez Continuez pour consulter le restant à payer.
+                        <br>Si ce n'est pas le cas, contactez votre agence par le menu "Assistance en ligne".                        
                     </div>
-                @elseif($periode)
-                    {{-- Informations du locataire --}}
-                    <div class="mb-4">
-                        <h5><i class="fas fa-user-circle"></i> Informations du locataire</h5>
-                        <p><strong>Nom :</strong> {{ $periode->locataire->nom }} {{ $periode->locataire->prenom }}</p>
-                    </div>
+                </div>
 
-                    {{-- Informations sur le bien --}}
-                    <div class="mb-4">
-                        <h5><i class="fas fa-home"></i> Détails du bien</h5>
-                        <p><strong>Nom :</strong> {{ $periode->contratDeBail->bien->name_bien }}</p>
-                        <p><strong>Type :</strong> {{ $periode->contratDeBail->bien->type_bien }}</p>
-                        <p><strong>Adresse :</strong> {{ $periode->contratDeBail->bien->adresse_bien }}</p>
-                    </div>
-
-                    {{-- Informations sur la période --}}
-                    <div class="mb-4">
-                        <h5><i class="fas fa-calendar-alt"></i> Période de facturation</h5>
-                        <p><strong>Du :</strong> {{ \Carbon\Carbon::parse($periode->date_debut_periode)->format('d/m/Y') }}</p>
-                        <p><strong>Au :</strong> {{ \Carbon\Carbon::parse($periode->date_fin_periode)->format('d/m/Y') }}</p>
-                    </div>
-
-                    {{-- Avertissement important --}}
-                    <div class="important-warning">
-                        <i class="fas fa-exclamation-circle"></i>
-                        Vérifiez qu'il s'agit du bien pour lequel la période (mois actuel du loyer) est exacte et découvrez le restant à payer
-                    </div>
-
-                    {{-- Bouton de paiement --}}
-                    <div class="text-center mt-4">
-                        <a href="{{ route('paiement.partiepaiement') }}" class="btn btn-success">
-                            <i class="fas fa-credit-card"></i> Continuer
-                        </a>
-                    </div>
-                @else
-                    <div class="info-empty">
-                        <h4><i class="fas fa-exclamation-circle text-warning"></i> Aucune période trouvée</h4>
-                        <p>Aucune période de gestion n’a encore été générée pour votre contrat. Veuillez réessayer plus tard.</p>
-                    </div>
-                @endif
-            </div>
+                {{-- Bouton paiement --}}
+                <div class="text-center mt-4">
+                    <a href="{{ route('paiement.partiepaiement') }}" class="btn btn-lg btn-primary px-5 rounded-pill shadow">
+                        <i class="fas fa-credit-card me-2"></i> Continuer
+                    </a>
+                </div>
+            @else
+                <div class="border border-warning rounded-3 p-4 text-center bg-light">
+                    <h4 class="text-warning fw-bold mb-3">
+                        <i class="fas fa-exclamation-circle me-2"></i> Aucune période trouvée
+                    </h4>
+                    <p class="mb-0 text-muted">
+                        Aucune période de gestion n’a encore été générée pour votre contrat.<br>
+                        Veuillez réessayer plus tard.
+                    </p>
+                </div>
+            @endif
         </div>
     </div>
+</div>
 @endsection

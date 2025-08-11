@@ -116,6 +116,12 @@ Route::get('/periodes', [PaiementController::class, 'trouverPeriode'])->name('pe
 Route::get('/paiement/partiepaiement', [PaiementController::class, 'partiepaiement'])->name('paiement.partiepaiement');
 Route::post('/paiement/complement', [PaiementController::class, 'ajouterComplement'])->name('paiement.complement');
 
+Route::get('/paiement/form', [PaiementController::class, 'showForm'])->name('paiement.form');
+
+Route::post('/paiement/kkiapay/success', [PaiementController::class, 'enregistrerPaiement'])->name('paiement.kkiapay.success');
+
+/////TJR POUR LE PAIMENT ROUTE LOGIQQUE 4 
+
 
 
 
