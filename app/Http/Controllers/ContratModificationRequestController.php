@@ -173,7 +173,8 @@ class ContratModificationRequestController extends Controller
             $demandesRecues = ContratModificationRequest::with('contrat.bien')
                 ->where('demande_par', 'agent')
                 ->whereHas('contrat', function ($query) use ($user) {
-                    $query->where('locataire_id', $user->locataires->first()->id);
+                    $query->where('locataire_id', $user->locataires->first()->id)
+                    ->where('statut_contrat', 'Actif');
                 })
                 ->latest()
                 ->get();
@@ -182,7 +183,8 @@ class ContratModificationRequestController extends Controller
             $demandesEnvoyees = ContratModificationRequest::with('contrat.bien')
                 ->where('demande_par', 'locataire')
                 ->whereHas('contrat', function ($query) use ($user) {
-                    $query->where('locataire_id', $user->locataires->first()->id);
+                    $query->where('locataire_id', $user->locataires->first()->id)
+                    ->where('statut_contrat', 'Actif');
                 })
                 ->latest()
                 ->get();
@@ -192,7 +194,8 @@ class ContratModificationRequestController extends Controller
                 ->where('demande_par', 'locataire')
                 ->whereHas('contrat', function ($query) use ($user) {
                     $query->whereHas('locataire', function ($subQuery) use ($user) {
-                        $subQuery->where('agent_id', $user->agent_immobiliers->first()->id);
+                        $subQuery->where('agent_id', $user->agent_immobiliers->first()->id)
+                        ->where('statut_contrat', 'Actif');
                     });
                 })
                 ->latest()
@@ -203,7 +206,8 @@ class ContratModificationRequestController extends Controller
                 ->where('demande_par', 'agent')
                 ->whereHas('contrat', function ($query) use ($user) {
                     $query->whereHas('locataire', function ($subQuery) use ($user) {
-                        $subQuery->where('agent_id', $user->agent_immobiliers->first()->id);
+                        $subQuery->where('agent_id', $user->agent_immobiliers->first()->id)
+                        ->where('statut_contrat', 'Actif');
                     });
                 })
                 ->latest()
