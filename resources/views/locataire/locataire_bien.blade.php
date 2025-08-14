@@ -26,7 +26,7 @@
                             <th>Bien</th>
                             <th>Adresse</th>
                             <th>Loyer mensuel</th>
-                            <th class="text-center">Détails</th>
+                            <th class="text-center">Contrat/Bien</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -40,7 +40,7 @@
                                 <td class="text-center">
                                     <a href="{{ route('biens.show', ['bien_id' => $bien->id, 'agent_id' => $locataire->agent_immobilier->id ?? null]) }}"
                                        class="btn btn-outline-success btn-sm px-3 py-1">
-                                        <i class="bi bi-eye-fill me-1"></i> Détails
+                                        <i class="bi bi-eye-fill me-1"></i> Contrat
                                     </a>
                                 </td>
                             </tr>
@@ -61,7 +61,7 @@
                         <div class="text-end">
                             <a href="{{ route('biens.show', ['bien_id' => $bien->id, 'agent_id' => $locataire->agent_immobilier->id ?? null]) }}"
                                class="btn btn-outline-success btn-sm">
-                                <i class="bi bi-eye-fill me-1"></i> Détails
+                                <i class="bi bi-eye-fill me-1"></i> Contrat
                             </a>
                         </div>
                     </div>
