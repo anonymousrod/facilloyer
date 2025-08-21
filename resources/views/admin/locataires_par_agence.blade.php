@@ -63,7 +63,7 @@
                                                     </button>
                                                 </form>
 
-                                                <a href="{{ route('admin.locataires.profil', $locataire->id) }}" class="btn btn-sm btn-info text-white">
+                                                <a href="{{ route('admin.locataires.profil', $locataire) }}" class="btn btn-sm btn-info text-white">
                                                     Profil
                                                 </a>
 

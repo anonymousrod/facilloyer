@@ -1,63 +1,63 @@
 <style>
-.topbar-custom {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: nowrap;
-}
+    .topbar-custom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: nowrap;
+    }
 
-/* Conteneur gauche, milieu, droite */
-.topbar-left,
-.topbar-center,
-.topbar-right {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
+    /* Conteneur gauche, milieu, droite */
+    .topbar-left,
+    .topbar-center,
+    .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    }
 
-/* Le centre prend toute la place disponible */
-.topbar-center {
-  flex-grow: 1;
-  justify-content: center;
-}
+    /* Le centre prend toute la place disponible */
+    .topbar-center {
+    flex-grow: 1;
+    justify-content: center;
+    }
 
-/* Recherche prend toute la largeur possible dans le centre */
-.topbar-center .app-search {
-  width: 100%;
-  max-width: 500px;
-}
+    /* Recherche prend toute la largeur possible dans le centre */
+    .topbar-center .app-search {
+    width: 100%;
+    max-width: 500px;
+    }
 
-/* Recherche et bouton dans la même ligne */
-.app-search form {
-  display: flex;
-  width: 100%;
-}
+    /* Recherche et bouton dans la même ligne */
+    .app-search form {
+    display: flex;
+    width: 100%;
+    }
 
-.app-search input.top-search {
-  flex-grow: 1;
-  border-radius: 30px 0 0 30px;
-  border: none;
-  padding: 0.4rem 1rem;
-  outline: none;
-}
+    .app-search input.top-search {
+    flex-grow: 1;
+    border-radius: 30px 0 0 30px;
+    border: none;
+    padding: 0.4rem 1rem;
+    outline: none;
+    }
 
-.app-search button {
-  border-radius: 0 30px 30px 0;
-  border: none;
-  background-color: #012C1C;
-  color: white;
-  padding: 0 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
+    .app-search button {
+    border-radius: 0 30px 30px 0;
+    border: none;
+    background-color: #012C1C;
+    color: white;
+    padding: 0 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    }
 
-.app-search button:hover {
-  background-color: #034d2a;
-}
+    .app-search button:hover {
+    background-color: #034d2a;
+    }
 
 
-</style>
+    </style>
 
 <!-- Top Bar Start -->
 <div class="topbar d-print-none">
@@ -178,7 +178,7 @@
                         <div class="dropdown-divider mt-0"></div>
                         <small class="text-muted px-2 pb-1 d-block">Compte</small>
                         @if ($user->id_role == 2)
-                            <a class="dropdown-item" href="{{ route('locataire.locashow', $user->id) }}"><i class="las la-user fs-18 me-1 align-text-bottom"></i> Profil</a>
+                            <a class="dropdown-item" href="{{ route('locataire.locashow', $user->locataires->first()) }}"><i class="las la-user fs-18 me-1 align-text-bottom"></i> Profil</a>
                         @elseif ($user->id_role == 3 && $user->statut)
                             <a class="dropdown-item" href="{{ route('profil_agent') }}"><i class="las la-user fs-18 me-1 align-text-bottom"></i> Profil</a>
                         @endif

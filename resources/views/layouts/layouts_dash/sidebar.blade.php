@@ -183,7 +183,7 @@
                         <li class="nav-item"><a class="nav-link" href="{{ route('dashboard') }}"><i
                                     class="iconoir-view-grid" style="color:#0d6efd;"></i><span>Dashboard</span></a></li>
                         <li class="nav-item"><a class="nav-link"
-                                href="{{ route('locataire_bien', Auth::user()->id) }}"><i
+                                href="{{ route('locataire_bien', Auth::user()->locataires->first()) }}"><i
                                     class="iconoir-book" style="color:#6f42c1;"></i><span>Bien loué / Contrat</span></a></li>
                         <li class="nav-item"><a class="nav-link" href="{{ route('locataire.demandes.index') }}"><i
                                     class="iconoir-wrench" style="color:#dc3545;"></i><span>Demande maintenance</span></a></li>
@@ -195,10 +195,10 @@
                                 href="{{ route('locataire.paiements.historique') }}"><i
                                     class="iconoir-list" style="color:#fd7e14;"></i><span>Historique des paiements</span></a></li>
                         <li class="nav-item"><a class="nav-link"
-                                href="{{ route('locataire.agentinfo', Auth::user()->id) }}"><i
+                                href="{{ route('locataire.agentinfo', Auth::user()->locataires->first()) }}"><i
                                     class="iconoir-phone" style="color:#198754;"></i><span>Infos de l’agence</span></a></li>
                         <li class="nav-item"><a class="nav-link"
-                                href="{{ route('locataire.locashow', Auth::user()->id) }}"><i
+                                href="{{ route('locataire.locashow', Auth::user()->locataires->first()) }}"><i
                                     class="iconoir-user" style="color:#ffc107;"></i><span>Profil</span></a></li>
                         <li class="nav-item"><a class="nav-link"
                                 href="{{ route('profile.edit', Auth::user()->id) }}"><i

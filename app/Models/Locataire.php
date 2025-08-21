@@ -6,8 +6,8 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Collection;
+use Propaganistas\LaravelFakeId\RoutesWithFakeIds;
+
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -41,6 +41,15 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Locataire extends Model
 {
     use SoftDeletes;
+
+    use RoutesWithFakeIds;
+    
+    // Optionnel : personnaliser le champ à utiliser
+    protected static $RoutesWithFakeIds = [
+        'id' // le champ qui sera « fake » dans les URLs
+    ];
+
+
 
     protected $table = 'locataires';
 

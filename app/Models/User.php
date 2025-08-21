@@ -5,7 +5,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
-
+use Propaganistas\LaravelFakeId\RoutesWithFakeIds;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -33,6 +33,12 @@ class User extends Authenticatable //implements MustVerifyEmail  Implements Must
     use SoftDeletes;
     use  HasFactory, Notifiable, SoftDeletes; //HasApiTokens,
     // Added traits required by Breeze and Sanctum if used
+    use RoutesWithFakeIds;
+
+    // Optionnel : personnaliser le champ à utiliser
+    protected static $RoutesWithFakeIds = [
+        'id' // le champ qui sera « fake » dans les URLs
+    ];
 
     protected $table = 'users';
 

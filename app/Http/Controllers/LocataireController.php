@@ -22,66 +22,33 @@ class LocataireController extends Controller
     // Affiche les informations détaillées du locataire
 
 
-    public function showInformations($id)
-    {
-        // Récupérer le locataire, ses relations et les biens loués
-        $locataire = Locataire::with(['user', 'agent_immobilier', 'biens.paiements'])
-            ->where('user_id', $id)
-            ->firstOrFail();
+   public function showInformations(Locataire $locataire)
+{
+    $paiementsDuMois = $locataire->paiements()
+        ->whereMonth('date_paiement', now()->month)
+        ->whereYear('date_paiement', now()->year)
+        ->get();
 
-        if (!$locataire) {
-            abort(404, "Locataire non trouvé avec l'ID $id");
-        }
+    $user = Auth::user();
+    $message = !$user->statut ? "Votre compte est en attente d'activation par l'administrateur." : null;
 
-        // Filtrer les paiements du mois en cours
-        $paiementsDuMois = Paiement::where('locataire_id', $locataire->id)
-            ->whereMonth('date_paiement', now()->month)
-            ->whereYear('date_paiement', now()->year)
-            ->get();
+    return view('locataire.locashow', compact('locataire', 'paiementsDuMois', 'message'));
+}
 
-        $user = Auth::user();
-        $message = null;
+public function showlocatairebien(Locataire $locataire)
+{
+    return view('locataire.locataire_bien', compact('locataire'));
+}
 
-        if (!$user->statut) {
-            $message = "Votre compte est en attente d'activation par l'administrateur. Vous aurez accès aux autres fonctionnalités une fois activé.";
-        }
-
-        return view('locataire.locashow', compact('locataire', 'paiementsDuMois', 'message'));
-    }
-
-    public function showlocatairebien($id)
-    {
-        // Récupérer le locataire, ses relations et les biens loués
-        $locataire = Locataire::with(['user', 'agent_immobilier', 'biens.paiements'])
-            ->where('user_id', $id)
-            ->firstOrFail();
-
-        if (!$locataire) {
-            abort(404, "Locataire non trouvé avec l'ID $id");
-        }
-
-        // Filtrer les paiements du mois en cours
-        // $paiementsDuMois = Paiement::where('locataire_id', $locataire->id)
-        //     ->whereMonth('date_debut_frequence', now()->month)
-        //     ->whereYear('date_debut_frequence', now()->year)
-        //     ->get();
-
-        return view('locataire.locataire_bien', compact('locataire'));
-    }
 
 
 
 
     // admin use pour afficher chaque les profil locataire
-    public function showProfil($locataireId)
+    public function showProfil(Locataire $locataire)
     {
-        // Récupère le locataire par son ID, y compris ses informations liées à l'utilisateur (user)
-        $locataire = Locataire::with('user')->findOrFail($locataireId);
-
-        // Retourne la vue du profil avec les données du locataire
         return view('admin.locataires.profil', compact('locataire'));
     }
-
 
 
 

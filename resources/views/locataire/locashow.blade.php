@@ -16,7 +16,7 @@
       <h4 class="mb-0 fw-semibold">{{ $locataire->prenom }} {{ $locataire->nom }}</h4>
     </div>
     @if (Auth::user()->id_role === 2)
-      <a href="{{ route('locataire.edit', $locataire->user_id) }}" class="btn btn-success px-3 py-1 rounded-pill">
+      <a href="{{ route('locataire.edit', $locataire) }}" class="btn btn-success px-3 py-1 rounded-pill">
         <i class="fas fa-edit me-1"></i> Modifier
       </a>
     @endif

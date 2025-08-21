@@ -57,8 +57,13 @@ Route::middleware('auth')->group(function () {
 // =========================
 // LOCATAIRES
 // =========================
-Route::get('/locataire/{id}/locashow', [LocataireController::class,'showInformations'])->name('locataire.locashow');
-Route::get('/locataire/{id}/locatairebien', [LocataireBienController::class,'showlocatairebien'])->name('locataire_bien');
+Route::get('/locataire/{locataire}/locashow', [LocataireController::class,'showInformations'])
+    ->name('locataire.locashow');
+
+Route::get('/locataire/{locataire}/locatairebien', [LocataireBienController::class,'showlocatairebien'])
+    ->name('locataire_bien');
+
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/locataire/agentinfo', [LocataireController::class,'agenceImmobiliereAssociee'])->name('locataire.agentinfo');
@@ -91,6 +96,7 @@ Route::middleware(['auth','check_abonnement'])->group(function () {
     Route::get('/export_biens/pdf', [ExportListePDF::class,'exportPdf_biens'])->name('export_biens.pdf');
 
     // Auditer paiement
+
     Route::get('/information_montant', [AgentImmobilierController::class, 'info_gestion'])->name('information_gestion');
 });
 
@@ -249,5 +255,6 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/info_detail_bien', function () {
     return view('layouts.bien_detail');
 })->name('bien_detail');
+
 
 

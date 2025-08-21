@@ -86,7 +86,7 @@
                                                 </div>
                                             </td>
                                             <td class="text-center align-middle">
-                                                <a href="{{ route('locataire.locashow', $locataire->user->id) }}" class="btn btn-link p-0 me-2 btn-circle-eye" title="Voir détails">
+                                                <a href="{{ route('locataire.locashow', $locataires->first()) }}" class="btn btn-link p-0 me-2 btn-circle-eye" title="Voir détails">
                                                     <i class="fas fa-eye icon-voir-details-custom"></i>
                                                 </a>
                                                 <a href="{{ route('user', $locataire->user->id) }}" class="btn btn-outline-success btn-circle" title="Chat" style="border-radius: 50%; width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center; font-size: 1.2rem; box-shadow: 0 2px 8px rgba(40,167,69,0.08);">
