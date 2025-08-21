@@ -13,7 +13,7 @@ class Plan extends Model
     protected $table = 'plans';
 
     protected $fillable = [
-        'nom', 'prix', 'duree', 'description'
+        'nom', 'prix', 'duree', 'description', 'limite_biens', 'type'
     ];
 
     public function abonnements()

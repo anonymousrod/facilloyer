@@ -106,4 +106,21 @@ class AgentImmobilier extends Model
             ->latest('date_fin')
             ->first();
     }
+
+    public function peutAjouterBien(): bool
+    {
+        $abonnement = $this->abonnementActif();
+
+        if (!$abonnement || !$abonnement->plan) {
+            return false; // Pas d'abonnement actif
+        }
+
+        $limite = $abonnement->plan->limite_biens;
+
+        if (is_null($limite)) {
+            return true; // illimité
+        }
+
+        return $this->biens()->count() < $limite;
+    }
 }

@@ -12,10 +12,32 @@ class AgentImmobilierObserver
     /**
      * Handle the AgentImmobilier "created" event.
      */
+    // public function created(AgentImmobilier $agentImmobilier): void
+    // {
+    //     // Récupère le plan Essai
+    //     $plan = Plan::where('nom', 'Essai')->first();
+
+    //     if ($plan) {
+    //         $dateDebut = Carbon::now();
+    //         $dateFin = $dateDebut->copy()->addDays($plan->duree);
+
+    //         // Crée l’abonnement automatiquement
+    //         Abonnement::create([
+    //             'agent_id' => $agentImmobilier->id,
+    //             'plan_id' => $plan->id,
+    //             'date_debut' => $dateDebut,
+    //             'date_fin' => $dateFin,
+    //             'status' => 'actif',
+    //         ]);
+    //     }
+    // }
+
     public function created(AgentImmobilier $agentImmobilier): void
     {
-        // Récupère le plan Essai
-        $plan = Plan::where('nom', 'Essai')->first();
+        // Récupère le plan Gratuit (lancement)
+        $plan = Plan::where('nom', 'Gratuit')
+            ->where('type', 'mensuel')
+            ->first();
 
         if ($plan) {
             $dateDebut = Carbon::now();
@@ -23,11 +45,11 @@ class AgentImmobilierObserver
 
             // Crée l’abonnement automatiquement
             Abonnement::create([
-                'agent_id' => $agentImmobilier->id,
-                'plan_id' => $plan->id,
+                'agent_id'   => $agentImmobilier->id,
+                'plan_id'    => $plan->id,
                 'date_debut' => $dateDebut,
-                'date_fin' => $dateFin,
-                'status' => 'actif',
+                'date_fin'   => $dateFin,
+                'status'     => 'actif',
             ]);
         }
     }
