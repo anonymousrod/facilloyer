@@ -274,6 +274,11 @@
                                 <div class="plan-price">{{ number_format($plan->prix, 0, ',', ' ') }} FCFA</div>
                                 <p class="plan-duration">Durée : <strong>{{ $plan->duree }} jours</strong></p>
                             </div>
+                            <p class="plan-description">
+                                {{ $plan->description }} <br>
+                                <strong>Limite :
+                                    {{ $plan->limite_biens ? $plan->limite_biens . ' biens' : 'Illimité' }}</strong>
+                            </p>
                             <p class="plan-description">{{ $plan->description }}</p>
                             <button class="plan-btn"
                                 onclick="launchKkiapay('{{ $plan->id }}', '{{ $plan->nom }}', '{{ $plan->prix }}')">
@@ -315,7 +320,7 @@
                 // lastname: "",
                 // Utilisation du nom de l'agence pour plus de clarté
                 name: agenceName,
-                data: "Abonnement " + selectedPlanNamze,
+                data: "Abonnement " + selectedPlanName,
                 theme: "#166534"
             });
 

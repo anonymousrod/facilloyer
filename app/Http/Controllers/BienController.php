@@ -38,10 +38,18 @@ class BienController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
     public function store(Request $request)
     {
 
-        //
+        $agent = auth::user()->agent_immobiliers->first();
+
+        if (!$agent->peutAjouterBien()) {
+            return redirect()->back()->with('error', 'Vous avez atteint la limite de biens de votre abonnement. Passez à un plan supérieur.');
+        }
+
+        // Continuer création du bien
+        // Valider les données
         $request->validate([
             'name_bien' => 'required|string|max:255',
             'name_proprietaire' => 'required|string|max:255',

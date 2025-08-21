@@ -12,7 +12,7 @@ class PlanController extends Controller
 {
     public function index()
     {
-        $plans = Plan::where('nom', '!=', 'Essai')->get();
+        $plans = Plan::where('nom', '!=', 'Gratuit')->get();
         // Gérer les notifications
         if (request()->has('notification_id')) {
             auth()->user()->notifications()
