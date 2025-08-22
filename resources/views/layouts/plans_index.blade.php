@@ -119,7 +119,10 @@
 
 
 @endsection --}}
-@php
+
+{{-- ce qui marche actuellement --}}
+
+{{-- @php
     $agent = auth()->user()->agent_immobiliers->first();
 @endphp
 @extends('layouts.master_dash')
@@ -352,4 +355,218 @@
             });
         }
     </script>
+@endsection --}}
+{{-- --------------------------------------------------------------------------- --}}
+
+{{-- Marche bien pour le moment --}}
+@php
+    $agent = auth()->user()->agent_immobiliers->first();
+@endphp
+@extends('layouts.master_dash')
+@section('title', 'Abonnement')
+@section('content')
+
+<style>
+    :root {
+        --primary: #2E7D32;
+        --primary-dark: #256628;
+        --accent: #E63C33;
+        --text-color: #222;
+        --text-muted: #555;
+        --bg-light: #fff;
+        --shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+        --radius: 1.2rem;
+    }
+
+    @media (prefers-color-scheme: dark) {
+        :root {
+            --text-color: #fff;
+            --text-muted: #ccc;
+            --bg-light: #1e1e1e;
+            --shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+    }
+
+    .premium-title {
+        font-weight: 700;
+        text-align: center;
+        color: #28a745;
+        margin-bottom: 2.5rem;
+    }
+
+    .plans-container {
+        max-width: 1100px;
+        margin: auto;
+    }
+
+    .plan-card {
+        background: var(--bg-light);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        display: flex;
+        flex-direction: column;
+        padding: 2rem 1.8rem;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+    }
+
+    .plan-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+    }
+
+    .plan-header {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .plan-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--primary);
+    }
+
+    .plan-description {
+        font-size: 0.95rem;
+        color: var(--text-color);
+        text-align: center;
+        line-height: 1.5;
+        flex-grow: 1;
+        margin-bottom: 1.5rem;
+    }
+
+    .plan-btn {
+        background: var(--primary);
+        color: #fff;
+        font-weight: 600;
+        font-size: 1.1rem;
+        padding: 0.9rem;
+        border: none;
+        border-radius: 50px;
+        width: 100%;
+        transition: background 0.3s ease, transform 0.2s ease;
+        box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+    }
+
+    .plan-btn:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+    }
+</style>
+
+<div class="container-xxl py-5">
+    <div class="plans-container">
+        <h2 class="premium-title">Choisissez un Plan d’Abonnement</h2>
+
+        @if (session('success'))
+            <div class="alert alert-success text-center">{{ session('success') }}</div>
+        @endif
+        @if (session('error'))
+            <div class="alert alert-danger text-center">{{ session('error') }}</div>
+        @endif
+
+        <div class="row g-4 justify-content-center">
+            @foreach ($plans->groupBy('nom') as $planName => $options)
+                <div class="col-md-6 col-lg-4 d-flex">
+                    <div class="plan-card w-100" onclick="openPlanOptions('{{ $planName }}')">
+                        <div class="plan-header">
+                            <h5 class="plan-title">{{ $planName }}</h5>
+                        </div>
+                        <p class="plan-description">
+                            Cliquez pour voir les options (Mensuel / Annuel)
+                        </p>
+                        <button class="plan-btn">
+                            <i class="bi bi-lightning-charge-fill me-2"></i>Choisir ce plan
+                        </button>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="planModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content p-3">
+      <div class="modal-header">
+        <h5 class="modal-title" id="planModalLabel">Choisir une option</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body" id="planOptionsContainer">
+        <!-- Options injectées en JS -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.kkiapay.me/k.js"></script>
+<script>
+    const agentId = "{{ $agent->id }}";
+    const agentEmail = "{{ auth()->user()->email }}";
+    const agenceName = "{{ auth()->user()->agent_immobiliers->first()->nom_agence ?? 'Mon Agence' }}";
+
+    const allPlans = @json($plans);
+
+    function openPlanOptions(planName) {
+        const options = allPlans.filter(p => p.nom === planName);
+        let html = "";
+
+        options.forEach(plan => {
+            const type = plan.duree >= 365 ? 'Annuel' : 'Mensuel';
+            html += `
+                <div class="border rounded p-3 mb-3">
+                    <h6>${type}</h6>
+                    <p><strong>${Number(plan.prix).toLocaleString()} FCFA</strong> - ${plan.description}</p>
+                    <button class="btn btn-success w-100"
+                        onclick="launchKkiapay('${plan.id}', '${plan.nom} - ${type}', '${plan.prix}')">
+                        Choisir (${type})
+                    </button>
+                </div>
+            `;
+        });
+
+        document.getElementById("planOptionsContainer").innerHTML = html;
+        const modal = new bootstrap.Modal(document.getElementById('planModal'));
+        modal.show();
+    }
+
+    function launchKkiapay(planId, planName, planPrice) {
+        openKkiapayWidget({
+            amount: planPrice,
+            key: "{{ env('KKIAPAY_PUBLIC_KEY') }}",
+            sandbox: true,
+            email: agentEmail,
+            name: agenceName,
+            data: "Abonnement " + planName,
+            theme: "#166534"
+        });
+
+        addSuccessListener(function(response) {
+            const transactionId = response.transactionId;
+            fetch("{{ url('/api/abonnement/success') }}", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    agent_id: agentId,
+                    plan_id: planId,
+                    transaction_id: transactionId
+                })
+            })
+            .then(res => res.json())
+            .then(() => {
+                alert("Abonnement activé avec succès !");
+                window.location.href = "{{ route('dashboard') }}";
+            })
+            .catch(() => {
+                alert("Paiement effectué mais une erreur est survenue. Contactez le support.");
+            });
+        });
+
+        addFailedListener(function() {
+            alert("Le paiement a échoué. Veuillez réessayer.");
+        });
+    }
+</script>
 @endsection
+{{-- ---------------------------------------------- --}}
